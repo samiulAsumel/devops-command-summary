@@ -1,0 +1,1920 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linux/DevOps Command Reference Guide - Monitoring & Security</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="scripts.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="part-links">
+        <strong>📚 Navigate:</strong>
+        <a href="index.html">🏠 HOME</a>
+        <a href="system-admin.html">Part 1: System Administration</a>
+        <a href="devops-tools.html">Part 2: DevOps Tools</a>
+        <a href="monitoring-security.html" class="active-part"
+          >Part 3: Monitoring & Security</a
+        >
+      </div>
+      <!--
+      <div class="download-section">
+        <h3>💾 Download & Export This Guide</h3>
+        <p>Save this reference guide for offline use:</p>
+        <a
+          href="javascript:void(0);"
+          onclick="downloadAsFile('linux-devops-monitoring-security.html')"
+          class="download-btn"
+          >📥 Download as HTML</a
+        >
+        <a href="javascript:void(0);" onclick="printPage()" class="download-btn"
+          >🖨️ Print to PDF</a
+        >
+      </div>
+      -->
+      <h1>Linux/DevOps Command Reference Guide</h1>
+      <h2>Part 3: Monitoring & Security (Sections 24-29)</h2>
+
+      <div class="warning">
+        <strong>Important Security Note:</strong> Many security commands require
+        root/sudo privileges. Use with caution and only on systems you own or
+        have permission to test.
+      </div>
+      <div class="section-index">
+        <h3>📑 Table of Contents</h3>
+        <ul>
+          <li><a href="#monitoring">24. Monitoring Commands</a></li>
+          <li><a href="#security">25. Security & Hardening</a></li>
+          <li>
+            <a href="#performance">26. Performance Monitoring & Tuning</a>
+          </li>
+          <li><a href="#backup">27. Backup & Recovery</a></li>
+          <li><a href="#automation">28. Automation & Scheduling</a></li>
+          <li><a href="#misc">29. Miscellaneous Commands</a></li>
+        </ul>
+      </div>
+
+      <h2 id="monitoring">24. MONITORING COMMANDS</h2>
+
+      <h3>Prometheus Commands</h3>
+
+      <div class="command-block">
+        <h4>Prometheus service (systemd)</h4>
+        <pre><code>
+systemctl status prometheus
+systemctl start prometheus
+systemctl stop prometheus
+systemctl restart prometheus</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Prometheus configuration</h4>
+        <pre><code>
+/etc/prometheus/prometheus.yml                                  # Main config file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reload configuration</h4>
+        <pre><code>
+curl -X POST http://localhost:9090/-/reload
+kill -HUP $(pidof prometheus)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Prometheus CLI</h4>
+        <pre><code>
+promtool check config prometheus.yml                                                  # Validate config
+promtool check rules rules.yml                                                        # Validate rules
+promtool query instant 'up{job="node"}'                                               # Query instant
+promtool query range 'up' --start="2024-01-01T00:00:00Z" --end="2024-01-02T00:00:00Z" # Query range</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>PromQL queries (via API or UI)</h4>
+        <pre><code>
+# up - Check if targets are up
+# rate(http_requests_total[5m]) - Request rate
+# sum(rate(http_requests_total[5m])) by (job) - Sum by job
+# avg(node_cpu_seconds_total) - Average CPU</code></pre>
+      </div>
+
+      <h3>Node Exporter Commands</h3>
+
+      <div class="command-block">
+        <h4>Node Exporter service</h4>
+        <pre><code>
+systemctl status node_exporter
+systemctl start node_exporter
+systemctl restart node_exporter</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Default metrics endpoint</h4>
+        <pre><code>
+curl http://localhost:9100/metrics                              # View metrics</code></pre>
+      </div>
+
+      <h3>Grafana Commands</h3>
+
+      <div class="command-block">
+        <h4>Grafana service</h4>
+        <pre><code>
+systemctl status grafana-server
+systemctl start grafana-server
+systemctl stop grafana-server
+systemctl restart grafana-server</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Grafana CLI</h4>
+        <pre><code>
+grafana-cli plugins list-remote                                 # List available plugins
+grafana-cli plugins install plugin-name                         # Install plugin
+grafana-cli plugins update plugin-name                          # Update plugin
+grafana-cli plugins remove plugin-name                          # Remove plugin
+grafana-cli admin reset-admin-password newpassword              # Reset admin password</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Grafana configuration</h4>
+        <pre><code>
+/etc/grafana/grafana.ini                                        # Main config file</code></pre>
+      </div>
+
+      <h3>Elasticsearch Commands</h3>
+
+      <div class="command-block">
+        <h4>Elasticsearch service</h4>
+        <pre><code>
+systemctl status elasticsearch
+systemctl start elasticsearch
+systemctl stop elasticsearch
+systemctl restart elasticsearch</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Cluster health</h4>
+        <pre><code>
+curl -X GET "localhost:9200/_cluster/health?pretty"
+curl -X GET "localhost:9200/_cat/health?v"</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Nodes</h4>
+        <pre><code>
+curl -X GET "localhost:9200/_cat/nodes?v"</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Indices</h4>
+        <pre><code>
+curl -X GET "localhost:9200/_cat/indices?v"
+curl -X PUT "localhost:9200/myindex"                            # Create index
+curl -X DELETE "localhost:9200/myindex"                         # Delete index</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Documents</h4>
+        <pre><code>
+curl -X POST "localhost:9200/myindex/_doc/1" -H 'Content-Type: application/json' -d '{"field":"value"}'     # Index document
+curl -X GET "localhost:9200/myindex/_doc/1"                                                                 # Get document
+curl -X DELETE "localhost:9200/myindex/_doc/1"                                                              # Delete document</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search</h4>
+        <pre><code>
+curl -X GET "localhost:9200/myindex/_search?pretty" -H 'Content-Type: application/json' -d '{"query":{"match_all":{}}}'</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Bulk operations</h4>
+        <pre><code>
+curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary "@bulk.json"</code></pre>
+      </div>
+
+      <h3>Logstash Commands</h3>
+
+      <div class="command-block">
+        <h4>Logstash service</h4>
+        <pre><code>
+systemctl status logstash
+systemctl start logstash
+systemctl stop logstash
+systemctl restart logstash</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Test configuration</h4>
+        <pre><code>
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf --config.test_and_exit</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reload configuration</h4>
+        <pre><code>
+systemctl reload logstash</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Run Logstash manually</h4>
+        <pre><code>
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf</code></pre>
+      </div>
+
+      <h3>Kibana Commands</h3>
+
+      <div class="command-block">
+        <h4>Kibana service</h4>
+        <pre><code>
+systemctl status kibana
+systemctl start kibana
+systemctl stop kibana
+systemctl restart kibana</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Kibana configuration</h4>
+        <pre><code>
+/etc/kibana/kibana.yml                                          # Main config file</code></pre>
+      </div>
+
+      <h3>Filebeat Commands</h3>
+
+      <div class="command-block">
+        <h4>Filebeat service</h4>
+        <pre><code>
+systemctl status filebeat
+systemctl start filebeat
+systemctl stop filebeat
+systemctl restart filebeat</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Test configuration</h4>
+        <pre><code>
+filebeat test config -c /etc/filebeat/filebeat.yml
+filebeat test output -c /etc/filebeat/filebeat.yml</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Setup</h4>
+        <pre><code>
+filebeat setup -e                                               # Setup index template and dashboards
+filebeat modules list                                           # List available modules
+filebeat modules enable system                                  # Enable module
+filebeat modules disable system                                 # Disable module</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filebeat configuration</h4>
+        <pre><code>
+/etc/filebeat/filebeat.yml                                      # Main config file</code></pre>
+      </div>
+
+      <h2 id="security">25. SECURITY AND HARDENING</h2>
+
+      <div class="danger">
+        <strong>DANGER:</strong> Security commands can lock you out of your
+        system if misconfigured. Always test in a safe environment first.
+      </div>
+
+      <h3>fail2ban Commands</h3>
+
+      <div class="command-block">
+        <h4>fail2ban service</h4>
+        <pre><code>
+systemctl status fail2ban
+systemctl start fail2ban
+systemctl stop fail2ban
+systemctl restart fail2ban</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>fail2ban-client</h4>
+        <pre><code>
+fail2ban-client status                                          # Show status
+fail2ban-client status sshd                                     # Show jail status
+fail2ban-client set sshd banip 192.168.1.10                     # Ban IP
+fail2ban-client set sshd unbanip 192.168.1.10                   # Unban IP
+fail2ban-client reload                                          # Reload configuration
+fail2ban-client ping                                            # Test if running</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration files</h4>
+        <pre><code>
+/etc/fail2ban/jail.conf                                         # Main config (don't edit)
+/etc/fail2ban/jail.local                                        # Local overrides</code></pre>
+      </div>
+
+      <h3>SELinux Commands</h3>
+
+      <div class="command-block">
+        <h4>SELinux status</h4>
+        <pre><code>
+getenforce                                                      # Current mode
+sestatus                                                        # Detailed status
+setenforce 0                                                    # Permissive mode
+setenforce 1                                                    # Enforcing mode</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Contexts</h4>
+        <pre><code>
+ls -Z file                                                      # Show file context
+ps -Z                                                           # Show process contexts
+chcon -t httpd_sys_content_t /var/www/html/index.html           # Change context
+restorecon -Rv /var/www/html                                    # Restore default contexts</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Booleans</h4>
+        <pre><code>
+getsebool -a                                                    # List all booleans
+getsebool httpd_can_network_connect                             # Check boolean
+setsebool -P httpd_can_network_connect on                       # Set boolean permanently</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Troubleshooting</h4>
+        <pre><code>
+ausearch -m avc -ts recent                                      # Recent AVC denials
+audit2why < /var/log/audit/audit.log                            # Why was it denied
+audit2allow -a                                                  # Generate policy to allow</code></pre>
+      </div>
+
+      <h3>OpenSSL Commands</h3>
+
+      <div class="command-block">
+        <h4>Generate private key</h4>
+        <pre><code>
+openssl genrsa -out private.key 2048                            # RSA 2048-bit
+openssl genrsa -out private.key 4096                            # RSA 4096-bit</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate public key from private</h4>
+        <pre><code>
+openssl rsa -in private.key -pubout -out public.key</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate CSR (Certificate Signing Request)</h4>
+        <pre><code>
+openssl req -new -key private.key -out cert.csr</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate self-signed certificate</h4>
+        <pre><code>
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out cert.crt</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View certificate</h4>
+        <pre><code>
+openssl x509 -in cert.crt -text -noout
+openssl x509 -in cert.crt -noout -dates                         # Show validity dates
+openssl x509 -in cert.crt -noout -subject                       # Show subject
+openssl x509 -in cert.crt -noout -issuer                        # Show issuer</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Verify certificate</h4>
+        <pre><code>
+openssl verify cert.crt</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Test SSL/TLS connection</h4>
+        <pre><code>
+openssl s_client -connect google.com:443
+openssl s_client -connect google.com:443 -showcerts</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Convert certificate formats</h4>
+        <pre><code>
+openssl x509 -in cert.crt -out cert.pem                         # CRT to PEM
+openssl x509 -in cert.pem -outform DER -out cert.der            # PEM to DER</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Encrypt/Decrypt files</h4>
+        <pre><code>
+openssl enc -aes-256-cbc -salt -in file.txt -out file.txt.enc
+openssl enc -aes-256-cbc -d -in file.txt.enc -out file.txt</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate random data</h4>
+        <pre><code>
+openssl rand -base64 32                                         # 32 bytes base64
+openssl rand -hex 16                                            # 16 bytes hex</code></pre>
+      </div>
+
+      <h3>GPG Commands</h3>
+
+      <div class="command-block">
+        <h4>Generate key pair</h4>
+        <pre><code>
+gpg --gen-key                                                   # Interactive
+gpg --full-generate-key                                         # Full options</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List keys</h4>
+        <pre><code>
+gpg --list-keys                                                 # Public keys
+gpg --list-secret-keys                                          # Private keys
+gpg --list-sigs                                                 # Keys with signatures</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Export keys</h4>
+        <pre><code>
+gpg --export -a "User Name" > public.key                        # Export public key (ASCII)
+gpg --export-secret-keys -a "User Name" > private.key           # Export private key</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Import keys</h4>
+        <pre><code>
+gpg --import public.key                                         # Import public key
+gpg --import private.key                                        # Import private key</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Encrypt/Decrypt files</h4>
+        <pre><code>
+gpg --encrypt --recipient "User Name" file.txt                  # Encrypt
+gpg --output file.txt --decrypt file.txt.gpg                    # Decrypt
+gpg -c file.txt                                                 # Symmetric encryption (password)
+gpg -d file.txt.gpg                                             # Decrypt symmetric</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Sign files</h4>
+        <pre><code>
+gpg --sign file.txt                                             # Sign file
+gpg --clearsign file.txt                                        # Sign with readable text
+gpg --detach-sign file.txt                                      # Detached signature
+gpg --verify file.txt.sig                                       # Verify signature</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Key management</h4>
+        <pre><code>
+gpg --edit-key "User Name"                                      # Edit key (interactive)
+gpg --delete-keys "User Name"                                   # Delete public key
+gpg --delete-secret-keys "User Name"                            # Delete private key</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Trust keys</h4>
+        <pre><code>
+gpg --edit-key "User Name"
+# In GPG prompt: trust, then select level (1-5)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Send/receive keys (keyserver)</h4>
+        <pre><code>
+gpg --keyserver keyserver.ubuntu.com --send-keys KEY_ID
+gpg --keyserver keyserver.ubuntu.com --recv-keys KEY_ID
+gpg --keyserver keyserver.ubuntu.com --search-keys "email@example.com"</code></pre>
+      </div>
+
+      <h3>Lynis (Security Auditing)</h3>
+
+      <div class="command-block">
+        <h4>Install Lynis</h4>
+        <pre><code>
+dnf install lynis                                               # RHEL/CentOS
+apt install lynis                                               # Debian/Ubuntu</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Run audit</h4>
+        <pre><code>
+lynis audit system                                              # Full system audit
+lynis audit system --quick                                      # Quick scan
+lynis audit system --cronjob                                    # Cron mode (no colors)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show options</h4>
+        <pre><code>
+lynis show options                                              # Display options
+lynis show version                                              # Show version
+lynis show commands                                             # List commands
+lynis show profiles                                             # Show profiles</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Update Lynis</h4>
+        <pre><code>
+lynis update info                                               # Check for updates</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reports</h4>
+        <pre><code>
+/var/log/lynis.log                                              # Audit log
+/var/log/lynis-report.dat                                       # Report data</code></pre>
+      </div>
+
+      <h3>ClamAV (Antivirus)</h3>
+
+      <div class="command-block">
+        <h4>ClamAV service</h4>
+        <pre><code>
+systemctl status clamd@scan                                     # Check service
+systemctl start clamd@scan                                      # Start service
+systemctl enable clamd@scan                                     # Enable at boot</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Update virus definitions</h4>
+        <pre><code>
+freshclam                                                       # Update virus database</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Scan files</h4>
+        <pre><code>
+clamscan file.txt                                               # Scan single file
+clamscan -r /home                                               # Recursive scan
+clamscan -r --infected /home                                    # Show only infected files
+clamscan -r --remove /home                                      # Remove infected files
+clamscan -r --move=/quarantine /home                            # Move infected to quarantine
+clamscan -r -l scan.log /home                                   # Log to file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Background scanning</h4>
+        <pre><code>
+clamd                                                           # Start daemon
+clamdscan /path                                                 # Scan using daemon (faster)</code></pre>
+      </div>
+
+      <h3>AppArmor Commands</h3>
+
+      <div class="command-block">
+        <h4>AppArmor status</h4>
+        <pre><code>
+apparmor_status                                                 # Show AppArmor status
+aa-status                                                       # Alternative command</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Profile management</h4>
+        <pre><code>
+aa-enforce /etc/apparmor.d/usr.bin.program                      # Set to enforce mode
+aa-complain /etc/apparmor.d/usr.bin.program                     # Set to complain mode
+aa-disable /etc/apparmor.d/usr.bin.program                      # Disable profile</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Load/unload profiles</h4>
+        <pre><code>
+apparmor_parser -r /etc/apparmor.d/usr.bin.program              # Reload profile
+apparmor_parser -R /etc/apparmor.d/usr.bin.program              # Remove profile</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate profiles</h4>
+        <pre><code>
+aa-genprof /usr/bin/program                                     # Generate profile (interactive)
+aa-logprof                                                      # Update profiles from logs</code></pre>
+      </div>
+
+      <h2 id="performance">26. PERFORMANCE MONITORING & TUNING</h2>
+
+      <h3>iostat (I/O Statistics)</h3>
+
+      <div class="command-block">
+        <h4>Basic I/O stats</h4>
+        <pre><code>
+iostat                                                          # Basic report
+iostat -x                                                       # Extended statistics
+iostat -x 1 10                                                  # Every 1 second, 10 times
+iostat -d                                                       # Device utilization only
+iostat -c                                                       # CPU utilization only
+iostat -p sda                                                   # Specific device
+iostat -m                                                       # Display in MB/s
+iostat -k                                                       # Display in KB/s</code></pre>
+      </div>
+
+      <h3>vmstat (Virtual Memory Statistics)</h3>
+
+      <div class="command-block">
+        <h4>Virtual memory stats</h4>
+        <pre><code>
+vmstat                                                          # Basic report
+vmstat 1 10                                                     # Every 1 second, 10 times
+vmstat -a                                                       # Active/inactive memory
+vmstat -s                                                       # Memory statistics summary
+vmstat -d                                                       # Disk statistics
+vmstat -p /dev/sda1                                             # Partition statistics</code></pre>
+      </div>
+
+      <h3>sar (System Activity Reporter)</h3>
+
+      <div class="command-block">
+        <h4>CPU usage</h4>
+        <pre><code>
+sar                                                             # CPU usage (default)
+sar -u 1 10                                                     # CPU every 1 sec, 10 times
+sar -u ALL                                                      # All CPU statistics
+sar -P ALL                                                      # Per-CPU statistics</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Memory usage</h4>
+        <pre><code>
+sar -r                                                          # Memory utilization
+sar -r 1 10                                                     # Memory every 1 sec
+sar -R                                                          # Memory statistics
+sar -S                                                          # Swap space utilization</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>I/O statistics</h4>
+        <pre><code>
+sar -b                                                          # I/O transfer rate
+sar -d                                                          # Block device statistics
+sar -d -p                                                       # Pretty names for devices</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Network statistics</h4>
+        <pre><code>
+sar -n DEV                                                      # Network interface statistics
+sar -n EDEV                                                     # Network errors
+sar -n TCP                                                      # TCP statistics
+sar -n SOCK                                                     # Socket statistics</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Load average</h4>
+        <pre><code>
+sar -q                                                          # Queue length and load average</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Historical data</h4>
+        <pre><code>
+sar -f /var/log/sa/sa01                                         # Read from specific file
+sar -s 10:00:00 -e 11:00:00                                     # Time range</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate report</h4>
+        <pre><code>
+sar -A                                                          # All statistics
+sadf -d                                                         # Database format</code></pre>
+      </div>
+
+      <h3>mpstat (Multiprocessor Statistics)</h3>
+
+      <div class="command-block">
+        <h4>CPU statistics</h4>
+        <pre><code>
+mpstat                                                          # All CPUs summary
+mpstat -P ALL                                                   # Per-CPU statistics
+mpstat -P ALL 1 10                                              # Every 1 second, 10 times
+mpstat -P 0                                                     # CPU 0 only</code></pre>
+      </div>
+
+      <h3>pidstat (Process Statistics)</h3>
+
+      <div class="command-block">
+        <h4>Process statistics</h4>
+        <pre><code>
+pidstat                                                         # Default statistics
+pidstat 1 10                                                    # Every 1 second, 10 times
+pidstat -p PID                                                  # Specific process
+pidstat -u                                                      # CPU usage
+pidstat -r                                                      # Memory usage
+pidstat -d                                                      # I/O statistics
+pidstat -t                                                      # Thread statistics
+pidstat -C httpd                                                # Processes matching name</code></pre>
+      </div>
+
+      <h3>iotop (I/O Monitor)</h3>
+
+      <div class="command-block">
+        <h4>I/O monitoring</h4>
+        <pre><code>
+iotop                                                           # Interactive I/O monitor
+iotop -o                                                        # Only processes doing I/O
+iotop -P                                                        # Show processes, not threads
+iotop -a                                                        # Accumulated I/O
+iotop -b -n 3                                                   # Batch mode, 3 iterations</code></pre>
+      </div>
+
+      <h3>nethogs (Network Monitor)</h3>
+
+      <div class="command-block">
+        <h4>Network bandwidth per process</h4>
+        <pre><code>
+nethogs                                                         # Monitor all interfaces
+nethogs eth0                                                    # Specific interface
+nethogs -d 5                                                    # Update every 5 seconds</code></pre>
+      </div>
+
+      <h3>iftop (Interface Monitor)</h3>
+
+      <div class="command-block">
+        <h4>Network interface monitoring</h4>
+        <pre><code>
+iftop                                                           # Default interface
+iftop -i eth0                                                   # Specific interface
+iftop -n                                                        # No hostname lookup
+iftop -P                                                        # Show port numbers
+iftop -B                                                        # Display bandwidth in bytes</code></pre>
+      </div>
+
+      <h3>dstat (Versatile Resource Statistics)</h3>
+
+      <div class="command-block">
+        <h4>Combined statistics</h4>
+        <pre><code>
+dstat                                                           # Default output
+dstat -c                                                        # CPU stats only
+dstat -d                                                        # Disk stats only
+dstat -n                                                        # Network stats only
+dstat -m                                                        # Memory stats only
+dstat -cdnm                                                     # Combined stats
+dstat --top-cpu                                                 # Show top CPU process
+dstat --top-mem                                                 # Show top memory process
+dstat --top-io                                                  # Show top I/O process</code></pre>
+      </div>
+
+      <h3>nmon (Performance Monitor)</h3>
+
+      <div class="command-block">
+        <h4>Interactive performance monitor</h4>
+        <pre><code>
+nmon                                                            # Start nmon
+# Press keys for different views:
+# c - CPU
+# m - Memory
+# d - Disk I/O
+# n - Network
+# t - Top processes
+# q - Quit</code></pre>
+      </div>
+
+      <h3>Tuning Commands</h3>
+
+      <div class="command-block">
+        <h4>sysctl (Kernel parameters)</h4>
+        <pre><code>
+sysctl -a                                                       # Show all parameters
+sysctl kernel.hostname                                          # Show specific parameter
+sysctl -w net.ipv4.ip_forward=1                                 # Set parameter temporarily
+sysctl -p                                                       # Load from /etc/sysctl.conf
+sysctl -p /etc/sysctl.d/custom.conf                             # Load from specific file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Common tuning parameters</h4>
+        <pre><code>
+# /etc/sysctl.conf or /etc/sysctl.d/*.conf
+# net.ipv4.ip_forward = 1
+# net.ipv4.tcp_tw_reuse = 1
+# vm.swappiness = 10
+# fs.file-max = 65536</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Transparent Huge Pages</h4>
+        <pre><code>
+cat /sys/kernel/mm/transparent_hugepage/enabled                 # Check status
+echo never > /sys/kernel/mm/transparent_hugepage/enabled        # Disable</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>CPU governor</h4>
+        <pre><code>
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor                 # Check
+echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  # Set</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>I/O scheduler</h4>
+        <pre><code>
+cat /sys/block/sda/queue/scheduler                              # Check scheduler
+echo deadline > /sys/block/sda/queue/scheduler                  # Set scheduler</code></pre>
+      </div>
+
+      <h2 id="backup">27. BACKUP AND RECOVERY</h2>
+
+      <h3>tar (Archive)</h3>
+
+      <div class="command-block">
+        <h4>Create archive</h4>
+        <pre><code>
+tar -cvf archive.tar files/                                     # Create tar
+tar -czvf archive.tar.gz files/                                 # Create compressed (gzip)
+tar -cjvf archive.tar.bz2 files/                                # Create compressed (bzip2)
+tar -cJvf archive.tar.xz files/                                 # Create compressed (xz)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Extract archive</h4>
+        <pre><code>
+tar -xvf archive.tar                                            # Extract tar
+tar -xzvf archive.tar.gz                                        # Extract gzip
+tar -xjvf archive.tar.bz2                                       # Extract bzip2
+tar -xJvf archive.tar.xz                                        # Extract xz
+tar -xvf archive.tar -C /path                                   # Extract to directory</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List archive contents</h4>
+        <pre><code>
+tar -tvf archive.tar                                            # List contents
+tar -tzvf archive.tar.gz                                        # List gzip archive</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Append to archive</h4>
+        <pre><code>
+tar -rvf archive.tar newfile                                    # Append file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Exclude files</h4>
+        <pre><code>
+tar -czvf archive.tar.gz --exclude='*.log' files/
+tar -czvf archive.tar.gz --exclude-from=exclude.txt files/</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Incremental backup</h4>
+        <pre><code>
+tar -czvf full.tar.gz -g snapshot.file /data                    # Full backup
+tar -czvf incr.tar.gz -g snapshot.file /data                    # Incremental</code></pre>
+      </div>
+
+      <h3>rsync (Remote Sync)</h3>
+
+      <div class="command-block">
+        <h4>Basic sync</h4>
+        <pre><code>
+rsync source/ destination/                                      # Sync directories
+rsync -a source/ destination/                                   # Archive mode (recursive, preserve)
+rsync -av source/ destination/                                  # Archive + verbose
+rsync -avz source/ destination/                                 # Archive + compress</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remote sync</h4>
+        <pre><code>
+rsync -avz /local/ user@remote:/remote/                         # Push to remote
+rsync -avz user@remote:/remote/ /local/                         # Pull from remote
+rsync -avz -e "ssh -p 2222" /local/ user@remote:/remote/        # Custom SSH port</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Dry run</h4>
+        <pre><code>
+rsync -avz --dry-run source/ destination/                       # Test without changes
+rsync -avn source/ destination/                                 # Short form</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete</h4>
+        <pre><code>
+rsync -av --delete source/ destination/                         # Delete files not in source</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Exclude files</h4>
+        <pre><code>
+rsync -av --exclude='*.log' source/ destination/
+rsync -av --exclude-from=exclude.txt source/ destination/</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Progress and stats</h4>
+        <pre><code>
+rsync -av --progress source/ destination/                       # Show progress
+rsync -av --stats source/ destination/                          # Show statistics</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Bandwidth limit</h4>
+        <pre><code>
+rsync -av --bwlimit=1000 source/ destination/                   # Limit to 1000 KB/s</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Partial transfers</h4>
+        <pre><code>
+rsync -av --partial source/ destination/                        # Keep partial files
+rsync -avP source/ destination/                                 # Partial + progress</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup with timestamps</h4>
+        <pre><code>
+rsync -av --backup --backup-dir=backup-$(date +%Y%m%d) source/ destination/</code></pre>
+      </div>
+
+      <h3>dd (Disk Dump)</h3>
+
+      <div class="command-block">
+        <h4>Disk/partition copy</h4>
+        <pre><code>
+dd if=/dev/sda of=/dev/sdb                                      # Clone disk
+dd if=/dev/sda1 of=/dev/sdb1                                    # Clone partition
+dd if=/dev/sda of=disk.img                                      # Create disk image
+dd if=disk.img of=/dev/sdb                                      # Restore from image</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup with compression</h4>
+        <pre><code>
+dd if=/dev/sda | gzip > disk.img.gz
+gunzip -c disk.img.gz | dd of=/dev/sdb</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup MBR</h4>
+        <pre><code>
+dd if=/dev/sda of=mbr.img bs=512 count=1                        # Backup MBR
+dd if=mbr.img of=/dev/sda bs=512 count=1                        # Restore MBR</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Progress monitoring</h4>
+        <pre><code>
+dd if=/dev/sda of=/dev/sdb bs=4M status=progress</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create bootable USB</h4>
+        <pre><code>
+dd if=iso_file.iso of=/dev/sdb bs=4M status=progress</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Wipe disk</h4>
+        <pre><code>
+dd if=/dev/zero of=/dev/sda bs=4M status=progress               # Write zeros
+dd if=/dev/urandom of=/dev/sda bs=4M status=progress            # Random data</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Test disk speed</h4>
+        <pre><code>
+dd if=/dev/zero of=/tmp/test bs=1M count=1024                   # Write test
+dd if=/tmp/test of=/dev/null bs=1M                              # Read test</code></pre>
+      </div>
+
+      <h3>Backup with MySQL/MariaDB</h3>
+
+      <div class="command-block">
+        <h4>Backup database</h4>
+        <pre><code>
+mysqldump -u root -p database_name > backup.sql
+mysqldump -u root -p --all-databases > all_backup.sql
+mysqldump -u root -p database_name table_name > table_backup.sql
+mysqldump -u root -p --databases db1 db2 > multiple_backup.sql</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup with compression</h4>
+        <pre><code>
+mysqldump -u root -p database_name | gzip > backup.sql.gz</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup structure only</h4>
+        <pre><code>
+mysqldump -u root -p --no-data database_name > structure.sql</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup data only</h4>
+        <pre><code>
+mysqldump -u root -p --no-create-info database_name > data.sql</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Restore database</h4>
+        <pre><code>
+mysql -u root -p database_name < backup.sql
+mysql -u root -p < all_backup.sql                               # Restore all databases
+gunzip < backup.sql.gz | mysql -u root -p database_name         # Restore compressed</code></pre>
+      </div>
+
+      <h3>Backup with PostgreSQL</h3>
+
+      <div class="command-block">
+        <h4>Backup database</h4>
+        <pre><code>
+pg_dump database_name > backup.sql
+pg_dump -U username database_name > backup.sql
+pg_dump -h hostname -U username database_name > backup.sql</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup all databases</h4>
+        <pre><code>
+pg_dumpall > all_backup.sql
+pg_dumpall -U postgres > all_backup.sql</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup with compression</h4>
+        <pre><code>
+pg_dump database_name | gzip > backup.sql.gz
+pg_dump -Fc database_name > backup.dump                         # Custom format (compressed)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup specific table</h4>
+        <pre><code>
+pg_dump -t table_name database_name > table_backup.sql</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Restore database</h4>
+        <pre><code>
+psql database_name < backup.sql
+psql -U username database_name < backup.sql
+gunzip < backup.sql.gz | psql database_name                     # Restore compressed
+pg_restore -d database_name backup.dump                         # Restore custom format</code></pre>
+      </div>
+
+      <h3>Snapshot with LVM</h3>
+
+      <div class="command-block">
+        <h4>Create LVM snapshot</h4>
+        <pre><code>
+lvcreate -L 5G -s -n snap_lv /dev/vg_name/lv_name</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Mount snapshot</h4>
+        <pre><code>
+mkdir /mnt/snapshot
+mount /dev/vg_name/snap_lv /mnt/snapshot</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Backup from snapshot</h4>
+        <pre><code>
+tar -czvf backup.tar.gz -C /mnt/snapshot .</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove snapshot</h4>
+        <pre><code>
+umount /mnt/snapshot
+lvremove /dev/vg_name/snap_lv</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Restore from snapshot (merge back)</h4>
+        <pre><code>
+lvconvert --merge /dev/vg_name/snap_lv
+# System must reboot to complete merge</code></pre>
+      </div>
+
+      <h2 id="automation">28. AUTOMATION AND SCHEDULING</h2>
+
+      <h3>cron (Scheduled Tasks)</h3>
+
+      <div class="command-block">
+        <h4>View crontab</h4>
+        <pre><code>
+crontab -l                                                      # List current user's crontab
+crontab -l -u username                                          # List specific user's crontab
+sudo crontab -l                                                 # List root's crontab</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Edit crontab</h4>
+        <pre><code>
+crontab -e                                                      # Edit current user's crontab
+crontab -e -u username                                          # Edit specific user's crontab</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove crontab</h4>
+        <pre><code>
+crontab -r                                                      # Remove current user's crontab
+crontab -r -u username                                          # Remove specific user's crontab</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Crontab format</h4>
+        <pre><code>
+# Crontab format:
+# * * * * * command
+# │ │ │ │ │
+# │ │ │ │ └─── Day of week (0-7, 0 and 7 are Sunday)
+# │ │ │ └───── Month (1-12)
+# │ │ └─────── Day of month (1-31)
+# │ └───────── Hour (0-23)
+# └─────────── Minute (0-59)
+
+# Examples:
+# 0 2 * * * /path/to/script.sh         # Daily at 2 AM
+# */5 * * * * /path/to/script.sh       # Every 5 minutes
+# 0 */2 * * * /path/to/script.sh       # Every 2 hours
+# 0 9-17 * * 1-5 /path/to/script.sh    # 9 AM to 5 PM, Mon-Fri
+# 0 0 1 * * /path/to/script.sh         # First day of month
+# @reboot /path/to/script.sh           # At system boot
+# @daily /path/to/script.sh            # Daily
+# @weekly /path/to/script.sh           # Weekly
+# @monthly /path/to/script.sh          # Monthly</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>System-wide cron</h4>
+        <pre><code>
+/etc/crontab                                                    # System crontab
+/etc/cron.d/                                                    # Additional cron files
+/etc/cron.daily/                                                # Daily scripts
+/etc/cron.weekly/                                               # Weekly scripts
+/etc/cron.monthly/                                              # Monthly scripts
+/etc/cron.hourly/                                               # Hourly scripts</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Cron logs</h4>
+        <pre><code>
+tail -f /var/log/cron                                           # Follow cron logs
+grep CRON /var/log/syslog                                       # Check cron execution (Ubuntu/Debian)</code></pre>
+      </div>
+
+      <h3>at (One-Time Scheduled Tasks)</h3>
+
+      <div class="command-block">
+        <h4>Schedule one-time task</h4>
+        <pre><code>
+at 10:00                                                        # Schedule for 10:00 AM today
+at now + 5 minutes                                              # In 5 minutes
+at now + 2 hours                                                # In 2 hours
+at 22:00 tomorrow                                               # 10 PM tomorrow
+at 09:00 2024-12-25                                             # Specific date and time
+
+# In at prompt, enter commands, then Ctrl+D to save</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List scheduled jobs</h4>
+        <pre><code>
+atq                                                             # List all jobs
+at -l                                                           # Alternative</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View job details</h4>
+        <pre><code>
+at -c job_number                                                # Show job commands</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove scheduled job</h4>
+        <pre><code>
+atrm job_number                                                 # Remove job
+at -r job_number                                                # Alternative</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Examples</h4>
+        <pre><code>
+echo "/path/to/script.sh" | at now + 1 hour
+at 02:00 <<EOF
+/usr/bin/backup.sh
+/usr/bin/cleanup.sh
+EOF</code></pre>
+      </div>
+
+      <h3>systemd Timers (Modern Alternative to Cron)</h3>
+
+      <div class="command-block">
+        <h4>List all timers</h4>
+        <pre><code>
+systemctl list-timers                                           # Active timers
+systemctl list-timers --all                                     # All timers</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create timer (requires .timer and .service files)</h4>
+        <pre><code>
+# /etc/systemd/system/mytask.timer
+# /etc/systemd/system/mytask.service</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Enable and start timer</h4>
+        <pre><code>
+systemctl enable mytask.timer
+systemctl start mytask.timer</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check timer status</h4>
+        <pre><code>
+systemctl status mytask.timer</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Manual trigger</h4>
+        <pre><code>
+systemctl start mytask.service</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reload after editing</h4>
+        <pre><code>
+systemctl daemon-reload</code></pre>
+      </div>
+
+      <h3>watch (Repeat Command)</h3>
+
+      <div class="command-block">
+        <h4>Execute command repeatedly</h4>
+        <pre><code>
+watch command                                                   # Every 2 seconds (default)
+watch -n 5 command                                              # Every 5 seconds
+watch -d command                                                # Highlight differences
+watch -t command                                                # No title
+watch -b command                                                # Beep on error
+watch -x command                                                # Exec instead of sh -c</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Examples</h4>
+        <pre><code>
+watch df -h                                                     # Monitor disk usage
+watch -n 1 'ps aux | grep httpd'                                # Monitor processes
+watch -d free -m                                                # Monitor memory with highlights
+watch kubectl get pods                                          # Monitor Kubernetes pods</code></pre>
+      </div>
+
+      <h2 id="misc">29. MISCELLANEOUS USEFUL COMMANDS</h2>
+      <pre><code>
+Perfect for DevOps engineers who need rapid command lookup without project context or theoretical explanations.
+</code></pre>
+
+      <h3>File Compression/Decompression</h3>
+
+      <div class="command-block">
+        <h4>gzip</h4>
+        <pre><code>
+gzip file.txt                                                   # Compress (removes original)
+gzip -k file.txt                                                # Keep original
+gzip -9 file.txt                                                # Maximum compression
+gunzip file.txt.gz                                              # Decompress
+gzip -d file.txt.gz                                             # Alternative decompress
+gzip -c file.txt > file.txt.gz                                  # Keep original (redirect)
+gunzip -c file.txt.gz > file.txt                                # Decompress, keep .gz</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>bzip2</h4>
+        <pre><code>
+bzip2 file.txt                                                  # Compress
+bzip2 -k file.txt                                               # Keep original
+bunzip2 file.txt.bz2                                            # Decompress
+bzip2 -d file.txt.bz2                                           # Alternative decompress</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>xz</h4>
+        <pre><code>
+xz file.txt                                                     # Compress
+xz -k file.txt                                                  # Keep original
+unxz file.txt.xz                                                # Decompress
+xz -d file.txt.xz                                               # Alternative decompress</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>zip/unzip</h4>
+        <pre><code>
+zip archive.zip file1 file2                                     # Create zip
+zip -r archive.zip directory                                    # Recursive
+unzip archive.zip                                               # Extract
+unzip -l archive.zip                                            # List contents
+unzip archive.zip -d /path                                      # Extract to directory</code></pre>
+      </div>
+
+      <h3>System Information Commands</h3>
+
+      <div class="command-block">
+        <h4>Hardware info</h4>
+        <pre><code>
+lshw                                                            # List hardware
+lshw -short                                                     # Short format
+lshw -C cpu                                                     # CPU info only
+lshw -C memory                                                  # Memory info
+lspci                                                           # PCI devices
+lspci -v                                                        # Verbose
+lsusb                                                           # USB devices
+lsusb -v                                                        # Verbose</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>CPU info</h4>
+        <pre><code>
+lscpu                                                           # CPU architecture info
+cat /proc/cpuinfo                                               # Detailed CPU info</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Memory info</h4>
+        <pre><code>
+free -h                                                         # Memory usage
+dmidecode -t memory                                             # Detailed memory info</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Disk info</h4>
+        <pre><code>
+lsblk                                                           # List block devices
+fdisk -l                                                        # List disks and partitions
+hdparm -I /dev/sda                                              # Disk information
+smartctl -a /dev/sda                                            # SMART info (requires smartmontools)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>System info</h4>
+        <pre><code>
+uname -a                                                        # Kernel and system info
+hostnamectl                                                     # System hostname info
+timedatectl                                                     # Time and date info
+dmidecode                                                       # DMI/SMBIOS info</code></pre>
+      </div>
+
+      <h3>Date and Time Commands</h3>
+
+      <div class="command-block">
+        <h4>Display date/time</h4>
+        <pre><code>
+date                                                            # Current date and time
+date +%Y-%m-%d                                                  # Custom format (2024-01-06)
+date +%H:%M:%S                                                  # Time only
+date +%s                                                        # Unix timestamp
+date -d "2024-01-01"                                            # Specific date
+date -d "yesterday"                                             # Yesterday
+date -d "next monday"                                           # Next Monday
+date -d "+5 days"                                               # 5 days from now
+date -d @1704501600                                             # Convert from timestamp</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Set date/time (requires root)</h4>
+        <pre><code>
+date -s "2024-01-06 10:30:00"                                   # Set date and time
+timedatectl set-time "2024-01-06 10:30:00"                      # SystemD method</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Timezone</h4>
+        <pre><code>
+timedatectl list-timezones                                      # List available timezones
+timedatectl set-timezone America/New_York                       # Set timezone
+ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime      # Alternative</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>NTP sync</h4>
+        <pre><code>
+timedatectl set-ntp true                                        # Enable NTP
+chronyc tracking                                                # Check chronyd status
+ntpq -p                                                         # Check ntpd status</code></pre>
+      </div>
+
+      <h3>Calendar</h3>
+
+      <div class="command-block">
+        <h4>Display calendar</h4>
+        <pre><code>
+cal                                                             # Current month
+cal 2024                                                        # Entire year
+cal 12 2024                                                     # Specific month
+cal -3                                                          # Last, current, next month
+cal -y                                                          # Entire current year
+ncal                                                            # Alternative layout</code></pre>
+      </div>
+
+      <h3>bc (Calculator)</h3>
+
+      <div class="command-block">
+        <h4>Basic calculator</h4>
+        <pre><code>
+bc                                                              # Start interactive calculator
+echo "5 + 3" | bc                                               # Calculate from echo
+bc <<< "5 + 3"                                                  # Calculate with here string
+bc <<< "scale=2; 10/3"                                          # Floating point (2 decimals)
+bc <<< "sqrt(16)"                                               # Square root
+bc <<< "10^3"                                                   # Exponentiation</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Mathematical functions</h4>
+        <pre><code>
+bc -l                                                           # Start with math library
+bc -l <<< "s(1)"                                                # Sine
+bc -l <<< "c(1)"                                                # Cosine
+bc -l <<< "l(10)"                                               # Natural log
+bc -l <<< "e(1)"                                                # Exponential</code></pre>
+      </div>
+
+      <h3>Screen (Terminal Multiplexer)</h3>
+
+      <div class="command-block">
+        <h4>Start screen</h4>
+        <pre><code>
+screen                                                          # Start new session
+screen -S sessionname                                           # Named session
+
+# Inside screen:
+# Ctrl+a c    - Create new window
+# Ctrl+a n    - Next window
+# Ctrl+a p    - Previous window
+# Ctrl+a "    - List windows
+# Ctrl+a d    - Detach from session
+# Ctrl+a k    - Kill window
+
+# Outside screen:
+screen -ls                                                      # List sessions
+screen -r                                                       # Reattach to session
+screen -r sessionname                                           # Reattach to named session
+screen -d -r sessionname                                        # Detach and reattach
+screen -X -S sessionname quit                                   # Kill session</code></pre>
+      </div>
+
+      <h3>tmux (Terminal Multiplexer)</h3>
+
+      <div class="command-block">
+        <h4>Start tmux</h4>
+        <pre><code>
+tmux                                                            # Start new session
+tmux new -s sessionname                                         # Named session
+
+# Inside tmux (default prefix: Ctrl+b):
+# Ctrl+b c    - Create new window
+# Ctrl+b n    - Next window
+# Ctrl+b p    - Previous window
+# Ctrl+b w    - List windows
+# Ctrl+b d    - Detach from session
+# Ctrl+b %    - Split pane vertically
+# Ctrl+b "    - Split pane horizontally
+# Ctrl+b arrow - Navigate panes
+
+# Outside tmux:
+tmux ls                                                         # List sessions
+tmux attach                                                     # Attach to last session
+tmux attach -t sessionname                                      # Attach to named session
+tmux kill-session -t sessionname                                # Kill session</code></pre>
+      </div>
+
+      <h3>alias (Command Shortcuts)</h3>
+
+      <div class="command-block">
+        <h4>Create alias (temporary)</h4>
+        <pre><code>
+alias ll='ls -la'                                               # Create alias
+alias grep='grep --color=auto'
+alias update='sudo dnf update'</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View aliases</h4>
+        <pre><code>
+alias                                                           # List all aliases
+alias ll                                                        # Show specific alias</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove alias</h4>
+        <pre><code>
+unalias ll                                                      # Remove alias
+unalias -a                                                      # Remove all aliases</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Make permanent (add to ~/.bashrc or ~/.bash_aliases)</h4>
+        <pre><code>
+echo "alias ll='ls -la'" >> ~/.bashrc
+source ~/.bashrc                                                # Reload</code></pre>
+      </div>
+
+      <h3>history (Command History)</h3>
+
+      <div class="command-block">
+        <h4>View history</h4>
+        <pre><code>
+history                                                         # Show all history
+history 20                                                      # Show last 20 commands
+history | grep ssh                                              # Search history</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Execute from history</h4>
+        <pre><code>
+!100                                                            # Execute command 100
+!!                                                              # Execute last command
+!-2                                                             # Execute 2 commands ago
+!ssh                                                            # Execute last command starting with ssh
+!?pattern                                                       # Execute last command containing pattern</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>History control</h4>
+        <pre><code>
+history -c                                                      # Clear history
+history -d 100                                                  # Delete command 100
+export HISTSIZE=10000                                           # Set history size
+export HISTFILESIZE=20000                                       # Set history file size
+export HISTCONTROL=ignoredups                                   # Ignore duplicates
+export HISTIGNORE="ls:pwd:exit"                                 # Ignore specific commands</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search history</h4>
+        <pre><code>
+Ctrl+r                                                          # Reverse search (interactive)</code></pre>
+      </div>
+
+      <h2 id="summary">SUMMARY</h2>
+
+      <div class="info">
+        <p>
+          This comprehensive command reference covers 29 major categories with
+          1000+ commands organized for rapid recall and muscle memory
+          reinforcement:
+        </p>
+
+        <br />
+
+        <hr />
+
+        <br />
+
+        <p>
+          <strong>System Information & Navigation</strong> - Basic Linux
+          exploration
+        </p>
+        <p>
+          <strong>File Operations</strong> - Creating, copying, moving, finding
+          files
+        </p>
+        <p><strong>Text Editors</strong> - Vim and Nano</p>
+        <p>
+          <strong>File Permissions</strong> - chmod, chown, ACLs, attributes
+        </p>
+        <p>
+          <strong>User & Group Management</strong> - Creating, modifying
+          users/groups
+        </p>
+        <p>
+          <strong>Process Management</strong> - Viewing, controlling,
+          prioritizing processes
+        </p>
+        <p>
+          <strong>systemd Service Management</strong> - Managing services and
+          system state
+        </p>
+        <p><strong>Package Management</strong> - DNF/YUM and RPM</p>
+        <p><strong>System Logging</strong> - rsyslog, journalctl, auditd</p>
+        <p>
+          <strong>Disk Management</strong> - Partitioning, LVM, filesystems,
+          mounting
+        </p>
+        <p>
+          <strong>Networking Basics</strong> - IP configuration, routing,
+          testing
+        </p>
+        <p><strong>Firewall Management</strong> - firewalld and iptables</p>
+        <p><strong>SSH</strong> - Secure shell, keys, tunneling, SCP, SFTP</p>
+        <p>
+          <strong>Text Processing</strong> - grep, sed, awk, cut, sort, etc.
+        </p>
+        <p>
+          <strong>Bash Scripting</strong> - Variables, loops, functions, arrays
+        </p>
+        <p><strong>Python for DevOps</strong> - pip, virtual environments</p>
+        <p><strong>Git Version Control</strong> - All Git operations</p>
+        <p><strong>Docker</strong> - Containers, images, volumes, networks</p>
+        <p><strong>Kubernetes</strong> - kubectl for container orchestration</p>
+        <p>
+          <strong>Ansible</strong> - Configuration management and automation
+        </p>
+        <p><strong>Terraform</strong> - Infrastructure as Code</p>
+        <p><strong>AWS CLI</strong> - Cloud resource management</p>
+        <p><strong>Monitoring</strong> - Prometheus, Grafana, ELK stack</p>
+        <p>
+          <strong>Security</strong> - fail2ban, SELinux, OpenSSL, GPG, scanning
+        </p>
+        <p>
+          <strong>Performance Monitoring</strong> - iostat, vmstat, sar, tuning
+        </p>
+        <p>
+          <strong>Backup & Recovery</strong> - tar, rsync, dd, database backups
+        </p>
+        <p><strong>Automation</strong> - cron, at, systemd timers</p>
+        <p>
+          <strong>Miscellaneous</strong> - Compression, system info,
+          calculators, multiplexers
+        </p>
+        <p>
+          <strong>Useful One-Liners</strong> - Quick reference for common tasks
+        </p>
+
+        <br />
+
+        <p>
+          Perfect for DevOps engineers who need rapid command lookup without
+          project context or theoretical explanations.
+        </p>
+      </div>
+
+      <div class="download-section">
+        <h3>Complete Reference Guide</h3>
+        <p>
+          This is Part 3 of 3. For the complete Linux/DevOps command reference:
+        </p>
+        <a href="system-admin.html" class="download-btn"
+          >Part 1: System Administration</a
+        >
+        <a href="devops-tools.html" class="download-btn"
+          >Part 2: DevOps Tools</a
+        >
+        <a href="#" class="download-btn" style="background-color: #3498db"
+          >Part 3: Monitoring & Security</a
+        >
+      </div>
+
+      <div class="warning">
+        <p>
+          <strong>Note:</strong> This reference guide is optimized for quick
+          lookup. Commands are organized by function rather than complexity.
+          Always test commands in a safe environment before using in production.
+        </p>
+      </div>
+    </div>
+
+    <!-- Floating Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top-btn" onclick="scrollToTop()">
+      ↑ TOP
+    </button>
+
+    <script>
+      function downloadAsFile(filename) {
+        // Get the entire HTML content
+        const htmlContent = document.documentElement.outerHTML;
+
+        // Create a blob with the HTML content
+        const blob = new Blob([htmlContent], { type: "text/html" });
+
+        // Create a temporary link element
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename || "linux-devops-monitoring-security.html";
+
+        // Append to body, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function printPage() {
+        window.print();
+      }
+
+      // Add smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 20,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Add search functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // Create search input
+        const searchContainer = document.createElement("div");
+        searchContainer.style.cssText = "margin: 20px 0; text-align: center;";
+        searchContainer.innerHTML = `
+                <input type="text" id="commandSearch" placeholder="Search commands..." 
+                       style="padding: 10px; width: 80%; max-width: 500px; border: 2px solid #3498db; border-radius: 5px;">
+                <button onclick="searchCommands()" 
+                        style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; margin-left: 10px;">
+                    Search
+                </button>
+                <button onclick="clearSearch()" 
+                        style="padding: 10px 20px; background-color: #95a5a6; color: white; border: none; border-radius: 5px; margin-left: 5px;">
+                    Clear
+                </button>
+            `;
+
+        // Insert search at the beginning
+        const container = document.querySelector(".container");
+        container.insertBefore(
+          searchContainer,
+          container.firstChild.nextSibling
+        );
+
+        // Add search results container
+        const resultsContainer = document.createElement("div");
+        resultsContainer.id = "searchResults";
+        resultsContainer.style.cssText = "margin: 20px 0; display: none;";
+        container.insertBefore(resultsContainer, searchContainer.nextSibling);
+      });
+
+      function searchCommands() {
+        const searchTerm = document
+          .getElementById("commandSearch")
+          .value.toLowerCase();
+        const resultsContainer = document.getElementById("searchResults");
+
+        if (!searchTerm) {
+          resultsContainer.innerHTML =
+            '<p style="color: #e74c3c;">Please enter a search term</p>';
+          resultsContainer.style.display = "block";
+          return;
+        }
+
+        // Get all pre elements (command blocks)
+        const preElements = document.querySelectorAll("pre");
+        let results = [];
+
+        preElements.forEach((pre, index) => {
+          const text = pre.textContent.toLowerCase();
+          if (text.includes(searchTerm)) {
+            // Get the heading for context
+            let heading = "Unknown Section";
+            let currentElement = pre.previousElementSibling;
+
+            // Find the nearest heading
+            while (currentElement) {
+              if (currentElement.tagName.match(/^H[2-4]$/)) {
+                heading = currentElement.textContent;
+                break;
+              }
+              currentElement = currentElement.previousElementSibling;
+            }
+
+            // Extract matching lines
+            const lines = pre.textContent.split("\n");
+            const matchingLines = lines
+              .filter((line) => line.toLowerCase().includes(searchTerm))
+              .slice(0, 3); // Show first 3 matching lines
+
+            if (matchingLines.length > 0) {
+              results.push({
+                heading: heading,
+                lines: matchingLines,
+                element: pre,
+              });
+            }
+          }
+        });
+
+        // Display results
+        if (results.length > 0) {
+          let html = `<h3>Found ${results.length} results for "${searchTerm}"</h3>`;
+
+          results.forEach((result, index) => {
+            html += `
+                        <div style="background-color: #f8f9fa; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db;">
+                            <h4 style="margin-top: 0;">${result.heading}</h4>
+                            <pre style="margin: 10px 0;">${result.lines.join(
+                              "\n"
+                            )}</pre>
+                            <button onclick="scrollToResult(${index})" 
+                                    style="padding: 5px 10px; background-color: #2ecc71; color: white; border: none; border-radius: 3px;">
+                                Go to Command
+                            </button>
+                        </div>
+                    `;
+          });
+
+          resultsContainer.innerHTML = html;
+          resultsContainer.style.display = "block";
+
+          // Store results for scrolling
+          window.searchResults = results;
+        } else {
+          resultsContainer.innerHTML = `<p style="color: #e74c3c;">No results found for "${searchTerm}"</p>`;
+          resultsContainer.style.display = "block";
+        }
+      }
+
+      function scrollToResult(index) {
+        if (window.searchResults && window.searchResults[index]) {
+          const element = window.searchResults[index].element;
+          window.scrollTo({
+            top: element.offsetTop - 20,
+            behavior: "smooth",
+          });
+
+          // Highlight the element temporarily
+          element.style.backgroundColor = "#fff3cd";
+          element.style.borderColor = "#ffc107";
+
+          setTimeout(() => {
+            element.style.backgroundColor = "";
+            element.style.borderColor = "";
+          }, 2000);
+        }
+      }
+
+      function clearSearch() {
+        document.getElementById("commandSearch").value = "";
+        const resultsContainer = document.getElementById("searchResults");
+        resultsContainer.style.display = "none";
+        resultsContainer.innerHTML = "";
+      }
+
+      // Floating Back to Top Button (static markup + idempotent handler)
+      // Inserted button markup
+      (function () {
+        if (!document.getElementById("backToTopBtn")) {
+          const btn = document.createElement("button");
+          btn.id = "backToTopBtn";
+          btn.className = "back-to-top-btn";
+          btn.setAttribute("onclick", "scrollToTop()");
+          btn.innerHTML = "↑ TOP";
+          document.body.appendChild(btn);
+        }
+
+        if (window._backToTopInstalled) return;
+        window._backToTopInstalled = true;
+
+        window.scrollToTop =
+          window.scrollToTop ||
+          function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          };
+
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        if (!backToTopBtn) return;
+        backToTopBtn.style.display = "none";
+
+        window.addEventListener("scroll", function () {
+          backToTopBtn.style.display =
+            window.pageYOffset > 300 ? "flex" : "none";
+        });
+      })();
+    </script>
+
+    <style>
+      .back-to-top-btn {
+        display: none;
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        z-index: 99;
+        width: 60px;
+        height: 60px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0.95;
+      }
+      .back-to-top-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        opacity: 1;
+      }
+      .back-to-top-btn:active {
+        transform: translateY(-2px) scale(1.05);
+      }
+    </style>
+  </body>
+</html>

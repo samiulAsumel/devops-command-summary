@@ -1,0 +1,5027 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linux/DevOps Command Reference Guide - DevOps Tools</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="scripts.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="part-links">
+        <strong>📚 Navigate:</strong>
+        <a href="index.html">🏠 HOME</a>
+        <a href="system-admin.html">Part 1: System Administration</a>
+        <a href="devops-tools.html" class="active-part">Part 2: DevOps Tools</a>
+        <a href="monitoring-security.html">Part 3: Monitoring & Security</a>
+      </div>
+      <!--
+      <div class="download-section">
+        <h3>💾 Download & Export This Guide</h3>
+        <p>Save this reference guide for offline use:</p>
+        <a
+          href="javascript:void(0);"
+          onclick="downloadAsFile('linux-devops-devops-tools.html')"
+          class="download-btn"
+          >📥 Download as HTML</a
+        >
+        <a href="javascript:void(0);" onclick="printPage()" class="download-btn"
+          >🖨️ Print to PDF</a
+        >
+      </div>
+       -->
+      <h1>📖 Linux/DevOps Command Reference Guide</h1>
+      <h2>Part 2: DevOps Tools (13 Sections)</h2>
+
+      <div class="section-index">
+        <h3>📑 Table of Contents</h3>
+        <ul>
+          <li><a href="#disk-management">11. Disk Management</a></li>
+          <li><a href="#networking">12. Networking Basics</a></li>
+          <li><a href="#firewall">13. Firewall Management</a></li>
+          <li><a href="#ssh">14. SSH (Secure Shell)</a></li>
+          <li><a href="#text-processing">15. Text Processing</a></li>
+          <li><a href="#scripting">16. Bash Scripting Essentials</a></li>
+          <li><a href="#python">17. Python for DevOps - Basics</a></li>
+          <li><a href="#git">18. Git Version Control</a></li>
+          <li><a href="#docker">19. Docker Commands</a></li>
+          <li><a href="#kubernetes">20. Kubernetes (kubectl) Commands</a></li>
+          <li><a href="#ansible">21. Ansible Commands</a></li>
+          <li><a href="#terraform">22. Terraform Commands</a></li>
+          <li><a href="#aws">23. AWS CLI Commands</a></li>
+        </ul>
+      </div>
+
+      <h2 id="disk-management">11. DISK MANAGEMENT</h2>
+
+      <h3>Disk Information</h3>
+
+      <div class="command-block">
+        <h4>List block devices</h4>
+        <pre><code>
+lsblk                                                           # Tree view of block devices
+lsblk -f                                                        # Show filesystems
+lsblk -a                                                        # Show all devices
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT                              # Custom columns
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show device IDs</h4>
+        <pre><code>
+blkid                                                           # Show all block device attributes
+blkid /dev/sda1                                                 # Show specific device
+blkid -o list                                                   # List format
+blkid -t TYPE=ext4                                              # Find by filesystem type
+blkid -U UUID                                                   # Find by UUID
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Disk usage</h4>
+        <pre><code>
+df                                                              # Disk space usage
+df -h                                                           # Human-readable sizes
+df -i                                                           # Inode usage
+df -T                                                           # Show filesystem type
+df -t ext4                                                      # Show only ext4 filesystems
+df -x tmpfs                                                     # Exclude tmpfs
+df /path                                                        # Show filesystem for path
+
+du                                                              # Directory usage
+du -h                                                           # Human-readable
+du -s directory                                                 # Summary only
+du -sh directory                                                # Summary human-readable
+du -ah directory                                                # All files human-readable
+du -h --max-depth=1                                             # Limit depth
+du -ch directory                                                # Show total
+du -h --exclude="*.log"                                         # Exclude pattern
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Find large files</h4>
+        <pre><code>
+find / -type f -size +100M                                      # Files over 100MB
+find / -type f -size +1G                                        # Files over 1GB
+du -ah / 2>/dev/null | sort -rh | head -20                      # Top 20 largest
+</code></pre>
+      </div>
+
+      <h3>Partitioning</h3>
+
+      <div class="command-block">
+        <h4>fdisk (MBR partitions)</h4>
+        <pre><code>
+fdisk -l                                                        # List all partitions
+fdisk -l /dev/sda                                               # List partitions on device
+fdisk /dev/sdb                                                  # Partition device (interactive)
+# Inside fdisk:
+# m - help
+# p - print partition table
+# n - new partition
+# d - delete partition
+# t - change partition type
+# w - write changes and exit
+# q - quit without saving
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>parted (GPT/MBR partitions)</h4>
+        <pre><code>
+parted -l                                                       # List all partitions
+parted /dev/sdb                                                 # Partition device (interactive)
+parted /dev/sdb print                                           # Print partition table
+parted /dev/sdb mklabel gpt                                     # Create GPT partition table
+parted /dev/sdb mklabel msdos                                   # Create MBR partition table
+parted /dev/sdb mkpart primary ext4 0% 100%                     # Create partition
+parted /dev/sdb rm 1                                            # Remove partition 1
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>gdisk (GPT only)</h4>
+        <pre><code>
+gdisk -l /dev/sda                                               # List GPT partitions
+gdisk /dev/sdb                                                  # Partition device (interactive)
+# Inside gdisk:
+# ? - help
+# p - print partition table
+# n - new partition
+# d - delete partition
+# w - write and exit
+# q - quit without saving
+</code></pre>
+      </div>
+
+      <h3>LVM (Logical Volume Manager)</h3>
+
+      <div class="command-block">
+        <h4>Physical Volumes (PV)</h4>
+        <pre><code>
+pvs                                                             # List PVs (summary)
+pvdisplay                                                       # List PVs (detailed)
+pvscan                                                          # Scan for PVs
+pvcreate /dev/sdb1                                              # Create PV
+pvcreate /dev/sdb1 /dev/sdc1                                    # Create multiple PVs
+pvremove /dev/sdb1                                              # Remove PV
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Volume Groups (VG)</h4>
+        <pre><code>
+vgs                                                             # List VGs (summary)
+vgdisplay                                                       # List VGs (detailed)
+vgscan                                                          # Scan for VGs
+vgcreate vg_name /dev/sdb1                                      # Create VG
+vgcreate vg_name /dev/sdb1 /dev/sdc1                            # VG from multiple PVs
+vgextend vg_name /dev/sdd1                                      # Add PV to VG
+vgreduce vg_name /dev/sdb1                                      # Remove PV from VG
+vgremove vg_name                                                # Remove VG
+vgrename old_name new_name                                      # Rename VG
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Logical Volumes (LV)</h4>
+        <pre><code>
+lvs                                                             # List LVs (summary)
+lvdisplay                                                       # List LVs (detailed)
+lvscan                                                          # Scan for LVs
+lvcreate -n lv_name -L 10G vg_name                              # Create 10GB LV
+lvcreate -n lv_name -l 100%FREE vg_name                         # Use all free space
+lvcreate -n lv_name -L 10G -s /dev/vg_name/lv_source            # Create snapshot
+lvextend -L +5G /dev/vg_name/lv_name                            # Extend by 5GB
+lvextend -L 20G /dev/vg_name/lv_name                            # Extend to 20GB
+lvextend -l +100%FREE /dev/vg_name/lv_name                      # Use all free space
+lvreduce -L -5G /dev/vg_name/lv_name                            # Reduce by 5GB (DANGEROUS)
+lvremove /dev/vg_name/lv_name                                   # Remove LV
+lvrename vg_name old_lv new_lv                                  # Rename LV
+lvresize -L 15G /dev/vg_name/lv_name                            # Resize to 15GB
+</code></pre>
+      </div>
+
+      <h3>Filesystems</h3>
+
+      <div class="command-block">
+        <h4>Create filesystems</h4>
+        <pre><code>
+mkfs.ext4 /dev/sdb1                                             # Create ext4 filesystem
+mkfs.ext4 -L label /dev/sdb1                                    # With label
+mkfs.xfs /dev/sdb1                                              # Create XFS filesystem
+mkfs.xfs -L label /dev/sdb1                                     # With label
+mkfs.vfat /dev/sdb1                                             # Create FAT filesystem
+mkfs -t ext4 /dev/sdb1                                          # Alternative syntax
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filesystem checks</h4>
+        <pre><code>
+fsck /dev/sdb1                                                  # Check filesystem (unmounted)
+fsck -y /dev/sdb1                                               # Auto-answer yes
+fsck.ext4 /dev/sdb1                                             # Check ext4
+fsck.xfs /dev/sdb1                                              # Check XFS (limited)
+e2fsck /dev/sdb1                                                # Check ext2/3/4
+xfs_repair /dev/sdb1                                            # Repair XFS
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Resize filesystems</h4>
+        <pre><code>
+resize2fs /dev/sdb1                                             # Resize ext2/3/4 to fill partition
+resize2fs /dev/sdb1 10G                                         # Resize to 10GB
+xfs_growfs /mount/point                                         # Grow XFS (cannot shrink)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filesystem information</h4>
+        <pre><code>
+tune2fs -l /dev/sdb1                                            # Show ext2/3/4 parameters
+xfs_info /mount/point                                           # Show XFS parameters
+xfs_admin -l /dev/sdb1                                          # Show XFS label
+xfs_admin -L newlabel /dev/sdb1                                 # Set XFS label
+tune2fs -L newlabel /dev/sdb1                                   # Set ext label
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filesystem labels</h4>
+        <pre><code>
+e2label /dev/sdb1                                               # Show ext label
+e2label /dev/sdb1 newlabel                                      # Set ext label
+</code></pre>
+      </div>
+
+      <h3>Mounting</h3>
+
+      <div class="command-block">
+        <h4>Mount filesystems</h4>
+        <pre><code>
+mount /dev/sdb1 /mnt                                            # Mount to /mnt
+mount -t ext4 /dev/sdb1 /mnt                                    # Specify filesystem type
+mount -o ro /dev/sdb1 /mnt                                      # Mount read-only
+mount -o rw /dev/sdb1 /mnt                                      # Mount read-write
+mount -o remount,ro /mnt                                        # Remount read-only
+mount -o remount,rw /mnt                                        # Remount read-write
+mount -o noexec /dev/sdb1 /mnt                                  # No execute permission
+mount -o nosuid /dev/sdb1 /mnt                                  # No SUID
+mount -o nodev /dev/sdb1 /mnt                                   # No device files
+mount -a                                                        # Mount all in /etc/fstab
+mount | grep sdb1                                               # Show if mounted
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Unmount filesystems</h4>
+        <pre><code>
+umount /mnt                                                     # Unmount by mount point
+umount /dev/sdb1                                                # Unmount by device
+umount -l /mnt                                                  # Lazy unmount
+umount -f /mnt                                                  # Force unmount
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show mounted filesystems</h4>
+        <pre><code>
+mount                                                           # Show all mounts
+mount | column -t                                               # Formatted output
+findmnt                                                         # Tree view of mounts
+findmnt /dev/sdb1                                               # Find mount point
+findmnt /mnt                                                    # Find device
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>/etc/fstab</h4>
+        <pre><code>
+# /etc/fstab format:
+# device  mount_point  fs_type  options  dump  pass
+
+# Examples (edit /etc/fstab):
+# UUID=***  /data  ext4  defaults  0  2
+# /dev/sdb1  /backup  xfs  defaults,noexec  0  2
+# //server/share  /mnt/cifs  cifs  credentials=/root/.creds  0  0
+
+# Test fstab
+mount -a                                                        # Mount all (test fstab)
+findmnt --verify                                                # Verify fstab syntax
+
+# Get UUID
+blkid /dev/sdb1                                                 # Show UUID
+lsblk -f                                                        # Show UUIDs for all
+</code></pre>
+      </div>
+
+      <h3>Swap Management</h3>
+
+      <div class="command-block">
+        <h4>Show swap</h4>
+        <pre><code>
+swapon --show                                                   # Show swap devices
+swapon -s                                                       # Show swap summary
+cat /proc/swaps                                                 # Show swap (alternative)
+free -h                                                         # Show memory and swap
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create swap partition</h4>
+        <pre><code>
+mkswap /dev/sdb1                                                # Initialize swap partition
+swapon /dev/sdb1                                                # Enable swap
+swapon -p 10 /dev/sdb1                                          # Enable with priority 10
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create swap file</h4>
+        <pre><code>
+dd if=/dev/zero of=/swapfile bs=1M count=2048                   # Create 2GB file
+chmod 600 /swapfile                                             # Secure permissions
+mkswap /swapfile                                                # Initialize swap file
+swapon /swapfile                                                # Enable swap file
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Disable swap</h4>
+        <pre><code>
+swapoff /dev/sdb1                                               # Disable swap partition
+swapoff -a                                                      # Disable all swap
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add to /etc/fstab for persistence:</h4>
+        <pre><code>
+# /dev/sdb1  none  swap  defaults  0  0
+# /swapfile  none  swap  defaults  0  0
+</code></pre>
+      </div>
+
+      <h3>RAID (mdadm)</h3>
+
+      <div class="command-block">
+        <h4>Create RAID</h4>
+        <pre><code>
+mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1 # RAID 1
+mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sdb1 /dev/sdc1 /dev/sdd1 # RAID 5
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show RAID status</h4>
+        <pre><code>
+cat /proc/mdstat                                                # RAID status
+mdadm --detail /dev/md0                                         # Detailed RAID info
+mdadm --query /dev/md0                                          # Query RAID device
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Manage RAID</h4>
+        <pre><code>
+mdadm --stop /dev/md0                                           # Stop RAID
+mdadm --assemble /dev/md0                                       # Assemble RAID
+mdadm /dev/md0 --fail /dev/sdb1                                 # Mark disk as failed
+mdadm /dev/md0 --remove /dev/sdb1                               # Remove disk
+mdadm /dev/md0 --add /dev/sde1                                  # Add disk
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Save RAID configuration</h4>
+        <pre><code>
+mdadm --detail --scan >> /etc/mdadm.conf                        # Save config
+</code></pre>
+      </div>
+
+      <h2 id="networking">12. NETWORKING BASICS</h2>
+
+      <h3>Network Configuration</h3>
+
+      <div class="command-block">
+        <h4>Show IP addresses</h4>
+        <pre><code>
+ip addr                                                         # Show all interfaces
+ip addr show                                                    # Same as above
+ip a                                                            # Short form
+ip addr show eth0                                               # Show specific interface
+ip -4 addr                                                      # IPv4 only
+ip -6 addr                                                      # IPv6 only
+ip -br addr                                                     # Brief format
+ip -c addr                                                      # Colorized output
+
+# Legacy command (if available)
+ifconfig                                                        # Show all interfaces
+ifconfig eth0                                                   # Show specific interface
+</code></pre>
+      </div>
+
+      <h3>IP Address Management</h3>
+
+      <div class="command-block">
+        <h4>Add IP address</h4>
+        <pre><code>
+ip addr add 192.168.1.10/24 dev eth0                            # Add IP
+ip addr add 192.168.1.10/24 brd + dev eth0                      # With broadcast
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete IP address</h4>
+        <pre><code>
+ip addr del 192.168.1.10/24 dev eth0                            # Remove IP
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Flush IP addresses</h4>
+        <pre><code>
+ip addr flush dev eth0                                          # Remove all IPs from interface
+</code></pre>
+      </div>
+
+      <h3>Interface Management</h3>
+
+      <div class="command-block">
+        <h4>Show interfaces</h4>
+        <pre><code>
+ip link                                                         # Show all interfaces
+ip link show                                                    # Same as above
+ip -s link                                                      # Show statistics
+ip -s -s link                                                   # Detailed statistics
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Interface up/down</h4>
+        <pre><code>
+ip link set eth0 up                                             # Bring interface up
+ip link set eth0 down                                           # Bring interface down
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change MTU</h4>
+        <pre><code>
+ip link set eth0 mtu 9000                                       # Set MTU to 9000
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change MAC address</h4>
+        <pre><code>
+ip link set eth0 address 00:11:22:33:44:55                      # Set MAC
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Legacy commands</h4>
+        <pre><code>
+ifconfig eth0 up                                                # Bring up
+ifconfig eth0 down                                              # Bring down
+ifup eth0                                                       # Bring up (uses config)
+ifdown eth0                                                     # Bring down
+</code></pre>
+      </div>
+
+      <h3>Routing</h3>
+
+      <div class="command-block">
+        <h4>Show routing table</h4>
+        <pre><code>
+ip route                                                        # Show routes
+ip route show                                                   # Same as above
+ip r                                                            # Short form
+ip route show table all                                         # Show all routing tables
+ip -6 route                                                     # IPv6 routes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add routes</h4>
+        <pre><code>
+ip route add 10.0.0.0/8 via 192.168.1.1                         # Add route
+ip route add default via 192.168.1.1                            # Add default gateway
+ip route add 10.0.0.0/8 dev eth0                                # Route via interface
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete routes</h4>
+        <pre><code>
+ip route del 10.0.0.0/8                                         # Delete route
+ip route del default                                            # Delete default gateway
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change routes</h4>
+        <pre><code>
+ip route change 10.0.0.0/8 via 192.168.1.2                      # Change route
+ip route replace 10.0.0.0/8 via 192.168.1.2                     # Replace route
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Legacy command</h4>
+        <pre><code>
+route -n                                                        # Show routing table (numeric)
+route add default gw 192.168.1.1                                # Add default gateway
+route del default                                               # Delete default gateway
+</code></pre>
+      </div>
+
+      <h3>ARP (Address Resolution Protocol)</h3>
+
+      <div class="command-block">
+        <h4>Show ARP cache</h4>
+        <pre><code>
+ip neigh                                                        # Show ARP cache
+ip neighbour show                                               # Same as above
+ip neigh show dev eth0                                          # For specific interface
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add ARP entry</h4>
+        <pre><code>
+ip neigh add 192.168.1.10 lladdr 00:11:22:33:44:55 dev eth0
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete ARP entry</h4>
+        <pre><code>
+ip neigh del 192.168.1.10 dev eth0
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Flush ARP cache</h4>
+        <pre><code>
+ip neigh flush dev eth0                                         # Flush for interface
+ip neigh flush all                                              # Flush all
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Legacy command</h4>
+        <pre><code>
+arp -a                                                          # Show ARP cache
+arp -n                                                          # Numeric addresses
+arp -d 192.168.1.10                                             # Delete entry
+</code></pre>
+      </div>
+
+      <h3>Network Testing</h3>
+
+      <div class="command-block">
+        <h4>Ping (connectivity test)</h4>
+        <pre><code>
+ping 8.8.8.8                                                    # Ping IP
+ping -c 4 8.8.8.8                                               # Ping 4 times
+ping -i 2 8.8.8.8                                               # Interval 2 seconds
+ping -s 1000 8.8.8.8                                            # Packet size 1000 bytes
+ping -W 2 8.8.8.8                                               # Timeout 2 seconds
+ping google.com                                                 # Ping hostname
+ping6 ::1                                                       # Ping IPv6
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Traceroute</h4>
+        <pre><code>
+traceroute google.com                                           # Trace route to host
+traceroute -n google.com                                        # No DNS resolution
+traceroute -m 20 google.com                                     # Max 20 hops
+tracepath google.com                                            # Alternative (no root needed)
+tracepath6 google.com                                           # IPv6 tracepath
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>MTR (My TraceRoute)</h4>
+        <pre><code>
+mtr google.com                                                  # Interactive
+mtr -c 10 google.com                                            # 10 cycles
+mtr -r google.com                                               # Report mode
+mtr -n google.com                                               # No DNS resolution
+</code></pre>
+      </div>
+
+      <h3>Socket Statistics</h3>
+
+      <div class="command-block">
+        <h4>ss (socket statistics)</h4>
+        <pre><code>
+ss                                                              # Show all sockets
+ss -t                                                           # TCP sockets
+ss -u                                                           # UDP sockets
+ss -l                                                           # Listening sockets
+ss -a                                                           # All sockets
+ss -n                                                           # Numeric (no DNS resolution)
+ss -p                                                           # Show process
+ss -s                                                           # Summary statistics
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Common combinations</h4>
+        <pre><code>
+ss -tuln                                                        # TCP/UDP listening numeric
+ss -tulnp                                                       # With process info (requires root)
+ss -anp                                                         # All numeric with process
+ss -s                                                           # Socket statistics summary
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by state</h4>
+        <pre><code>
+ss state established                                            # Established connections
+ss state listening                                              # Listening sockets
+ss state closed                                                 # Closed sockets
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by port</h4>
+        <pre><code>
+ss -tn sport = :22                                              # Source port 22
+ss -tn dport = :80                                              # Destination port 80
+ss -tn '( sport = :22 or dport = :80 )'                         # Multiple ports
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>netstat (legacy)</h4>
+        <pre><code>
+netstat -tuln                                                   # TCP/UDP listening numeric
+netstat -tulnp                                                  # With process
+netstat -anp                                                    # All numeric with process
+netstat -s                                                      # Statistics
+netstat -i                                                      # Interface statistics
+netstat -r                                                      # Routing table
+</code></pre>
+      </div>
+
+      <h3>DNS Resolution</h3>
+
+      <div class="command-block">
+        <h4>host</h4>
+        <pre><code>
+host google.com                                                 # Basic lookup
+host -t A google.com                                            # A record
+host -t AAAA google.com                                         # AAAA record (IPv6)
+host -t MX google.com                                           # MX records
+host -t NS google.com                                           # NS records
+host -t TXT google.com                                          # TXT records
+host 8.8.8.8                                                    # Reverse lookup
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>dig</h4>
+        <pre><code>
+dig google.com                                                  # Full DNS query
+dig google.com +short                                           # Short answer only
+dig google.com A                                                # A record
+dig google.com AAAA                                             # AAAA record
+dig google.com MX                                               # MX records
+dig google.com NS                                               # NS records
+dig google.com ANY                                              # All records
+dig @8.8.8.8 google.com                                         # Use specific DNS server
+dig -x 8.8.8.8                                                  # Reverse lookup
+dig google.com +trace                                           # Trace DNS resolution
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>nslookup (legacy)</h4>
+        <pre><code>
+nslookup google.com                                             # Basic lookup
+nslookup google.com 8.8.8.8                                     # Use specific DNS server
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>getent (query system databases)</h4>
+        <pre><code>
+getent hosts google.com                                         # Hostname lookup
+getent hosts 8.8.8.8                                            # Reverse lookup
+</code></pre>
+      </div>
+
+      <h3>Network Configuration Files (RHEL)</h3>
+
+      <div class="command-block">
+        <h4>View network config</h4>
+        <pre><code>
+cat /etc/sysconfig/network-scripts/ifcfg-eth0                   # Interface config
+cat /etc/resolv.conf                                            # DNS configuration
+cat /etc/hosts                                                  # Static hostname resolution
+cat /etc/hostname                                               # System hostname
+cat /etc/nsswitch.conf                                          # Name service switch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Hostname</h4>
+        <pre><code>
+hostname                                                        # Show hostname
+hostnamectl                                                     # Show detailed hostname info
+hostnamectl set-hostname newhostname                            # Set hostname
+hostnamectl set-hostname --static newhostname                   # Set static hostname
+hostnamectl set-hostname --transient newhostname                # Set transient hostname
+</code></pre>
+      </div>
+
+      <h3>NetworkManager (RHEL/CentOS)</h3>
+
+      <div class="command-block">
+        <h4>nmcli (NetworkManager command-line)</h4>
+        <pre><code>
+nmcli device                                                    # Show all devices
+nmcli device status                                             # Device status
+nmcli device show eth0                                          # Show device details
+nmcli connection                                                # Show all connections
+nmcli connection show                                           # List connections
+nmcli connection show eth0                                      # Show connection details
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Activate/deactivate connection</h4>
+        <pre><code>
+nmcli connection up eth0                                        # Activate connection
+nmcli connection down eth0                                      # Deactivate connection
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add connection</h4>
+        <pre><code>
+nmcli connection add type ethernet con-name eth0 ifname eth0    # Basic
+nmcli connection add type ethernet con-name eth0 ifname eth0 ip4 192.168.1.10/24 gw4 192.168.1.1 # Static IP
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Modify connection</h4>
+        <pre><code>
+nmcli connection modify eth0 ipv4.addresses 192.168.1.10/24
+nmcli connection modify eth0 ipv4.gateway 192.168.1.1
+nmcli connection modify eth0 ipv4.dns "8.8.8.8 8.8.4.4"
+nmcli connection modify eth0 ipv4.method manual                 # Static
+nmcli connection modify eth0 ipv4.method auto                   # DHCP
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete connection</h4>
+        <pre><code>
+nmcli connection delete eth0                                    # Delete connection
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reload configuration</h4>
+        <pre><code>
+nmcli connection reload                                         # Reload all connections
+nmcli device reapply eth0                                       # Reapply configuration
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>nmtui (NetworkManager text UI)</h4>
+        <pre><code>
+nmtui                                                           # Launch text UI
+nmtui-edit                                                      # Edit connection
+nmtui-connect                                                   # Activate connection
+nmtui-hostname                                                  # Set hostname
+</code></pre>
+      </div>
+
+      <h2 id="firewall">13. FIREWALL MANAGEMENT</h2>
+
+      <h3>firewalld (RHEL/CentOS Default)</h3>
+
+      <div class="command-block">
+        <h4>Service management</h4>
+        <pre><code>
+systemctl status firewalld                                      # Check status
+systemctl start firewalld                                       # Start firewall
+systemctl stop firewalld                                        # Stop firewall
+systemctl enable firewalld                                      # Enable at boot
+systemctl disable firewalld                                     # Disable at boot
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Basic commands</h4>
+        <pre><code>
+firewall-cmd --state                                            # Check if running
+firewall-cmd --reload                                           # Reload firewall
+firewall-cmd --complete-reload                                  # Complete reload (breaks connections)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Zones</h4>
+        <pre><code>
+firewall-cmd --get-zones                                        # List all zones
+firewall-cmd --get-default-zone                                 # Show default zone
+firewall-cmd --set-default-zone=public                          # Set default zone
+firewall-cmd --get-active-zones                                 # Show active zones
+firewall-cmd --list-all                                         # List all settings in default zone
+firewall-cmd --list-all --zone=public                           # List settings for specific zone
+firewall-cmd --zone=public --list-services                      # List services in zone
+firewall-cmd --zone=public --list-ports                         # List ports in zone
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Services</h4>
+        <pre><code>
+firewall-cmd --get-services                                     # List available services
+firewall-cmd --add-service=http                                 # Add service (temporary)
+firewall-cmd --add-service=http --permanent                     # Add service (permanent)
+firewall-cmd --remove-service=http                              # Remove service (temporary)
+firewall-cmd --remove-service=http --permanent                  # Remove (permanent)
+firewall-cmd --add-service=http --zone=public                   # Add to specific zone
+firewall-cmd --query-service=http                               # Check if service enabled
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Ports</h4>
+        <pre><code>
+firewall-cmd --add-port=8080/tcp                                # Add port (temporary)
+firewall-cmd --add-port=8080/tcp --permanent                    # Add port (permanent)
+firewall-cmd --add-port=8000-9000/tcp                           # Port range
+firewall-cmd --remove-port=8080/tcp                             # Remove port
+firewall-cmd --query-port=8080/tcp                              # Check if port open
+firewall-cmd --list-ports                                       # List all open ports
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Rich rules (advanced filtering)</h4>
+        <pre><code>
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" accept'
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="10.0.0.5" port port="22" protocol="tcp" reject'
+firewall-cmd --add-rich-rule='rule service name="http" log limit value="4/m" accept'
+firewall-cmd --list-rich-rules                                  # List all rich rules
+firewall-cmd --remove-rich-rule='...'                           # Remove rich rule
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Direct rules (iptables syntax)</h4>
+        <pre><code>
+firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT
+firewall-cmd --direct --get-all-rules                           # List all direct rules
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Port forwarding</h4>
+        <pre><code>
+firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080   # Forward 80 to 8080
+firewall-cmd --add-forward-port=port=80:proto=tcp:toaddr=192.168.1.10 # Forward to another host
+firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.10 # Forward with port change
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Masquerading (NAT)</h4>
+        <pre><code>
+firewall-cmd --add-masquerade                                   # Enable masquerading
+firewall-cmd --remove-masquerade                                # Disable masquerading
+firewall-cmd --query-masquerade                                 # Check if enabled
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Interface assignment</h4>
+        <pre><code>
+firewall-cmd --zone=public --add-interface=eth0                 # Add interface to zone
+firewall-cmd --zone=public --change-interface=eth0              # Change zone for interface
+firewall-cmd --zone=public --remove-interface=eth0              # Remove from zone
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Sources (IP-based zone assignment)</h4>
+        <pre><code>
+firewall-cmd --zone=trusted --add-source=192.168.1.0/24         # Add source to zone
+firewall-cmd --zone=trusted --remove-source=192.168.1.0/24      # Remove source
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Panic mode</h4>
+        <pre><code>
+firewall-cmd --panic-on                                         # Block all traffic
+firewall-cmd --panic-off                                        # Restore normal operation
+firewall-cmd --query-panic                                      # Check panic status
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration files</h4>
+        <pre><code>
+/etc/firewalld/firewalld.conf                                   # Main configuration
+/etc/firewalld/zones/                                           # Zone configurations
+/usr/lib/firewalld/services/                                    # Service definitions
+</code></pre>
+      </div>
+
+      <h3>iptables (Legacy)</h3>
+
+      <div class="command-block">
+        <h4>View rules</h4>
+        <pre><code>
+iptables -L                                                     # List all rules
+iptables -L -n                                                  # Numeric output (no DNS)
+iptables -L -v                                                  # Verbose output
+iptables -L -n -v --line-numbers                                # With line numbers
+iptables -L INPUT                                               # List INPUT chain only
+iptables -t nat -L                                              # List NAT table
+iptables -t mangle -L                                           # List mangle table
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add rules</h4>
+        <pre><code>
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT                   # Append to INPUT
+iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT                 # Insert at position 1
+iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT                   # Accept from network
+iptables -A INPUT -i eth0 -j ACCEPT                             # Accept from interface
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT # Stateful
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete rules</h4>
+        <pre><code>
+iptables -D INPUT 3                                             # Delete rule 3 from INPUT
+iptables -D INPUT -p tcp --dport 22 -j ACCEPT                   # Delete by specification
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Flush rules</h4>
+        <pre><code>
+iptables -F                                                     # Flush all rules
+iptables -F INPUT                                               # Flush INPUT chain
+iptables -t nat -F                                              # Flush NAT table
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Default policies</h4>
+        <pre><code>
+iptables -P INPUT DROP                                          # Set INPUT default policy to DROP
+iptables -P FORWARD DROP                                        # Set FORWARD default policy
+iptables -P OUTPUT ACCEPT                                       # Set OUTPUT default policy
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Save and restore</h4>
+        <pre><code>
+iptables-save > /etc/iptables.rules                             # Save rules
+iptables-restore < /etc/iptables.rules                          # Restore rules
+</code></pre>
+      </div>
+
+      <h2 id="ssh">14. SSH (SECURE SHELL)</h2>
+
+      <h3>SSH Client</h3>
+
+      <div class="command-block">
+        <h4>Basic connection</h4>
+        <pre><code>
+ssh user@hostname                                               # Connect to host
+ssh user@192.168.1.10                                           # Connect by IP
+ssh -p 2222 user@hostname                                       # Custom port
+ssh hostname                                                    # Connect with current username
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>SSH options</h4>
+        <pre><code>
+ssh -v user@hostname                                            # Verbose mode
+ssh -vv user@hostname                                           # More verbose
+ssh -vvv user@hostname                                          # Maximum verbosity
+ssh -4 user@hostname                                            # Force IPv4
+ssh -6 user@hostname                                            # Force IPv6
+ssh -C user@hostname                                            # Compression
+ssh -X user@hostname                                            # X11 forwarding
+ssh -Y user@hostname                                            # Trusted X11 forwarding
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Execute remote command</h4>
+        <pre><code>
+ssh user@hostname 'command'                                     # Execute single command
+ssh user@hostname 'ls -la'                                      # Example
+ssh user@hostname 'uname -a; df -h'                             # Multiple commands
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>SSH with key</h4>
+        <pre><code>
+ssh -i ~/.ssh/id_rsa user@hostname                              # Specify private key
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>SSH config usage</h4>
+        <pre><code>
+ssh confighost                                                  # Use ~/.ssh/config entry
+</code></pre>
+      </div>
+
+      <h3>SSH Key Management</h3>
+
+      <div class="command-block">
+        <h4>Generate SSH keys</h4>
+        <pre><code>
+ssh-keygen                                                      # Generate RSA key (default)
+ssh-keygen -t rsa                                               # RSA key explicitly
+ssh-keygen -t rsa -b 4096                                       # 4096-bit RSA
+ssh-keygen -t ecdsa                                             # ECDSA key
+ssh-keygen -t ed25519                                           # Ed25519 key (recommended)
+ssh-keygen -t rsa -C "comment"                                  # With comment
+ssh-keygen -f ~/.ssh/custom_key                                 # Custom filename
+ssh-keygen -N ""                                                # No passphrase
+ssh-keygen -p                                                   # Change passphrase
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy public key to server</h4>
+        <pre><code>
+ssh-copy-id user@hostname                                       # Copy default key
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@hostname                  # Specify key
+ssh-copy-id -p 2222 user@hostname                               # Custom port
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Manual key copy</h4>
+        <pre><code>
+cat ~/.ssh/id_rsa.pub | ssh user@hostname "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Key permissions</h4>
+        <pre><code>
+chmod 700 ~/.ssh                                                # SSH directory
+chmod 600 ~/.ssh/id_rsa                                         # Private key
+chmod 644 ~/.ssh/id_rsa.pub                                     # Public key
+chmod 644 ~/.ssh/authorized_keys                                # Authorized keys
+chmod 600 ~/.ssh/config                                         # SSH config
+</code></pre>
+      </div>
+
+      <h3>SSH Configuration</h3>
+
+      <div class="command-block">
+        <h4>Client configuration</h4>
+        <pre><code>
+~/.ssh/config                                                   # User SSH config
+/etc/ssh/ssh_config                                             # System-wide client config
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Example ~/.ssh/config:</h4>
+        <pre><code>
+# Host myserver
+# HostName 192.168.1.10
+# User admin
+# Port 2222
+# IdentityFile ~/.ssh/custom_key
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Server configuration</h4>
+        <pre><code>
+/etc/ssh/sshd_config                                            # SSH daemon config
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Common sshd_config options:</h4>
+        <pre><code>
+# Port 22                    # SSH port
+# PermitRootLogin no         # Disable root login
+# PasswordAuthentication no  # Disable password auth
+# PubkeyAuthentication yes   # Enable key auth
+# AllowUsers user1 user2     # Whitelist users
+# DenyUsers baduser          # Blacklist users
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Restart SSH daemon</h4>
+        <pre><code>
+systemctl restart sshd                                          # Restart SSH daemon
+systemctl reload sshd                                           # Reload config (safer)
+</code></pre>
+      </div>
+
+      <h3>SSH Tunneling</h3>
+
+      <div class="command-block">
+        <h4>Local port forwarding</h4>
+        <pre><code>
+ssh -L 8080:localhost:80 user@hostname                          # Forward local 8080 to remote 80
+ssh -L 3306:database.local:3306 user@gateway                    # Access remote MySQL
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remote port forwarding</h4>
+        <pre><code>
+ssh -R 8080:localhost:80 user@hostname                          # Forward remote 8080 to local 80
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Dynamic port forwarding (SOCKS proxy)</h4>
+        <pre><code>
+ssh -D 1080 user@hostname                                       # Create SOCKS proxy on local 1080
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Keep tunnel alive</h4>
+        <pre><code>
+ssh -N -L 8080:localhost:80 user@hostname                       # No command execution
+ssh -f -N -L 8080:localhost:80 user@hostname                    # Background
+</code></pre>
+      </div>
+
+      <h3>SCP (Secure Copy)</h3>
+
+      <div class="command-block">
+        <h4>Copy to remote</h4>
+        <pre><code>
+scp file.txt user@hostname:/path/                               # Copy file
+scp -r directory user@hostname:/path/                           # Copy directory
+scp -P 2222 file.txt user@hostname:/path/                       # Custom port
+scp -i ~/.ssh/id_rsa file.txt user@hostname:/path/              # With key
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy from remote</h4>
+        <pre><code>
+scp user@hostname:/path/file.txt .                              # Copy to current directory
+scp -r user@hostname:/path/directory .                          # Copy directory
+scp user@hostname:/path/file1.txt user@hostname:/path/file2.txt . # Multiple files
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy between remote hosts</h4>
+        <pre><code>
+scp user1@host1:/path/file.txt user2@host2:/path/               # Copy between remotes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>SCP options</h4>
+        <pre><code>
+scp -C file.txt user@hostname:/path/                            # Compression
+scp -v file.txt user@hostname:/path/                            # Verbose
+scp -p file.txt user@hostname:/path/                            # Preserve timestamps
+scp -q file.txt user@hostname:/path/                            # Quiet mode
+</code></pre>
+      </div>
+
+      <h3>SFTP (SSH File Transfer Protocol)</h3>
+
+      <div class="command-block">
+        <h4>Connect to SFTP</h4>
+        <pre><code>
+sftp user@hostname                                              # Interactive SFTP session
+sftp -P 2222 user@hostname                                      # Custom port
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>SFTP commands (in interactive session)</h4>
+        <pre><code>
+pwd                                                             # Print remote working directory
+lpwd                                                            # Print local working directory
+ls                                                              # List remote directory
+lls                                                             # List local directory
+cd /path                                                        # Change remote directory
+lcd /path                                                       # Change local directory
+get file.txt                                                    # Download file
+get -r directory                                                # Download directory
+put file.txt                                                    # Upload file
+put -r directory                                                # Upload directory
+mkdir dirname                                                   # Create remote directory
+rmdir dirname                                                   # Remove remote directory
+rm file.txt                                                     # Remove remote file
+bye/exit/quit                                                   # Exit SFTP
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Batch mode</h4>
+        <pre><code>
+sftp -b batchfile user@hostname                                 # Execute commands from file
+</code></pre>
+      </div>
+
+      <h3>SSH Agent</h3>
+
+      <div class="command-block">
+        <h4>Start SSH agent</h4>
+        <pre><code>
+eval $(ssh-agent)                                               # Start agent and set environment
+ssh-agent bash                                                  # Start new bash with agent
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add keys to agent</h4>
+        <pre><code>
+ssh-add                                                         # Add default key
+ssh-add ~/.ssh/id_rsa                                           # Add specific key
+ssh-add -l                                                      # List loaded keys
+ssh-add -d ~/.ssh/id_rsa                                        # Remove key from agent
+ssh-add -D                                                      # Remove all keys
+ssh-add -t 3600 ~/.ssh/id_rsa                                   # Add key for 1 hour
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Kill agent</h4>
+        <pre><code>
+ssh-agent -k                                                    # Kill agent
+</code></pre>
+      </div>
+
+      <h2 id="text-processing">15. TEXT PROCESSING</h2>
+
+      <h3>grep (Pattern Matching)</h3>
+
+      <div class="command-block">
+        <h4>Basic grep</h4>
+        <pre><code>
+grep pattern file.txt                                           # Search for pattern
+grep "pattern" file.txt                                         # Pattern with spaces
+grep pattern file1 file2                                        # Multiple files
+grep -r pattern directory                                       # Recursive search
+grep -R pattern directory                                       # Recursive with symlinks
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Common options</h4>
+        <pre><code>
+grep -i pattern file                                            # Case-insensitive
+grep -v pattern file                                            # Invert match (exclude)
+grep -n pattern file                                            # Show line numbers
+grep -c pattern file                                            # Count matches
+grep -l pattern files*                                          # List filenames only
+grep -L pattern files*                                          # List non-matching files
+grep -w pattern file                                            # Match whole word
+grep -x pattern file                                            # Match whole line
+grep -A 3 pattern file                                          # Show 3 lines after match
+grep -B 3 pattern file                                          # Show 3 lines before match
+grep -C 3 pattern file                                          # Show 3 lines context (before and after)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Regular expressions</h4>
+        <pre><code>
+grep '^pattern' file                                            # Line starts with pattern
+grep 'pattern$' file                                            # Line ends with pattern
+grep '^$' file                                                  # Empty lines
+grep '[0-9]' file                                               # Lines with digits
+grep '[A-Z]' file                                               # Lines with uppercase
+grep 'pat.*ern' file                                            # Pattern with anything between
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Extended regex</h4>
+        <pre><code>
+grep -E 'pattern1|pattern2' file                                # OR operator
+grep -E '^[0-9]+$' file                                         # Lines with only digits
+grep -E 'pattern+' file                                         # One or more
+grep -E 'pattern?' file                                         # Zero or one
+grep -E 'pattern{3}' file                                       # Exactly 3 occurrences
+grep -E 'pattern{2,5}' file                                     # Between 2 and 5
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Practical examples</h4>
+        <pre><code>
+grep -i error /var/log/messages                                 # Find errors in log
+grep -rn "TODO" .                                               # Find TODO in code
+ps aux | grep httpd                                             # Find httpd processes
+grep -v '^                                                      # ' config.conf # Exclude comments
+</code></pre>
+      </div>
+
+      <h3>sed (Stream Editor)</h3>
+
+      <div class="command-block">
+        <h4>Basic substitution</h4>
+        <pre><code>
+sed 's/old/new/' file                                           # Replace first occurrence per line
+sed 's/old/new/g' file                                          # Replace all occurrences
+sed 's/old/new/2' file                                          # Replace 2nd occurrence per line
+sed 's/old/new/gi' file                                         # Global case-insensitive
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>In-place editing</h4>
+        <pre><code>
+sed -i 's/old/new/g' file                                       # Edit file in-place
+sed -i.bak 's/old/new/g' file                                   # Edit with backup
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Addressing</h4>
+        <pre><code>
+sed '5s/old/new/' file                                          # Line 5 only
+sed '5,10s/old/new/' file                                       # Lines 5-10
+sed '/pattern/s/old/new/' file                                  # Lines matching pattern
+sed '5,/pattern/s/old/new/' file                                # Line 5 to pattern
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete lines</h4>
+        <pre><code>
+sed '5d' file                                                   # Delete line 5
+sed '5,10d' file                                                # Delete lines 5-10
+sed '/pattern/d' file                                           # Delete lines matching pattern
+sed '/^$/d' file                                                # Delete empty lines
+sed '/^                                                         # /d' file # Delete comment lines
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Insert and append</h4>
+        <pre><code>
+sed '5i\New line' file                                          # Insert before line 5
+sed '5a\New line' file                                          # Append after line 5
+sed '/pattern/a\New line' file                                  # Append after pattern
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Print specific lines</h4>
+        <pre><code>
+sed -n '5p' file                                                # Print line 5 only
+sed -n '5,10p' file                                             # Print lines 5-10
+sed -n '/pattern/p' file                                        # Print matching lines
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Multiple commands</h4>
+        <pre><code>
+sed 's/old/new/g; s/foo/bar/g' file                             # Multiple substitutions
+sed -e 's/old/new/g' -e 's/foo/bar/g' file                      # Using -e
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change line</h4>
+        <pre><code>
+sed '5c\Replacement line' file                                  # Change line 5
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Practical examples</h4>
+        <pre><code>
+sed 's/                                                         # .*$//' config.conf # Remove comments
+sed '/^$/d' file                                                # Remove empty lines
+sed 's/  */ /g' file                                            # Multiple spaces to single
+sed 's/^[ \t]*//' file                                          # Remove leading whitespace
+</code></pre>
+      </div>
+
+      <h3>awk (Text Processing)</h3>
+
+      <div class="command-block">
+        <h4>Basic awk</h4>
+        <pre><code>
+awk '{print}' file                                              # Print all lines
+awk '{print $1}' file                                           # Print first field
+awk '{print $1, $3}' file                                       # Print fields 1 and 3
+awk '{print $NF}' file                                          # Print last field
+awk '{print $0}' file                                           # Print entire line
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Field separator</h4>
+        <pre><code>
+awk -F: '{print $1}' /etc/passwd                                # Use : as delimiter
+awk -F, '{print $1, $2}' file.csv                               # Use comma
+awk 'BEGIN{FS=":"} {print $1}' file                             # Set FS in BEGIN
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Output field separator</h4>
+        <pre><code>
+awk 'BEGIN{OFS=","} {print $1, $2}' file                        # Comma-separated output
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Pattern matching</h4>
+        <pre><code>
+awk '/pattern/ {print}' file                                    # Print matching lines
+awk '/pattern/ {print $1}' file                                 # Print field from matching lines
+awk '!/pattern/ {print}' file                                   # Print non-matching lines
+awk '/start/,/end/ {print}' file                                # Print range
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Conditions</h4>
+        <pre><code>
+awk '$3 > 100 {print}' file                                     # Field 3 greater than 100
+awk '$3 >= 100 && $3 <= 200' file                               # Range condition
+awk '$1 == "value" {print}' file                                # Exact match
+awk '$1 != "value" {print}' file                                # Not equal
+awk 'NF > 5 {print}' file                                       # Lines with more than 5 fields
+awk 'length($0) > 80 {print}' file                              # Lines longer than 80 chars
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Built-in variables</h4>
+        <pre><code>
+awk '{print NR, $0}' file                                       # NR = line number
+awk '{print NF}' file                                           # NF = number of fields
+awk 'NR==5 {print}' file                                        # Print line 5
+awk 'NR>=5 && NR<=10 {print}' file                              # Lines 5-10
+awk 'END {print NR}' file                                       # Print total lines
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>BEGIN and END</h4>
+        <pre><code>
+awk 'BEGIN {print "Start"} {print} END {print "End"}' file
+awk 'BEGIN {sum=0} {sum+=$1} END {print sum}' file              # Sum field 1
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Arithmetic</h4>
+        <pre><code>
+awk '{print $1 + $2}' file                                      # Add fields
+awk '{sum+=$1} END {print sum}' file                            # Sum column
+awk '{sum+=$1} END {print sum/NR}' file                         # Average
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>String functions</h4>
+        <pre><code>
+awk '{print length($1)}' file                                   # Length of field
+awk '{print tolower($1)}' file                                  # Lowercase
+awk '{print toupper($1)}' file                                  # Uppercase
+awk '{print substr($1,1,5)}' file                               # Substring
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Printf formatting</h4>
+        <pre><code>
+awk '{printf "%-10s %5d\n", $1, $2}' file                       # Formatted output
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Practical examples</h4>
+        <pre><code>
+awk -F: '{print $1}' /etc/passwd                                # List usernames
+ps aux | awk '{print $1, $11}'                                  # User and command
+df -h | awk '/\/$/ {print $5}'                                  # Root filesystem usage
+awk '{sum+=$1} END {print sum}' file                            # Sum first column
+</code></pre>
+      </div>
+
+      <h3>cut (Extract Columns)</h3>
+
+      <div class="command-block">
+        <h4>By character position</h4>
+        <pre><code>
+cut -c1 file                                                    # First character
+cut -c1-5 file                                                  # Characters 1-5
+cut -c1,5,10 file                                               # Characters 1, 5, 10
+cut -c5- file                                                   # From character 5 to end
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>By field</h4>
+        <pre><code>
+cut -f1 file                                                    # First field (tab-delimited)
+cut -f1,3 file                                                  # Fields 1 and 3
+cut -f1-3 file                                                  # Fields 1 through 3
+cut -d: -f1 /etc/passwd                                         # Field 1 with : delimiter
+cut -d, -f2 file.csv                                            # Field 2 from CSV
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Options</h4>
+        <pre><code>
+cut -d: -f1,3 --output-delimiter=' ' /etc/passwd                # Custom output delimiter
+</code></pre>
+      </div>
+
+      <h3>sort</h3>
+
+      <div class="command-block">
+        <h4>Basic sort</h4>
+        <pre><code>
+sort file                                                       # Sort alphabetically
+sort -r file                                                    # Reverse sort
+sort -n file                                                    # Numeric sort
+sort -rn file                                                   # Reverse numeric sort
+sort -u file                                                    # Sort and remove duplicates
+sort -f file                                                    # Case-insensitive sort
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>By field</h4>
+        <pre><code>
+sort -t: -k1 /etc/passwd                                        # Sort by field 1 (: delimiter)
+sort -t: -k3 -n /etc/passwd                                     # Sort by field 3 numerically
+sort -k2,2 file                                                 # Sort by field 2 only
+sort -k2,2n -k1,1 file                                          # Sort by field 2 then field 1
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Month sort</h4>
+        <pre><code>
+sort -M file                                                    # Sort by month name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Human-readable numeric sort</h4>
+        <pre><code>
+sort -h file                                                    # Sort 1K, 2M, 3G properly
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Multiple files</h4>
+        <pre><code>
+sort file1 file2                                                # Sort combined files
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Practical examples</h4>
+        <pre><code>
+ps aux | sort -nk3                                              # Sort processes by CPU
+du -h | sort -h                                                 # Sort by size
+</code></pre>
+      </div>
+
+      <h3>uniq (Remove Duplicates)</h3>
+
+      <div class="command-block">
+        <h4>Basic uniq (requires sorted input)</h4>
+        <pre><code>
+sort file | uniq                                                # Remove adjacent duplicates
+sort file | uniq -c                                             # Count occurrences
+sort file | uniq -d                                             # Show only duplicates
+sort file | uniq -u                                             # Show only unique lines
+sort file | uniq -i                                             # Case-insensitive
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Skip fields</h4>
+        <pre><code>
+sort file | uniq -f 1                                           # Skip first field
+sort file | uniq -s 5                                           # Skip first 5 characters
+</code></pre>
+      </div>
+
+      <h3>tr (Translate Characters)</h3>
+
+      <div class="command-block">
+        <h4>Basic translation</h4>
+        <pre><code>
+tr 'a' 'b' < file                                               # Replace a with b
+tr 'abc' 'xyz' < file                                           # Multiple replacements
+tr 'a-z' 'A-Z' < file                                           # Lowercase to uppercase
+tr 'A-Z' 'a-z' < file                                           # Uppercase to lowercase
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete characters</h4>
+        <pre><code>
+tr -d 'a' < file                                                # Delete character
+tr -d '0-9' < file                                              # Delete digits
+tr -d '\n' < file                                               # Delete newlines
+tr -d ' ' < file                                                # Delete spaces
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Squeeze repeats</h4>
+        <pre><code>
+tr -s ' ' < file                                                # Squeeze multiple spaces to one
+tr -s '\n' < file                                               # Squeeze multiple newlines
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Character classes</h4>
+        <pre><code>
+tr -d '[:digit:]' < file                                        # Delete digits
+tr -d '[:punct:]' < file                                        # Delete punctuation
+tr '[:lower:]' '[:upper:]' < file                               # Lowercase to uppercase
+</code></pre>
+      </div>
+
+      <h3>wc (Word Count)</h3>
+
+      <div class="command-block">
+        <h4>Basic word count</h4>
+        <pre><code>
+wc file                                                         # Lines, words, characters
+wc -l file                                                      # Count lines only
+wc -w file                                                      # Count words only
+wc -c file                                                      # Count bytes
+wc -m file                                                      # Count characters
+wc -L file                                                      # Length of longest line
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Multiple files</h4>
+        <pre><code>
+wc file1 file2 file3                                            # Count for each file
+wc -l *.txt                                                     # Count lines in all .txt files
+</code></pre>
+      </div>
+
+      <h3>paste (Merge Lines)</h3>
+
+      <div class="command-block">
+        <pre><code>
+paste file1 file2                                               # Merge files side-by-side
+paste -d, file1 file2                                           # Use comma as delimiter
+paste -s file                                                   # Merge all lines into one
+</code></pre>
+      </div>
+
+      <h3>join (Join Files on Common Field)</h3>
+
+      <div class="command-block">
+        <pre><code>
+join file1 file2                                                # Join on first field
+join -1 2 -2 1 file1 file2                                      # Join field 2 of file1 with field 1 of file2
+join -t: file1 file2                                            # Use : as delimiter
+</code></pre>
+      </div>
+
+      <h3>diff (Compare Files)</h3>
+
+      <div class="command-block">
+        <h4>Basic diff</h4>
+        <pre><code>
+diff file1 file2                                                # Show differences
+diff -u file1 file2                                             # Unified format
+diff -c file1 file2                                             # Context format
+diff -y file1 file2                                             # Side-by-side
+diff -q file1 file2                                             # Brief (just if different)
+diff -r dir1 dir2                                               # Recursive directory compare
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Ignore differences</h4>
+        <pre><code>
+diff -w file1 file2                                             # Ignore whitespace
+diff -i file1 file2                                             # Ignore case
+diff -B file1 file2                                             # Ignore blank lines
+</code></pre>
+      </div>
+
+      <h2 id="scripting">16. BASH SCRIPTING ESSENTIALS</h2>
+
+      <h3>Script Basics</h3>
+
+      <div class="command-block">
+        <h4>Shebang (first line of script)</h4>
+        <pre><code>
+# !/bin/bash                  # Standard bash shebang
+# !/usr/bin/env bash          # Portable shebang
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Make script executable</h4>
+        <pre><code>
+chmod +x script.sh                                              # Add execute permission
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Run script</h4>
+        <pre><code>
+./script.sh                                                     # Execute in current directory
+bash script.sh                                                  # Run with bash
+sh script.sh                                                    # Run with sh
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Debug script</h4>
+        <pre><code>
+bash -x script.sh                                               # Execute with debug output (trace)
+bash -v script.sh                                               # Verbose mode
+bash -n script.sh                                               # Syntax check only (no execution)
+</code></pre>
+      </div>
+
+      <h3>Variables</h3>
+
+      <div class="command-block">
+        <h4>Variable assignment</h4>
+        <pre><code>
+var="value"                                                     # No spaces around =
+name="John"
+count=10
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Variable usage</h4>
+        <pre><code>
+echo $var                                                       # Access variable
+echo ${var}                                                     # Explicit variable
+echo "$var"                                                     # With quotes (preserves spaces)
+echo '$var'                                                     # Single quotes (literal)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Special variables</h4>
+        <pre><code>
+$0                                                              # Script name
+$1, $2, $3                                                      # Positional parameters
+$                                                               # # Number of arguments
+$@                                                              # All arguments (separate words)
+$*                                                              # All arguments (single word)
+$?                                                              # Exit status of last command
+$$                                                              # Current process ID
+$!                                                              # PID of last background job
+$_                                                              # Last argument of previous command
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Environment variables</h4>
+        <pre><code>
+export VAR="value"                                              # Make variable available to child processes
+echo $PATH                                                      # PATH variable
+echo $HOME                                                      # Home directory
+echo $USER                                                      # Current user
+echo $PWD                                                       # Current directory
+echo $SHELL                                                     # Current shell
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Read input</h4>
+        <pre><code>
+read varname                                                    # Read into variable
+read -p "Enter name: " name                                     # With prompt
+read -s password                                                # Silent (no echo)
+read -t 5 input                                                 # 5 second timeout
+read -n 1 char                                                  # Read single character
+read -a array                                                   # Read into array
+</code></pre>
+      </div>
+
+      <h3>Conditional Statements</h3>
+
+      <div class="command-block">
+        <h4>if statement</h4>
+        <pre><code>
+if [ condition ]; then
+    commands
+fi
+
+if [ condition ]; then
+    commands
+else
+    commands
+fi
+
+if [ condition1 ]; then
+    commands
+elif [ condition2 ]; then
+    commands
+else
+    commands
+fi
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Test conditions ([ ] or test command)</h4>
+        <pre><code>
+[ -f file ]                                                     # File exists and is regular file
+[ -d directory ]                                                # Directory exists
+[ -e path ]                                                     # Path exists (file or directory)
+[ -r file ]                                                     # File is readable
+[ -w file ]                                                     # File is writable
+[ -x file ]                                                     # File is executable
+[ -s file ]                                                     # File exists and not empty
+[ -L file ]                                                     # File is symbolic link
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>String comparisons</h4>
+        <pre><code>
+[ "$str1" = "$str2" ]                                           # Strings equal
+[ "$str1" != "$str2" ]                                          # Strings not equal
+[ -z "$str" ]                                                   # String is empty
+[ -n "$str" ]                                                   # String is not empty
+[ "$str1" < "$str2" ]                                           # String less than (lexicographic)
+[ "$str1" > "$str2" ]                                           # String greater than
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Numeric comparisons</h4>
+        <pre><code>
+[ $num1 -eq $num2 ]                                             # Equal
+[ $num1 -ne $num2 ]                                             # Not equal
+[ $num1 -gt $num2 ]                                             # Greater than
+[ $num1 -lt $num2 ]                                             # Less than
+[ $num1 -ge $num2 ]                                             # Greater than or equal
+[ $num1 -le $num2 ]                                             # Less than or equal
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Logical operators</h4>
+        <pre><code>
+[ condition1 ] && [ condition2 ]                                # AND
+[ condition1 ] || [ condition2 ]                                # OR
+[ ! condition ]                                                 # NOT
+[ condition1 -a condition2 ]                                    # AND (inside test)
+[ condition1 -o condition2 ]                                    # OR (inside test)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Modern test [[ ]]</h4>
+        <pre><code>
+[[ condition ]]                                                 # Enhanced test
+[[ $str =~ regex ]]                                             # Regex matching
+[[ $str == pattern ]]                                           # Pattern matching with wildcards
+</code></pre>
+      </div>
+
+      <h3>case Statement</h3>
+
+      <div class="command-block">
+        <pre><code>
+case $variable in
+    pattern1)
+        commands
+        ;;
+    pattern2|pattern3)
+        commands
+        ;;
+    *)
+        commands
+        ;;
+esac
+
+# Example
+case $option in
+    start)
+        echo "Starting..."
+        ;;
+    stop)
+        echo "Stopping..."
+        ;;
+    restart)
+        echo "Restarting..."
+        ;;
+    *)
+        echo "Invalid option"
+        ;;
+esac
+</code></pre>
+      </div>
+
+      <h3>Loops</h3>
+
+      <div class="command-block">
+        <h4>for loop</h4>
+        <pre><code>
+for var in list; do
+    commands
+done
+
+for i in 1 2 3 4 5; do
+    echo $i
+done
+
+for file in *.txt; do
+    echo $file
+done
+
+for i in {1..10}; do
+    echo $i
+done
+
+for i in {1..10..2}; do                                         # Step by 2
+    echo $i
+done
+
+# C-style for loop
+for ((i=1; i<=10; i++)); do
+    echo $i
+done
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>while loop</h4>
+        <pre><code>
+while [ condition ]; do
+    commands
+done
+
+counter=1
+while [ $counter -le 10 ]; do
+    echo $counter
+    ((counter++))
+done
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>until loop</h4>
+        <pre><code>
+until [ condition ]; do
+    commands
+done
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Read file line by line</h4>
+        <pre><code>
+while read line; do
+    echo $line
+done < file.txt
+
+while IFS= read -r line; do                                     # Preserve whitespace
+    echo "$line"
+done < file.txt
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Loop control</h4>
+        <pre><code>
+break                                                           # Exit loop
+continue                                                        # Skip to next iteration
+</code></pre>
+      </div>
+
+      <h3>Functions</h3>
+
+      <div class="command-block">
+        <h4>Function definition</h4>
+        <pre><code>
+function_name() {
+    commands
+}
+
+# Alternative syntax
+function function_name {
+    commands
+}
+
+# Function with parameters
+greet() {
+    echo "Hello, $1"
+}
+greet "John"                                                    # Call function
+
+# Return value
+add() {
+    local result=$(($1 + $2))
+    echo $result
+}
+sum=$(add 5 3)                                                  # Capture return value
+
+# Return exit code
+check_file() {
+    if [ -f "$1" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Local variables
+myfunc() {
+    local var="value"                                           # Local to function
+    global_var="value"                                          # Global
+}
+</code></pre>
+      </div>
+
+      <h3>Arrays</h3>
+
+      <div class="command-block">
+        <h4>Indexed arrays</h4>
+        <pre><code>
+array=(item1 item2 item3)                                       # Create array
+array[0]="item1"                                                # Set element
+echo ${array[0]}                                                # Access element
+echo ${array[@]}                                                # All elements
+echo ${                                                         # array[@]} # Array length
+array+=(item4)                                                  # Append element
+
+# Loop through array
+for item in "${array[@]}"; do
+    echo $item
+done
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Associative arrays (bash 4+)</h4>
+        <pre><code>
+declare -A assoc_array                                          # Declare associative array
+assoc_array[key1]="value1"
+assoc_array[key2]="value2"
+echo ${assoc_array[key1]}                                       # Access by key
+
+# Loop through associative array
+for key in "${!assoc_array[@]}"; do
+    echo "$key: ${assoc_array[$key]}"
+done
+</code></pre>
+      </div>
+
+      <h3>String Manipulation</h3>
+
+      <div class="command-block">
+        <h4>String length</h4>
+        <pre><code>
+string="Hello World"
+echo ${                                                         # string} # Length of string
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Substring</h4>
+        <pre><code>
+echo ${string:0:5}                                              # Extract from position 0, length 5
+echo ${string:6}                                                # Extract from position 6 to end
+echo ${string: -5}                                              # Last 5 characters (note space)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>String replacement</h4>
+        <pre><code>
+echo ${string/o/O}                                              # Replace first 'o' with 'O'
+echo ${string//o/O}                                             # Replace all 'o' with 'O'
+echo ${string/                                                  # Hello/Hi} # Replace at beginning
+echo ${string/%World/Universe}                                  # Replace at end
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove pattern</h4>
+        <pre><code>
+echo ${string                                                   # He} # Remove shortest match from beginning
+echo ${string                                                   # #He*o} # Remove longest match from beginning
+echo ${string%ld}                                               # Remove shortest match from end
+echo ${string%%o*}                                              # Remove longest match from end
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Case conversion</h4>
+        <pre><code>
+echo ${string^^}                                                # Uppercase all
+echo ${string,,}                                                # Lowercase all
+echo ${string^}                                                 # Uppercase first character
+echo ${string,}                                                 # Lowercase first character
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Default values</h4>
+        <pre><code>
+echo ${var:-default}                                            # Use default if var is unset or null
+echo ${var:=default}                                            # Assign default if var is unset or null
+echo ${var:+value}                                              # Use value if var is set
+echo ${var:?error message}                                      # Print error if var is unset or null
+</code></pre>
+      </div>
+
+      <h3>Command Substitution</h3>
+
+      <div class="command-block">
+        <h4>Command substitution</h4>
+        <pre><code>
+output=$(command)                                               # Preferred method
+output=`command`                                                # Old-style (backticks)
+
+# Examples
+current_date=$(date)
+file_count=$(ls | wc -l)
+user_list=$(cat /etc/passwd | cut -d: -f1)
+
+# Nested substitution
+result=$(echo "Current user: $(whoami)")
+</code></pre>
+      </div>
+
+      <h3>Arithmetic Operations</h3>
+
+      <div class="command-block">
+        <h4>Arithmetic expansion</h4>
+        <pre><code>
+result=$((5 + 3))                                               # Addition
+result=$((10 - 4))                                              # Subtraction
+result=$((6 * 7))                                               # Multiplication
+result=$((20 / 4))                                              # Division
+result=$((10 % 3))                                              # Modulus
+result=$((2 ** 3))                                              # Exponentiation
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Increment/decrement</h4>
+        <pre><code>
+((count++))                                                     # Increment
+((count--))                                                     # Decrement
+((count += 5))                                                  # Add 5
+((count -= 3))                                                  # Subtract 3
+((count *= 2))                                                  # Multiply by 2
+((count /= 2))                                                  # Divide by 2
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>let command</h4>
+        <pre><code>
+let result=5+3
+let "result = 5 + 3"                                            # With spaces
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>expr command (legacy)</h4>
+        <pre><code>
+result=$(expr 5 + 3)                                            # Note: spaces required
+result=$(expr 10 \* 2)                                          # Escape special characters
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>bc for floating point</h4>
+        <pre><code>
+result=$(echo "scale=2; 10/3" | bc)                             # 3.33
+result=$(echo "sqrt(16)" | bc)                                  # 4
+</code></pre>
+      </div>
+
+      <h3>Input/Output Redirection</h3>
+
+      <div class="command-block">
+        <h4>Output redirection</h4>
+        <pre><code>
+command > file                                                  # Redirect stdout to file (overwrite)
+command >> file                                                 # Redirect stdout to file (append)
+command 2> file                                                 # Redirect stderr to file
+command 2>> file                                                # Redirect stderr to file (append)
+command &> file                                                 # Redirect both stdout and stderr
+command > file 2>&1                                             # Redirect both (alternative)
+command > /dev/null 2>&1                                        # Discard all output
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Input redirection</h4>
+        <pre><code>
+command < file                                                  # Read input from file
+command <<EOF                                                   # Here document
+line 1
+line 2
+EOF
+
+command <<-EOF                                                  # Here document (strip leading tabs)
+	indented line
+EOF
+
+command <<< "string"                                            # Here string
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Pipe</h4>
+        <pre><code>
+command1 | command2                                             # Pipe stdout to next command
+command1 |& command2                                            # Pipe stdout and stderr
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>tee (write to file and stdout)</h4>
+        <pre><code>
+command | tee file                                              # Write to file and display
+command | tee -a file                                           # Append to file and display
+command | tee file1 file2                                       # Write to multiple files
+</code></pre>
+      </div>
+
+      <h3>Process Substitution</h3>
+
+      <div class="command-block">
+        <h4>Process substitution</h4>
+        <pre><code>
+diff <(ls dir1) <(ls dir2)                                      # Compare command outputs
+command <(other_command)                                        # Use command output as file
+
+# Examples
+sort <(grep pattern file1) <(grep pattern file2)
+while read line; do
+    echo $line
+done < <(ps aux)
+</code></pre>
+      </div>
+
+      <h3>Error Handling</h3>
+
+      <div class="command-block">
+        <h4>Exit on error</h4>
+        <pre><code>
+set -e                                                          # Exit immediately if command fails
+set +e                                                          # Disable exit on error
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Exit on undefined variable</h4>
+        <pre><code>
+set -u                                                          # Exit if undefined variable used
+set +u                                                          # Disable
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Pipefail</h4>
+        <pre><code>
+set -o pipefail                                                 # Pipe fails if any command fails
+set +o pipefail                                                 # Disable
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Combined</h4>
+        <pre><code>
+set -euo pipefail                                               # Strict mode
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>trap (signal handling)</h4>
+        <pre><code>
+trap 'commands' SIGNAL                                          # Execute commands on signal
+
+# Cleanup on exit
+trap 'rm -f /tmp/tempfile' EXIT
+
+# Handle Ctrl+C
+trap 'echo "Interrupted"; exit 1' INT
+
+# Handle errors
+trap 'echo "Error on line $LINENO"' ERR
+
+# Multiple signals
+trap 'cleanup_function' EXIT INT TERM
+
+# Ignore signal
+trap '' INT                                                     # Ignore Ctrl+C
+
+# Reset trap
+trap - INT                                                      # Reset to default
+</code></pre>
+      </div>
+
+      <h3>Script Options and Debugging</h3>
+
+      <div class="command-block">
+        <h4>Bash options</h4>
+        <pre><code>
+set -x                                                          # Print commands before execution (debug)
+set +x                                                          # Disable debug
+set -v                                                          # Print shell input lines
+set +v                                                          # Disable verbose
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check if option is set</h4>
+        <pre><code>
+if [[ $- == *x* ]]; then
+    echo "Debug mode is on"
+fi
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Script must run as root</h4>
+        <pre><code>
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit 1
+fi
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check number of arguments</h4>
+        <pre><code>
+if [ $                                                          # -lt 2 ]; then
+    echo "Usage: $0 arg1 arg2"
+    exit 1
+fi
+</code></pre>
+      </div>
+
+      <h2 id="python">17. PYTHON FOR DEVOPS - BASICS</h2>
+
+      <h3>Python Execution</h3>
+
+      <div class="command-block">
+        <h4>Run Python</h4>
+        <pre><code>
+python3 script.py                                               # Execute script
+python3 -c "print('Hello')"                                     # Execute command
+python3 -m module                                               # Run module as script
+python3 -i script.py                                            # Interactive mode after script
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Shebang for Python scripts</h4>
+        <pre><code>
+# !/usr/bin/env python3       # Portable shebang
+</code></pre>
+      </div>
+
+      <h3>pip (Package Manager)</h3>
+
+      <div class="command-block">
+        <h4>pip operations</h4>
+        <pre><code>
+pip3 --version                                                  # Check pip version
+pip3 install package                                            # Install package
+pip3 install package==1.2.3                                     # Install specific version
+pip3 install 'package>=1.2'                                     # Install version constraint
+pip3 install -r requirements.txt                                # Install from file
+pip3 install --upgrade package                                  # Upgrade package
+pip3 uninstall package                                          # Uninstall package
+pip3 list                                                       # List installed packages
+pip3 list --outdated                                            # List outdated packages
+pip3 show package                                               # Show package details
+pip3 freeze                                                     # List installed packages with versions
+pip3 freeze > requirements.txt                                  # Export requirements
+pip3 search package                                             # Search for package (deprecated)
+</code></pre>
+      </div>
+
+      <h3>Virtual Environments</h3>
+
+      <div class="command-block">
+        <h4>venv (built-in)</h4>
+        <pre><code>
+python3 -m venv myenv                                           # Create virtual environment
+source myenv/bin/activate                                       # Activate (Linux/Mac)
+myenv\Scripts\activate                                          # Activate (Windows)
+deactivate                                                      # Deactivate environment
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check if in virtual environment</h4>
+        <pre><code>
+echo $VIRTUAL_ENV                                               # Shows path if active
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>virtualenv (alternative)</h4>
+        <pre><code>
+pip3 install virtualenv                                         # Install virtualenv
+virtualenv myenv                                                # Create environment
+virtualenv -p python3.9 myenv                                   # Specific Python version
+</code></pre>
+      </div>
+
+      <h3>Python Interactive</h3>
+
+      <div class="command-block">
+        <h4>Python REPL</h4>
+        <pre><code>
+python3                                                         # Start interactive Python
+exit()                                                          # Exit REPL
+quit()                                                          # Exit REPL
+Ctrl+D                                                          # Exit REPL (Linux/Mac)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>IPython (enhanced REPL)</h4>
+        <pre><code>
+pip3 install ipython                                            # Install IPython
+ipython                                                         # Start IPython
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Run Python script from REPL</h4>
+        <pre><code>
+exec(open('script.py').read())
+</code></pre>
+      </div>
+
+      <h2 id="git">18. GIT VERSION CONTROL</h2>
+
+      <h3>Git Configuration</h3>
+
+      <div class="command-block">
+        <h4>User configuration</h4>
+        <pre><code>
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git config --global core.editor vim
+git config --global init.defaultBranch main
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View configuration</h4>
+        <pre><code>
+git config --list                                               # List all config
+git config --global --list                                      # Global config only
+git config user.name                                            # Show specific value
+git config --get user.name                                      # Alternative
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration levels</h4>
+        <pre><code>
+git config --system                                             # System-wide
+git config --global                                             # User-specific
+git config --local                                              # Repository-specific
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration file locations</h4>
+        <pre><code>
+~/.gitconfig                                                    # Global config
+.git/config                                                     # Local repo config
+</code></pre>
+      </div>
+
+      <h3>Repository Initialization</h3>
+
+      <div class="command-block">
+        <h4>Create repository</h4>
+        <pre><code>
+git init                                                        # Initialize new repo
+git init project-name                                           # Initialize with directory name
+git clone url                                                   # Clone remote repository
+git clone url dirname                                           # Clone to specific directory
+git clone --depth 1 url                                         # Shallow clone (last commit only)
+git clone -b branch url                                         # Clone specific branch
+</code></pre>
+      </div>
+
+      <h3>Basic Git Workflow</h3>
+
+      <div class="command-block">
+        <h4>Check status</h4>
+        <pre><code>
+git status                                                      # Show working tree status
+git status -s                                                   # Short status
+git status -sb                                                  # Short status with branch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add files</h4>
+        <pre><code>
+git add file.txt                                                # Add specific file
+git add .                                                       # Add all changes in current dir
+git add -A                                                      # Add all changes in repo
+git add *.txt                                                   # Add all .txt files
+git add -p                                                      # Interactive staging
+git add -u                                                      # Add modified/deleted, not new
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Commit</h4>
+        <pre><code>
+git commit                                                      # Commit (opens editor)
+git commit -m "message"                                         # Commit with message
+git commit -am "message"                                        # Add and commit tracked files
+git commit --amend                                              # Amend last commit
+git commit --amend --no-edit                                    # Amend without changing message
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View changes</h4>
+        <pre><code>
+git diff                                                        # Unstaged changes
+git diff --staged                                               # Staged changes
+git diff HEAD                                                   # All changes since last commit
+git diff branch1 branch2                                        # Compare branches
+git diff commit1 commit2                                        # Compare commits
+git diff --stat                                                 # Summary of changes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove files</h4>
+        <pre><code>
+git rm file.txt                                                 # Remove file and stage
+git rm --cached file.txt                                        # Untrack file, keep in working dir
+git rm -r directory                                             # Remove directory
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Move/rename</h4>
+        <pre><code>
+git mv oldname newname                                          # Move or rename file
+</code></pre>
+      </div>
+
+      <h3>Viewing History</h3>
+
+      <div class="command-block">
+        <h4>Log</h4>
+        <pre><code>
+git log                                                         # Show commit history
+git log --oneline                                               # Compact format
+git log --graph                                                 # Graph view
+git log --all --graph --decorate --oneline                      # Full graph view
+git log -n 5                                                    # Last 5 commits
+git log --since="2024-01-01"                                    # Commits since date
+git log --until="2024-12-31"                                    # Commits until date
+git log --author="name"                                         # By author
+git log --grep="pattern"                                        # Search commit messages
+git log file.txt                                                # Commits affecting file
+git log -p                                                      # Show patches (diffs)
+git log --stat                                                  # Show file statistics
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show commit</h4>
+        <pre><code>
+git show commit_hash                                            # Show commit details
+git show HEAD                                                   # Show latest commit
+git show HEAD~1                                                 # Show previous commit
+git show branch:file.txt                                        # Show file from branch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Blame</h4>
+        <pre><code>
+git blame file.txt                                              # Show who changed each line
+git blame -L 10,20 file.txt                                     # Lines 10-20 only
+</code></pre>
+      </div>
+
+      <h3>Branching</h3>
+
+      <div class="command-block">
+        <h4>List branches</h4>
+        <pre><code>
+git branch                                                      # List local branches
+git branch -a                                                   # List all branches (local + remote)
+git branch -r                                                   # List remote branches
+git branch -v                                                   # Verbose (show last commit)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create branch</h4>
+        <pre><code>
+git branch branch-name                                          # Create branch
+git checkout -b branch-name                                     # Create and switch to branch
+git switch -c branch-name                                       # Create and switch (modern)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Switch branches</h4>
+        <pre><code>
+git checkout branch-name                                        # Switch to branch
+git switch branch-name                                          # Switch to branch (modern)
+git checkout -                                                  # Switch to previous branch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete branch</h4>
+        <pre><code>
+git branch -d branch-name                                       # Delete branch (safe)
+git branch -D branch-name                                       # Force delete branch
+git push origin --delete branch-name                            # Delete remote branch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Rename branch</h4>
+        <pre><code>
+git branch -m new-name                                          # Rename current branch
+git branch -m old new                                           # Rename specific branch
+</code></pre>
+      </div>
+
+      <h3>Merging</h3>
+
+      <div class="command-block">
+        <h4>Merge branches</h4>
+        <pre><code>
+git merge branch-name                                           # Merge branch into current
+git merge --no-ff branch-name                                   # No fast-forward merge
+git merge --squash branch-name                                  # Squash commits
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Abort merge</h4>
+        <pre><code>
+git merge --abort                                               # Cancel merge in progress
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Merge tools</h4>
+        <pre><code>
+git mergetool                                                   # Launch merge tool
+</code></pre>
+      </div>
+
+      <h3>Remote Repositories</h3>
+
+      <div class="command-block">
+        <h4>View remotes</h4>
+        <pre><code>
+git remote                                                      # List remotes
+git remote -v                                                   # List with URLs
+git remote show origin                                          # Show remote details
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add remote</h4>
+        <pre><code>
+git remote add origin url                                       # Add remote
+git remote add upstream url                                     # Add upstream remote
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove/rename remote</h4>
+        <pre><code>
+git remote remove origin                                        # Remove remote
+git remote rename old new                                       # Rename remote
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Fetch and pull</h4>
+        <pre><code>
+git fetch                                                       # Fetch from default remote
+git fetch origin                                                # Fetch from specific remote
+git fetch --all                                                 # Fetch from all remotes
+git pull                                                        # Fetch and merge
+git pull --rebase                                               # Fetch and rebase
+git pull origin main                                            # Pull specific branch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Push</h4>
+        <pre><code>
+git push                                                        # Push to default remote/branch
+git push origin main                                            # Push to specific remote/branch
+git push -u origin main                                         # Push and set upstream
+git push --all                                                  # Push all branches
+git push --tags                                                 # Push all tags
+git push --force                                                # Force push (DANGEROUS)
+git push --force-with-lease                                     # Safer force push
+</code></pre>
+      </div>
+
+      <h3>Stashing</h3>
+
+      <div class="command-block">
+        <h4>Stash changes</h4>
+        <pre><code>
+git stash                                                       # Stash changes
+git stash save "message"                                        # Stash with message
+git stash -u                                                    # Include untracked files
+git stash -a                                                    # Include all files (even ignored)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List stashes</h4>
+        <pre><code>
+git stash list                                                  # Show all stashes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Apply stash</h4>
+        <pre><code>
+git stash apply                                                 # Apply latest stash
+git stash apply stash@{2}                                       # Apply specific stash
+git stash pop                                                   # Apply and remove latest stash
+git stash pop stash@{2}                                         # Apply and remove specific stash
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Manage stashes</h4>
+        <pre><code>
+git stash show                                                  # Show stash changes
+git stash show -p                                               # Show stash diff
+git stash drop                                                  # Delete latest stash
+git stash drop stash@{2}                                        # Delete specific stash
+git stash clear                                                 # Delete all stashes
+</code></pre>
+      </div>
+
+      <h3>Undoing Changes</h3>
+
+      <div class="command-block">
+        <h4>Discard changes</h4>
+        <pre><code>
+git restore file.txt                                            # Discard changes in file (modern)
+git restore --staged file.txt                                   # Unstage file (modern)
+git checkout -- file.txt                                        # Discard changes (legacy)
+git reset HEAD file.txt                                         # Unstage file (legacy)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reset commits</h4>
+        <pre><code>
+git reset --soft HEAD~1                                         # Undo commit, keep changes staged
+git reset --mixed HEAD~1                                        # Undo commit, keep changes unstaged (default)
+git reset --hard HEAD~1                                         # Undo commit, discard changes (DANGEROUS)
+git reset --hard origin/main                                    # Reset to remote state (DANGEROUS)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Revert (create new commit that undoes)</h4>
+        <pre><code>
+git revert commit_hash                                          # Revert specific commit
+git revert HEAD                                                 # Revert last commit
+git revert --no-commit HEAD                                     # Revert without committing
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Clean untracked files</h4>
+        <pre><code>
+git clean -n                                                    # Dry run (show what would be deleted)
+git clean -f                                                    # Delete untracked files
+git clean -fd                                                   # Delete untracked files and directories
+git clean -fX                                                   # Delete only ignored files
+git clean -fx                                                   # Delete untracked and ignored
+</code></pre>
+      </div>
+
+      <h3>Tagging</h3>
+
+      <div class="command-block">
+        <h4>List tags</h4>
+        <pre><code>
+git tag                                                         # List all tags
+git tag -l "v1.*"                                               # List tags matching pattern
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create tags</h4>
+        <pre><code>
+git tag v1.0.0                                                  # Lightweight tag
+git tag -a v1.0.0 -m "message"                                  # Annotated tag
+git tag -a v1.0.0 commit_hash                                   # Tag specific commit
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show tag</h4>
+        <pre><code>
+git show v1.0.0                                                 # Show tag details
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Push tags</h4>
+        <pre><code>
+git push origin v1.0.0                                          # Push specific tag
+git push origin --tags                                          # Push all tags
+git push --follow-tags                                          # Push commit and associated tags
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete tags</h4>
+        <pre><code>
+git tag -d v1.0.0                                               # Delete local tag
+git push origin --delete v1.0.0                                 # Delete remote tag
+</code></pre>
+      </div>
+
+      <h3>Rebasing</h3>
+
+      <div class="command-block">
+        <h4>Rebase</h4>
+        <pre><code>
+git rebase main                                                 # Rebase current branch onto main
+git rebase -i HEAD~3                                            # Interactive rebase last 3 commits
+git rebase --continue                                           # Continue after resolving conflicts
+git rebase --abort                                              # Abort rebase
+git rebase --skip                                               # Skip current commit
+</code></pre>
+      </div>
+
+      <h3>Git Extras</h3>
+
+      <div class="command-block">
+        <h4>Submodules</h4>
+        <pre><code>
+git submodule add url path                                      # Add submodule
+git submodule init                                              # Initialize submodules
+git submodule update                                            # Update submodules
+git submodule update --remote                                   # Update to latest
+git clone --recursive url                                       # Clone with submodules
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Cherry-pick</h4>
+        <pre><code>
+git cherry-pick commit_hash                                     # Apply specific commit
+git cherry-pick --continue                                      # Continue after conflict
+git cherry-pick --abort                                         # Abort cherry-pick
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Bisect (find bad commit)</h4>
+        <pre><code>
+git bisect start                                                # Start bisect
+git bisect bad                                                  # Mark current as bad
+git bisect good commit_hash                                     # Mark commit as good
+git bisect reset                                                # End bisect
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Reflog (recover lost commits)</h4>
+        <pre><code>
+git reflog                                                      # Show reflog
+git reflog show branch-name                                     # Reflog for branch
+git reset --hard HEAD@{2}                                       # Restore to reflog entry
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Archive</h4>
+        <pre><code>
+git archive --format=zip HEAD > archive.zip                     # Create archive
+git archive --format=tar HEAD | gzip > archive.tar.gz           # Tar.gz archive
+</code></pre>
+      </div>
+
+      <h2 id="docker">19. DOCKER COMMANDS</h2>
+
+      <h3>Docker System</h3>
+
+      <div class="command-block">
+        <h4>Docker version and info</h4>
+        <pre><code>
+docker --version                                                # Show version
+docker version                                                  # Detailed version info
+docker info                                                     # System-wide information
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Docker service (systemd)</h4>
+        <pre><code>
+systemctl status docker                                         # Check Docker service
+systemctl start docker                                          # Start Docker
+systemctl stop docker                                           # Stop Docker
+systemctl enable docker                                         # Enable at boot
+systemctl restart docker                                        # Restart Docker
+</code></pre>
+      </div>
+
+      <h3>Docker Images</h3>
+
+      <div class="command-block">
+        <h4>List images</h4>
+        <pre><code>
+docker images                                                   # List all images
+docker images -a                                                # List all images (including intermediate)
+docker images -q                                                # List only image IDs
+docker images --digests                                         # Show digests
+docker images --filter "dangling=true"                          # Dangling images
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Pull images</h4>
+        <pre><code>
+docker pull image:tag                                           # Pull image
+docker pull ubuntu:22.04                                        # Pull specific version
+docker pull --all-tags image                                    # Pull all tags
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search images</h4>
+        <pre><code>
+docker search ubuntu                                            # Search Docker Hub
+docker search --limit 5 ubuntu                                  # Limit results
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Build images</h4>
+        <pre><code>
+docker build -t name:tag .                                      # Build from Dockerfile
+docker build -t name:tag -f Dockerfile.prod .                   # Specify Dockerfile
+docker build --no-cache -t name:tag .                           # Build without cache
+docker build --build-arg VAR=value -t name:tag .                # Build args
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove images</h4>
+        <pre><code>
+docker rmi image_id                                             # Remove image
+docker rmi image:tag                                            # Remove by tag
+docker rmi -f image_id                                          # Force remove
+docker image prune                                              # Remove unused images
+docker image prune -a                                           # Remove all unused images
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Image details</h4>
+        <pre><code>
+docker inspect image_id                                         # Inspect image
+docker history image_id                                         # Show image layers
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Tag images</h4>
+        <pre><code>
+docker tag source:tag target:tag                                # Tag image
+docker tag image_id new_name:tag                                # Tag by ID
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Save/load images</h4>
+        <pre><code>
+docker save image:tag > image.tar                               # Save to tar
+docker save -o image.tar image:tag                              # Save to file
+docker load < image.tar                                         # Load from tar
+docker load -i image.tar                                        # Load from file
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Export/import images</h4>
+        <pre><code>
+docker export container_id > container.tar                      # Export container
+docker import container.tar name:tag                            # Import as image
+</code></pre>
+      </div>
+
+      <h3>Docker Containers</h3>
+
+      <div class="command-block">
+        <h4>Run containers</h4>
+        <pre><code>
+docker run image                                                # Run container
+docker run -d image                                             # Run detached (background)
+docker run -it image bash                                       # Interactive with terminal
+docker run --name mycontainer image                             # Name container
+docker run -p 8080:80 image                                     # Port mapping (host:container)
+docker run -P image                                             # Map all exposed ports
+docker run -v /host:/container image                            # Volume mount
+docker run --rm image                                           # Remove container when stops
+docker run -e VAR=value image                                   # Set environment variable
+docker run --env-file .env image                                # Load env from file
+docker run --network mynet image                                # Connect to network
+docker run --restart always image                               # Restart policy
+docker run --memory 512m image                                  # Memory limit
+docker run --cpus 2 image                                       # CPU limit
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List containers</h4>
+        <pre><code>
+docker ps                                                       # List running containers
+docker ps -a                                                    # List all containers
+docker ps -q                                                    # List container IDs only
+docker ps -l                                                    # List last created container
+docker ps --filter "status=exited"                              # Filter by status
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Container management</h4>
+        <pre><code>
+docker start container_id                                       # Start container
+docker stop container_id                                        # Stop container (SIGTERM)
+docker stop -t 30 container_id                                  # Stop with 30s timeout
+docker kill container_id                                        # Kill container (SIGKILL)
+docker restart container_id                                     # Restart container
+docker pause container_id                                       # Pause container
+docker unpause container_id                                     # Unpause container
+docker rename old new                                           # Rename container
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove containers</h4>
+        <pre><code>
+docker rm container_id                                          # Remove container
+docker rm -f container_id                                       # Force remove running container
+docker rm $(docker ps -aq)                                      # Remove all containers
+docker container prune                                          # Remove all stopped containers
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Container details</h4>
+        <pre><code>
+docker inspect container_id                                     # Inspect container
+docker logs container_id                                        # View logs
+docker logs -f container_id                                     # Follow logs
+docker logs --tail 100 container_id                             # Last 100 lines
+docker logs --since 10m container_id                            # Last 10 minutes
+docker top container_id                                         # Running processes
+docker stats                                                    # Resource usage (live)
+docker stats --no-stream                                        # Resource usage (snapshot)
+docker port container_id                                        # Port mappings
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Execute commands</h4>
+        <pre><code>
+docker exec container_id command                                # Execute command
+docker exec -it container_id bash                               # Interactive bash
+docker exec -u user container_id command                        # As specific user
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy files</h4>
+        <pre><code>
+docker cp container_id:/path/file ./local                       # Copy from container
+docker cp ./local container_id:/path/                           # Copy to container
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Attach to container</h4>
+        <pre><code>
+docker attach container_id                                      # Attach to running container
+</code></pre>
+      </div>
+
+      <h3>Docker Volumes</h3>
+
+      <div class="command-block">
+        <h4>List volumes</h4>
+        <pre><code>
+docker volume ls                                                # List all volumes
+docker volume ls -q                                             # List volume names only
+docker volume ls --filter "dangling=true"                       # Dangling volumes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create volume</h4>
+        <pre><code>
+docker volume create myvolume                                   # Create named volume
+docker volume create --driver local --opt type=nfs myvolume     # With options
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Inspect volume</h4>
+        <pre><code>
+docker volume inspect myvolume                                  # Volume details
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove volumes</h4>
+        <pre><code>
+docker volume rm myvolume                                       # Remove volume
+docker volume prune                                             # Remove unused volumes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Use volumes</h4>
+        <pre><code>
+docker run -v myvolume:/data image                              # Named volume
+docker run -v /host/path:/container/path image                  # Bind mount
+docker run --mount type=volume,source=myvolume,target=/data image # Long syntax
+</code></pre>
+      </div>
+
+      <h3>Docker Networks</h3>
+
+      <div class="command-block">
+        <h4>List networks</h4>
+        <pre><code>
+docker network ls                                               # List all networks
+docker network ls --filter "driver=bridge"                      # Filter by driver
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create network</h4>
+        <pre><code>
+docker network create mynetwork                                 # Create bridge network
+docker network create --driver bridge mynetwork                 # Specify driver
+docker network create --subnet 172.20.0.0/16 mynetwork          # With subnet
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Inspect network</h4>
+        <pre><code>
+docker network inspect mynetwork                                # Network details
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Connect/disconnect</h4>
+        <pre><code>
+docker network connect mynetwork container_id                   # Connect container
+docker network disconnect mynetwork container_id                # Disconnect
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove networks</h4>
+        <pre><code>
+docker network rm mynetwork                                     # Remove network
+docker network prune                                            # Remove unused networks
+</code></pre>
+      </div>
+
+      <h3>Docker Compose</h3>
+
+      <div class="command-block">
+        <h4>Docker Compose commands</h4>
+        <pre><code>
+docker-compose --version                                        # Show version
+docker-compose up                                               # Create and start containers
+docker-compose up -d                                            # Detached mode
+docker-compose down                                             # Stop and remove containers
+docker-compose down -v                                          # Also remove volumes
+docker-compose start                                            # Start services
+docker-compose stop                                             # Stop services
+docker-compose restart                                          # Restart services
+docker-compose ps                                               # List containers
+docker-compose logs                                             # View logs
+docker-compose logs -f                                          # Follow logs
+docker-compose logs service                                     # Logs for specific service
+docker-compose exec service command                             # Execute command
+docker-compose build                                            # Build images
+docker-compose build --no-cache                                 # Build without cache
+docker-compose pull                                             # Pull images
+docker-compose config                                           # Validate and view config
+docker-compose scale service=3                                  # Scale service
+</code></pre>
+      </div>
+
+      <h3>Docker System Management</h3>
+
+      <div class="command-block">
+        <h4>System info</h4>
+        <pre><code>
+docker system df                                                # Show disk usage
+docker system df -v                                             # Verbose disk usage
+docker system events                                            # Real-time events
+docker system info                                              # System information
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Cleanup</h4>
+        <pre><code>
+docker system prune                                             # Remove unused data
+docker system prune -a                                          # Remove all unused data
+docker system prune --volumes                                   # Also remove volumes
+docker system prune -f                                          # Force without prompt
+</code></pre>
+      </div>
+
+      <h3>Docker Registry</h3>
+
+      <div class="command-block">
+        <h4>Login/logout</h4>
+        <pre><code>
+docker login                                                    # Login to Docker Hub
+docker login registry.example.com                               # Login to private registry
+docker logout                                                   # Logout
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Push images</h4>
+        <pre><code>
+docker push image:tag                                           # Push to registry
+docker push registry.example.com/image:tag                      # Push to private registry
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Tag for registry</h4>
+        <pre><code>
+docker tag local:tag registry.example.com/image:tag
+</code></pre>
+      </div>
+
+      <h2 id="kubernetes">20. KUBERNETES (kubectl) COMMANDS</h2>
+
+      <h3>Cluster Information</h3>
+
+      <div class="command-block">
+        <h4>Cluster info</h4>
+        <pre><code>
+kubectl cluster-info                                            # Display cluster info
+kubectl version                                                 # Client and server version
+kubectl version --short                                         # Short version
+kubectl api-resources                                           # List API resources
+kubectl api-versions                                            # List API versions
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration</h4>
+        <pre><code>
+kubectl config view                                             # Show kubeconfig
+kubectl config get-contexts                                     # List contexts
+kubectl config current-context                                  # Show current context
+kubectl config use-context context-name                         # Switch context
+kubectl config set-context --current --namespace=mynamespace    # Set namespace
+</code></pre>
+      </div>
+
+      <h3>Pods</h3>
+
+      <div class="command-block">
+        <h4>List pods</h4>
+        <pre><code>
+kubectl get pods                                                # List pods in current namespace
+kubectl get pods -A                                             # List pods in all namespaces
+kubectl get pods -n namespace                                   # List pods in specific namespace
+kubectl get pods -o wide                                        # Wide output (more details)
+kubectl get pods -o json                                        # JSON output
+kubectl get pods -o yaml                                        # YAML output
+kubectl get pods --show-labels                                  # Show labels
+kubectl get pods -l app=myapp                                   # Filter by label
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Describe pod</h4>
+        <pre><code>
+kubectl describe pod pod-name                                   # Detailed pod information
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create/delete pods</h4>
+        <pre><code>
+kubectl run nginx --image=nginx                                 # Run pod
+kubectl run nginx --image=nginx --dry-run=client -o yaml        # Generate YAML
+kubectl delete pod pod-name                                     # Delete pod
+kubectl delete pods --all                                       # Delete all pods
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Pod logs</h4>
+        <pre><code>
+kubectl logs pod-name                                           # View pod logs
+kubectl logs pod-name -f                                        # Follow logs
+kubectl logs pod-name -c container-name                         # Specific container
+kubectl logs pod-name --previous                                # Previous instance logs
+kubectl logs pod-name --tail=100                                # Last 100 lines
+kubectl logs pod-name --since=10m                               # Last 10 minutes
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Execute commands</h4>
+        <pre><code>
+kubectl exec pod-name -- command                                # Execute command
+kubectl exec -it pod-name -- bash                               # Interactive bash
+kubectl exec -it pod-name -c container-name -- bash             # Specific container
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Port forwarding</h4>
+        <pre><code>
+kubectl port-forward pod-name 8080:80                           # Forward port
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy files</h4>
+        <pre><code>
+kubectl cp pod-name:/path/file ./local                          # Copy from pod
+kubectl cp ./local pod-name:/path/                              # Copy to pod
+</code></pre>
+      </div>
+
+      <h3>Deployments</h3>
+
+      <div class="command-block">
+        <h4>List deployments</h4>
+        <pre><code>
+kubectl get deployments                                         # List deployments
+kubectl get deploy                                              # Short form
+kubectl get deployments -A                                      # All namespaces
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create deployment</h4>
+        <pre><code>
+kubectl create deployment nginx --image=nginx                   # Create deployment
+kubectl create deployment nginx --image=nginx --replicas=3      # With replicas
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Describe deployment</h4>
+        <pre><code>
+kubectl describe deployment deployment-name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Scale deployment</h4>
+        <pre><code>
+kubectl scale deployment deployment-name --replicas=5
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Update deployment</h4>
+        <pre><code>
+kubectl set image deployment/deployment-name container=image:tag
+kubectl rollout restart deployment/deployment-name              # Restart deployment
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Deployment rollout</h4>
+        <pre><code>
+kubectl rollout status deployment/deployment-name               # Check status
+kubectl rollout history deployment/deployment-name              # View history
+kubectl rollout undo deployment/deployment-name                 # Rollback
+kubectl rollout undo deployment/deployment-name --to-revision=2 # Specific revision
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete deployment</h4>
+        <pre><code>
+kubectl delete deployment deployment-name
+</code></pre>
+      </div>
+
+      <h3>Services</h3>
+
+      <div class="command-block">
+        <h4>List services</h4>
+        <pre><code>
+kubectl get services                                            # List services
+kubectl get svc                                                 # Short form
+kubectl get services -A                                         # All namespaces
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Describe service</h4>
+        <pre><code>
+kubectl describe service service-name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create service</h4>
+        <pre><code>
+kubectl expose deployment deployment-name --port=80 --type=NodePort # Expose deployment
+kubectl create service clusterip myservice --tcp=80:8080        # ClusterIP service
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete service</h4>
+        <pre><code>
+kubectl delete service service-name
+</code></pre>
+      </div>
+
+      <h3>Namespaces</h3>
+
+      <div class="command-block">
+        <h4>List namespaces</h4>
+        <pre><code>
+kubectl get namespaces                                          # List all namespaces
+kubectl get ns                                                  # Short form
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create namespace</h4>
+        <pre><code>
+kubectl create namespace mynamespace
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete namespace</h4>
+        <pre><code>
+kubectl delete namespace mynamespace
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Set default namespace</h4>
+        <pre><code>
+kubectl config set-context --current --namespace=mynamespace
+</code></pre>
+      </div>
+
+      <h3>ConfigMaps and Secrets</h3>
+
+      <div class="command-block">
+        <h4>ConfigMaps</h4>
+        <pre><code>
+kubectl get configmaps                                          # List ConfigMaps
+kubectl get cm                                                  # Short form
+kubectl describe configmap cm-name
+kubectl create configmap myconfig --from-literal=key=value
+kubectl create configmap myconfig --from-file=file.txt
+kubectl delete configmap cm-name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Secrets</h4>
+        <pre><code>
+kubectl get secrets                                             # List secrets
+kubectl describe secret secret-name
+kubectl create secret generic mysecret --from-literal=password=mypass
+kubectl create secret generic mysecret --from-file=./secret.txt
+kubectl delete secret secret-name
+</code></pre>
+      </div>
+
+      <h3>Apply and Manage Resources</h3>
+
+      <div class="command-block">
+        <h4>Apply configuration</h4>
+        <pre><code>
+kubectl apply -f file.yaml                                      # Apply from file
+kubectl apply -f directory/                                     # Apply all files in directory
+kubectl apply -f https://url/file.yaml                          # Apply from URL
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create from file</h4>
+        <pre><code>
+kubectl create -f file.yaml                                     # Create from file
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete from file</h4>
+        <pre><code>
+kubectl delete -f file.yaml                                     # Delete resources in file
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Replace</h4>
+        <pre><code>
+kubectl replace -f file.yaml                                    # Replace existing resource
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Edit resource</h4>
+        <pre><code>
+kubectl edit deployment deployment-name                         # Edit in editor
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Patch resource</h4>
+        <pre><code>
+kubectl patch deployment deployment-name -p '{"spec":{"replicas":5}}'
+</code></pre>
+      </div>
+
+      <h3>Nodes</h3>
+
+      <div class="command-block">
+        <h4>List nodes</h4>
+        <pre><code>
+kubectl get nodes                                               # List all nodes
+kubectl get nodes -o wide                                       # Wide output
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Describe node</h4>
+        <pre><code>
+kubectl describe node node-name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Cordon/uncordon (maintenance)</h4>
+        <pre><code>
+kubectl cordon node-name                                        # Mark node unschedulable
+kubectl uncordon node-name                                      # Mark node schedulable
+kubectl drain node-name                                         # Drain node for maintenance
+kubectl drain node-name --ignore-daemonsets --delete-emptydir-data # Force drain
+</code></pre>
+      </div>
+
+      <h3>Labels and Annotations</h3>
+
+      <div class="command-block">
+        <h4>Labels</h4>
+        <pre><code>
+kubectl label pods pod-name app=myapp                           # Add label
+kubectl label pods pod-name app-                                # Remove label
+kubectl label pods pod-name app=newapp --overwrite              # Update label
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Annotations</h4>
+        <pre><code>
+kubectl annotate pods pod-name description="My pod"             # Add annotation
+kubectl annotate pods pod-name description-                     # Remove annotation
+</code></pre>
+      </div>
+
+      <h3>Resource Monitoring</h3>
+
+      <div class="command-block">
+        <h4>Resource usage</h4>
+        <pre><code>
+kubectl top nodes                                               # Node resource usage
+kubectl top pods                                                # Pod resource usage
+kubectl top pod pod-name                                        # Specific pod usage
+kubectl top pods -n namespace                                   # Namespace pods usage
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Debugging</h4>
+        <pre><code>
+kubectl get events                                              # List cluster events
+kubectl get events --sort-by=.metadata.creationTimestamp        # Sorted events
+kubectl get events -n namespace                                 # Namespace events
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Troubleshooting</h4>
+        <pre><code>
+kubectl describe pod pod-name                                   # Detailed pod info (shows errors)
+kubectl logs pod-name --previous                                # Logs from crashed container
+kubectl get pod pod-name -o yaml                                # Full pod specification
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Debug with ephemeral container</h4>
+        <pre><code>
+kubectl debug pod-name -it --image=busybox                      # Add debug container
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy resources</h4>
+        <pre><code>
+kubectl get deployment deployment-name -o yaml > deployment.yaml # Export to file
+</code></pre>
+      </div>
+
+      <h3>RBAC (Role-Based Access Control)</h3>
+
+      <div class="command-block">
+        <h4>Service accounts</h4>
+        <pre><code>
+kubectl get serviceaccounts                                     # List service accounts
+kubectl get sa                                                  # Short form
+kubectl create serviceaccount mysa                              # Create service account
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Roles and RoleBindings</h4>
+        <pre><code>
+kubectl get roles                                               # List roles
+kubectl get rolebindings                                        # List role bindings
+kubectl get clusterroles                                        # List cluster roles
+kubectl get clusterrolebindings                                 # List cluster role bindings
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create role</h4>
+        <pre><code>
+kubectl create role myrole --verb=get,list --resource=pods
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create role binding</h4>
+        <pre><code>
+kubectl create rolebinding mybinding --role=myrole --user=myuser
+</code></pre>
+      </div>
+
+      <h3>Jobs and CronJobs</h3>
+
+      <div class="command-block">
+        <h4>Jobs</h4>
+        <pre><code>
+kubectl get jobs                                                # List jobs
+kubectl describe job job-name
+kubectl create job myjob --image=busybox -- echo "Hello"
+kubectl delete job job-name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>CronJobs</h4>
+        <pre><code>
+kubectl get cronjobs                                            # List cronjobs
+kubectl get cj                                                  # Short form
+kubectl describe cronjob cronjob-name
+kubectl create cronjob mycron --image=busybox --schedule="*/5 * * * *" -- echo "Hello"
+kubectl delete cronjob cronjob-name
+</code></pre>
+      </div>
+
+      <h3>Ingress</h3>
+
+      <div class="command-block">
+        <h4>Ingress</h4>
+        <pre><code>
+kubectl get ingress                                             # List ingress resources
+kubectl get ing                                                 # Short form
+kubectl describe ingress ingress-name
+kubectl delete ingress ingress-name
+</code></pre>
+      </div>
+
+      <h3>Persistent Volumes</h3>
+
+      <div class="command-block">
+        <h4>Persistent Volumes</h4>
+        <pre><code>
+kubectl get pv                                                  # List persistent volumes
+kubectl describe pv pv-name
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Persistent Volume Claims</h4>
+        <pre><code>
+kubectl get pvc                                                 # List PVCs
+kubectl describe pvc pvc-name
+kubectl delete pvc pvc-name
+</code></pre>
+      </div>
+
+      <h3>StatefulSets</h3>
+
+      <div class="command-block">
+        <h4>StatefulSets</h4>
+        <pre><code>
+kubectl get statefulsets                                        # List StatefulSets
+kubectl get sts                                                 # Short form
+kubectl describe statefulset ss-name
+kubectl scale statefulset ss-name --replicas=5
+kubectl delete statefulset ss-name
+</code></pre>
+      </div>
+
+      <h3>DaemonSets</h3>
+
+      <div class="command-block">
+        <h4>DaemonSets</h4>
+        <pre><code>
+kubectl get daemonsets                                          # List DaemonSets
+kubectl get ds                                                  # Short form
+kubectl describe daemonset ds-name
+kubectl delete daemonset ds-name
+</code></pre>
+      </div>
+
+      <h2 id="ansible">21. ANSIBLE COMMANDS</h2>
+
+      <h3>Ansible Ad-Hoc Commands</h3>
+
+      <div class="command-block">
+        <h4>Basic ad-hoc syntax</h4>
+        <pre><code>
+ansible all -m module -a "arguments"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Ping hosts</h4>
+        <pre><code>
+ansible all -m ping                                             # Ping all hosts
+ansible webservers -m ping                                      # Ping specific group
+ansible host1 -m ping                                           # Ping specific host
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Command module (default)</h4>
+        <pre><code>
+ansible all -m command -a "uptime"
+ansible all -a "uptime"                                         # Short form (command is default)
+ansible all -a "df -h"                                          # Disk usage
+ansible all -a "free -m"                                        # Memory info
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Shell module (supports shell features)</h4>
+        <pre><code>
+ansible all -m shell -a "ps aux | grep httpd"
+ansible all -m shell -a "ls -la /tmp > /tmp/output.txt"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy files</h4>
+        <pre><code>
+ansible all -m copy -a "src=/local/file dest=/remote/path"
+ansible all -m copy -a "src=/local/file dest=/remote/path mode=0644 owner=user"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>File operations</h4>
+        <pre><code>
+ansible all -m file -a "path=/tmp/test state=touch"             # Create file
+ansible all -m file -a "path=/tmp/test state=absent"            # Delete file
+ansible all -m file -a "path=/tmp/dir state=directory mode=0755" # Create dir
+ansible all -m file -a "src=/path/file dest=/path/link state=link" # Symlink
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Package management</h4>
+        <pre><code>
+ansible all -m dnf -a "name=httpd state=present"                # Install package
+ansible all -m dnf -a "name=httpd state=latest"                 # Update package
+ansible all -m dnf -a "name=httpd state=absent"                 # Remove package
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Service management</h4>
+        <pre><code>
+ansible all -m service -a "name=httpd state=started"            # Start service
+ansible all -m service -a "name=httpd state=stopped"            # Stop service
+ansible all -m service -a "name=httpd state=restarted"          # Restart service
+ansible all -m service -a "name=httpd enabled=yes"              # Enable at boot
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>User management</h4>
+        <pre><code>
+ansible all -m user -a "name=john state=present"
+ansible all -m user -a "name=john state=absent remove=yes"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Gather facts</h4>
+        <pre><code>
+ansible all -m setup                                            # Gather all facts
+ansible all -m setup -a "filter=ansible_distribution*"          # Filter facts
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Execute with sudo</h4>
+        <pre><code>
+ansible all -m command -a "whoami" --become
+ansible all -m command -a "whoami" -b                           # Short form
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Specify user</h4>
+        <pre><code>
+ansible all -m ping -u username
+ansible all -m ping --user username
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Limit hosts</h4>
+        <pre><code>
+ansible all -m ping --limit "host1,host2"
+ansible all -m ping --limit "webservers:!host1"                 # Exclude host1
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check mode (dry run)</h4>
+        <pre><code>
+ansible all -m command -a "uptime" --check
+ansible all -m command -a "uptime" -C                           # Short form
+</code></pre>
+      </div>
+
+      <h3>Ansible Playbook Commands</h3>
+
+      <div class="command-block">
+        <h4>Run playbook</h4>
+        <pre><code>
+ansible-playbook playbook.yml                                   # Execute playbook
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check syntax</h4>
+        <pre><code>
+ansible-playbook playbook.yml --syntax-check
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Dry run</h4>
+        <pre><code>
+ansible-playbook playbook.yml --check
+ansible-playbook playbook.yml -C                                # Short form
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Diff mode</h4>
+        <pre><code>
+ansible-playbook playbook.yml --diff                            # Show changes
+ansible-playbook playbook.yml --check --diff                    # Dry run with diff
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Limit execution</h4>
+        <pre><code>
+ansible-playbook playbook.yml --limit webservers
+ansible-playbook playbook.yml -l host1,host2                    # Short form
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Tags</h4>
+        <pre><code>
+ansible-playbook playbook.yml --tags "install,configure"
+ansible-playbook playbook.yml --skip-tags "test"
+ansible-playbook playbook.yml --list-tags                       # List available tags
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Start at task</h4>
+        <pre><code>
+ansible-playbook playbook.yml --start-at-task "task name"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Step through</h4>
+        <pre><code>
+ansible-playbook playbook.yml --step                            # Confirm each task
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Verbose output</h4>
+        <pre><code>
+ansible-playbook playbook.yml -v                                # Verbose
+ansible-playbook playbook.yml -vv                               # More verbose
+ansible-playbook playbook.yml -vvv                              # Very verbose
+ansible-playbook playbook.yml -vvvv                             # Debug level
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Extra variables</h4>
+        <pre><code>
+ansible-playbook playbook.yml --extra-vars "version=1.0 env=prod"
+ansible-playbook playbook.yml -e "version=1.0"                  # Short form
+ansible-playbook playbook.yml -e @vars.yml                      # From file
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Inventory</h4>
+        <pre><code>
+ansible-playbook playbook.yml -i inventory.ini
+ansible-playbook playbook.yml --inventory hosts                 # Alternative
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Ask for passwords</h4>
+        <pre><code>
+ansible-playbook playbook.yml --ask-pass                        # SSH password
+ansible-playbook playbook.yml --ask-become-pass                 # Sudo password
+ansible-playbook playbook.yml -K                                # Ask become password (short)
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List tasks</h4>
+        <pre><code>
+ansible-playbook playbook.yml --list-tasks
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List hosts</h4>
+        <pre><code>
+ansible-playbook playbook.yml --list-hosts
+</code></pre>
+      </div>
+
+      <h3>Ansible Inventory Commands</h3>
+
+      <div class="command-block">
+        <h4>List inventory</h4>
+        <pre><code>
+ansible-inventory --list                                        # Show inventory in JSON
+ansible-inventory --graph                                       # Show inventory graph
+ansible-inventory --host hostname                               # Show host variables
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Inventory file locations</h4>
+        <pre><code>
+ansible all --list-hosts -i inventory.ini                       # Use specific inventory
+</code></pre>
+      </div>
+
+      <h3>Ansible Vault Commands</h3>
+
+      <div class="command-block">
+        <h4>Create encrypted file</h4>
+        <pre><code>
+ansible-vault create secret.yml
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Edit encrypted file</h4>
+        <pre><code>
+ansible-vault edit secret.yml
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Encrypt existing file</h4>
+        <pre><code>
+ansible-vault encrypt file.yml
+ansible-vault encrypt file1.yml file2.yml                       # Multiple files
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Decrypt file</h4>
+        <pre><code>
+ansible-vault decrypt file.yml
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View encrypted file</h4>
+        <pre><code>
+ansible-vault view file.yml
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change password</h4>
+        <pre><code>
+ansible-vault rekey file.yml
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Use vault in playbook</h4>
+        <pre><code>
+ansible-playbook playbook.yml --ask-vault-pass
+ansible-playbook playbook.yml --vault-password-file ~/.vault_pass
+ansible-playbook playbook.yml --vault-id @prompt
+</code></pre>
+      </div>
+
+      <h3>Ansible Galaxy Commands</h3>
+
+      <div class="command-block">
+        <h4>Install role</h4>
+        <pre><code>
+ansible-galaxy install username.rolename
+ansible-galaxy install -r requirements.yml
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List installed roles</h4>
+        <pre><code>
+ansible-galaxy list
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove role</h4>
+        <pre><code>
+ansible-galaxy remove username.rolename
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Initialize new role</h4>
+        <pre><code>
+ansible-galaxy init rolename
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search for roles</h4>
+        <pre><code>
+ansible-galaxy search elasticsearch
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Role information</h4>
+        <pre><code>
+ansible-galaxy info username.rolename
+</code></pre>
+      </div>
+
+      <h3>Ansible Configuration</h3>
+
+      <div class="command-block">
+        <h4>View configuration</h4>
+        <pre><code>
+ansible-config view                                             # View current config
+ansible-config list                                             # List all settings
+ansible-config dump                                             # Dump current settings
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration file locations</h4>
+        <pre><code>
+/etc/ansible/ansible.cfg                                        # System-wide
+~/.ansible.cfg                                                  # User-specific
+./ansible.cfg                                                   # Project-specific (highest priority)
+</code></pre>
+      </div>
+
+      <h2 id="terraform">22. TERRAFORM COMMANDS</h2>
+
+      <h3>Terraform Initialization</h3>
+
+      <div class="command-block">
+        <h4>Initialize working directory</h4>
+        <pre><code>
+terraform init                                                  # Initialize Terraform
+terraform init -upgrade                                         # Upgrade providers
+terraform init -reconfigure                                     # Reconfigure backend
+terraform init -migrate-state                                   # Migrate state
+</code></pre>
+      </div>
+
+      <h3>Terraform Planning</h3>
+
+      <div class="command-block">
+        <h4>Create execution plan</h4>
+        <pre><code>
+terraform plan                                                  # Show execution plan
+terraform plan -out=plan.out                                    # Save plan to file
+terraform plan -var="key=value"                                 # Pass variables
+terraform plan -var-file="vars.tfvars"                          # Use variable file
+terraform plan -target=resource.name                            # Target specific resource
+terraform plan -refresh=false                                   # Don't refresh state
+terraform plan -destroy                                         # Plan destroy
+</code></pre>
+      </div>
+
+      <h3>Terraform Apply</h3>
+
+      <div class="command-block">
+        <h4>Apply changes</h4>
+        <pre><code>
+terraform apply                                                 # Apply with confirmation
+terraform apply -auto-approve                                   # Apply without confirmation
+terraform apply plan.out                                        # Apply saved plan
+terraform apply -var="key=value"                                # With variables
+terraform apply -target=resource.name                           # Target specific resource
+terraform apply -parallelism=10                                 # Set parallelism
+</code></pre>
+      </div>
+
+      <h3>Terraform Destroy</h3>
+
+      <div class="command-block">
+        <h4>Destroy infrastructure</h4>
+        <pre><code>
+terraform destroy                                               # Destroy with confirmation
+terraform destroy -auto-approve                                 # Destroy without confirmation
+terraform destroy -target=resource.name                         # Destroy specific resource
+</code></pre>
+      </div>
+
+      <h3>Terraform State</h3>
+
+      <div class="command-block">
+        <h4>State management</h4>
+        <pre><code>
+terraform state list                                            # List resources in state
+terraform state show resource.name                              # Show resource details
+terraform state pull                                            # Pull remote state
+terraform state push                                            # Push local state
+terraform state mv source destination                           # Move resource
+terraform state rm resource.name                                # Remove resource from state
+terraform state replace-provider old new                        # Replace provider
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>State backup</h4>
+        <pre><code>
+terraform state list > state_backup.txt
+</code></pre>
+      </div>
+
+      <h3>Terraform Workspace</h3>
+
+      <div class="command-block">
+        <h4>Workspace management</h4>
+        <pre><code>
+terraform workspace list                                        # List workspaces
+terraform workspace show                                        # Show current workspace
+terraform workspace new dev                                     # Create new workspace
+terraform workspace select dev                                  # Switch workspace
+terraform workspace delete dev                                  # Delete workspace
+</code></pre>
+      </div>
+
+      <h3>Terraform Output</h3>
+
+      <div class="command-block">
+        <h4>View outputs</h4>
+        <pre><code>
+terraform output                                                # Show all outputs
+terraform output output_name                                    # Show specific output
+terraform output -json                                          # JSON format
+terraform output -raw output_name                               # Raw value (no quotes)
+</code></pre>
+      </div>
+
+      <h3>Terraform Validation</h3>
+
+      <div class="command-block">
+        <h4>Validate configuration</h4>
+        <pre><code>
+terraform validate                                              # Validate configuration
+terraform fmt                                                   # Format configuration files
+terraform fmt -check                                            # Check if formatting needed
+terraform fmt -recursive                                        # Format recursively
+terraform fmt -diff                                             # Show formatting changes
+</code></pre>
+      </div>
+
+      <h3>Terraform Console</h3>
+
+      <div class="command-block">
+        <h4>Interactive console</h4>
+        <pre><code>
+terraform console                                               # Launch interactive console
+# In console, can test expressions:
+# > var.instance_type
+# > aws_instance.example.id
+</code></pre>
+      </div>
+
+      <h3>Terraform Import</h3>
+
+      <div class="command-block">
+        <h4>Import existing resources</h4>
+        <pre><code>
+terraform import resource.name id                               # Import resource
+terraform import aws_instance.example i-1234567890abcdef0
+</code></pre>
+      </div>
+
+      <h3>Terraform Graph</h3>
+
+      <div class="command-block">
+        <h4>Generate dependency graph</h4>
+        <pre><code>
+terraform graph                                                 # Output DOT format
+terraform graph | dot -Tpng > graph.png                         # Generate image
+</code></pre>
+      </div>
+
+      <h3>Terraform Providers</h3>
+
+      <div class="command-block">
+        <h4>Provider management</h4>
+        <pre><code>
+terraform providers                                             # Show providers
+terraform providers lock                                        # Lock provider versions
+terraform providers mirror dir                                  # Mirror providers to directory
+terraform providers schema -json                                # Show provider schema
+</code></pre>
+      </div>
+
+      <h3>Terraform Debug</h3>
+
+      <div class="command-block">
+        <h4>Enable debug logging</h4>
+        <pre><code>
+export TF_LOG=TRACE                                             # Set log level (TRACE, DEBUG, INFO, WARN, ERROR)
+export TF_LOG_PATH=terraform.log                                # Log to file
+terraform apply                                                 # Run with logging
+</code></pre>
+      </div>
+
+      <h3>Terraform Taint</h3>
+
+      <div class="command-block">
+        <h4>Mark resources for recreation</h4>
+        <pre><code>
+terraform taint resource.name                                   # Taint resource (deprecated)
+terraform untaint resource.name                                 # Untaint resource (deprecated)
+
+# Modern replacement
+terraform apply -replace=resource.name                          # Force replacement
+</code></pre>
+      </div>
+
+      <h2 id="aws">23. AWS CLI COMMANDS</h2>
+
+      <h3>AWS CLI Configuration</h3>
+
+      <div class="command-block">
+        <h4>Configure AWS CLI</h4>
+        <pre><code>
+aws configure                                                   # Interactive configuration
+aws configure list                                              # List configuration
+aws configure get region                                        # Get specific value
+aws configure set region us-west-2                              # Set specific value
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Named profiles</h4>
+        <pre><code>
+aws configure --profile myprofile
+aws s3 ls --profile myprofile
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration files</h4>
+        <pre><code>
+~/.aws/credentials                                              # Credentials file
+~/.aws/config                                                   # Configuration file
+</code></pre>
+      </div>
+
+      <h3>AWS EC2 Commands</h3>
+
+      <div class="command-block">
+        <h4>List instances</h4>
+        <pre><code>
+aws ec2 describe-instances                                      # All instances
+aws ec2 describe-instances --instance-ids i-1234567890abcdef0
+aws ec2 describe-instances --filters "Name=instance-state-name,Values=running"
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output table
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Start/stop instances</h4>
+        <pre><code>
+aws ec2 start-instances --instance-ids i-1234567890abcdef0
+aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+aws ec2 reboot-instances --instance-ids i-1234567890abcdef0
+aws ec2 terminate-instances --instance-ids i-1234567890abcdef0
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create instance</h4>
+        <pre><code>
+aws ec2 run-instances --image-id ami-12345678 --instance-type t2.micro --key-name MyKey
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Describe images (AMIs)</h4>
+        <pre><code>
+aws ec2 describe-images --owners self
+aws ec2 describe-images --image-ids ami-12345678
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Security groups</h4>
+        <pre><code>
+aws ec2 describe-security-groups
+aws ec2 create-security-group --group-name MyGroup --description "My security group"
+aws ec2 authorize-security-group-ingress --group-id sg-12345678 --protocol tcp --port 22 --cidr 0.0.0.0/0
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Key pairs</h4>
+        <pre><code>
+aws ec2 describe-key-pairs
+aws ec2 create-key-pair --key-name MyKey --query 'KeyMaterial' --output text > MyKey.pem
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>EBS volumes</h4>
+        <pre><code>
+aws ec2 describe-volumes
+aws ec2 create-volume --size 10 --availability-zone us-west-2a
+aws ec2 attach-volume --volume-id vol-12345678 --instance-id i-1234567890abcdef0 --device /dev/sdf
+aws ec2 detach-volume --volume-id vol-12345678
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Snapshots</h4>
+        <pre><code>
+aws ec2 describe-snapshots --owner-ids self
+aws ec2 create-snapshot --volume-id vol-12345678 --description "My snapshot"
+aws ec2 delete-snapshot --snapshot-id snap-12345678
+</code></pre>
+      </div>
+
+      <h3>AWS S3 Commands</h3>
+
+      <div class="command-block">
+        <h4>List buckets</h4>
+        <pre><code>
+aws s3 ls                                                       # List all buckets
+aws s3 ls s3://bucket-name                                      # List bucket contents
+aws s3 ls s3://bucket-name/prefix/                              # List with prefix
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy files</h4>
+        <pre><code>
+aws s3 cp file.txt s3://bucket-name/                            # Upload file
+aws s3 cp s3://bucket-name/file.txt ./                          # Download file
+aws s3 cp s3://bucket1/file.txt s3://bucket2/                   # Copy between buckets
+aws s3 cp directory s3://bucket-name/ --recursive               # Upload directory
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Sync</h4>
+        <pre><code>
+aws s3 sync directory s3://bucket-name/                         # Sync directory to S3
+aws s3 sync s3://bucket-name/ directory                         # Sync S3 to directory
+aws s3 sync s3://bucket1/ s3://bucket2/                         # Sync between buckets
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Move files</h4>
+        <pre><code>
+aws s3 mv file.txt s3://bucket-name/                            # Move file
+aws s3 mv s3://bucket-name/file.txt ./                          # Move from S3
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove files</h4>
+        <pre><code>
+aws s3 rm s3://bucket-name/file.txt                             # Delete file
+aws s3 rm s3://bucket-name/ --recursive                         # Delete all objects
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Bucket operations</h4>
+        <pre><code>
+aws s3 mb s3://bucket-name                                      # Create bucket
+aws s3 rb s3://bucket-name                                      # Remove empty bucket
+aws s3 rb s3://bucket-name --force                              # Remove bucket with contents
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>S3 API commands</h4>
+        <pre><code>
+aws s3api list-buckets                                          # List buckets (API)
+aws s3api get-object --bucket bucket-name --key file.txt output.txt
+aws s3api put-object --bucket bucket-name --key file.txt --body file.txt
+aws s3api delete-object --bucket bucket-name --key file.txt
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Bucket policies</h4>
+        <pre><code>
+aws s3api get-bucket-policy --bucket bucket-name
+aws s3api put-bucket-policy --bucket bucket-name --policy file://policy.json
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Bucket versioning</h4>
+        <pre><code>
+aws s3api get-bucket-versioning --bucket bucket-name
+aws s3api put-bucket-versioning --bucket bucket-name --versioning-configuration Status=Enabled
+</code></pre>
+      </div>
+
+      <h3>AWS IAM Commands</h3>
+
+      <div class="command-block">
+        <h4>Users</h4>
+        <pre><code>
+aws iam list-users                                              # List all users
+aws iam get-user --user-name username                           # Get user details
+aws iam create-user --user-name username
+aws iam delete-user --user-name username
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Access keys</h4>
+        <pre><code>
+aws iam list-access-keys --user-name username
+aws iam create-access-key --user-name username
+aws iam delete-access-key --user-name username --access-key-id AKIAIOSFODNN7EXAMPLE
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Groups</h4>
+        <pre><code>
+aws iam list-groups                                             # List all groups
+aws iam create-group --group-name groupname
+aws iam add-user-to-group --user-name username --group-name groupname
+aws iam remove-user-from-group --user-name username --group-name groupname
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Policies</h4>
+        <pre><code>
+aws iam list-policies                                           # List all policies
+aws iam get-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+aws iam list-attached-user-policies --user-name username
+aws iam attach-user-policy --user-name username --policy-arn arn
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Roles</h4>
+        <pre><code>
+aws iam list-roles                                              # List all roles
+aws iam get-role --role-name rolename
+aws iam create-role --role-name rolename --assume-role-policy-document file://trust-policy.json
+</code></pre>
+      </div>
+
+      <h3>AWS RDS Commands</h3>
+
+      <div class="command-block">
+        <h4>DB instances</h4>
+        <pre><code>
+aws rds describe-db-instances                                   # List all DB instances
+aws rds describe-db-instances --db-instance-identifier mydb
+aws rds create-db-instance --db-instance-identifier mydb --db-instance-class db.t2.micro --engine mysql --master-username admin --master-user-password password
+aws rds delete-db-instance --db-instance-identifier mydb --skip-final-snapshot
+aws rds reboot-db-instance --db-instance-identifier mydb
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Snapshots</h4>
+        <pre><code>
+aws rds describe-db-snapshots
+aws rds create-db-snapshot --db-instance-identifier mydb --db-snapshot-identifier mydb-snapshot
+aws rds delete-db-snapshot --db-snapshot-identifier mydb-snapshot
+</code></pre>
+      </div>
+
+      <h3>AWS Lambda Commands</h3>
+
+      <div class="command-block">
+        <h4>List functions</h4>
+        <pre><code>
+aws lambda list-functions                                       # List all functions
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Get function</h4>
+        <pre><code>
+aws lambda get-function --function-name myfunction
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create function</h4>
+        <pre><code>
+aws lambda create-function --function-name myfunction --runtime python3.9 --role arn --handler lambda_function.lambda_handler --zip-file fileb://function.zip
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Update function code</h4>
+        <pre><code>
+aws lambda update-function-code --function-name myfunction --zip-file fileb://function.zip
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Invoke function</h4>
+        <pre><code>
+aws lambda invoke --function-name myfunction output.txt
+aws lambda invoke --function-name myfunction --payload '{"key":"value"}' output.txt
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete function</h4>
+        <pre><code>
+aws lambda delete-function --function-name myfunction
+</code></pre>
+      </div>
+
+      <h3>AWS CloudWatch Commands</h3>
+
+      <div class="command-block">
+        <h4>Logs</h4>
+        <pre><code>
+aws logs describe-log-groups                                    # List log groups
+aws logs describe-log-streams --log-group-name /aws/lambda/myfunction
+aws logs get-log-events --log-group-name /aws/lambda/myfunction --log-stream-name stream-name
+aws logs filter-log-events --log-group-name /aws/lambda/myfunction --filter-pattern "ERROR"
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Metrics</h4>
+        <pre><code>
+aws cloudwatch list-metrics                                     # List all metrics
+aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --dimensions Name=InstanceId,Value=i-1234567890abcdef0 --start-time 2024-01-01T00:00:00Z --end-time 2024-01-02T00:00:00Z --period 3600 --statistics Average
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Alarms</h4>
+        <pre><code>
+aws cloudwatch describe-alarms
+aws cloudwatch put-metric-alarm --alarm-name cpu-alarm --alarm-description "CPU alarm" --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 80 --comparison-operator GreaterThanThreshold
+aws cloudwatch delete-alarms --alarm-names cpu-alarm
+</code></pre>
+      </div>
+
+      <h3>AWS VPC Commands</h3>
+
+      <div class="command-block">
+        <h4>VPCs</h4>
+        <pre><code>
+aws ec2 describe-vpcs                                           # List VPCs
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+aws ec2 delete-vpc --vpc-id vpc-12345678
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Subnets</h4>
+        <pre><code>
+aws ec2 describe-subnets                                        # List subnets
+aws ec2 create-subnet --vpc-id vpc-12345678 --cidr-block 10.0.1.0/24
+aws ec2 delete-subnet --subnet-id subnet-12345678
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Internet Gateways</h4>
+        <pre><code>
+aws ec2 describe-internet-gateways
+aws ec2 create-internet-gateway
+aws ec2 attach-internet-gateway --internet-gateway-id igw-12345678 --vpc-id vpc-12345678
+aws ec2 detach-internet-gateway --internet-gateway-id igw-12345678 --vpc-id vpc-12345678
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Route tables</h4>
+        <pre><code>
+aws ec2 describe-route-tables
+aws ec2 create-route --route-table-id rtb-12345678 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-12345678
+</code></pre>
+      </div>
+
+      <h3>AWS CLI Output Formatting</h3>
+
+      <div class="command-block">
+        <h4>Output formats</h4>
+        <pre><code>
+aws ec2 describe-instances --output json                        # JSON (default)
+aws ec2 describe-instances --output text                        # Text
+aws ec2 describe-instances --output table                       # Table
+aws ec2 describe-instances --output yaml                        # YAML
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Query with JMESPath</h4>
+        <pre><code>
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name,PrivateIpAddress]' --output table
+aws ec2 describe-instances --query 'Reservations[*].Instances[?State.Name==`running`].[InstanceId]' --output text
+</code></pre>
+      </div>
+
+      <div class="navigation" style="margin-top: 40px; text-align: center">
+        <strong>End of Part 2 - DevOps Tools</strong><br />
+        <a href="#top">Back to Top</a>
+        <a href="system-admin.html">Go to Part 1</a>
+        <a href="monitoring-security.html">Go to Part 3</a>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript for download functionality
+      function downloadAsFile(filename) {
+        // Get the entire HTML content
+        const htmlContent = document.documentElement.outerHTML;
+
+        // Create a blob with the HTML content
+        const blob = new Blob([htmlContent], { type: "text/html" });
+
+        // Create a temporary link element
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename || "linux-devops-devops-tools.html";
+
+        // Append to body, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function printPage() {
+        window.print();
+      }
+
+      // Add smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 20,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Add search functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // Create search input
+        const searchContainer = document.createElement("div");
+        searchContainer.style.cssText = "margin: 20px 0; text-align: center;";
+        searchContainer.innerHTML = `
+                <input type="text" id="commandSearch" placeholder="Search commands..." 
+                       style="padding: 10px; width: 80%; max-width: 500px; border: 2px solid #3498db; border-radius: 5px;">
+                <button onclick="searchCommands()" 
+                        style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; margin-left: 10px;">
+                    Search
+                </button>
+                <button onclick="clearSearch()" 
+                        style="padding: 10px 20px; background-color: #95a5a6; color: white; border: none; border-radius: 5px; margin-left: 5px;">
+                    Clear
+                </button>
+            `;
+
+        // Insert search at the beginning
+        const container = document.querySelector(".container");
+        container.insertBefore(
+          searchContainer,
+          container.firstChild.nextSibling
+        );
+
+        // Add search results container
+        const resultsContainer = document.createElement("div");
+        resultsContainer.id = "searchResults";
+        resultsContainer.style.cssText = "margin: 20px 0; display: none;";
+        container.insertBefore(resultsContainer, searchContainer.nextSibling);
+      });
+
+      function searchCommands() {
+        const searchTerm = document
+          .getElementById("commandSearch")
+          .value.toLowerCase();
+        const resultsContainer = document.getElementById("searchResults");
+
+        if (!searchTerm) {
+          resultsContainer.innerHTML =
+            '<p style="color: #e74c3c;">Please enter a search term</p>';
+          resultsContainer.style.display = "block";
+          return;
+        }
+
+        // Get all pre elements (command blocks)
+        const preElements = document.querySelectorAll("pre");
+        let results = [];
+
+        preElements.forEach((pre, index) => {
+          const text = pre.textContent.toLowerCase();
+          if (text.includes(searchTerm)) {
+            // Get the heading for context
+            let heading = "Unknown Section";
+            let currentElement = pre.previousElementSibling;
+
+            // Find the nearest heading
+            while (currentElement) {
+              if (currentElement.tagName.match(/^H[2-4]$/)) {
+                heading = currentElement.textContent;
+                break;
+              }
+              currentElement = currentElement.previousElementSibling;
+            }
+
+            // Extract matching lines
+            const lines = pre.textContent.split("\n");
+            const matchingLines = lines
+              .filter((line) => line.toLowerCase().includes(searchTerm))
+              .slice(0, 3); // Show first 3 matching lines
+
+            if (matchingLines.length > 0) {
+              results.push({
+                heading: heading,
+                lines: matchingLines,
+                element: pre,
+              });
+            }
+          }
+        });
+
+        // Display results
+        if (results.length > 0) {
+          let html = `<h3>Found ${results.length} results for "${searchTerm}"</h3>`;
+
+          results.forEach((result, index) => {
+            html += `
+                        <div style="background-color: #f8f9fa; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db;">
+                            <h4 style="margin-top: 0;">${result.heading}</h4>
+                            <pre style="margin: 10px 0;">${result.lines.join(
+                              "\n"
+                            )}</pre>
+                            <button onclick="scrollToResult(${index})" 
+                                    style="padding: 5px 10px; background-color: #2ecc71; color: white; border: none; border-radius: 3px;">
+                                Go to Command
+                            </button>
+                        </div>
+                    `;
+          });
+
+          resultsContainer.innerHTML = html;
+          resultsContainer.style.display = "block";
+
+          // Store results for scrolling
+          window.searchResults = results;
+        } else {
+          resultsContainer.innerHTML = `<p style="color: #e74c3c;">No results found for "${searchTerm}"</p>`;
+          resultsContainer.style.display = "block";
+        }
+      }
+
+      function scrollToResult(index) {
+        if (window.searchResults && window.searchResults[index]) {
+          const element = window.searchResults[index].element;
+          window.scrollTo({
+            top: element.offsetTop - 20,
+            behavior: "smooth",
+          });
+
+          // Highlight the element temporarily
+          element.style.backgroundColor = "#fff3cd";
+          element.style.borderColor = "#ffc107";
+
+          setTimeout(() => {
+            element.style.backgroundColor = "";
+            element.style.borderColor = "";
+          }, 2000);
+        }
+      }
+
+      function clearSearch() {
+        document.getElementById("commandSearch").value = "";
+        const resultsContainer = document.getElementById("searchResults");
+        resultsContainer.style.display = "none";
+        resultsContainer.innerHTML = "";
+      }
+
+      // Floating Back to Top Button (static markup + idempotent handler)
+      // Inserted button markup
+      (function () {
+        if (!document.getElementById("backToTopBtn")) {
+          const btn = document.createElement("button");
+          btn.id = "backToTopBtn";
+          btn.className = "back-to-top-btn";
+          btn.setAttribute("onclick", "scrollToTop()");
+          btn.innerHTML = "↑ TOP";
+          document.body.appendChild(btn);
+        }
+
+        if (window._backToTopInstalled) return;
+        window._backToTopInstalled = true;
+
+        window.scrollToTop =
+          window.scrollToTop ||
+          function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          };
+
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        if (!backToTopBtn) return;
+        backToTopBtn.style.display = "none";
+
+        window.addEventListener("scroll", function () {
+          backToTopBtn.style.display =
+            window.pageYOffset > 300 ? "flex" : "none";
+        });
+      })();
+    </script>
+
+    <style>
+      .back-to-top-btn {
+        display: none;
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        z-index: 99;
+        width: 60px;
+        height: 60px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0.95;
+      }
+      .back-to-top-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        opacity: 1;
+      }
+      .back-to-top-btn:active {
+        transform: translateY(-2px) scale(1.05);
+      }
+    </style>
+  </body>
+</html>

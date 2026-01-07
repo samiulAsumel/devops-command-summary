@@ -1,0 +1,4746 @@
+Linux/DevOps Command Reference Guide
+1. SYSTEM INFORMATION & NAVIGATION
+Display System Information
+
+# Hostname
+hostname                    # Show hostname
+hostname -f                 # Fully qualified domain name
+hostname -I                 # All IP addresses
+
+# OS/Kernel
+uname -a                    # All system information
+uname -r                    # Kernel version only
+uname -m                    # Machine hardware architecture
+cat /etc/os-release         # OS distribution details
+cat /etc/redhat-release     # RHEL-specific version
+lsb_release -a              # LSB version (if available)
+
+# CPU
+lscpu                       # Detailed CPU architecture
+cat /proc/cpuinfo           # Raw CPU data
+nproc                       # Number of processing units
+
+# Memory
+free -h                     # Human-readable memory usage
+free -m                     # Memory in megabytes
+cat /proc/meminfo           # Detailed memory info
+vmstat                      # Virtual memory statistics
+vmstat 1 5                  # Update every 1 sec, 5 times
+
+# Uptime/Users
+uptime                      # System uptime and load average
+w                           # Who is logged in and what they're doing
+who                         # Show logged-in users
+last                        # Login history
+lastlog                     # Last login for all users
+File System Navigation
+
+# Directory operations
+pwd                         # Print working directory
+cd /path/to/dir             # Change directory
+cd ~                        # Home directory
+cd -                        # Previous directory
+cd ..                       # Parent directory
+cd ../..                    # Two levels up
+
+# List files
+ls                          # List current directory
+ls -l                       # Long format with permissions
+ls -la                      # Include hidden files
+ls -lh                      # Human-readable sizes
+ls -lt                      # Sort by modification time
+ls -ltr                     # Reverse time order (oldest first)
+ls -lS                      # Sort by size
+ls -R                       # Recursive listing
+ls -i                       # Show inode numbers
+ls -d */                    # List only directories
+
+# Tree view
+tree                        # Tree view of current dir
+tree -L 2                   # Limit depth to 2 levels
+tree -d                     # Directories only
+tree -a                     # Include hidden files
+tree -h                     # Human-readable sizes
+File System Hierarchy
+
+# Explore standard directories
+ls -l /                     # Root directory
+ls -l /bin                  # Essential user binaries
+ls -l /sbin                 # System binaries
+ls -l /usr/bin              # User programs
+ls -l /usr/sbin             # System admin programs
+ls -l /etc                  # Configuration files
+ls -l /var                  # Variable data (logs, spools)
+ls -l /var/log              # System logs
+ls -l /tmp                  # Temporary files
+ls -l /home                 # User home directories
+ls -l /root                 # Root user home
+ls -l /opt                  # Optional software
+ls -l /proc                 # Process information (virtual)
+ls -l /sys                  # System/hardware info (virtual)
+ls -l /dev                  # Device files
+
+# RHEL-specific
+ls -l /etc/sysconfig/       # RHEL system configuration
+ls -l /var/log/messages     # System messages log
+2. FILE OPERATIONS
+Basic File Management
+
+# Create files
+touch file.txt                  # Create empty file or update timestamp
+touch file1 file2 file3         # Create multiple files
+touch -t 202301011200 file.txt  # Set specific timestamp
+
+# Copy files
+cp source dest              # Copy file
+cp -r dir1 dir2             # Copy directory recursively
+cp -p file dest             # Preserve attributes
+cp -v file dest             # Verbose output
+cp -i file dest             # Interactive (prompt before overwrite)
+cp -a dir1 dir2             # Archive mode (preserve all)
+cp -u source dest           # Update (copy only if newer)
+
+# Move/rename files
+mv oldname newname          # Rename file
+mv file /path/to/dest       # Move file
+mv -i file dest             # Interactive mode
+mv -v file dest             # Verbose mode
+mv -u source dest           # Update only
+
+# Remove files
+rm file.txt                 # Remove file
+rm -f file.txt              # Force remove (no prompt)
+rm -i file.txt              # Interactive (prompt)
+rm -v file.txt              # Verbose
+rm -r directory             # Remove directory recursively
+rm -rf directory            # Force remove directory (DANGEROUS)
+
+# Create directories
+mkdir newdir                # Create directory
+mkdir -p /path/to/dir       # Create parent directories
+mkdir -m 755 dir            # Set permissions while creating
+mkdir -v dir                # Verbose mode
+
+# Remove directories
+rmdir emptydir              # Remove empty directory only
+rm -r directory             # Remove directory with contents
+rm -rf directory            # Force remove (DANGEROUS - no confirmation)
+Advanced File Operations
+
+# Find files
+find /path -name "*.txt"                    # Find by name
+find /path -iname "*.TXT"                   # Case-insensitive
+find /path -type f                          # Files only
+find /path -type d                          # Directories only
+find /path -size +100M                      # Files larger than 100MB
+find /path -size -10k                       # Files smaller than 10KB
+find /path -mtime -7                        # Modified in last 7 days
+find /path -mtime +30                       # Modified more than 30 days ago
+find /path -user username                   # Files owned by user
+find /path -perm 777                        # Files with specific permissions
+find /path -name "*.log" -delete            # Find and delete
+find /path -type f -exec chmod 644 {} \;    # Execute command on results
+find /path -empty                           # Empty files/directories
+
+# Locate (faster, uses database)
+locate filename             # Find file in database
+locate -i filename          # Case-insensitive
+updatedb                    # Update locate database (run as root)
+
+# Which/whereis
+which command               # Show path of executable
+which -a command            # Show all matches
+whereis command             # Show binary, source, manual locations
+type command                # Show command type (alias/function/builtin)
+File Viewing and Reading
+
+# View file contents
+cat file.txt                    # Display entire file
+cat -n file.txt                 # Show line numbers
+cat -A file.txt                 # Show all characters (including non-printing)
+cat file1 file2                 # Concatenate multiple files
+cat file1 file2 > merged.txt    # Merge files
+
+# Page through files
+less file.txt               # View file (scroll with space/arrows)
+more file.txt               # View file (older pager)
+
+# View file portions
+head file.txt               # First 10 lines
+head -n 20 file.txt         # First 20 lines
+head -n -5 file.txt         # All except last 5 lines
+tail file.txt               # Last 10 lines
+tail -n 20 file.txt         # Last 20 lines
+tail -f file.txt            # Follow file (real-time updates)
+tail -F file.txt            # Follow with retry (handles log rotation)
+tail -n +10 file.txt        # From line 10 to end
+
+# Compare files
+diff file1 file2            # Show differences
+diff -u file1 file2         # Unified format
+diff -y file1 file2         # Side-by-side comparison
+cmp file1 file2             # Byte-by-byte comparison
+comm file1 file2            # Compare sorted files line-by-line
+3. TEXT EDITORS
+Vim (Production Standard)
+
+# Start vim
+vim filename                # Open/create file
+vim +10 filename            # Open at line 10
+vim +/pattern filename      # Open at first pattern match
+vim -R filename             # Read-only mode
+view filename               # Read-only mode (alias)
+
+# Navigation (Normal mode)
+h, j, k, l                  # Left, down, up, right
+w, b                        # Word forward, word backward
+0, $                        # Line start, line end
+gg, G                       # File start, file end
+:10                         # Go to line 10
+Ctrl+f, Ctrl+b              # Page down, page up
+
+# Editing
+i                           # Insert before cursor
+a                           # Insert after cursor
+o                           # Insert new line below
+O                           # Insert new line above
+dd                          # Delete line
+yy                          # Yank (copy) line
+p                           # Paste after cursor
+P                           # Paste before cursor
+u                           # Undo
+Ctrl+r                      # Redo
+
+# Search
+/pattern                    # Search forward
+?pattern                    # Search backward
+n                           # Next match
+N                           # Previous match
+
+# Search and replace
+:%s/old/new/g               # Replace all in file
+:%s/old/new/gc              # Replace with confirmation
+:10,20s/old/new/g           # Replace in lines 10-20
+
+# Save and exit
+:w                          # Save
+:q                          # Quit
+:wq or :x                   # Save and quit
+:q!                         # Quit without saving
+ZZ                          # Save and quit (Normal mode)
+Nano (Simpler Alternative)
+
+nano filename               # Open/create file
+nano +10 filename           # Open at line 10
+
+# Nano is menu-driven (shortcuts shown at bottom)
+# Ctrl+O - Save (WriteOut)
+# Ctrl+X - Exit
+# Ctrl+K - Cut line
+# Ctrl+U - Paste
+# Ctrl+W - Search
+# Ctrl+\ - Replace
+# Ctrl+G - Help
+4. FILE PERMISSIONS & OWNERSHIP
+Understanding Permissions
+
+# View permissions
+ls -l                       # Long format shows permissions
+ls -la                      # Include hidden files
+stat file.txt               # Detailed file status including permissions
+
+# Permission format: -rwxrwxrwx
+# Position 1: file type (- file, d directory, l link)
+# Positions 2-4: owner (user) permissions
+# Positions 5-7: group permissions
+# Positions 8-10: others permissions
+# r=read(4), w=write(2), x=execute(1)
+Change Permissions (chmod)
+
+# Symbolic mode
+chmod u+x file              # Add execute for user
+chmod g-w file              # Remove write for group
+chmod o+r file              # Add read for others
+chmod a+x file              # Add execute for all
+chmod u+rw,g+r file         # Multiple changes
+chmod ugo+x file            # Execute for user, group, others
+
+# Numeric (octal) mode
+chmod 644 file              # rw-r--r-- (common for files)
+chmod 755 file              # rwxr-xr-x (common for scripts)
+chmod 777 file              # rwxrwxrwx (DANGEROUS - avoid)
+chmod 600 file              # rw------- (private file)
+chmod 700 directory         # rwx------ (private directory)
+
+# Recursive
+chmod -R 755 directory      # Apply to directory and contents
+chmod -R u+x directory      # Add execute recursively
+
+# Special permissions
+chmod u+s file              # Set SUID (setuid)
+chmod g+s directory         # Set SGID (setgid)
+chmod +t directory          # Set sticky bit
+chmod 4755 file             # SUID + rwxr-xr-x
+chmod 2755 directory        # SGID + rwxr-xr-x
+chmod 1777 directory        # Sticky + rwxrwxrwx (like /tmp)
+Change Ownership (chown)
+
+# Change owner
+chown newowner file         # Change file owner
+chown -R newowner dir       # Recursive
+
+# Change owner and group
+chown user:group file       # Change both
+chown user: file            # Change user, group to user's primary group
+
+# Change only group (alternative to chgrp)
+chown :group file           # Change group only
+Change Group (chgrp)
+
+chgrp newgroup file         # Change group
+chgrp -R newgroup dir       # Recursive
+Access Control Lists (ACL)
+
+# View ACLs
+getfacl file.txt            # Show ACL for file
+getfacl -R directory        # Recursive
+
+# Set ACLs
+setfacl -m u:username:rwx file     # Modify user ACL
+setfacl -m g:groupname:rx file     # Modify group ACL
+setfacl -m o::r file               # Modify others ACL
+setfacl -x u:username file         # Remove user ACL
+setfacl -b file                    # Remove all ACLs
+setfacl -R -m u:username:rx dir    # Recursive
+setfacl -d -m u:username:rwx dir   # Set default ACL for new files
+
+# Copy ACLs
+getfacl file1 | setfacl --set-file=- file2  # Copy ACL from file1 to file2
+File Attributes (Extended)
+
+# View attributes
+lsattr file.txt             # Show file attributes
+lsattr -a directory         # Include hidden files
+lsattr -d directory         # Show directory attributes
+
+# Change attributes
+chattr +i file              # Immutable (cannot modify/delete)
+chattr -i file              # Remove immutable
+chattr +a file              # Append only
+chattr +A file              # No atime updates
+chattr +c file              # Compressed
+chattr +s file              # Secure deletion
+chattr +u file              # Undeletable
+umask (Default Permissions)
+
+umask                       # Show current umask
+umask 022                   # Set umask (files: 644, dirs: 755)
+umask 027                   # Set umask (files: 640, dirs: 750)
+umask -S                    # Show in symbolic format
+
+# Make permanent (add to ~/.rc or /etc/profile)
+5. USER & GROUP MANAGEMENT
+User Operations
+
+# Create users
+useradd username                        # Create user (minimal setup)
+useradd -m username                     # Create with home directory
+useradd -m -s /bin/ username            # Specify shell
+useradd -m -d /custom/home username     # Custom home directory
+useradd -m -u 1500 username             # Specify UID
+useradd -m -g group username            # Specify primary group
+useradd -m -G group1,group2 username    # Add to groups
+useradd -m -e 2024-12-31 username       # Expiry date
+useradd -m -c "Full Name" username      # Comment (GECOS)
+
+# Modify users
+usermod -s /bin/zsh username      # Change shell
+usermod -d /new/home username     # Change home directory
+usermod -m -d /new/home username  # Move home directory contents
+usermod -l newname oldname        # Change username
+usermod -L username               # Lock account
+usermod -U username               # Unlock account
+usermod -e 2024-12-31 username    # Set expiry date
+usermod -e "" username            # Remove expiry date
+usermod -g newgroup username      # Change primary group
+usermod -G group1,group2 username # Set supplementary groups (REPLACE)
+usermod -aG group username        # Add to group (APPEND)
+
+# Delete users
+userdel username            # Delete user (keep home directory)
+userdel -r username         # Delete user and home directory
+userdel -f username         # Force delete (even if logged in)
+
+# Password management
+passwd username             # Set/change password
+passwd -l username          # Lock password
+passwd -u username          # Unlock password
+passwd -d username          # Delete password (passwordless)
+passwd -e username          # Expire password (force change)
+passwd -S username          # Show password status
+passwd -n 7 username        # Minimum password age (7 days)
+passwd -x 90 username       # Maximum password age (90 days)
+passwd -w 14 username       # Warning days before expiry
+
+# Password aging
+chage username                  # Interactive password aging
+chage -l username               # List aging information
+chage -E 2024-12-31 username    # Set account expiry
+chage -M 90 username            # Max days before password change
+chage -m 7 username             # Min days between password changes
+chage -W 14 username            # Warning days before expiry
+chage -I 30 username            # Inactive days after expiry
+Group Operations
+
+# Create groups
+groupadd groupname          # Create group
+groupadd -g 5000 groupname  # Create with specific GID
+groupadd -r groupname       # Create system group
+
+# Modify groups
+groupmod -n newname oldname # Rename group
+groupmod -g 6000 groupname  # Change GID
+
+# Delete groups
+groupdel groupname          # Delete group
+
+# Add user to group
+gpasswd -a username groupname       # Add user to group
+gpasswd -d username groupname       # Remove user from group
+gpasswd -M user1,user2 groupname    # Set group members (REPLACE)
+gpasswd -A user groupname           # Set group admin
+
+# Alternative: usermod
+usermod -aG groupname username  # Add user to group
+User/Group Information
+
+# Current user information
+id                          # Show user and group IDs
+id username                 # Show IDs for specific user
+whoami                      # Show current username
+who                         # Show who is logged in
+w                           # Show who is logged in and what they're doing
+users                       # List logged-in users
+last                        # Show login history
+last username               # Login history for user
+lastlog                     # Last login for all users
+lastb                       # Failed login attempts
+
+# Switch users
+su username                 # Switch user (non-login shell)
+su - username               # Switch user (login shell)
+su -                        # Switch to root (login shell)
+sudo command                # Execute command as root
+sudo -u username command    # Execute as different user
+sudo -i                     # Interactive root shell
+sudo -s                     # Shell as root (non-login)
+sudo -l                     # List sudo privileges
+
+# View user/group databases
+cat /etc/passwd             # User account database
+cat /etc/shadow             # Password hashes (root only)
+cat /etc/group              # Group database
+cat /etc/gshadow            # Group passwords (root only)
+
+# Get user info
+getent passwd username      # Query user database
+getent group groupname      # Query group database
+getent passwd               # Show all users
+getent group                # Show all groups
+sudo Configuration
+
+# Edit sudoers file (ALWAYS use visudo)
+visudo                      # Edit /etc/sudoers safely
+visudo -c                   # Check syntax without editing
+
+# sudoers examples (edit with visudo)
+# username ALL=(ALL) ALL           # Full sudo access
+# username ALL=(ALL) NOPASSWD: ALL # No password required
+# %groupname ALL=(ALL) ALL         # Group access
+# username ALL=/usr/bin/systemctl  # Specific command only
+6. PROCESS MANAGEMENT
+View Processes
+
+# ps (process status)
+ps                                          # Processes in current shell
+ps -e                                       # All processes
+ps -ef                                      # All processes (full format)
+ps -eF                                      # Extra full format
+ps aux                                      # BSD style (all users)
+ps aux | grep processname                   # Find specific process
+ps -u username                              # Processes by user
+ps -p PID                                   # Process by PID
+ps --ppid PPID                              # Processes by parent PID
+ps -C commandname                           # Processes by command name
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem  # Custom format, sorted
+
+# pgrep (process grep)
+pgrep processname           # Find PID by name
+pgrep -u username           # PIDs by user
+pgrep -l processname        # Show PID and name
+pgrep -a processname        # Show full command line
+pgrep -f pattern            # Match full command line
+
+# pidof
+pidof processname           # Find PID(s) by exact name
+
+# Process tree
+pstree                      # Show process tree
+pstree -p                   # Show PIDs
+pstree username             # Tree for specific user
+pstree -a                   # Show command-line arguments
+Interactive Process Monitoring
+
+# top
+top                         # Interactive process viewer
+# Inside top:
+# Press M - sort by memory
+# Press P - sort by CPU
+# Press k - kill process (enter PID)
+# Press r - renice process
+# Press f - select fields to display
+# Press q - quit
+
+top -u username             # Show processes for user
+top -p PID                  # Monitor specific PID
+top -d 5                    # Update every 5 seconds
+top -b -n 1 > output.txt    # Batch mode, one iteration
+
+# htop (if installed)
+htop                        # Interactive process viewer
+# F5 - tree view
+# F6 - sort
+# F9 - kill
+# F10 - quit
+
+# atop (comprehensive resource monitor)
+atop                        # System and process monitor
+atop -w logfile             # Write to log
+atop -r logfile             # Read from log
+Control Processes
+
+# Kill processes
+kill PID                    # Send SIGTERM (graceful)
+kill -9 PID                 # Send SIGKILL (force)
+kill -15 PID                # SIGTERM (explicit)
+kill -1 PID                 # SIGHUP (reload config)
+kill -l                     # List all signals
+
+killall processname         # Kill all by name
+killall -9 processname      # Force kill all
+killall -u username         # Kill all processes by user
+killall -i processname      # Interactive (confirm each)
+
+pkill processname           # Kill by name (similar to killall)
+pkill -9 processname        # Force kill
+pkill -u username           # Kill by user
+pkill -f pattern            # Match full command line
+
+# Send signals
+kill -STOP PID              # Pause process
+kill -CONT PID              # Continue paused process
+Background Jobs
+
+# Run in background
+command &                           # Run command in background
+nohup command &                     # Run immune to hangups
+nohup command > output.log 2>&1 &   # Redirect output
+
+# Job control
+jobs                        # List background jobs
+jobs -l                     # Show PIDs
+bg                          # Continue job in background
+bg %1                       # Continue job number 1
+fg                          # Bring job to foreground
+fg %1                       # Bring job number 1 to foreground
+Ctrl+Z                      # Suspend current foreground job
+
+# Disown jobs
+disown                      # Remove job from shell's job table
+disown %1                   # Disown job number 1
+disown -a                   # Disown all jobs
+Process Priority
+
+# nice (set priority when starting)
+nice command                # Start with default niceness (+10)
+nice -n 10 command          # Start with niceness +10
+nice -n -10 command         # Start with niceness -10 (requires root)
+
+# renice (change priority of running process)
+renice 10 PID               # Change to niceness +10
+renice -n 10 PID            # Same as above
+renice -n -10 PID           # Change to niceness -10 (requires root)
+renice -u username          # Change for all user's processes
+renice -g groupname         # Change for all group's processes
+
+# Niceness range: -20 (highest priority) to +19 (lowest priority)
+Resource Limits
+
+# ulimit (per-process limits)
+ulimit -a                   # Show all limits
+ulimit -u                   # Max user processes
+ulimit -n                   # Max open files
+ulimit -f                   # Max file size
+ulimit -c                   # Core dump size
+ulimit -t                   # Max CPU time
+
+# Set limits
+ulimit -n 4096              # Set max open files to 4096
+ulimit -u 200               # Set max processes to 200
+ulimit -c unlimited         # Unlimited core dumps
+
+# Hard vs soft limits
+ulimit -S -n                # Show soft limit
+ulimit -H -n                # Show hard limit
+ulimit -S -n 2048           # Set soft limit
+ulimit -H -n 4096           # Set hard limit (root only)
+/proc Filesystem
+
+# Process information
+cat /proc/PID/status        # Process status
+cat /proc/PID/cmdline       # Command line
+cat /proc/PID/environ       # Environment variables
+cat /proc/PID/cwd           # Current working directory (symlink)
+cat /proc/PID/exe           # Executable path (symlink)
+cat /proc/PID/fd/           # Open file descriptors
+cat /proc/PID/maps          # Memory mappings
+cat /proc/PID/limits        # Resource limits
+
+# System information
+cat /proc/cpuinfo           # CPU information
+cat /proc/meminfo           # Memory information
+cat /proc/version           # Kernel version
+cat /proc/uptime            # System uptime
+cat /proc/loadavg           # Load average
+cat /proc/sys/              # Kernel parameters
+7. SYSTEMD SERVICE MANAGEMENT
+Basic Service Control
+
+# Service status and control
+systemctl status servicename                # Show service status
+systemctl start servicename                 # Start service
+systemctl stop servicename                  # Stop service
+systemctl restart servicename               # Restart service
+systemctl reload servicename                # Reload config (no restart)
+systemctl try-restart servicename           # Restart only if running
+systemctl reload-or-restart servicename     # Reload if possible, else restart
+
+# Enable/disable services
+systemctl enable servicename         # Enable at boot
+systemctl disable servicename        # Disable at boot
+systemctl enable --now servicename   # Enable and start
+systemctl disable --now servicename  # Disable and stop
+systemctl is-enabled servicename     # Check if enabled
+systemctl is-active servicename      # Check if active
+systemctl is-failed servicename      # Check if failed
+
+# Mask/unmask (prevent service from starting)
+systemctl mask servicename       # Mask service (cannot start)
+systemctl unmask servicename     # Unmask service
+List and Query Services
+
+# List services
+systemctl list-units                        # List active units
+systemctl list-units --all                  # List all units
+systemctl list-units --type=service         # Services only
+systemctl list-units --state=running        # Running services
+systemctl list-units --state=failed         # Failed services
+systemctl list-unit-files                   # List all unit files
+systemctl list-unit-files --type=service    # Service unit files
+systemctl list-unit-files --state=enabled   # Enabled services
+
+# Show service details
+systemctl show servicename              # Show all properties
+systemctl show servicename -p Property  # Show specific property
+systemctl cat servicename               # Show unit file content
+
+# Dependencies
+systemctl list-dependencies servicename             # Show dependencies
+systemctl list-dependencies --all servicename       # All dependencies
+systemctl list-dependencies --reverse servicename   # What depends on this
+System State Management
+
+# System targets (runlevels)
+systemctl get-default                       # Show default target
+systemctl set-default multi-user.target     # Set default target
+systemctl isolate multi-user.target         # Switch to target
+systemctl isolate graphical.target          # Switch to graphical
+
+# Common targets
+# multi-user.target (runlevel 3) - Multi-user text mode
+# graphical.target (runlevel 5) - Multi-user graphical mode
+# rescue.target (runlevel 1) - Rescue mode
+# emergency.target - Emergency mode
+
+# System control
+systemctl reboot                 # Reboot system
+systemctl poweroff               # Power off system
+systemctl halt                   # Halt system
+systemctl suspend                # Suspend system
+systemctl hibernate              # Hibernate system
+Systemd Timers (Cron Alternative)
+
+# List timers
+systemctl list-timers            # Show all timers
+systemctl list-timers --all      # Include inactive
+
+# Timer control
+systemctl start timer-name.timer     # Start timer
+systemctl enable timer-name.timer    # Enable timer
+systemctl status timer-name.timer    # Timer status
+Journal (Logging)
+
+# View logs
+journalctl                       # All logs
+journalctl -f                    # Follow logs (like tail -f)
+journalctl -u servicename        # Logs for specific service
+journalctl -u servicename -f     # Follow service logs
+journalctl -b                    # Current boot logs
+journalctl -b -1                 # Previous boot logs
+journalctl --since "2024-01-01"  # Since date
+journalctl --since "1 hour ago"  # Since time
+journalctl --since today         # Today's logs
+journalctl --until "2024-01-31"  # Until date
+journalctl -p err                # Priority: err and above
+journalctl -p warning            # Warning and above
+journalctl -k                    # Kernel messages only
+journalctl _PID=1234             # Logs for specific PID
+journalctl -n 100                # Last 100 lines
+journalctl --no-pager            # No paging
+
+# Journal management
+journalctl --disk-usage          # Show disk usage
+journalctl --vacuum-size=100M    # Keep only 100MB
+journalctl --vacuum-time=2weeks  # Keep only 2 weeks
+Create Custom Service Unit
+
+# Service unit file location
+/etc/systemd/system/myservice.service
+
+# After creating/editing unit file
+systemctl daemon-reload          # Reload systemd configuration
+systemctl start myservice        # Start the service
+systemctl enable myservice       # Enable at boot
+8. PACKAGE MANAGEMENT (DNF/YUM)
+DNF Package Operations
+
+# Search and info
+dnf search keyword           # Search for packages
+dnf search all keyword       # Search name and description
+dnf info packagename         # Show package information
+dnf list                     # List all packages
+dnf list installed           # List installed packages
+dnf list available           # List available packages
+dnf list updates             # List available updates
+dnf list --recent            # Recently added packages
+
+# Install packages
+dnf install packagename         # Install package
+dnf install package1 package2   # Install multiple
+dnf install -y packagename      # Auto-answer yes
+dnf reinstall packagename       # Reinstall package
+dnf downgrade packagename       # Downgrade to previous version
+
+# Remove packages
+dnf remove packagename       # Remove package
+dnf remove -y packagename    # Auto-answer yes
+dnf autoremove               # Remove unneeded dependencies
+
+# Update packages
+dnf check-update             # Check for updates
+dnf update                   # Update all packages
+dnf update packagename       # Update specific package
+dnf update -y                # Update with auto-yes
+dnf upgrade                  # Upgrade (same as update)
+
+# Package groups
+dnf grouplist                   # List package groups
+dnf groupinfo "Group Name"      # Group information
+dnf groupinstall "Group Name"   # Install group
+dnf groupremove "Group Name"    # Remove group
+dnf groupupdate "Group Name"    # Update group
+
+# Repository management
+dnf repolist                            # List enabled repositories
+dnf repolist all                        # List all repositories
+dnf repoinfo reponame                   # Repository information
+dnf config-manager --add-repo URL       # Add repository
+dnf config-manager --enable reponame    # Enable repository
+dnf config-manager --disable reponame   # Disable repository
+
+# Cache operations
+dnf makecache                # Build cache
+dnf clean all                # Clean all cache
+dnf clean packages           # Clean package cache
+dnf clean metadata           # Clean metadata cache
+
+# History and undo
+dnf history                  # Show transaction history
+dnf history info ID          # Transaction details
+dnf history undo ID          # Undo transaction
+dnf history redo ID          # Redo transaction
+
+# Dependency queries
+dnf provides */filename                     # Find package providing file
+dnf provides command                        # Find package with command
+dnf deplist packagename                     # List dependencies
+dnf repoquery --requires packagename        # What does it require
+dnf repoquery --whatrequires packagename    # What requires it
+dnf repoquery --whatprovides filename       # What provides file
+
+# Module management (RHEL 8+)
+dnf module list                         # List available modules
+dnf module list --installed             # Installed modules
+dnf module info modulename              # Module information
+dnf module enable modulename:stream     # Enable module stream
+dnf module install modulename:stream    # Install module
+dnf module disable modulename           # Disable module
+dnf module reset modulename             # Reset module
+
+# Advanced options
+dnf install --downloadonly packagename          # Download without install
+dnf install --downloaddir=/path packagename     # Download to directory
+dnf install --skip-broken                       # Skip packages with problems
+dnf install --nobest                            # Use older version if latest problematic
+YUM (Legacy, similar to DNF)
+
+# YUM commands are mostly identical to DNF
+yum install packagename
+yum update
+yum remove packagename
+# YUM and DNF are compatible in RHEL 8+
+9. RPM PACKAGE MANAGEMENT
+Query Operations
+
+# Query installed packages
+rpm -qa                         # List all installed packages
+rpm -qa | grep packagename      # Search installed packages
+rpm -qi packagename             # Show package information
+rpm -ql packagename             # List files in package
+rpm -qc packagename             # List config files
+rpm -qd packagename             # List documentation files
+rpm -q --scripts packagename    # Show installation scripts
+rpm -q --changelog packagename  # Show changelog
+
+# Query package files
+rpm -qf /path/to/file        # Which package owns file
+rpm -qp package.rpm          # Query package file (not installed)
+rpm -qip package.rpm         # Info from package file
+rpm -qlp package.rpm         # List files in package file
+rpm -qcp package.rpm         # Config files in package file
+
+# Query capabilities
+rpm -q --provides packagename       # What package provides
+rpm -q --requires packagename       # What package requires
+rpm -q --whatprovides filename      # What package provides file
+rpm -q --whatrequires packagename   # What requires this package
+Install and Remove Operations
+
+# Install packages
+rpm -ivh package.rpm            # Install with verbose and hash
+rpm -Uvh package.rpm            # Upgrade or install
+rpm -Fvh package.rpm            # Freshen (upgrade if installed)
+rpm -ivh --nodeps package.rpm   # Install ignoring dependencies (DANGEROUS)
+rpm -ivh --force package.rpm    # Force install (DANGEROUS)
+rpm -ivh --test package.rpm     # Test install (dry run)
+
+# Remove packages
+rpm -e packagename           # Remove package
+rpm -ev packagename          # Remove with verbose
+rpm -e --nodeps packagename  # Remove ignoring dependencies (DANGEROUS)
+
+# Verify packages
+rpm -V packagename           # Verify installed package
+rpm -Va                      # Verify all packages
+rpm -Vf /path/to/file        # Verify package owning file
+
+# Database operations
+rpm --rebuilddb                 # Rebuild RPM database
+rpm --initdb                    # Initialize RPM database
+rpm --import /path/to/GPG-KEY   # Import GPG key
+Extract and Build
+
+# Extract package contents
+rpm2cpio package.rpm | cpio -idmv  # Extract package files
+rpm2cpio package.rpm | cpio -t     # List files without extracting
+
+# Query remote packages
+rpm -qp http://url/package.rpm     # Query from URL
+10. SYSTEM LOGGING
+rsyslog (System Logger)
+
+# rsyslog configuration
+/etc/rsyslog.conf            # Main configuration
+/etc/rsyslog.d/*.conf        # Additional configs
+
+# Log file locations
+/var/log/messages            # General system messages
+/var/log/secure              # Authentication/security
+/var/log/maillog             # Mail server logs
+/var/log/cron                # Cron job logs
+/var/log/boot.log            # Boot messages
+/var/log/dmesg               # Kernel ring buffer
+/var/log/wtmp                # Login records (binary)
+/var/log/btmp                # Failed login attempts (binary)
+
+# View logs
+tail -f /var/log/messages    # Follow system messages
+tail -100 /var/log/secure    # Last 100 auth lines
+less /var/log/messages       # Page through log
+grep ERROR /var/log/messages # Search for errors
+grep -i fail /var/log/secure # Case-insensitive search
+
+# Service control
+systemctl status rsyslog     # Check rsyslog status
+systemctl restart rsyslog    # Restart rsyslog
+systemctl enable rsyslog     # Enable at boot
+journalctl (Systemd Journal)
+
+# Basic viewing
+journalctl                   # All journal entries
+journalctl -f                # Follow journal
+journalctl -r                # Reverse order (newest first)
+journalctl -n 50             # Last 50 entries
+journalctl --no-pager        # No paging
+
+# Filter by time
+journalctl --since "2024-01-01 10:00:00"
+journalctl --since today
+journalctl --since yesterday
+journalctl --since "10 minutes ago"
+journalctl --since "1 hour ago"
+journalctl --until "2024-01-31"
+journalctl --since "2024-01-01" --until "2024-01-31"
+
+# Filter by unit/service
+journalctl -u sshd           # SSH daemon logs
+journalctl -u httpd -f       # Follow Apache logs
+journalctl -u servicename --since today
+
+# Filter by priority
+journalctl -p emerg          # Emergency only
+journalctl -p alert          # Alert and above
+journalctl -p crit           # Critical and above
+journalctl -p err            # Error and above
+journalctl -p warning        # Warning and above
+journalctl -p notice         # Notice and above
+journalctl -p info           # Info and above
+journalctl -p debug          # Debug and above
+
+# Filter by boot
+journalctl -b                # Current boot
+journalctl -b -1             # Previous boot
+journalctl -b -2             # Two boots ago
+journalctl --list-boots      # List all boots
+
+# Filter by identifier
+journalctl -t sshd           # By syslog identifier
+journalctl _COMM=sshd        # By command name
+journalctl _PID=1234         # By process ID
+journalctl _UID=1000         # By user ID
+
+# Kernel messages
+journalctl -k                # Kernel messages only
+journalctl -kb               # Kernel messages current boot
+
+# Output formats
+journalctl -o verbose        # Verbose output
+journalctl -o json           # JSON format
+journalctl -o json-pretty    # Pretty JSON
+journalctl -o cat            # Just messages, no metadata
+journalctl -o short-iso      # ISO timestamp format
+
+# Journal maintenance
+journalctl --disk-usage             # Show disk usage
+journalctl --verify                 # Verify journal integrity
+journalctl --vacuum-size=1G         # Limit journal to 1GB
+journalctl --vacuum-time=1month     # Keep 1 month
+journalctl --vacuum-files=10        # Keep 10 journal files
+journalctl --rotate                 # Rotate journal files
+
+# Persistent journal configuration
+# Edit /etc/systemd/journald.conf
+# Storage=persistent                # Make journal persistent across reboots
+systemctl restart systemd-journald  # Apply changes
+Log Rotation (logrotate)
+
+# Configuration
+/etc/logrotate.conf          # Main configuration
+/etc/logrotate.d/            # Service-specific configs
+
+# Manual rotation
+logrotate /etc/logrotate.conf       # Run rotation
+logrotate -f /etc/logrotate.conf    # Force rotation
+logrotate -d /etc/logrotate.conf    # Debug mode (dry run)
+logrotate -v /etc/logrotate.conf    # Verbose mode
+
+# Check logrotate status
+cat /var/lib/logrotate/logrotate.status  # Rotation status
+Audit System (auditd)
+
+# Audit service
+systemctl status auditd      # Check audit daemon
+systemctl start auditd       # Start audit daemon
+systemctl enable auditd      # Enable at boot
+
+# Audit logs
+/var/log/audit/audit.log     # Main audit log
+
+# Search audit logs
+ausearch -m LOGIN            # Search for login events
+ausearch -m USER_AUTH        # Authentication attempts
+ausearch -f /etc/passwd      # File access
+ausearch -k key-name         # Search by key
+ausearch -ts today           # Today's events
+ausearch -ts 10:00 -te 11:00 # Time range
+ausearch -ui 1000            # By user ID
+ausearch -p 1234             # By process ID
+ausearch --success yes       # Successful events only
+ausearch --success no        # Failed events only
+
+# Audit reports
+aureport                     # Summary report
+aureport -au                 # Authentication report
+aureport -l                  # Login report
+aureport -f                  # File access report
+aureport -m                  # Modification report
+aureport -x                  # Executable report
+aureport --summary           # Summary statistics
+aureport --failed            # Failed events
+
+# Audit rules
+auditctl -l                                                 # List current rules
+auditctl -w /etc/passwd -p wa -k passwd_changes             # Watch file
+auditctl -a always,exit -F arch=b64 -S open -k file_open    # System call
+
+# Audit configuration
+/etc/audit/auditd.conf       # Audit daemon config
+/etc/audit/rules.d/          # Audit rules
+
+# Generate readable output
+ausearch -i                  # Interpret UIDs/GIDs to names
+11. DISK MANAGEMENT
+Disk Information
+
+# List block devices
+lsblk                               # Tree view of block devices
+lsblk -f                            # Show filesystems
+lsblk -a                            # Show all devices
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT  # Custom columns
+
+# Show device IDs
+blkid                        # Show all block device attributes
+blkid /dev/sda1              # Show specific device
+blkid -o list                # List format
+blkid -t TYPE=ext4           # Find by filesystem type
+blkid -U UUID                # Find by UUID
+
+# Disk usage
+df                           # Disk space usage
+df -h                        # Human-readable sizes
+df -i                        # Inode usage
+df -T                        # Show filesystem type
+df -t ext4                   # Show only ext4 filesystems
+df -x tmpfs                  # Exclude tmpfs
+df /path                     # Show filesystem for path
+
+du                           # Directory usage
+du -h                        # Human-readable
+du -s directory              # Summary only
+du -sh directory             # Summary human-readable
+du -ah directory             # All files human-readable
+du -h --max-depth=1          # Limit depth
+du -ch directory             # Show total
+du -h --exclude="*.log"      # Exclude pattern
+
+# Find large files
+find / -type f -size +100M                  # Files over 100MB
+find / -type f -size +1G                    # Files over 1GB
+du -ah / 2>/dev/null | sort -rh | head -20  # Top 20 largest
+Partitioning
+
+# fdisk (MBR partitions)
+fdisk -l                     # List all partitions
+fdisk -l /dev/sda            # List partitions on device
+fdisk /dev/sdb               # Partition device (interactive)
+# Inside fdisk:
+# m - help
+# p - print partition table
+# n - new partition
+# d - delete partition
+# t - change partition type
+# w - write changes and exit
+# q - quit without saving
+
+# parted (GPT/MBR partitions)
+parted -l                                       # List all partitions
+parted /dev/sdb                                 # Partition device (interactive)
+parted /dev/sdb print                           # Print partition table
+parted /dev/sdb mklabel gpt                     # Create GPT partition table
+parted /dev/sdb mklabel msdos                   # Create MBR partition table
+parted /dev/sdb mkpart primary ext4 0% 100%     # Create partition
+parted /dev/sdb rm 1                            # Remove partition 1
+
+# gdisk (GPT only)
+gdisk -l /dev/sda            # List GPT partitions
+gdisk /dev/sdb               # Partition device (interactive)
+# Inside gdisk:
+# ? - help
+# p - print partition table
+# n - new partition
+# d - delete partition
+# w - write and exit
+# q - quit without saving
+LVM (Logical Volume Manager)
+
+# Physical Volumes (PV)
+pvs                          # List PVs (summary)
+pvdisplay                    # List PVs (detailed)
+pvscan                       # Scan for PVs
+pvcreate /dev/sdb1           # Create PV
+pvcreate /dev/sdb1 /dev/sdc1 # Create multiple PVs
+pvremove /dev/sdb1           # Remove PV
+
+# Volume Groups (VG)
+vgs                                     # List VGs (summary)
+vgdisplay                               # List VGs (detailed)
+vgscan                                  # Scan for VGs
+vgcreate vg_name /dev/sdb1              # Create VG
+vgcreate vg_name /dev/sdb1 /dev/sdc1    # VG from multiple PVs
+vgextend vg_name /dev/sdd1              # Add PV to VG
+vgreduce vg_name /dev/sdb1              # Remove PV from VG
+vgremove vg_name                        # Remove VG
+vgrename old_name new_name              # Rename VG
+
+# Logical Volumes (LV)
+lvs                                                     # List LVs (summary)
+lvdisplay                                               # List LVs (detailed)
+lvscan                                                  # Scan for LVs
+lvcreate -n lv_name -L 10G vg_name                      # Create 10GB LV
+lvcreate -n lv_name -l 100%FREE vg_name                 # Use all free space
+lvcreate -n lv_name -L 10G -s /dev/vg_name/lv_source    # Create snapshot
+lvextend -L +5G /dev/vg_name/lv_name                    # Extend by 5GB
+lvextend -L 20G /dev/vg_name/lv_name                    # Extend to 20GB
+lvextend -l +100%FREE /dev/vg_name/lv_name              # Use all free space
+lvreduce -L -5G /dev/vg_name/lv_name                    # Reduce by 5GB (DANGEROUS)
+lvremove /dev/vg_name/lv_name                           # Remove LV
+lvrename vg_name old_lv new_lv                          # Rename LV
+lvresize -L 15G /dev/vg_name/lv_name                    # Resize to 15GB
+Filesystems
+
+# Create filesystems
+mkfs.ext4 /dev/sdb1          # Create ext4 filesystem
+mkfs.ext4 -L label /dev/sdb1 # With label
+mkfs.xfs /dev/sdb1           # Create XFS filesystem
+mkfs.xfs -L label /dev/sdb1  # With label
+mkfs.vfat /dev/sdb1          # Create FAT filesystem
+mkfs -t ext4 /dev/sdb1       # Alternative syntax
+
+# Filesystem checks
+fsck /dev/sdb1               # Check filesystem (unmounted)
+fsck -y /dev/sdb1            # Auto-answer yes
+fsck.ext4 /dev/sdb1          # Check ext4
+fsck.xfs /dev/sdb1           # Check XFS (limited)
+e2fsck /dev/sdb1             # Check ext2/3/4
+xfs_repair /dev/sdb1         # Repair XFS
+
+# Resize filesystems
+resize2fs /dev/sdb1          # Resize ext2/3/4 to fill partition
+resize2fs /dev/sdb1 10G      # Resize to 10GB
+xfs_growfs /mount/point      # Grow XFS (cannot shrink)
+
+# Filesystem information
+tune2fs -l /dev/sdb1                # Show ext2/3/4 parameters
+xfs_info /mount/point               # Show XFS parameters
+xfs_admin -l /dev/sdb1              # Show XFS label
+xfs_admin -L newlabel /dev/sdb1     # Set XFS label
+tune2fs -L newlabel /dev/sdb1       # Set ext label
+
+# Filesystem labels
+e2label /dev/sdb1            # Show ext label
+e2label /dev/sdb1 newlabel   # Set ext label
+Mounting
+
+# Mount filesystems
+mount /dev/sdb1 /mnt            # Mount to /mnt
+mount -t ext4 /dev/sdb1 /mnt    # Specify filesystem type
+mount -o ro /dev/sdb1 /mnt      # Mount read-only
+mount -o rw /dev/sdb1 /mnt      # Mount read-write
+mount -o remount,ro /mnt        # Remount read-only
+mount -o remount,rw /mnt        # Remount read-write
+mount -o noexec /dev/sdb1 /mnt  # No execute permission
+mount -o nosuid /dev/sdb1 /mnt  # No SUID
+mount -o nodev /dev/sdb1 /mnt   # No device files
+mount -a                        # Mount all in /etc/fstab
+mount | grep sdb1               # Show if mounted
+
+# Unmount filesystems
+umount /mnt                  # Unmount by mount point
+umount /dev/sdb1             # Unmount by device
+umount -l /mnt               # Lazy unmount
+umount -f /mnt               # Force unmount
+
+# Show mounted filesystems
+mount                        # Show all mounts
+mount | column -t            # Formatted output
+findmnt                      # Tree view of mounts
+findmnt /dev/sdb1            # Find mount point
+findmnt /mnt                 # Find device
+/etc/fstab
+
+# /etc/fstab format:
+# device  mount_point  fs_type  options  dump  pass
+
+# Examples (edit /etc/fstab):
+# UUID=xxx  /data  ext4  defaults  0  2
+# /dev/sdb1  /backup  xfs  defaults,noexec  0  2
+# //server/share  /mnt/cifs  cifs  credentials=/root/.creds  0  0
+
+# Test fstab
+mount -a                     # Mount all (test fstab)
+findmnt --verify             # Verify fstab syntax
+
+# Get UUID
+blkid /dev/sdb1              # Show UUID
+lsblk -f                     # Show UUIDs for all
+Swap Management
+
+# Show swap
+swapon --show                # Show swap devices
+swapon -s                    # Show swap summary
+cat /proc/swaps              # Show swap (alternative)
+free -h                      # Show memory and swap
+
+# Create swap partition
+mkswap /dev/sdb1             # Initialize swap partition
+swapon /dev/sdb1             # Enable swap
+swapon -p 10 /dev/sdb1       # Enable with priority 10
+
+# Create swap file
+dd if=/dev/zero of=/swapfile bs=1M count=2048   # Create 2GB file
+chmod 600 /swapfile                             # Secure permissions
+mkswap /swapfile                                # Initialize swap file
+swapon /swapfile                                # Enable swap file
+
+# Disable swap
+swapoff /dev/sdb1            # Disable swap partition
+swapoff -a                   # Disable all swap
+
+# Add to /etc/fstab for persistence:
+# /dev/sdb1  none  swap  defaults  0  0
+# /swapfile  none  swap  defaults  0  0
+RAID (mdadm)
+
+# Create RAID
+mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1              # RAID 1
+mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sdb1 /dev/sdc1 /dev/sdd1    # RAID 5
+
+# Show RAID status
+cat /proc/mdstat             # RAID status
+mdadm --detail /dev/md0      # Detailed RAID info
+mdadm --query /dev/md0       # Query RAID device
+
+# Manage RAID
+mdadm --stop /dev/md0               # Stop RAID
+mdadm --assemble /dev/md0           # Assemble RAID
+mdadm /dev/md0 --fail /dev/sdb1     # Mark disk as failed
+mdadm /dev/md0 --remove /dev/sdb1   # Remove disk
+mdadm /dev/md0 --add /dev/sde1      # Add disk
+
+# Save RAID configuration
+mdadm --detail --scan >> /etc/mdadm.conf  # Save config
+12. NETWORKING BASICS
+Network Configuration
+
+# Show IP addresses
+ip addr                      # Show all interfaces
+ip addr show                 # Same as above
+ip a                         # Short form
+ip addr show eth0            # Show specific interface
+ip -4 addr                   # IPv4 only
+ip -6 addr                   # IPv6 only
+ip -br addr                  # Brief format
+ip -c addr                   # Colorized output
+
+# Legacy command (if available)
+ifconfig                     # Show all interfaces
+ifconfig eth0                # Show specific interface
+IP Address Management
+
+# Add IP address
+ip addr add 192.168.1.10/24 dev eth0        # Add IP
+ip addr add 192.168.1.10/24 brd + dev eth0  # With broadcast
+
+# Delete IP address
+ip addr del 192.168.1.10/24 dev eth0  # Remove IP
+
+# Flush IP addresses
+ip addr flush dev eth0       # Remove all IPs from interface
+Interface Management
+
+# Show interfaces
+ip link                      # Show all interfaces
+ip link show                 # Same as above
+ip -s link                   # Show statistics
+ip -s -s link                # Detailed statistics
+
+# Interface up/down
+ip link set eth0 up          # Bring interface up
+ip link set eth0 down        # Bring interface down
+
+# Change MTU
+ip link set eth0 mtu 9000    # Set MTU to 9000
+
+# Change MAC address
+ip link set eth0 address 00:11:22:33:44:55  # Set MAC
+
+# Legacy commands
+ifconfig eth0 up             # Bring up
+ifconfig eth0 down           # Bring down
+ifup eth0                    # Bring up (uses config)
+ifdown eth0                  # Bring down
+Routing
+
+# Show routing table
+ip route                     # Show routes
+ip route show                # Same as above
+ip r                         # Short form
+ip route show table all      # Show all routing tables
+ip -6 route                  # IPv6 routes
+
+# Add routes
+ip route add 10.0.0.0/8 via 192.168.1.1  # Add route
+ip route add default via 192.168.1.1     # Add default gateway
+ip route add 10.0.0.0/8 dev eth0         # Route via interface
+
+# Delete routes
+ip route del 10.0.0.0/8      # Delete route
+ip route del default         # Delete default gateway
+
+# Change routes
+ip route change 10.0.0.0/8 via 192.168.1.2      # Change route
+ip route replace 10.0.0.0/8 via 192.168.1.2     # Replace route
+
+# Legacy command
+route -n                            # Show routing table (numeric)
+route add default gw 192.168.1.1    # Add default gateway
+route del default                   # Delete default gateway
+ARP (Address Resolution Protocol)
+
+# Show ARP cache
+ip neigh                     # Show ARP cache
+ip neighbour show            # Same as above
+ip neigh show dev eth0       # For specific interface
+
+# Add ARP entry
+ip neigh add 192.168.1.10 lladdr 00:11:22:33:44:55 dev eth0
+
+# Delete ARP entry
+ip neigh del 192.168.1.10 dev eth0
+
+# Flush ARP cache
+ip neigh flush dev eth0      # Flush for interface
+ip neigh flush all           # Flush all
+
+# Legacy command
+arp -a                       # Show ARP cache
+arp -n                       # Numeric addresses
+arp -d 192.168.1.10          # Delete entry
+Network Testing
+
+# Ping (connectivity test)
+ping 8.8.8.8                 # Ping IP
+ping -c 4 8.8.8.8            # Ping 4 times
+ping -i 2 8.8.8.8            # Interval 2 seconds
+ping -s 1000 8.8.8.8         # Packet size 1000 bytes
+ping -W 2 8.8.8.8            # Timeout 2 seconds
+ping google.com              # Ping hostname
+ping6 ::1                    # Ping IPv6
+
+# Traceroute
+traceroute google.com        # Trace route to host
+traceroute -n google.com     # No DNS resolution
+traceroute -m 20 google.com  # Max 20 hops
+tracepath google.com         # Alternative (no root needed)
+tracepath6 google.com        # IPv6 tracepath
+
+# MTR (My TraceRoute)
+mtr google.com               # Interactive
+mtr -c 10 google.com         # 10 cycles
+mtr -r google.com            # Report mode
+mtr -n google.com            # No DNS resolution
+Socket Statistics
+
+# ss (socket statistics)
+ss                           # Show all sockets
+ss -t                        # TCP sockets
+ss -u                        # UDP sockets
+ss -l                        # Listening sockets
+ss -a                        # All sockets
+ss -n                        # Numeric (no DNS resolution)
+ss -p                        # Show process
+ss -s                        # Summary statistics
+
+# Common combinations
+ss -tuln                     # TCP/UDP listening numeric
+ss -tulnp                    # With process info (requires root)
+ss -anp                      # All numeric with process
+ss -s                        # Socket statistics summary
+
+# Filter by state
+ss state established         # Established connections
+ss state listening           # Listening sockets
+ss state closed              # Closed sockets
+
+# Filter by port
+ss -tn sport = :22                          # Source port 22
+ss -tn dport = :80                          # Destination port 80
+ss -tn '( sport = :22 or dport = :80 )'     # Multiple ports
+
+# netstat (legacy)
+netstat -tuln                # TCP/UDP listening numeric
+netstat -tulnp               # With process
+netstat -anp                 # All numeric with process
+netstat -s                   # Statistics
+netstat -i                   # Interface statistics
+netstat -r                   # Routing table
+DNS Resolution
+
+# host
+host google.com              # Basic lookup
+host -t A google.com         # A record
+host -t AAAA google.com      # AAAA record (IPv6)
+host -t MX google.com        # MX records
+host -t NS google.com        # NS records
+host -t TXT google.com       # TXT records
+host 8.8.8.8                 # Reverse lookup
+
+# dig
+dig google.com               # Full DNS query
+dig google.com +short        # Short answer only
+dig google.com A             # A record
+dig google.com AAAA          # AAAA record
+dig google.com MX            # MX records
+dig google.com NS            # NS records
+dig google.com ANY           # All records
+dig @8.8.8.8 google.com      # Use specific DNS server
+dig -x 8.8.8.8               # Reverse lookup
+dig google.com +trace        # Trace DNS resolution
+
+# nslookup (legacy)
+nslookup google.com          # Basic lookup
+nslookup google.com 8.8.8.8  # Use specific DNS server
+
+# getent (query system databases)
+getent hosts google.com      # Hostname lookup
+getent hosts 8.8.8.8         # Reverse lookup
+Network Configuration Files (RHEL)
+
+# View network config
+cat /etc/sysconfig/network-scripts/ifcfg-eth0  # Interface config
+cat /etc/resolv.conf         # DNS configuration
+cat /etc/hosts               # Static hostname resolution
+cat /etc/hostname            # System hostname
+cat /etc/nsswitch.conf       # Name service switch
+
+# Hostname
+hostname                                            # Show hostname
+hostnamectl                                         # Show detailed hostname info
+hostnamectl set-hostname newhostname                # Set hostname
+hostnamectl set-hostname --static newhostname       # Set static hostname
+hostnamectl set-hostname --transient newhostname    # Set transient hostname
+NetworkManager (RHEL/CentOS)
+
+# nmcli (NetworkManager command-line)
+nmcli device                 # Show all devices
+nmcli device status          # Device status
+nmcli device show eth0       # Show device details
+nmcli connection             # Show all connections
+nmcli connection show        # List connections
+nmcli connection show eth0   # Show connection details
+
+# Activate/deactivate connection
+nmcli connection up eth0     # Activate connection
+nmcli connection down eth0   # Deactivate connection
+
+# Add connection
+nmcli connection add type ethernet con-name eth0 ifname eth0                                      # Basic
+nmcli connection add type ethernet con-name eth0 ifname eth0 ip4 192.168.1.10/24 gw4 192.168.1.1  # Static IP
+
+# Modify connection
+nmcli connection modify eth0 ipv4.addresses 192.168.1.10/24
+nmcli connection modify eth0 ipv4.gateway 192.168.1.1
+nmcli connection modify eth0 ipv4.dns "8.8.8.8 8.8.4.4"
+nmcli connection modify eth0 ipv4.method manual  # Static
+nmcli connection modify eth0 ipv4.method auto    # DHCP
+
+# Delete connection
+nmcli connection delete eth0  # Delete connection
+
+# Reload configuration
+nmcli connection reload      # Reload all connections
+nmcli device reapply eth0    # Reapply configuration
+
+# nmtui (NetworkManager text UI)
+nmtui                        # Launch text UI
+nmtui-edit                   # Edit connection
+nmtui-connect                # Activate connection
+nmtui-hostname               # Set hostname
+13. FIREWALL MANAGEMENT
+firewalld (RHEL/CentOS Default)
+
+# Service management
+systemctl status firewalld   # Check status
+systemctl start firewalld    # Start firewall
+systemctl stop firewalld     # Stop firewall
+systemctl enable firewalld   # Enable at boot
+systemctl disable firewalld  # Disable at boot
+
+# Basic commands
+firewall-cmd --state            # Check if running
+firewall-cmd --reload           # Reload firewall
+firewall-cmd --complete-reload  # Complete reload (breaks connections)
+
+# Zones
+firewall-cmd --get-zones                    # List all zones
+firewall-cmd --get-default-zone             # Show default zone
+firewall-cmd --set-default-zone=public      # Set default zone
+firewall-cmd --get-active-zones             # Show active zones
+firewall-cmd --list-all                     # List all settings in default zone
+firewall-cmd --list-all --zone=public       # List settings for specific zone
+firewall-cmd --zone=public --list-services  # List services in zone
+firewall-cmd --zone=public --list-ports     # List ports in zone
+
+# Services
+firewall-cmd --get-services                     # List available services
+firewall-cmd --add-service=http                 # Add service (temporary)
+firewall-cmd --add-service=http --permanent     # Add service (permanent)
+firewall-cmd --remove-service=http              # Remove service (temporary)
+firewall-cmd --remove-service=http --permanent  # Remove (permanent)
+firewall-cmd --add-service=http --zone=public   # Add to specific zone
+firewall-cmd --query-service=http               # Check if service enabled
+
+# Ports
+firewall-cmd --add-port=8080/tcp                # Add port (temporary)
+firewall-cmd --add-port=8080/tcp --permanent    # Add port (permanent)
+firewall-cmd --add-port=8000-9000/tcp           # Port range
+firewall-cmd --remove-port=8080/tcp             # Remove port
+firewall-cmd --query-port=8080/tcp              # Check if port open
+firewall-cmd --list-ports                       # List all open ports
+
+# Rich rules (advanced filtering)
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" accept'
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="10.0.0.5" port port="22" protocol="tcp" reject'
+firewall-cmd --add-rich-rule='rule service name="http" log limit value="4/m" accept'
+firewall-cmd --list-rich-rules          # List all rich rules
+firewall-cmd --remove-rich-rule='...'   # Remove rich rule
+
+# Direct rules (iptables syntax)
+firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT
+firewall-cmd --direct --get-all-rules  # List all direct rules
+
+# Port forwarding
+firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080                       # Forward 80 to 8080
+firewall-cmd --add-forward-port=port=80:proto=tcp:toaddr=192.168.1.10               # Forward to another host
+firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.10   # Forward with port change
+
+# Masquerading (NAT)
+firewall-cmd --add-masquerade    # Enable masquerading
+firewall-cmd --remove-masquerade # Disable masquerading
+firewall-cmd --query-masquerade  # Check if enabled
+
+# Interface assignment
+firewall-cmd --zone=public --add-interface=eth0     # Add interface to zone
+firewall-cmd --zone=public --change-interface=eth0  # Change zone for interface
+firewall-cmd --zone=public --remove-interface=eth0  # Remove from zone
+
+# Sources (IP-based zone assignment)
+firewall-cmd --zone=trusted --add-source=192.168.1.0/24     # Add source to zone
+firewall-cmd --zone=trusted --remove-source=192.168.1.0/24  # Remove source
+
+# Panic mode
+firewall-cmd --panic-on          # Block all traffic
+firewall-cmd --panic-off         # Restore normal operation
+firewall-cmd --query-panic       # Check panic status
+
+# Configuration files
+/etc/firewalld/firewalld.conf    # Main configuration
+/etc/firewalld/zones/            # Zone configurations
+/usr/lib/firewalld/services/     # Service definitions
+iptables (Legacy)
+
+# View rules
+iptables -L                         # List all rules
+iptables -L -n                      # Numeric output (no DNS)
+iptables -L -v                      # Verbose output
+iptables -L -n -v --line-numbers    # With line numbers
+iptables -L INPUT                   # List INPUT chain only
+iptables -t nat -L                  # List NAT table
+iptables -t mangle -L               # List mangle table
+
+# Add rules
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT                       # Append to INPUT
+iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT                     # Insert at position 1
+iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT                       # Accept from network
+iptables -A INPUT -i eth0 -j ACCEPT                                 # Accept from interface
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT    # Stateful
+
+# Delete rules
+iptables -D INPUT 3                             # Delete rule 3 from INPUT
+iptables -D INPUT -p tcp --dport 22 -j ACCEPT   # Delete by specification
+
+# Flush rules
+iptables -F                  # Flush all rules
+iptables -F INPUT            # Flush INPUT chain
+iptables -t nat -F           # Flush NAT table
+
+# Default policies
+iptables -P INPUT DROP       # Set INPUT default policy to DROP
+iptables -P FORWARD DROP     # Set FORWARD default policy
+iptables -P OUTPUT ACCEPT    # Set OUTPUT default policy
+
+# Save and restore
+iptables-save > /etc/iptables.rules     # Save rules
+iptables-restore < /etc/iptables.rules  # Restore rules
+14. SSH (SECURE SHELL)
+SSH Client
+
+# Basic connection
+ssh user@hostname            # Connect to host
+ssh user@192.168.1.10        # Connect by IP
+ssh -p 2222 user@hostname    # Custom port
+ssh hostname                 # Connect with current username
+
+# SSH options
+ssh -v user@hostname         # Verbose mode
+ssh -vv user@hostname        # More verbose
+ssh -vvv user@hostname       # Maximum verbosity
+ssh -4 user@hostname         # Force IPv4
+ssh -6 user@hostname         # Force IPv6
+ssh -C user@hostname         # Compression
+ssh -X user@hostname         # X11 forwarding
+ssh -Y user@hostname         # Trusted X11 forwarding
+
+# Execute remote command
+ssh user@hostname 'command'             # Execute single command
+ssh user@hostname 'ls -la'              # Example
+ssh user@hostname 'uname -a; df -h'     # Multiple commands
+
+# SSH with key
+ssh -i ~/.ssh/id_rsa user@hostname  # Specify private key
+
+# SSH config usage
+ssh confighost               # Use ~/.ssh/config entry
+SSH Key Management
+
+# Generate SSH keys
+ssh-keygen                          # Generate RSA key (default)
+ssh-keygen -t rsa                   # RSA key explicitly
+ssh-keygen -t rsa -b 4096           # 4096-bit RSA
+ssh-keygen -t ecdsa                 # ECDSA key
+ssh-keygen -t ed25519               # Ed25519 key (recommended)
+ssh-keygen -t rsa -C "comment"      # With comment
+ssh-keygen -f ~/.ssh/custom_key     # Custom filename
+ssh-keygen -N ""                    # No passphrase
+ssh-keygen -p                       # Change passphrase
+
+# Copy public key to server
+ssh-copy-id user@hostname                       # Copy default key
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@hostname  # Specify key
+ssh-copy-id -p 2222 user@hostname               # Custom port
+
+# Manual key copy
+cat ~/.ssh/id_rsa.pub | ssh user@hostname "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+# Key permissions
+chmod 700 ~/.ssh                    # SSH directory
+chmod 600 ~/.ssh/id_rsa             # Private key
+chmod 644 ~/.ssh/id_rsa.pub         # Public key
+chmod 644 ~/.ssh/authorized_keys    # Authorized keys
+chmod 600 ~/.ssh/config             # SSH config
+SSH Configuration
+
+# Client configuration
+~/.ssh/config                # User SSH config
+/etc/ssh/ssh_config          # System-wide client config
+
+# Example ~/.ssh/config:
+# Host myserver
+#     HostName 192.168.1.10
+#     User admin
+#     Port 2222
+#     IdentityFile ~/.ssh/custom_key
+
+# Server configuration
+/etc/ssh/sshd_config         # SSH daemon config
+
+# Common sshd_config options:
+# Port 22                    # SSH port
+# PermitRootLogin no         # Disable root login
+# PasswordAuthentication no  # Disable password auth
+# PubkeyAuthentication yes   # Enable key auth
+# AllowUsers user1 user2     # Whitelist users
+# DenyUsers baduser          # Blacklist users
+
+# Restart SSH daemon
+systemctl restart sshd       # Restart SSH daemon
+systemctl reload sshd        # Reload config (safer)
+SSH Tunneling
+
+# Local port forwarding
+ssh -L 8080:localhost:80 user@hostname          # Forward local 8080 to remote 80
+ssh -L 3306:database.local:3306 user@gateway    # Access remote MySQL
+
+# Remote port forwarding
+ssh -R 8080:localhost:80 user@hostname  # Forward remote 8080 to local 80
+
+# Dynamic port forwarding (SOCKS proxy)
+ssh -D 1080 user@hostname    # Create SOCKS proxy on local 1080
+
+# Keep tunnel alive
+ssh -N -L 8080:localhost:80 user@hostname       # No command execution
+ssh -f -N -L 8080:localhost:80 user@hostname    # Background
+SCP (Secure Copy)
+
+# Copy to remote
+scp file.txt user@hostname:/path/                   # Copy file
+scp -r directory user@hostname:/path/               # Copy directory
+scp -P 2222 file.txt user@hostname:/path/           # Custom port
+scp -i ~/.ssh/id_rsa file.txt user@hostname:/path/  # With key
+
+# Copy from remote
+scp user@hostname:/path/file.txt .                                  # Copy to current directory
+scp -r user@hostname:/path/directory .                              # Copy directory
+scp user@hostname:/path/file1.txt user@hostname:/path/file2.txt .   # Multiple files
+
+# Copy between remote hosts
+scp user1@host1:/path/file.txt user2@host2:/path/  # Copy between remotes
+
+# SCP options
+scp -C file.txt user@hostname:/path/  # Compression
+scp -v file.txt user@hostname:/path/  # Verbose
+scp -p file.txt user@hostname:/path/  # Preserve timestamps
+scp -q file.txt user@hostname:/path/  # Quiet mode
+SFTP (SSH File Transfer Protocol)
+
+# Connect to SFTP
+sftp user@hostname           # Interactive SFTP session
+sftp -P 2222 user@hostname   # Custom port
+
+# SFTP commands (in interactive session)
+pwd                          # Print remote working directory
+lpwd                         # Print local working directory
+ls                           # List remote directory
+lls                          # List local directory
+cd /path                     # Change remote directory
+lcd /path                    # Change local directory
+get file.txt                 # Download file
+get -r directory             # Download directory
+put file.txt                 # Upload file
+put -r directory             # Upload directory
+mkdir dirname                # Create remote directory
+rmdir dirname                # Remove remote directory
+rm file.txt                  # Remove remote file
+bye/exit/quit                # Exit SFTP
+
+# Batch mode
+sftp -b batchfile user@hostname  # Execute commands from file
+SSH Agent
+
+# Start SSH agent
+eval $(ssh-agent)               # Start agent and set environment
+ssh-agent                       # Start new  with agent
+
+# Add keys to agent
+ssh-add                         # Add default key
+ssh-add ~/.ssh/id_rsa           # Add specific key
+ssh-add -l                      # List loaded keys
+ssh-add -d ~/.ssh/id_rsa        # Remove key from agent
+ssh-add -D                      # Remove all keys
+ssh-add -t 3600 ~/.ssh/id_rsa   # Add key for 1 hour
+
+# Kill agent
+ssh-agent -k                    # Kill agent
+15. TEXT PROCESSING
+grep (Pattern Matching)
+
+# Basic grep
+grep pattern file.txt        # Search for pattern
+grep "pattern" file.txt      # Pattern with spaces
+grep pattern file1 file2     # Multiple files
+grep -r pattern directory    # Recursive search
+grep -R pattern directory    # Recursive with symlinks
+
+# Common options
+grep -i pattern file         # Case-insensitive
+grep -v pattern file         # Invert match (exclude)
+grep -n pattern file         # Show line numbers
+grep -c pattern file         # Count matches
+grep -l pattern files*       # List filenames only
+grep -L pattern files*       # List non-matching files
+grep -w pattern file         # Match whole word
+grep -x pattern file         # Match whole line
+grep -A 3 pattern file       # Show 3 lines after match
+grep -B 3 pattern file       # Show 3 lines before match
+grep -C 3 pattern file       # Show 3 lines context (before and after)
+
+# Regular expressions
+grep '^pattern' file         # Line starts with pattern
+grep 'pattern$' file         # Line ends with pattern
+grep '^$' file               # Empty lines
+grep '[0-9]' file            # Lines with digits
+grep '[A-Z]' file            # Lines with uppercase
+grep 'pat.*ern' file         # Pattern with anything between
+
+# Extended regex
+grep -E 'pattern1|pattern2' file    # OR operator
+grep -E '^[0-9]+$' file             # Lines with only digits
+grep -E 'pattern+' file             # One or more
+grep -E 'pattern?' file             # Zero or one
+grep -E 'pattern{3}' file           # Exactly 3 occurrences
+grep -E 'pattern{2,5}' file         # Between 2 and 5
+
+# Practical examples
+grep -i error /var/log/messages     # Find errors in log
+grep -rn "TODO" .                   # Find TODO in code
+ps aux | grep httpd                 # Find httpd processes
+grep -v '^#' config.conf            # Exclude comments
+sed (Stream Editor)
+
+# Basic substitution
+sed 's/old/new/' file        # Replace first occurrence per line
+sed 's/old/new/g' file       # Replace all occurrences
+sed 's/old/new/2' file       # Replace 2nd occurrence per line
+sed 's/old/new/gi' file      # Global case-insensitive
+
+# In-place editing
+sed -i 's/old/new/g' file       # Edit file in-place
+sed -i.bak 's/old/new/g' file   # Edit with backup
+
+# Addressing
+sed '5s/old/new/' file              # Line 5 only
+sed '5,10s/old/new/' file           # Lines 5-10
+sed '/pattern/s/old/new/' file      # Lines matching pattern
+sed '5,/pattern/s/old/new/' file    # Line 5 to pattern
+
+# Delete lines
+sed '5d' file                # Delete line 5
+sed '5,10d' file             # Delete lines 5-10
+sed '/pattern/d' file        # Delete lines matching pattern
+sed '/^$/d' file             # Delete empty lines
+sed '/^#/d' file             # Delete comment lines
+
+# Insert and append
+sed '5i\New line' file          # Insert before line 5
+sed '5a\New line' file          # Append after line 5
+sed '/pattern/a\New line' file  # Append after pattern
+
+# Print specific lines
+sed -n '5p' file             # Print line 5 only
+sed -n '5,10p' file          # Print lines 5-10
+sed -n '/pattern/p' file     # Print matching lines
+
+# Multiple commands
+sed 's/old/new/g; s/foo/bar/g' file         # Multiple substitutions
+sed -e 's/old/new/g' -e 's/foo/bar/g' file  # Using -e
+
+# Change line
+sed '5c\Replacement line' file  # Change line 5
+
+# Practical examples
+sed 's/#.*$//' config.conf   # Remove comments
+sed '/^$/d' file             # Remove empty lines
+sed 's/  */ /g' file         # Multiple spaces to single
+sed 's/^[ \t]*//' file       # Remove leading whitespace
+awk (Text Processing)
+
+# Basic awk
+awk '{print}' file           # Print all lines
+awk '{print $1}' file        # Print first field
+awk '{print $1, $3}' file    # Print fields 1 and 3
+awk '{print $NF}' file       # Print last field
+awk '{print $0}' file        # Print entire line
+
+# Field separator
+awk -F: '{print $1}' /etc/passwd        # Use : as delimiter
+awk -F, '{print $1, $2}' file.csv       # Use comma
+awk 'BEGIN{FS=":"} {print $1}' file     # Set FS in BEGIN
+
+# Output field separator
+awk 'BEGIN{OFS=","} {print $1, $2}' file  # Comma-separated output
+
+# Pattern matching
+awk '/pattern/ {print}' file        # Print matching lines
+awk '/pattern/ {print $1}' file     # Print field from matching lines
+awk '!/pattern/ {print}' file       # Print non-matching lines
+awk '/start/,/end/ {print}' file    # Print range
+
+# Conditions
+awk '$3 > 100 {print}' file         # Field 3 greater than 100
+awk '$3 >= 100 && $3 <= 200' file   # Range condition
+awk '$1 == "value" {print}' file    # Exact match
+awk '$1 != "value" {print}' file    # Not equal
+awk 'NF > 5 {print}' file           # Lines with more than 5 fields
+awk 'length($0) > 80 {print}' file  # Lines longer than 80 chars
+
+# Built-in variables
+awk '{print NR, $0}' file           # NR = line number
+awk '{print NF}' file               # NF = number of fields
+awk 'NR==5 {print}' file            # Print line 5
+awk 'NR>=5 && NR<=10 {print}' file  # Lines 5-10
+awk 'END {print NR}' file           # Print total lines
+
+# BEGIN and END
+awk 'BEGIN {print "Start"} {print} END {print "End"}' file
+awk 'BEGIN {sum=0} {sum+=$1} END {print sum}' file          # Sum field 1
+
+# Arithmetic
+awk '{print $1 + $2}' file   # Add fields
+awk '{sum+=$1} END {print sum}' file        # Sum column
+awk '{sum+=$1} END {print sum/NR}' file     # Average
+
+# String functions
+awk '{print length($1)}' file       # Length of field
+awk '{print tolower($1)}' file      # Lowercase
+awk '{print toupper($1)}' file      # Uppercase
+awk '{print substr($1,1,5)}' file   # Substring
+
+# Printf formatting
+awk '{printf "%-10s %5d\n", $1, $2}' file  # Formatted output
+
+# Practical examples
+awk -F: '{print $1}' /etc/passwd        # List usernames
+ps aux | awk '{print $1, $11}'          # User and command
+df -h | awk '/\/$/ {print $5}'          # Root filesystem usage
+awk '{sum+=$1} END {print sum}' file    # Sum first column
+cut (Extract Columns)
+
+# By character position
+cut -c1 file                 # First character
+cut -c1-5 file               # Characters 1-5
+cut -c1,5,10 file            # Characters 1, 5, 10
+cut -c5- file                # From character 5 to end
+
+# By field
+cut -f1 file                 # First field (tab-delimited)
+cut -f1,3 file               # Fields 1 and 3
+cut -f1-3 file               # Fields 1 through 3
+cut -d: -f1 /etc/passwd      # Field 1 with : delimiter
+cut -d, -f2 file.csv         # Field 2 from CSV
+
+# Options
+cut -d: -f1,3 --output-delimiter=' ' /etc/passwd  # Custom output delimiter
+sort
+
+# Basic sort
+sort file                    # Sort alphabetically
+sort -r file                 # Reverse sort
+sort -n file                 # Numeric sort
+sort -rn file                # Reverse numeric sort
+sort -u file                 # Sort and remove duplicates
+sort -f file                 # Case-insensitive sort
+
+# By field
+sort -t: -k1 /etc/passwd     # Sort by field 1 (: delimiter)
+sort -t: -k3 -n /etc/passwd  # Sort by field 3 numerically
+sort -k2,2 file              # Sort by field 2 only
+sort -k2,2n -k1,1 file       # Sort by field 2 then field 1
+
+# Month sort
+sort -M file                 # Sort by month name
+
+# Human-readable numeric sort
+sort -h file                 # Sort 1K, 2M, 3G properly
+
+# Multiple files
+sort file1 file2             # Sort combined files
+
+# Practical examples
+ps aux | sort -nk3           # Sort processes by CPU
+du -h | sort -h              # Sort by size
+uniq (Remove Duplicates)
+
+# Basic uniq (requires sorted input)
+sort file | uniq             # Remove adjacent duplicates
+sort file | uniq -c          # Count occurrences
+sort file | uniq -d          # Show only duplicates
+sort file | uniq -u          # Show only unique lines
+sort file | uniq -i          # Case-insensitive
+
+# Skip fields
+sort file | uniq -f 1        # Skip first field
+sort file | uniq -s 5        # Skip first 5 characters
+tr (Translate Characters)
+
+# Basic translation
+tr 'a' 'b' < file            # Replace a with b
+tr 'abc' 'xyz' < file        # Multiple replacements
+tr 'a-z' 'A-Z' < file        # Lowercase to uppercase
+tr 'A-Z' 'a-z' < file        # Uppercase to lowercase
+
+# Delete characters
+tr -d 'a' < file             # Delete character
+tr -d '0-9' < file           # Delete digits
+tr -d '\n' < file            # Delete newlines
+tr -d ' ' < file             # Delete spaces
+
+# Squeeze repeats
+tr -s ' ' < file             # Squeeze multiple spaces to one
+tr -s '\n' < file            # Squeeze multiple newlines
+
+# Character classes
+tr -d '[:digit:]' < file            # Delete digits
+tr -d '[:punct:]' < file            # Delete punctuation
+tr '[:lower:]' '[:upper:]' < file   # Lowercase to uppercase
+wc (Word Count)
+
+wc file                      # Lines, words, characters
+wc -l file                   # Count lines only
+wc -w file                   # Count words only
+wc -c file                   # Count bytes
+wc -m file                   # Count characters
+wc -L file                   # Length of longest line
+
+# Multiple files
+wc file1 file2 file3         # Count for each file
+wc -l *.txt                  # Count lines in all .txt files
+paste (Merge Lines)
+
+paste file1 file2            # Merge files side-by-side
+paste -d, file1 file2        # Use comma as delimiter
+paste -s file                # Merge all lines into one
+join (Join Files on Common Field)
+
+join file1 file2             # Join on first field
+join -1 2 -2 1 file1 file2   # Join field 2 of file1 with field 1 of file2
+join -t: file1 file2         # Use : as delimiter
+diff (Compare Files)
+
+# Basic diff
+diff file1 file2             # Show differences
+diff -u file1 file2          # Unified format
+diff -c file1 file2          # Context format
+diff -y file1 file2          # Side-by-side
+diff -q file1 file2          # Brief (just if different)
+diff -r dir1 dir2            # Recursive directory compare
+
+# Ignore differences
+diff -w file1 file2          # Ignore whitespace
+diff -i file1 file2          # Ignore case
+diff -B file1 file2          # Ignore blank lines
+16.  SCRIPTING ESSENTIALS
+Script Basics
+
+# Shebang (first line of script)
+#!/bin/                  # Standard  shebang
+#!/usr/bin/env           # Portable shebang
+
+# Make script executable
+chmod +x script.sh           # Add execute permission
+
+# Run script
+./script.sh                     # Execute in current directory
+ script.sh                      # Run with 
+sh script.sh                    # Run with sh
+
+# Debug script
+ -x script.sh            # Execute with debug output (trace)
+ -v script.sh            # Verbose mode
+ -n script.sh            # Syntax check only (no execution)
+Variables
+
+# Variable assignment
+var="value"                  # No spaces around =
+name="John"
+count=10
+
+# Variable usage
+echo $var                    # Access variable
+echo ${var}                  # Explicit variable
+echo "$var"                  # With quotes (preserves spaces)
+echo '$var'                  # Single quotes (literal)
+
+# Special variables
+$0                           # Script name
+$1, $2, $3                   # Positional parameters
+$#                           # Number of arguments
+$@                           # All arguments (separate words)
+$*                           # All arguments (single word)
+$?                           # Exit status of last command
+$$                           # Current process ID
+$!                           # PID of last background job
+$_                           # Last argument of previous command
+
+# Environment variables
+export VAR="value"           # Make variable available to child processes
+echo $PATH                   # PATH variable
+echo $HOME                   # Home directory
+echo $USER                   # Current user
+echo $PWD                    # Current directory
+echo $SHELL                  # Current shell
+
+# Read input
+read varname                 # Read into variable
+read -p "Enter name: " name  # With prompt
+read -s password             # Silent (no echo)
+read -t 5 input              # 5 second timeout
+read -n 1 char               # Read single character
+read -a array                # Read into array
+Conditional Statements
+
+# if statement
+if [ condition ]; then
+    commands
+fi
+
+if [ condition ]; then
+    commands
+else
+    commands
+fi
+
+if [ condition1 ]; then
+    commands
+elif [ condition2 ]; then
+    commands
+else
+    commands
+fi
+
+# Test conditions ([ ] or test command)
+[ -f file ]                  # File exists and is regular file
+[ -d directory ]             # Directory exists
+[ -e path ]                  # Path exists (file or directory)
+[ -r file ]                  # File is readable
+[ -w file ]                  # File is writable
+[ -x file ]                  # File is executable
+[ -s file ]                  # File exists and not empty
+[ -L file ]                  # File is symbolic link
+
+# String comparisons
+[ "$str1" = "$str2" ]        # Strings equal
+[ "$str1" != "$str2" ]       # Strings not equal
+[ -z "$str" ]                # String is empty
+[ -n "$str" ]                # String is not empty
+[ "$str1" < "$str2" ]        # String less than (lexicographic)
+[ "$str1" > "$str2" ]        # String greater than
+
+# Numeric comparisons
+[ $num1 -eq $num2 ]          # Equal
+[ $num1 -ne $num2 ]          # Not equal
+[ $num1 -gt $num2 ]          # Greater than
+[ $num1 -lt $num2 ]          # Less than
+[ $num1 -ge $num2 ]          # Greater than or equal
+[ $num1 -le $num2 ]          # Less than or equal
+
+# Logical operators
+[ condition1 ] && [ condition2 ]    # AND
+[ condition1 ] || [ condition2 ]    # OR
+[ ! condition ]                     # NOT
+[ condition1 -a condition2 ]        # AND (inside test)
+[ condition1 -o condition2 ]        # OR (inside test)
+
+# Modern test [[ ]]
+[[ condition ]]              # Enhanced test
+[[ $str =~ regex ]]          # Regex matching
+[[ $str == pattern ]]        # Pattern matching with wildcards
+case Statement
+
+case $variable in
+    pattern1)
+        commands
+        ;;
+    pattern2|pattern3)
+        commands
+        ;;
+    *)
+        commands
+        ;;
+esac
+
+# Example
+case $option in
+    start)
+        echo "Starting..."
+        ;;
+    stop)
+        echo "Stopping..."
+        ;;
+    restart)
+        echo "Restarting..."
+        ;;
+    *)
+        echo "Invalid option"
+        ;;
+esac
+Loops
+
+# for loop
+for var in list; do
+    commands
+done
+
+for i in 1 2 3 4 5; do
+    echo $i
+done
+
+for file in *.txt; do
+    echo $file
+done
+
+for i in {1..10}; do
+    echo $i
+done
+
+for i in {1..10..2}; do  # Step by 2
+    echo $i
+done
+
+# C-style for loop
+for ((i=1; i<=10; i++)); do
+    echo $i
+done
+
+# while loop
+while [ condition ]; do
+    commands
+done
+
+counter=1
+while [ $counter -le 10 ]; do
+    echo $counter
+    ((counter++))
+done
+
+# until loop
+until [ condition ]; do
+    commands
+done
+
+# Read file line by line
+while read line; do
+    echo $line
+done < file.txt
+
+while IFS= read -r line; do  # Preserve whitespace
+    echo "$line"
+done < file.txt
+
+# Loop control
+break                        # Exit loop
+continue                     # Skip to next iteration
+Functions
+
+# Function definition
+function_name() {
+    commands
+}
+
+# Alternative syntax
+function function_name {
+    commands
+}
+
+# Function with parameters
+greet() {
+    echo "Hello, $1"
+}
+greet "John"                 # Call function
+
+# Return value
+add() {
+    local result=$(($1 + $2))
+    echo $result
+}
+sum=$(add 5 3)               # Capture return value
+
+# Return exit code
+check_file() {
+    if [ -f "$1" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Local variables
+myfunc() {
+    local var="value"        # Local to function
+    global_var="value"       # Global
+}
+Arrays
+
+# Indexed arrays
+array=(item1 item2 item3)    # Create array
+array[0]="item1"             # Set element
+echo ${array[0]}             # Access element
+echo ${array[@]}             # All elements
+echo ${#array[@]}            # Array length
+array+=(item4)               # Append element
+
+# Loop through array
+for item in "${array[@]}"; do
+    echo $item
+done
+
+# Associative arrays ( 4+)
+declare -A assoc_array       # Declare associative array
+assoc_array[key1]="value1"
+assoc_array[key2]="value2"
+echo ${assoc_array[key1]}    # Access by key
+
+# Loop through associative array
+for key in "${!assoc_array[@]}"; do
+    echo "$key: ${assoc_array[$key]}"
+done
+String Manipulation
+
+# String length
+string="Hello World"
+echo ${#string}              # Length of string
+
+# Substring
+echo ${string:0:5}           # Extract from position 0, length 5
+echo ${string:6}             # Extract from position 6 to end
+echo ${string: -5}           # Last 5 characters (note space)
+
+# String replacement
+echo ${string/o/O}              # Replace first 'o' with 'O'
+echo ${string//o/O}             # Replace all 'o' with 'O'
+echo ${string/#Hello/Hi}        # Replace at beginning
+echo ${string/%World/Universe}  # Replace at end
+
+# Remove pattern
+echo ${string#He}            # Remove shortest match from beginning
+echo ${string##He*o}         # Remove longest match from beginning
+echo ${string%ld}            # Remove shortest match from end
+echo ${string%%o*}           # Remove longest match from end
+
+# Case conversion
+echo ${string^^}             # Uppercase all
+echo ${string,,}             # Lowercase all
+echo ${string^}              # Uppercase first character
+echo ${string,}              # Lowercase first character
+
+# Default values
+echo ${var:-default}         # Use default if var is unset or null
+echo ${var:=default}         # Assign default if var is unset or null
+echo ${var:+value}           # Use value if var is set
+echo ${var:?error message}   # Print error if var is unset or null
+Command Substitution
+
+# Command substitution
+output=$(command)            # Preferred method
+output=`command`             # Old-style (backticks)
+
+# Examples
+current_date=$(date)
+file_count=$(ls | wc -l)
+user_list=$(cat /etc/passwd | cut -d: -f1)
+
+# Nested substitution
+result=$(echo "Current user: $(whoami)")
+Arithmetic Operations
+
+# Arithmetic expansion
+result=$((5 + 3))            # Addition
+result=$((10 - 4))           # Subtraction
+result=$((6 * 7))            # Multiplication
+result=$((20 / 4))           # Division
+result=$((10 % 3))           # Modulus
+result=$((2 ** 3))           # Exponentiation
+
+# Increment/decrement
+((count++))                  # Increment
+((count--))                  # Decrement
+((count += 5))               # Add 5
+((count -= 3))               # Subtract 3
+((count *= 2))               # Multiply by 2
+((count /= 2))               # Divide by 2
+
+# let command
+let result=5+3
+let "result = 5 + 3"         # With spaces
+
+# expr command (legacy)
+result=$(expr 5 + 3)         # Note: spaces required
+result=$(expr 10 \* 2)       # Escape special characters
+
+# bc for floating point
+result=$(echo "scale=2; 10/3" | bc)  # 3.33
+result=$(echo "sqrt(16)" | bc)       # 4
+Input/Output Redirection
+
+# Output redirection
+command > file                  # Redirect stdout to file (overwrite)
+command >> file                 # Redirect stdout to file (append)
+command 2> file                 # Redirect stderr to file
+command 2>> file                # Redirect stderr to file (append)
+command &> file                 # Redirect both stdout and stderr
+command > file 2>&1             # Redirect both (alternative)
+command > /dev/null 2>&1        # Discard all output
+
+# Input redirection
+command < file               # Read input from file
+command <<EOF                # Here document
+line 1
+line 2
+EOF
+
+command <<-EOF               # Here document (strip leading tabs)
+	indented line
+EOF
+
+command <<< "string"         # Here string
+
+# Pipe
+command1 | command2          # Pipe stdout to next command
+command1 |& command2         # Pipe stdout and stderr
+
+# tee (write to file and stdout)
+command | tee file           # Write to file and display
+command | tee -a file        # Append to file and display
+command | tee file1 file2    # Write to multiple files
+Process Substitution
+
+# Process substitution
+diff <(ls dir1) <(ls dir2)   # Compare command outputs
+command <(other_command)     # Use command output as file
+
+# Examples
+sort <(grep pattern file1) <(grep pattern file2)
+while read line; do
+    echo $line
+done < <(ps aux)
+Error Handling
+
+# Exit on error
+set -e                       # Exit immediately if command fails
+set +e                       # Disable exit on error
+
+# Exit on undefined variable
+set -u                       # Exit if undefined variable used
+set +u                       # Disable
+
+# Pipefail
+set -o pipefail              # Pipe fails if any command fails
+set +o pipefail              # Disable
+
+# Combined
+set -euo pipefail            # Strict mode
+
+# trap (signal handling)
+trap 'commands' SIGNAL       # Execute commands on signal
+
+# Cleanup on exit
+trap 'rm -f /tmp/tempfile' EXIT
+
+# Handle Ctrl+C
+trap 'echo "Interrupted"; exit 1' INT
+
+# Handle errors
+trap 'echo "Error on line $LINENO"' ERR
+
+# Multiple signals
+trap 'cleanup_function' EXIT INT TERM
+
+# Ignore signal
+trap '' INT                  # Ignore Ctrl+C
+
+# Reset trap
+trap - INT                   # Reset to default
+Script Options and Debugging
+
+#  options
+set -x                       # Print commands before execution (debug)
+set +x                       # Disable debug
+set -v                       # Print shell input lines
+set +v                       # Disable verbose
+
+# Check if option is set
+if [[ $- == *x* ]]; then
+    echo "Debug mode is on"
+fi
+
+# Script must run as root
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit 1
+fi
+
+# Check number of arguments
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 arg1 arg2"
+    exit 1
+fi
+17. PYTHON FOR DEVOPS - BASICS
+Python Execution
+
+# Run Python
+python3 script.py            # Execute script
+python3 -c "print('Hello')"  # Execute command
+python3 -m module            # Run module as script
+python3 -i script.py         # Interactive mode after script
+
+# Shebang for Python scripts
+#!/usr/bin/env python3       # Portable shebang
+pip (Package Manager)
+
+# pip operations
+pip3 --version                      # Check pip version
+pip3 install package                # Install package
+pip3 install package==1.2.3         # Install specific version
+pip3 install 'package>=1.2'         # Install version constraint
+pip3 install -r requirements.txt    # Install from file
+pip3 install --upgrade package      # Upgrade package
+pip3 uninstall package              # Uninstall package
+pip3 list                           # List installed packages
+pip3 list --outdated                # List outdated packages
+pip3 show package                   # Show package details
+pip3 freeze                         # List installed packages with versions
+pip3 freeze > requirements.txt      # Export requirements
+pip3 search package                 # Search for package (deprecated)
+Virtual Environments
+
+# venv (built-in)
+python3 -m venv myenv        # Create virtual environment
+source myenv/bin/activate    # Activate (Linux/Mac)
+myenv\Scripts\activate       # Activate (Windows)
+deactivate                   # Deactivate environment
+
+# Check if in virtual environment
+echo $VIRTUAL_ENV            # Shows path if active
+
+# virtualenv (alternative)
+pip3 install virtualenv         # Install virtualenv
+virtualenv myenv                # Create environment
+virtualenv -p python3.9 myenv   # Specific Python version
+Python Interactive
+
+# Python REPL
+python3                      # Start interactive Python
+exit()                       # Exit REPL
+quit()                       # Exit REPL
+Ctrl+D                       # Exit REPL (Linux/Mac)
+
+# IPython (enhanced REPL)
+pip3 install ipython         # Install IPython
+ipython                      # Start IPython
+
+# Run Python script from REPL
+exec(open('script.py').read())
+18. GIT VERSION CONTROL
+Git Configuration
+
+# User configuration
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git config --global core.editor vim
+git config --global init.defaultBranch main
+
+# View configuration
+git config --list            # List all config
+git config --global --list   # Global config only
+git config user.name         # Show specific value
+git config --get user.name   # Alternative
+
+# Configuration levels
+git config --system          # System-wide
+git config --global          # User-specific
+git config --local           # Repository-specific
+
+# Configuration file locations
+~/.gitconfig                 # Global config
+.git/config                  # Local repo config
+Repository Initialization
+
+# Create repository
+git init                     # Initialize new repo
+git init project-name        # Initialize with directory name
+git clone url                # Clone remote repository
+git clone url dirname        # Clone to specific directory
+git clone --depth 1 url      # Shallow clone (last commit only)
+git clone -b branch url      # Clone specific branch
+Basic Git Workflow
+
+# Check status
+git status                   # Show working tree status
+git status -s                # Short status
+git status -sb               # Short status with branch
+
+# Add files
+git add file.txt             # Add specific file
+git add .                    # Add all changes in current dir
+git add -A                   # Add all changes in repo
+git add *.txt                # Add all .txt files
+git add -p                   # Interactive staging
+git add -u                   # Add modified/deleted, not new
+
+# Commit
+git commit                   # Commit (opens editor)
+git commit -m "message"      # Commit with message
+git commit -am "message"     # Add and commit tracked files
+git commit --amend           # Amend last commit
+git commit --amend --no-edit # Amend without changing message
+
+# View changes
+git diff                     # Unstaged changes
+git diff --staged            # Staged changes
+git diff HEAD                # All changes since last commit
+git diff branch1 branch2     # Compare branches
+git diff commit1 commit2     # Compare commits
+git diff --stat              # Summary of changes
+
+# Remove files
+git rm file.txt              # Remove file and stage
+git rm --cached file.txt     # Untrack file, keep in working dir
+git rm -r directory          # Remove directory
+
+# Move/rename
+git mv oldname newname       # Move or rename file
+Viewing History
+
+# Log
+git log                      # Show commit history
+git log --oneline            # Compact format
+git log --graph              # Graph view
+git log --all --graph --decorate --oneline  # Full graph view
+git log -n 5                 # Last 5 commits
+git log --since="2024-01-01" # Commits since date
+git log --until="2024-12-31" # Commits until date
+git log --author="name"      # By author
+git log --grep="pattern"     # Search commit messages
+git log file.txt             # Commits affecting file
+git log -p                   # Show patches (diffs)
+git log --stat               # Show file statistics
+
+# Show commit
+git show commit_hash         # Show commit details
+git show HEAD                # Show latest commit
+git show HEAD~1              # Show previous commit
+git show branch:file.txt     # Show file from branch
+
+# Blame
+git blame file.txt           # Show who changed each line
+git blame -L 10,20 file.txt  # Lines 10-20 only
+Branching
+
+# List branches
+git branch                   # List local branches
+git branch -a                # List all branches (local + remote)
+git branch -r                # List remote branches
+git branch -v                # Verbose (show last commit)
+
+# Create branch
+git branch branch-name       # Create branch
+git checkout -b branch-name  # Create and switch to branch
+git switch -c branch-name    # Create and switch (modern)
+
+# Switch branches
+git checkout branch-name     # Switch to branch
+git switch branch-name       # Switch to branch (modern)
+git checkout -               # Switch to previous branch
+
+# Delete branch
+git branch -d branch-name               # Delete branch (safe)
+git branch -D branch-name               # Force delete branch
+git push origin --delete branch-name    # Delete remote branch
+
+# Rename branch
+git branch -m new-name       # Rename current branch
+git branch -m old new        # Rename specific branch
+Merging
+
+# Merge branches
+git merge branch-name           # Merge branch into current
+git merge --no-ff branch-name   # No fast-forward merge
+git merge --squash branch-name  # Squash commits
+
+# Abort merge
+git merge --abort            # Cancel merge in progress
+
+# Merge tools
+git mergetool                # Launch merge tool
+Remote Repositories
+
+# View remotes
+git remote                   # List remotes
+git remote -v                # List with URLs
+git remote show origin       # Show remote details
+
+# Add remote
+git remote add origin url    # Add remote
+git remote add upstream url  # Add upstream remote
+
+# Remove/rename remote
+git remote remove origin     # Remove remote
+git remote rename old new    # Rename remote
+
+# Fetch and pull
+git fetch                    # Fetch from default remote
+git fetch origin             # Fetch from specific remote
+git fetch --all              # Fetch from all remotes
+git pull                     # Fetch and merge
+git pull --rebase            # Fetch and rebase
+git pull origin main         # Pull specific branch
+
+# Push
+git push                     # Push to default remote/branch
+git push origin main         # Push to specific remote/branch
+git push -u origin main      # Push and set upstream
+git push --all               # Push all branches
+git push --tags              # Push all tags
+git push --force             # Force push (DANGEROUS)
+git push --force-with-lease  # Safer force push
+Stashing
+
+# Stash changes
+git stash                    # Stash changes
+git stash save "message"     # Stash with message
+git stash -u                 # Include untracked files
+git stash -a                 # Include all files (even ignored)
+
+# List stashes
+git stash list               # Show all stashes
+
+# Apply stash
+git stash apply              # Apply latest stash
+git stash apply stash@{2}    # Apply specific stash
+git stash pop                # Apply and remove latest stash
+git stash pop stash@{2}      # Apply and remove specific stash
+
+# Manage stashes
+git stash show               # Show stash changes
+git stash show -p            # Show stash diff
+git stash drop               # Delete latest stash
+git stash drop stash@{2}     # Delete specific stash
+git stash clear              # Delete all stashes
+Undoing Changes
+
+# Discard changes
+git restore file.txt            # Discard changes in file (modern)
+git restore --staged file.txt   # Unstage file (modern)
+git checkout -- file.txt        # Discard changes (legacy)
+git reset HEAD file.txt         # Unstage file (legacy)
+
+# Reset commits
+git reset --soft HEAD~1      # Undo commit, keep changes staged
+git reset --mixed HEAD~1     # Undo commit, keep changes unstaged (default)
+git reset --hard HEAD~1      # Undo commit, discard changes (DANGEROUS)
+git reset --hard origin/main # Reset to remote state (DANGEROUS)
+
+# Revert (create new commit that undoes)
+git revert commit_hash       # Revert specific commit
+git revert HEAD              # Revert last commit
+git revert --no-commit HEAD  # Revert without committing
+
+# Clean untracked files
+git clean -n                 # Dry run (show what would be deleted)
+git clean -f                 # Delete untracked files
+git clean -fd                # Delete untracked files and directories
+git clean -fX                # Delete only ignored files
+git clean -fx                # Delete untracked and ignored
+Tagging
+
+# List tags
+git tag                      # List all tags
+git tag -l "v1.*"            # List tags matching pattern
+
+# Create tags
+git tag v1.0.0                  # Lightweight tag
+git tag -a v1.0.0 -m "message"  # Annotated tag
+git tag -a v1.0.0 commit_hash   # Tag specific commit
+
+# Show tag
+git show v1.0.0              # Show tag details
+
+# Push tags
+git push origin v1.0.0       # Push specific tag
+git push origin --tags       # Push all tags
+git push --follow-tags       # Push commit and associated tags
+
+# Delete tags
+git tag -d v1.0.0                   # Delete local tag
+git push origin --delete v1.0.0     # Delete remote tag
+Rebasing
+
+# Rebase
+git rebase main              # Rebase current branch onto main
+git rebase -i HEAD~3         # Interactive rebase last 3 commits
+git rebase --continue        # Continue after resolving conflicts
+git rebase --abort           # Abort rebase
+git rebase --skip            # Skip current commit
+Git Extras
+
+# Submodules
+git submodule add url path      # Add submodule
+git submodule init              # Initialize submodules
+git submodule update            # Update submodules
+git submodule update --remote   # Update to latest
+git clone --recursive url       # Clone with submodules
+
+# Cherry-pick
+git cherry-pick commit_hash  # Apply specific commit
+git cherry-pick --continue   # Continue after conflict
+git cherry-pick --abort      # Abort cherry-pick
+
+# Bisect (find bad commit)
+git bisect start             # Start bisect
+git bisect bad               # Mark current as bad
+git bisect good commit_hash  # Mark commit as good
+git bisect reset             # End bisect
+
+# Reflog (recover lost commits)
+git reflog                   # Show reflog
+git reflog show branch-name  # Reflog for branch
+git reset --hard HEAD@{2}    # Restore to reflog entry
+
+# Archive
+git archive --format=zip HEAD > archive.zip             # Create archive
+git archive --format=tar HEAD | gzip > archive.tar.gz   # Tar.gz archive
+19. DOCKER COMMANDS
+Docker System
+
+# Docker version and info
+docker --version             # Show version
+docker version               # Detailed version info
+docker info                  # System-wide information
+
+# Docker service (systemd)
+systemctl status docker      # Check Docker service
+systemctl start docker       # Start Docker
+systemctl stop docker        # Stop Docker
+systemctl enable docker      # Enable at boot
+systemctl restart docker     # Restart Docker
+Docker Images
+
+# List images
+docker images                           # List all images
+docker images -a                        # List all images (including intermediate)
+docker images -q                        # List only image IDs
+docker images --digests                 # Show digests
+docker images --filter "dangling=true"  # Dangling images
+
+# Pull images
+docker pull image:tag        # Pull image
+docker pull ubuntu:22.04     # Pull specific version
+docker pull --all-tags image # Pull all tags
+
+# Search images
+docker search ubuntu            # Search Docker Hub
+docker search --limit 5 ubuntu  # Limit results
+
+# Build images
+docker build -t name:tag .                          # Build from Dockerfile
+docker build -t name:tag -f Dockerfile.prod .       # Specify Dockerfile
+docker build --no-cache -t name:tag .               # Build without cache
+docker build --build-arg VAR=value -t name:tag .    # Build args
+
+# Remove images
+docker rmi image_id          # Remove image
+docker rmi image:tag         # Remove by tag
+docker rmi -f image_id       # Force remove
+docker image prune           # Remove unused images
+docker image prune -a        # Remove all unused images
+
+# Image details
+docker inspect image_id      # Inspect image
+docker history image_id      # Show image layers
+
+# Tag images
+docker tag source:tag target:tag  # Tag image
+docker tag image_id new_name:tag  # Tag by ID
+
+# Save/load images
+docker save image:tag > image.tar   # Save to tar
+docker save -o image.tar image:tag  # Save to file
+docker load < image.tar             # Load from tar
+docker load -i image.tar            # Load from file
+
+# Export/import images
+docker export container_id > container.tar  # Export container
+docker import container.tar name:tag        # Import as image
+Docker Containers
+
+# Run containers
+docker run image                        # Run container
+docker run -d image                     # Run detached (background)
+docker run -it image                    # Interactive with terminal
+docker run --name mycontainer image     # Name container
+docker run -p 8080:80 image             # Port mapping (host:container)
+docker run -P image                     # Map all exposed ports
+docker run -v /host:/container image    # Volume mount
+docker run --rm image                   # Remove container when stops
+docker run -e VAR=value image           # Set environment variable
+docker run --env-file .env image        # Load env from file
+docker run --network mynet image        # Connect to network
+docker run --restart always image       # Restart policy
+docker run --memory 512m image          # Memory limit
+docker run --cpus 2 image               # CPU limit
+
+# List containers
+docker ps                           # List running containers
+docker ps -a                        # List all containers
+docker ps -q                        # List container IDs only
+docker ps -l                        # List last created container
+docker ps --filter "status=exited"  # Filter by status
+
+# Container management
+docker start container_id       # Start container
+docker stop container_id        # Stop container (SIGTERM)
+docker stop -t 30 container_id  # Stop with 30s timeout
+docker kill container_id        # Kill container (SIGKILL)
+docker restart container_id     # Restart container
+docker pause container_id       # Pause container
+docker unpause container_id     # Unpause container
+docker rename old new           # Rename container
+
+# Remove containers
+docker rm container_id       # Remove container
+docker rm -f container_id    # Force remove running container
+docker rm $(docker ps -aq)   # Remove all containers
+docker container prune       # Remove all stopped containers
+
+# Container details
+docker inspect container_id             # Inspect container
+docker logs container_id                # View logs
+docker logs -f container_id             # Follow logs
+docker logs --tail 100 container_id     # Last 100 lines
+docker logs --since 10m container_id    # Last 10 minutes
+docker top container_id                 # Running processes
+docker stats                            # Resource usage (live)
+docker stats --no-stream                # Resource usage (snapshot)
+docker port container_id                # Port mappings
+
+# Execute commands
+docker exec container_id command            # Execute command
+docker exec -it container_id                # Interactive 
+docker exec -u user container_id command    # As specific user
+
+# Copy files
+docker cp container_id:/path/file ./local   # Copy from container
+docker cp ./local container_id:/path/       # Copy to container
+
+# Attach to container
+docker attach container_id   # Attach to running container
+Docker Volumes
+
+# List volumes
+docker volume ls                            # List all volumes
+docker volume ls -q                         # List volume names only
+docker volume ls --filter "dangling=true"   # Dangling volumes
+
+# Create volume
+docker volume create myvolume                                   # Create named volume
+docker volume create --driver local --opt type=nfs myvolume     # With options
+
+# Inspect volume
+docker volume inspect myvolume  # Volume details
+
+# Remove volumes
+docker volume rm myvolume    # Remove volume
+docker volume prune          # Remove unused volumes
+
+# Use volumes
+docker run -v myvolume:/data image                                  # Named volume
+docker run -v /host/path:/container/path image                      # Bind mount
+docker run --mount type=volume,source=myvolume,target=/data image   # Long syntax
+Docker Networks
+
+# List networks
+docker network ls                           # List all networks
+docker network ls --filter "driver=bridge"  # Filter by driver
+
+# Create network
+docker network create mynetwork                         # Create bridge network
+docker network create --driver bridge mynetwork         # Specify driver
+docker network create --subnet 172.20.0.0/16 mynetwork  # With subnet
+
+# Inspect network
+docker network inspect mynetwork  # Network details
+
+# Connect/disconnect
+docker network connect mynetwork container_id       # Connect container
+docker network disconnect mynetwork container_id    # Disconnect
+
+# Remove networks
+docker network rm mynetwork  # Remove network
+docker network prune         # Remove unused networks
+Docker Compose
+
+# Docker Compose commands
+docker-compose --version                # Show version
+docker-compose up                       # Create and start containers
+docker-compose up -d                    # Detached mode
+docker-compose down                     # Stop and remove containers
+docker-compose down -v                  # Also remove volumes
+docker-compose start                    # Start services
+docker-compose stop                     # Stop services
+docker-compose restart                  # Restart services
+docker-compose ps                       # List containers
+docker-compose logs                     # View logs
+docker-compose logs -f                  # Follow logs
+docker-compose logs service             # Logs for specific service
+docker-compose exec service command     # Execute command
+docker-compose build                    # Build images
+docker-compose build --no-cache         # Build without cache
+docker-compose pull                     # Pull images
+docker-compose config                   # Validate and view config
+docker-compose scale service=3          # Scale service
+Docker System Management
+
+# System info
+docker system df             # Show disk usage
+docker system df -v          # Verbose disk usage
+docker system events         # Real-time events
+docker system info           # System information
+
+# Cleanup
+docker system prune             # Remove unused data
+docker system prune -a          # Remove all unused data
+docker system prune --volumes   # Also remove volumes
+docker system prune -f          # Force without prompt
+Docker Registry
+
+# Login/logout
+docker login                        # Login to Docker Hub
+docker login registry.example.com   # Login to private registry
+docker logout                       # Logout
+
+# Push images
+docker push image:tag                       # Push to registry
+docker push registry.example.com/image:tag  # Push to private registry
+
+# Tag for registry
+docker tag local:tag registry.example.com/image:tag
+20. KUBERNETES (kubectl) COMMANDS
+Cluster Information
+
+# Cluster info
+kubectl cluster-info         # Display cluster info
+kubectl version              # Client and server version
+kubectl version --short      # Short version
+kubectl api-resources        # List API resources
+kubectl api-versions         # List API versions
+
+# Configuration
+kubectl config view                                             # Show kubeconfig
+kubectl config get-contexts                                     # List contexts
+kubectl config current-context                                  # Show current context
+kubectl config use-context context-name                         # Switch context
+kubectl config set-context --current --namespace=mynamespace    # Set namespace
+Pods
+
+# List pods
+kubectl get pods                # List pods in current namespace
+kubectl get pods -A             # List pods in all namespaces
+kubectl get pods -n namespace   # List pods in specific namespace
+kubectl get pods -o wide        # Wide output (more details)
+kubectl get pods -o json        # JSON output
+kubectl get pods -o yaml        # YAML output
+kubectl get pods --show-labels  # Show labels
+kubectl get pods -l app=myapp   # Filter by label
+
+# Describe pod
+kubectl describe pod pod-name  # Detailed pod information
+
+# Create/delete pods
+kubectl run nginx --image=nginx                             # Run pod
+kubectl run nginx --image=nginx --dry-run=client -o yaml    # Generate YAML
+kubectl delete pod pod-name                                 # Delete pod
+kubectl delete pods --all                                   # Delete all pods
+
+# Pod logs
+kubectl logs pod-name                       # View pod logs
+kubectl logs pod-name -f                    # Follow logs
+kubectl logs pod-name -c container-name     # Specific container
+kubectl logs pod-name --previous            # Previous instance logs
+kubectl logs pod-name --tail=100            # Last 100 lines
+kubectl logs pod-name --since=10m           # Last 10 minutes
+
+# Execute commands
+kubectl exec pod-name -- command                    # Execute command
+kubectl exec -it pod-name --                        # Interactive 
+kubectl exec -it pod-name -c container-name --      # Specific container
+
+# Port forwarding
+kubectl port-forward pod-name 8080:80  # Forward port
+
+# Copy files
+kubectl cp pod-name:/path/file ./local  # Copy from pod
+kubectl cp ./local pod-name:/path/      # Copy to pod
+Deployments
+
+# List deployments
+kubectl get deployments      # List deployments
+kubectl get deploy           # Short form
+kubectl get deployments -A   # All namespaces
+
+# Create deployment
+kubectl create deployment nginx --image=nginx               # Create deployment
+kubectl create deployment nginx --image=nginx --replicas=3  # With replicas
+
+# Describe deployment
+kubectl describe deployment deployment-name
+
+# Scale deployment
+kubectl scale deployment deployment-name --replicas=5
+
+# Update deployment
+kubectl set image deployment/deployment-name container=image:tag
+kubectl rollout restart deployment/deployment-name  # Restart deployment
+
+# Deployment rollout
+kubectl rollout status deployment/deployment-name                   # Check status
+kubectl rollout history deployment/deployment-name                  # View history
+kubectl rollout undo deployment/deployment-name                     # Rollback
+kubectl rollout undo deployment/deployment-name --to-revision=2     # Specific revision
+
+# Delete deployment
+kubectl delete deployment deployment-name
+Services
+
+# List services
+kubectl get services         # List services
+kubectl get svc              # Short form
+kubectl get services -A      # All namespaces
+
+# Describe service
+kubectl describe service service-name
+
+# Create service
+kubectl expose deployment deployment-name --port=80 --type=NodePort     # Expose deployment
+kubectl create service clusterip myservice --tcp=80:8080                # ClusterIP service
+
+# Delete service
+kubectl delete service service-name
+Namespaces
+
+# List namespaces
+kubectl get namespaces       # List all namespaces
+kubectl get ns               # Short form
+
+# Create namespace
+kubectl create namespace mynamespace
+
+# Delete namespace
+kubectl delete namespace mynamespace
+
+# Set default namespace
+kubectl config set-context --current --namespace=mynamespace
+ConfigMaps and Secrets
+
+# ConfigMaps
+kubectl get configmaps       # List ConfigMaps
+kubectl get cm               # Short form
+kubectl describe configmap cm-name
+kubectl create configmap myconfig --from-literal=key=value
+kubectl create configmap myconfig --from-file=file.txt
+kubectl delete configmap cm-name
+
+# Secrets
+kubectl get secrets          # List secrets
+kubectl describe secret secret-name
+kubectl create secret generic mysecret --from-literal=password=mypass
+kubectl create secret generic mysecret --from-file=./secret.txt
+kubectl delete secret secret-name
+Apply and Manage Resources
+
+# Apply configuration
+kubectl apply -f file.yaml              # Apply from file
+kubectl apply -f directory/             # Apply all files in directory
+kubectl apply -f https://url/file.yaml  # Apply from URL
+
+# Create from file
+kubectl create -f file.yaml  # Create from file
+
+# Delete from file
+kubectl delete -f file.yaml  # Delete resources in file
+
+# Replace
+kubectl replace -f file.yaml  # Replace existing resource
+
+# Edit resource
+kubectl edit deployment deployment-name  # Edit in editor
+
+# Patch resource
+kubectl patch deployment deployment-name -p '{"spec":{"replicas":5}}'
+Nodes
+
+# List nodes
+kubectl get nodes            # List all nodes
+kubectl get nodes -o wide    # Wide output
+
+# Describe node
+kubectl describe node node-name
+
+# Cordon/uncordon (maintenance)
+kubectl cordon node-name                                            # Mark node unschedulable
+kubectl uncordon node-name                                          # Mark node schedulable
+kubectl drain node-name                                             # Drain node for maintenance
+kubectl drain node-name --ignore-daemonsets --delete-emptydir-data  # Force drain
+Labels and Annotations
+
+# Labels
+kubectl label pods pod-name app=myapp               # Add label
+kubectl label pods pod-name app-                    # Remove label
+kubectl label pods pod-name app=newapp --overwrite  # Update label
+
+# Annotations
+kubectl annotate pods pod-name description="My pod"     # Add annotation
+kubectl annotate pods pod-name description-             # Remove annotation
+Resource Monitoring
+
+# Resource usage
+kubectl top nodes               # Node resource usage
+kubectl top pods                # Pod resource usage
+kubectl top pod pod-name        # Specific pod usage
+kubectl top pods -n namespace   # Namespace pods usage
+
+# Debugging
+kubectl get events                                          # List cluster events
+kubectl get events --sort-by=.metadata.creationTimestamp    # Sorted events
+kubectl get events -n namespace                             # Namespace events
+
+# Troubleshooting
+kubectl describe pod pod-name       # Detailed pod info (shows errors)
+kubectl logs pod-name --previous    # Logs from crashed container
+kubectl get pod pod-name -o yaml    # Full pod specification
+
+# Debug with ephemeral container
+kubectl debug pod-name -it --image=busybox  # Add debug container
+
+# Copy resources
+kubectl get deployment deployment-name -o yaml > deployment.yaml  # Export to file
+RBAC (Role-Based Access Control)
+
+# Service accounts
+kubectl get serviceaccounts         # List service accounts
+kubectl get sa                      # Short form
+kubectl create serviceaccount mysa  # Create service account
+
+# Roles and RoleBindings
+kubectl get roles                   # List roles
+kubectl get rolebindings            # List role bindings
+kubectl get clusterroles            # List cluster roles
+kubectl get clusterrolebindings     # List cluster role bindings
+
+# Create role
+kubectl create role myrole --verb=get,list --resource=pods
+
+# Create role binding
+kubectl create rolebinding mybinding --role=myrole --user=myuser
+Jobs and CronJobs
+
+# Jobs
+kubectl get jobs             # List jobs
+kubectl describe job job-name
+kubectl create job myjob --image=busybox -- echo "Hello"
+kubectl delete job job-name
+
+# CronJobs
+kubectl get cronjobs         # List cronjobs
+kubectl get cj               # Short form
+kubectl describe cronjob cronjob-name
+kubectl create cronjob mycron --image=busybox --schedule="*/5 * * * *" -- echo "Hello"
+kubectl delete cronjob cronjob-name
+Ingress
+
+# Ingress
+kubectl get ingress          # List ingress resources
+kubectl get ing              # Short form
+kubectl describe ingress ingress-name
+kubectl delete ingress ingress-name
+Persistent Volumes
+
+# Persistent Volumes
+kubectl get pv               # List persistent volumes
+kubectl describe pv pv-name
+
+# Persistent Volume Claims
+kubectl get pvc              # List PVCs
+kubectl describe pvc pvc-name
+kubectl delete pvc pvc-name
+StatefulSets
+
+# StatefulSets
+kubectl get statefulsets     # List StatefulSets
+kubectl get sts              # Short form
+kubectl describe statefulset ss-name
+kubectl scale statefulset ss-name --replicas=5
+kubectl delete statefulset ss-name
+DaemonSets
+
+# DaemonSets
+kubectl get daemonsets       # List DaemonSets
+kubectl get ds               # Short form
+kubectl describe daemonset ds-name
+kubectl delete daemonset ds-name
+21. ANSIBLE COMMANDS
+Ansible Ad-Hoc Commands
+
+# Basic ad-hoc syntax
+ansible all -m module -a "arguments"
+
+# Ping hosts
+ansible all -m ping          # Ping all hosts
+ansible webservers -m ping   # Ping specific group
+ansible host1 -m ping        # Ping specific host
+
+# Command module (default)
+ansible all -m command -a "uptime"
+ansible all -a "uptime"      # Short form (command is default)
+ansible all -a "df -h"       # Disk usage
+ansible all -a "free -m"     # Memory info
+
+# Shell module (supports shell features)
+ansible all -m shell -a "ps aux | grep httpd"
+ansible all -m shell -a "ls -la /tmp > /tmp/output.txt"
+
+# Copy files
+ansible all -m copy -a "src=/local/file dest=/remote/path"
+ansible all -m copy -a "src=/local/file dest=/remote/path mode=0644 owner=user"
+
+# File operations
+ansible all -m file -a "path=/tmp/test state=touch"                 # Create file
+ansible all -m file -a "path=/tmp/test state=absent"                # Delete file
+ansible all -m file -a "path=/tmp/dir state=directory mode=0755"    # Create dir
+ansible all -m file -a "src=/path/file dest=/path/link state=link"  # Symlink
+
+# Package management
+ansible all -m dnf -a "name=httpd state=present"  # Install package
+ansible all -m dnf -a "name=httpd state=latest"   # Update package
+ansible all -m dnf -a "name=httpd state=absent"   # Remove package
+
+# Service management
+ansible all -m service -a "name=httpd state=started"    # Start service
+ansible all -m service -a "name=httpd state=stopped"    # Stop service
+ansible all -m service -a "name=httpd state=restarted"  # Restart service
+ansible all -m service -a "name=httpd enabled=yes"      # Enable at boot
+
+# User management
+ansible all -m user -a "name=john state=present"
+ansible all -m user -a "name=john state=absent remove=yes"
+
+# Gather facts
+ansible all -m setup                                    # Gather all facts
+ansible all -m setup -a "filter=ansible_distribution*"  # Filter facts
+
+# Execute with sudo
+ansible all -m command -a "whoami" --become
+ansible all -m command -a "whoami" -b  # Short form
+
+# Specify user
+ansible all -m ping -u username
+ansible all -m ping --user username
+
+# Limit hosts
+ansible all -m ping --limit "host1,host2"
+ansible all -m ping --limit "webservers:!host1"  # Exclude host1
+
+# Check mode (dry run)
+ansible all -m command -a "uptime" --check
+ansible all -m command -a "uptime" -C  # Short form
+Ansible Playbook Commands
+
+# Run playbook
+ansible-playbook playbook.yml  # Execute playbook
+
+# Check syntax
+ansible-playbook playbook.yml --syntax-check
+
+# Dry run
+ansible-playbook playbook.yml --check
+ansible-playbook playbook.yml -C  # Short form
+
+# Diff mode
+ansible-playbook playbook.yml --diff            # Show changes
+ansible-playbook playbook.yml --check --diff    # Dry run with diff
+
+# Limit execution
+ansible-playbook playbook.yml --limit webservers
+ansible-playbook playbook.yml -l host1,host2  # Short form
+
+# Tags
+ansible-playbook playbook.yml --tags "install,configure"
+ansible-playbook playbook.yml --skip-tags "test"
+ansible-playbook playbook.yml --list-tags  # List available tags
+
+# Start at task
+ansible-playbook playbook.yml --start-at-task "task name"
+
+# Step through
+ansible-playbook playbook.yml --step  # Confirm each task
+
+# Verbose output
+ansible-playbook playbook.yml -v     # Verbose
+ansible-playbook playbook.yml -vv    # More verbose
+ansible-playbook playbook.yml -vvv   # Very verbose
+ansible-playbook playbook.yml -vvvv  # Debug level
+
+# Extra variables
+ansible-playbook playbook.yml --extra-vars "version=1.0 env=prod"
+ansible-playbook playbook.yml -e "version=1.0"      # Short form
+ansible-playbook playbook.yml -e @vars.yml          # From file
+
+# Inventory
+ansible-playbook playbook.yml -i inventory.ini
+ansible-playbook playbook.yml --inventory hosts  # Alternative
+
+# Ask for passwords
+ansible-playbook playbook.yml --ask-pass            # SSH password
+ansible-playbook playbook.yml --ask-become-pass     # Sudo password
+ansible-playbook playbook.yml -K                    # Ask become password (short)
+
+# List tasks
+ansible-playbook playbook.yml --list-tasks
+
+# List hosts
+ansible-playbook playbook.yml --list-hosts
+Ansible Inventory Commands
+
+# List inventory
+ansible-inventory --list            # Show inventory in JSON
+ansible-inventory --graph           # Show inventory graph
+ansible-inventory --host hostname   # Show host variables
+
+# Inventory file locations
+ansible all --list-hosts -i inventory.ini  # Use specific inventory
+Ansible Vault Commands
+
+# Create encrypted file
+ansible-vault create secret.yml
+
+# Edit encrypted file
+ansible-vault edit secret.yml
+
+# Encrypt existing file
+ansible-vault encrypt file.yml
+ansible-vault encrypt file1.yml file2.yml  # Multiple files
+
+# Decrypt file
+ansible-vault decrypt file.yml
+
+# View encrypted file
+ansible-vault view file.yml
+
+# Change password
+ansible-vault rekey file.yml
+
+# Use vault in playbook
+ansible-playbook playbook.yml --ask-vault-pass
+ansible-playbook playbook.yml --vault-password-file ~/.vault_pass
+ansible-playbook playbook.yml --vault-id @prompt
+Ansible Galaxy Commands
+
+# Install role
+ansible-galaxy install username.rolename
+ansible-galaxy install -r requirements.yml
+
+# List installed roles
+ansible-galaxy list
+
+# Remove role
+ansible-galaxy remove username.rolename
+
+# Initialize new role
+ansible-galaxy init rolename
+
+# Search for roles
+ansible-galaxy search elasticsearch
+
+# Role information
+ansible-galaxy info username.rolename
+Ansible Configuration
+
+# View configuration
+ansible-config view          # View current config
+ansible-config list          # List all settings
+ansible-config dump          # Dump current settings
+
+# Configuration file locations
+/etc/ansible/ansible.cfg     # System-wide
+~/.ansible.cfg               # User-specific
+./ansible.cfg                # Project-specific (highest priority)
+22. TERRAFORM COMMANDS
+Terraform Initialization
+
+# Initialize working directory
+terraform init                  # Initialize Terraform
+terraform init -upgrade         # Upgrade providers
+terraform init -reconfigure     # Reconfigure backend
+terraform init -migrate-state   # Migrate state
+Terraform Planning
+
+# Create execution plan
+terraform plan                          # Show execution plan
+terraform plan -out=plan.out            # Save plan to file
+terraform plan -var="key=value"         # Pass variables
+terraform plan -var-file="vars.tfvars"  # Use variable file
+terraform plan -target=resource.name    # Target specific resource
+terraform plan -refresh=false           # Don't refresh state
+terraform plan -destroy                 # Plan destroy
+Terraform Apply
+
+# Apply changes
+terraform apply                         # Apply with confirmation
+terraform apply -auto-approve           # Apply without confirmation
+terraform apply plan.out                # Apply saved plan
+terraform apply -var="key=value"        # With variables
+terraform apply -target=resource.name   # Target specific resource
+terraform apply -parallelism=10         # Set parallelism
+Terraform Destroy
+
+# Destroy infrastructure
+terraform destroy                           # Destroy with confirmation
+terraform destroy -auto-approve             # Destroy without confirmation
+terraform destroy -target=resource.name     # Destroy specific resource
+Terraform State
+
+# State management
+terraform state list                        # List resources in state
+terraform state show resource.name          # Show resource details
+terraform state pull                        # Pull remote state
+terraform state push                        # Push local state
+terraform state mv source destination       # Move resource
+terraform state rm resource.name            # Remove resource from state
+terraform state replace-provider old new    # Replace provider
+
+# State backup
+terraform state list > state_backup.txt
+Terraform Workspace
+
+# Workspace management
+terraform workspace list        # List workspaces
+terraform workspace show        # Show current workspace
+terraform workspace new dev     # Create new workspace
+terraform workspace select dev  # Switch workspace
+terraform workspace delete dev  # Delete workspace
+Terraform Output
+
+# View outputs
+terraform output                    # Show all outputs
+terraform output output_name        # Show specific output
+terraform output -json              # JSON format
+terraform output -raw output_name   # Raw value (no quotes)
+Terraform Validation
+
+# Validate configuration
+terraform validate           # Validate configuration
+terraform fmt                # Format configuration files
+terraform fmt -check         # Check if formatting needed
+terraform fmt -recursive     # Format recursively
+terraform fmt -diff          # Show formatting changes
+Terraform Console
+
+# Interactive console
+terraform console            # Launch interactive console
+# In console, can test expressions:
+# > var.instance_type
+# > aws_instance.example.id
+Terraform Import
+
+# Import existing resources
+terraform import resource.name id  # Import resource
+terraform import aws_instance.example i-1234567890abcdef0
+Terraform Graph
+
+# Generate dependency graph
+terraform graph                             # Output DOT format
+terraform graph | dot -Tpng > graph.png     # Generate image
+Terraform Providers
+
+# Provider management
+terraform providers                 # Show providers
+terraform providers lock            # Lock provider versions
+terraform providers mirror dir      # Mirror providers to directory
+terraform providers schema -json    # Show provider schema
+Terraform Debug
+
+# Enable debug logging
+export TF_LOG=TRACE                 # Set log level (TRACE, DEBUG, INFO, WARN, ERROR)
+export TF_LOG_PATH=terraform.log    # Log to file
+terraform apply                     # Run with logging
+Terraform Taint
+
+# Mark resources for recreation
+terraform taint resource.name       # Taint resource (deprecated)
+terraform untaint resource.name     # Untaint resource (deprecated)
+
+# Modern replacement
+terraform apply -replace=resource.name  # Force replacement
+23. AWS CLI COMMANDS
+AWS CLI Configuration
+
+# Configure AWS CLI
+aws configure                       # Interactive configuration
+aws configure list                  # List configuration
+aws configure get region            # Get specific value
+aws configure set region us-west-2  # Set specific value
+
+# Named profiles
+aws configure --profile myprofile
+aws s3 ls --profile myprofile
+
+# Configuration files
+~/.aws/credentials           # Credentials file
+~/.aws/config                # Configuration file
+AWS EC2 Commands
+
+# List instances
+aws ec2 describe-instances   # All instances
+aws ec2 describe-instances --instance-ids i-1234567890abcdef0
+aws ec2 describe-instances --filters "Name=instance-state-name,Values=running"
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output table
+
+# Start/stop instances
+aws ec2 start-instances --instance-ids i-1234567890abcdef0
+aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+aws ec2 reboot-instances --instance-ids i-1234567890abcdef0
+aws ec2 terminate-instances --instance-ids i-1234567890abcdef0
+
+# Create instance
+aws ec2 run-instances --image-id ami-12345678 --instance-type t2.micro --key-name MyKey
+
+# Describe images (AMIs)
+aws ec2 describe-images --owners self
+aws ec2 describe-images --image-ids ami-12345678
+
+# Security groups
+aws ec2 describe-security-groups
+aws ec2 create-security-group --group-name MyGroup --description "My security group"
+aws ec2 authorize-security-group-ingress --group-id sg-12345678 --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+# Key pairs
+aws ec2 describe-key-pairs
+aws ec2 create-key-pair --key-name MyKey --query 'KeyMaterial' --output text > MyKey.pem
+
+# EBS volumes
+aws ec2 describe-volumes
+aws ec2 create-volume --size 10 --availability-zone us-west-2a
+aws ec2 attach-volume --volume-id vol-12345678 --instance-id i-1234567890abcdef0 --device /dev/sdf
+aws ec2 detach-volume --volume-id vol-12345678
+
+# Snapshots
+aws ec2 describe-snapshots --owner-ids self
+aws ec2 create-snapshot --volume-id vol-12345678 --description "My snapshot"
+aws ec2 delete-snapshot --snapshot-id snap-12345678
+AWS S3 Commands
+
+# List buckets
+aws s3 ls                           # List all buckets
+aws s3 ls s3://bucket-name          # List bucket contents
+aws s3 ls s3://bucket-name/prefix/  # List with prefix
+
+# Copy files
+aws s3 cp file.txt s3://bucket-name/                # Upload file
+aws s3 cp s3://bucket-name/file.txt ./              # Download file
+aws s3 cp s3://bucket1/file.txt s3://bucket2/       # Copy between buckets
+aws s3 cp directory s3://bucket-name/ --recursive   # Upload directory
+
+# Sync
+aws s3 sync directory s3://bucket-name/  # Sync directory to S3
+aws s3 sync s3://bucket-name/ directory  # Sync S3 to directory
+aws s3 sync s3://bucket1/ s3://bucket2/  # Sync between buckets
+
+# Move files
+aws s3 mv file.txt s3://bucket-name/    # Move file
+aws s3 mv s3://bucket-name/file.txt ./  # Move from S3
+
+# Remove files
+aws s3 rm s3://bucket-name/file.txt         # Delete file
+aws s3 rm s3://bucket-name/ --recursive     # Delete all objects
+
+# Bucket operations
+aws s3 mb s3://bucket-name          # Create bucket
+aws s3 rb s3://bucket-name          # Remove empty bucket
+aws s3 rb s3://bucket-name --force  # Remove bucket with contents
+
+# S3 API commands
+aws s3api list-buckets       # List buckets (API)
+aws s3api get-object --bucket bucket-name --key file.txt output.txt
+aws s3api put-object --bucket bucket-name --key file.txt --body file.txt
+aws s3api delete-object --bucket bucket-name --key file.txt
+
+# Bucket policies
+aws s3api get-bucket-policy --bucket bucket-name
+aws s3api put-bucket-policy --bucket bucket-name --policy file://policy.json
+
+# Bucket versioning
+aws s3api get-bucket-versioning --bucket bucket-name
+aws s3api put-bucket-versioning --bucket bucket-name --versioning-configuration Status=Enabled
+AWS IAM Commands
+
+# Users
+aws iam list-users                      # List all users
+aws iam get-user --user-name username   # Get user details
+aws iam create-user --user-name username
+aws iam delete-user --user-name username
+
+# Access keys
+aws iam list-access-keys --user-name username
+aws iam create-access-key --user-name username
+aws iam delete-access-key --user-name username --access-key-id AKIAIOSFODNN7EXAMPLE
+
+# Groups
+aws iam list-groups          # List all groups
+aws iam create-group --group-name groupname
+aws iam add-user-to-group --user-name username --group-name groupname
+aws iam remove-user-from-group --user-name username --group-name groupname
+
+# Policies
+aws iam list-policies        # List all policies
+aws iam get-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+aws iam list-attached-user-policies --user-name username
+aws iam attach-user-policy --user-name username --policy-arn arn
+
+# Roles
+aws iam list-roles           # List all roles
+aws iam get-role --role-name rolename
+aws iam create-role --role-name rolename --assume-role-policy-document file://trust-policy.json
+AWS RDS Commands
+
+# DB instances
+aws rds describe-db-instances  # List all DB instances
+aws rds describe-db-instances --db-instance-identifier mydb
+aws rds create-db-instance --db-instance-identifier mydb --db-instance-class db.t2.micro --engine mysql --master-username admin --master-user-password password
+aws rds delete-db-instance --db-instance-identifier mydb --skip-final-snapshot
+aws rds reboot-db-instance --db-instance-identifier mydb
+
+# Snapshots
+aws rds describe-db-snapshots
+aws rds create-db-snapshot --db-instance-identifier mydb --db-snapshot-identifier mydb-snapshot
+aws rds delete-db-snapshot --db-snapshot-identifier mydb-snapshot
+AWS Lambda Commands
+
+# List functions
+aws lambda list-functions    # List all functions
+
+# Get function
+aws lambda get-function --function-name myfunction
+
+# Create function
+aws lambda create-function --function-name myfunction --runtime python3.9 --role arn --handler lambda_function.lambda_handler --zip-file fileb://function.zip
+
+# Update function code
+aws lambda update-function-code --function-name myfunction --zip-file fileb://function.zip
+
+# Invoke function
+aws lambda invoke --function-name myfunction output.txt
+aws lambda invoke --function-name myfunction --payload '{"key":"value"}' output.txt
+
+# Delete function
+aws lambda delete-function --function-name myfunction
+AWS CloudWatch Commands
+
+# Logs
+aws logs describe-log-groups  # List log groups
+aws logs describe-log-streams --log-group-name /aws/lambda/myfunction
+aws logs get-log-events --log-group-name /aws/lambda/myfunction --log-stream-name stream-name
+aws logs filter-log-events --log-group-name /aws/lambda/myfunction --filter-pattern "ERROR"
+
+# Metrics
+aws cloudwatch list-metrics  # List all metrics
+aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --dimensions Name=InstanceId,Value=i-1234567890abcdef0 --start-time 2024-01-01T00:00:00Z --end-time 2024-01-02T00:00:00Z --period 3600 --statistics Average
+
+# Alarms
+aws cloudwatch describe-alarms
+aws cloudwatch put-metric-alarm --alarm-name cpu-alarm --alarm-description "CPU alarm" --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 80 --comparison-operator GreaterThanThreshold
+aws cloudwatch delete-alarms --alarm-names cpu-alarm
+AWS VPC Commands
+
+# VPCs
+aws ec2 describe-vpcs         # List VPCs
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+aws ec2 delete-vpc --vpc-id vpc-12345678
+
+# Subnets
+aws ec2 describe-subnets      # List subnets
+aws ec2 create-subnet --vpc-id vpc-12345678 --cidr-block 10.0.1.0/24
+aws ec2 delete-subnet --subnet-id subnet-12345678
+
+# Internet Gateways
+aws ec2 describe-internet-gateways
+aws ec2 create-internet-gateway
+aws ec2 attach-internet-gateway --internet-gateway-id igw-12345678 --vpc-id vpc-12345678
+aws ec2 detach-internet-gateway --internet-gateway-id igw-12345678 --vpc-id vpc-12345678
+
+# Route tables
+aws ec2 describe-route-tables
+aws ec2 create-route --route-table-id rtb-12345678 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-12345678
+AWS CLI Output Formatting
+
+# Output formats
+aws ec2 describe-instances --output json    # JSON (default)
+aws ec2 describe-instances --output text    # Text
+aws ec2 describe-instances --output table   # Table
+aws ec2 describe-instances --output yaml    # YAML
+
+# Query with JMESPath
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name,PrivateIpAddress]' --output table
+aws ec2 describe-instances --query 'Reservations[*].Instances[?State.Name==`running`].[InstanceId]' --output text
+24. MONITORING COMMANDS
+Prometheus Commands
+
+# Prometheus service (systemd)
+systemctl status prometheus
+systemctl start prometheus
+systemctl stop prometheus
+systemctl restart prometheus
+
+# Prometheus configuration
+/etc/prometheus/prometheus.yml  # Main config file
+
+# Reload configuration
+curl -X POST http://localhost:9090/-/reload
+kill -HUP $(pidof prometheus)
+
+# Prometheus CLI
+promtool check config prometheus.yml                                                    # Validate config
+promtool check rules rules.yml                                                          # Validate rules
+promtool query instant 'up{job="node"}'                                                 # Query instant
+promtool query range 'up' --start="2024-01-01T00:00:00Z" --end="2024-01-02T00:00:00Z"   # Query range
+
+# PromQL queries (via API or UI)
+# up - Check if targets are up
+# rate(http_requests_total[5m]) - Request rate
+# sum(rate(http_requests_total[5m])) by (job) - Sum by job
+# avg(node_cpu_seconds_total) - Average CPU
+Node Exporter Commands
+
+# Node Exporter service
+systemctl status node_exporter
+systemctl start node_exporter
+systemctl restart node_exporter
+
+# Default metrics endpoint
+curl http://localhost:9100/metrics  # View metrics
+Grafana Commands
+
+# Grafana service
+systemctl status grafana-server
+systemctl start grafana-server
+systemctl stop grafana-server
+systemctl restart grafana-server
+
+# Grafana CLI
+grafana-cli plugins list-remote                     # List available plugins
+grafana-cli plugins install plugin-name             # Install plugin
+grafana-cli plugins update plugin-name              # Update plugin
+grafana-cli plugins remove plugin-name              # Remove plugin
+grafana-cli admin reset-admin-password newpassword  # Reset admin password
+
+# Grafana configuration
+/etc/grafana/grafana.ini     # Main config file
+Elasticsearch Commands
+
+# Elasticsearch service
+systemctl status elasticsearch
+systemctl start elasticsearch
+systemctl stop elasticsearch
+systemctl restart elasticsearch
+
+# Cluster health
+curl -X GET "localhost:9200/_cluster/health?pretty"
+curl -X GET "localhost:9200/_cat/health?v"
+
+# Nodes
+curl -X GET "localhost:9200/_cat/nodes?v"
+
+# Indices
+curl -X GET "localhost:9200/_cat/indices?v"
+curl -X PUT "localhost:9200/myindex"        # Create index
+curl -X DELETE "localhost:9200/myindex"     # Delete index
+
+# Documents
+curl -X POST "localhost:9200/myindex/_doc/1" -H 'Content-Type: application/json' -d '{"field":"value"}'     # Index document
+curl -X GET "localhost:9200/myindex/_doc/1"                                                                 # Get document
+curl -X DELETE "localhost:9200/myindex/_doc/1"                                                              # Delete document
+
+# Search
+curl -X GET "localhost:9200/myindex/_search?pretty" -H 'Content-Type: application/json' -d '{"query":{"match_all":{}}}'
+
+# Bulk operations
+curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary "@bulk.json"
+Logstash Commands
+
+# Logstash service
+systemctl status logstash
+systemctl start logstash
+systemctl stop logstash
+systemctl restart logstash
+
+# Test configuration
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf --config.test_and_exit
+
+# Reload configuration
+systemctl reload logstash
+
+# Run Logstash manually
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf
+Kibana Commands
+
+# Kibana service
+systemctl status kibana
+systemctl start kibana
+systemctl stop kibana
+systemctl restart kibana
+
+# Kibana configuration
+/etc/kibana/kibana.yml       # Main config file
+Filebeat Commands
+
+# Filebeat service
+systemctl status filebeat
+systemctl start filebeat
+systemctl stop filebeat
+systemctl restart filebeat
+
+# Test configuration
+filebeat test config -c /etc/filebeat/filebeat.yml
+filebeat test output -c /etc/filebeat/filebeat.yml
+
+# Setup
+filebeat setup -e                   # Setup index template and dashboards
+filebeat modules list               # List available modules
+filebeat modules enable system      # Enable module
+filebeat modules disable system     # Disable module
+
+# Filebeat configuration
+/etc/filebeat/filebeat.yml   # Main config file
+25. SECURITY AND HARDENING
+fail2ban Commands
+
+# fail2ban service
+systemctl status fail2ban
+systemctl start fail2ban
+systemctl stop fail2ban
+systemctl restart fail2ban
+
+# fail2ban-client
+fail2ban-client status                          # Show status
+fail2ban-client status sshd                     # Show jail status
+fail2ban-client set sshd banip 192.168.1.10     # Ban IP
+fail2ban-client set sshd unbanip 192.168.1.10   # Unban IP
+fail2ban-client reload                          # Reload configuration
+fail2ban-client ping                            # Test if running
+
+# Configuration files
+/etc/fail2ban/jail.conf      # Main config (don't edit)
+/etc/fail2ban/jail.local     # Local overrides
+SELinux Commands
+
+# SELinux status
+getenforce                   # Current mode
+sestatus                     # Detailed status
+setenforce 0                 # Permissive mode
+setenforce 1                 # Enforcing mode
+
+# Contexts
+ls -Z file                                              # Show file context
+ps -Z                                                   # Show process contexts
+chcon -t httpd_sys_content_t /var/www/html/index.html   # Change context
+restorecon -Rv /var/www/html                            # Restore default contexts
+
+# Booleans
+getsebool -a                                # List all booleans
+getsebool httpd_can_network_connect         # Check boolean
+setsebool -P httpd_can_network_connect on   # Set boolean permanently
+
+# Troubleshooting
+ausearch -m avc -ts recent              # Recent AVC denials
+audit2why < /var/log/audit/audit.log    # Why was it denied
+audit2allow -a                          # Generate policy to allow
+OpenSSL Commands
+
+# Generate private key
+openssl genrsa -out private.key 2048  # RSA 2048-bit
+openssl genrsa -out private.key 4096  # RSA 4096-bit
+
+# Generate public key from private
+openssl rsa -in private.key -pubout -out public.key
+
+# Generate CSR (Certificate Signing Request)
+openssl req -new -key private.key -out cert.csr
+
+# Generate self-signed certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out cert.crt
+
+# View certificate
+openssl x509 -in cert.crt -text -noout
+openssl x509 -in cert.crt -noout -dates     # Show validity dates
+openssl x509 -in cert.crt -noout -subject   # Show subject
+openssl x509 -in cert.crt -noout -issuer    # Show issuer
+
+# Verify certificate
+openssl verify cert.crt
+
+# Test SSL/TLS connection
+openssl s_client -connect google.com:443
+openssl s_client -connect google.com:443 -showcerts
+
+# Convert certificate formats
+openssl x509 -in cert.crt -out cert.pem                 # CRT to PEM
+openssl x509 -in cert.pem -outform DER -out cert.der    # PEM to DER
+
+# Encrypt/Decrypt files
+openssl enc -aes-256-cbc -salt -in file.txt -out file.txt.enc
+openssl enc -aes-256-cbc -d -in file.txt.enc -out file.txt
+
+# Generate random data
+openssl rand -base64 32      # 32 bytes base64
+openssl rand -hex 16         # 16 bytes hex
+GPG Commands
+
+# Generate key pair
+gpg --gen-key                # Interactive
+gpg --full-generate-key      # Full options
+
+# List keys
+gpg --list-keys              # Public keys
+gpg --list-secret-keys       # Private keys
+gpg --list-sigs              # Keys with signatures
+
+# Export keys
+gpg --export -a "User Name" > public.key                # Export public key (ASCII)
+gpg --export-secret-keys -a "User Name" > private.key   # Export private key
+
+# Import keys
+gpg --import public.key      # Import public key
+gpg --import private.key     # Import private key
+
+# Encrypt/Decrypt files
+gpg --encrypt --recipient "User Name" file.txt  # Encrypt
+gpg --output file.txt --decrypt file.txt.gpg    # Decrypt
+gpg -c file.txt                                 # Symmetric encryption (password)
+gpg -d file.txt.gpg                             # Decrypt symmetric
+
+# Sign files
+gpg --sign file.txt          # Sign file
+gpg --clearsign file.txt     # Sign with readable text
+gpg --detach-sign file.txt   # Detached signature
+gpg --verify file.txt.sig    # Verify signature
+
+# Key management
+gpg --edit-key "User Name"              # Edit key (interactive)
+gpg --delete-keys "User Name"           # Delete public key
+gpg --delete-secret-keys "User Name"    # Delete private key
+
+# Trust keys
+gpg --edit-key "User Name"
+# In GPG prompt: trust, then select level (1-5)
+
+# Send/receive keys (keyserver)
+gpg --keyserver keyserver.ubuntu.com --send-keys KEY_ID
+gpg --keyserver keyserver.ubuntu.com --recv-keys KEY_ID
+gpg --keyserver keyserver.ubuntu.com --search-keys "email@example.com"
+Lynis (Security Auditing)
+
+# Install Lynis
+dnf install lynis            # RHEL/CentOS
+apt install lynis            # Debian/Ubuntu
+
+# Run audit
+lynis audit system           # Full system audit
+lynis audit system --quick   # Quick scan
+lynis audit system --cronjob # Cron mode (no colors)
+
+# Show options
+lynis show options           # Display options
+lynis show version           # Show version
+lynis show commands          # List commands
+lynis show profiles          # Show profiles
+
+# Update Lynis
+lynis update info            # Check for updates
+
+# Reports
+/var/log/lynis.log           # Audit log
+/var/log/lynis-report.dat    # Report data
+ClamAV (Antivirus)
+
+# ClamAV service
+systemctl status clamd@scan  # Check service
+systemctl start clamd@scan   # Start service
+systemctl enable clamd@scan  # Enable at boot
+
+# Update virus definitions
+freshclam                    # Update virus database
+
+# Scan files
+clamscan file.txt                       # Scan single file
+clamscan -r /home                       # Recursive scan
+clamscan -r --infected /home            # Show only infected files
+clamscan -r --remove /home              # Remove infected files
+clamscan -r --move=/quarantine /home    # Move infected to quarantine
+clamscan -r -l scan.log /home           # Log to file
+
+# Background scanning
+clamd                        # Start daemon
+clamdscan /path              # Scan using daemon (faster)
+AppArmor Commands
+
+# AppArmor status
+apparmor_status              # Show AppArmor status
+aa-status                    # Alternative command
+
+# Profile management
+aa-enforce /etc/apparmor.d/usr.bin.program  # Set to enforce mode
+aa-complain /etc/apparmor.d/usr.bin.program # Set to complain mode
+aa-disable /etc/apparmor.d/usr.bin.program  # Disable profile
+
+# Load/unload profiles
+apparmor_parser -r /etc/apparmor.d/usr.bin.program  # Reload profile
+apparmor_parser -R /etc/apparmor.d/usr.bin.program  # Remove profile
+
+# Generate profiles
+aa-genprof /usr/bin/program  # Generate profile (interactive)
+aa-logprof                   # Update profiles from logs
+26. PERFORMANCE MONITORING & TUNING
+iostat (I/O Statistics)
+
+# Basic I/O stats
+iostat                       # Basic report
+iostat -x                    # Extended statistics
+iostat -x 1 10               # Every 1 second, 10 times
+iostat -d                    # Device utilization only
+iostat -c                    # CPU utilization only
+iostat -p sda                # Specific device
+iostat -m                    # Display in MB/s
+iostat -k                    # Display in KB/s
+vmstat (Virtual Memory Statistics)
+
+# Virtual memory stats
+vmstat                       # Basic report
+vmstat 1 10                  # Every 1 second, 10 times
+vmstat -a                    # Active/inactive memory
+vmstat -s                    # Memory statistics summary
+vmstat -d                    # Disk statistics
+vmstat -p /dev/sda1          # Partition statistics
+sar (System Activity Reporter)
+
+# CPU usage
+sar                          # CPU usage (default)
+sar -u 1 10                  # CPU every 1 sec, 10 times
+sar -u ALL                   # All CPU statistics
+sar -P ALL                   # Per-CPU statistics
+
+# Memory usage
+sar -r                       # Memory utilization
+sar -r 1 10                  # Memory every 1 sec
+sar -R                       # Memory statistics
+sar -S                       # Swap space utilization
+
+# I/O statistics
+sar -b                       # I/O transfer rate
+sar -d                       # Block device statistics
+sar -d -p                    # Pretty names for devices
+
+# Network statistics
+sar -n DEV                   # Network interface statistics
+sar -n EDEV                  # Network errors
+sar -n TCP                   # TCP statistics
+sar -n SOCK                  # Socket statistics
+
+# Load average
+sar -q                       # Queue length and load average
+
+# Historical data
+sar -f /var/log/sa/sa01      # Read from specific file
+sar -s 10:00:00 -e 11:00:00  # Time range
+
+# Generate report
+sar -A                       # All statistics
+sadf -d                      # Database format
+mpstat (Multiprocessor Statistics)
+
+# CPU statistics
+mpstat                       # All CPUs summary
+mpstat -P ALL                # Per-CPU statistics
+mpstat -P ALL 1 10           # Every 1 second, 10 times
+mpstat -P 0                  # CPU 0 only
+pidstat (Process Statistics)
+
+# Process statistics
+pidstat                      # Default statistics
+pidstat 1 10                 # Every 1 second, 10 times
+pidstat -p PID               # Specific process
+pidstat -u                   # CPU usage
+pidstat -r                   # Memory usage
+pidstat -d                   # I/O statistics
+pidstat -t                   # Thread statistics
+pidstat -C httpd             # Processes matching name
+iotop (I/O Monitor)
+
+# I/O monitoring
+iotop                        # Interactive I/O monitor
+iotop -o                     # Only processes doing I/O
+iotop -P                     # Show processes, not threads
+iotop -a                     # Accumulated I/O
+iotop -b -n 3                # Batch mode, 3 iterations
+nethogs (Network Monitor)
+
+# Network bandwidth per process
+nethogs                      # Monitor all interfaces
+nethogs eth0                 # Specific interface
+nethogs -d 5                 # Update every 5 seconds
+iftop (Interface Monitor)
+
+# Network interface monitoring
+iftop                        # Default interface
+iftop -i eth0                # Specific interface
+iftop -n                     # No hostname lookup
+iftop -P                     # Show port numbers
+iftop -B                     # Display bandwidth in bytes
+dstat (Versatile Resource Statistics)
+
+# Combined statistics
+dstat                        # Default output
+dstat -c                     # CPU stats only
+dstat -d                     # Disk stats only
+dstat -n                     # Network stats only
+dstat -m                     # Memory stats only
+dstat -cdnm                  # Combined stats
+dstat --top-cpu              # Show top CPU process
+dstat --top-mem              # Show top memory process
+dstat --top-io               # Show top I/O process
+nmon (Performance Monitor)
+
+# Interactive performance monitor
+nmon                         # Start nmon
+# Press keys for different views:
+# c - CPU
+# m - Memory
+# d - Disk I/O
+# n - Network
+# t - Top processes
+# q - Quit
+Tuning Commands
+
+# sysctl (Kernel parameters)
+sysctl -a                               # Show all parameters
+sysctl kernel.hostname                  # Show specific parameter
+sysctl -w net.ipv4.ip_forward=1         # Set parameter temporarily
+sysctl -p                               # Load from /etc/sysctl.conf
+sysctl -p /etc/sysctl.d/custom.conf     # Load from specific file
+
+# Common tuning parameters
+# /etc/sysctl.conf or /etc/sysctl.d/*.conf
+# net.ipv4.ip_forward = 1
+# net.ipv4.tcp_tw_reuse = 1
+# vm.swappiness = 10
+# fs.file-max = 65536
+
+# Transparent Huge Pages
+cat /sys/kernel/mm/transparent_hugepage/enabled             # Check status
+echo never > /sys/kernel/mm/transparent_hugepage/enabled    # Disable
+
+# CPU governor
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor                   # Check
+echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor    # Set
+
+# I/O scheduler
+cat /sys/block/sda/queue/scheduler              # Check scheduler
+echo deadline > /sys/block/sda/queue/scheduler  # Set scheduler
+27. BACKUP AND RECOVERY
+tar (Archive)
+
+# Create archive
+tar -cvf archive.tar files/         # Create tar
+tar -czvf archive.tar.gz files/     # Create compressed (gzip)
+tar -cjvf archive.tar.bz2 files/    # Create compressed (bzip2)
+tar -cJvf archive.tar.xz files/     # Create compressed (xz)
+
+# Extract archive
+tar -xvf archive.tar            # Extract tar
+tar -xzvf archive.tar.gz        # Extract gzip
+tar -xjvf archive.tar.bz2       # Extract bzip2
+tar -xJvf archive.tar.xz        # Extract xz
+tar -xvf archive.tar -C /path   # Extract to directory
+
+# List archive contents
+tar -tvf archive.tar         # List contents
+tar -tzvf archive.tar.gz     # List gzip archive
+
+# Append to archive
+tar -rvf archive.tar newfile  # Append file
+
+# Exclude files
+tar -czvf archive.tar.gz --exclude='*.log' files/
+tar -czvf archive.tar.gz --exclude-from=exclude.txt files/
+
+# Incremental backup
+tar -czvf full.tar.gz -g snapshot.file /data  # Full backup
+tar -czvf incr.tar.gz -g snapshot.file /data  # Incremental
+rsync (Remote Sync)
+
+# Basic sync
+rsync source/ destination/          # Sync directories
+rsync -a source/ destination/       # Archive mode (recursive, preserve)
+rsync -av source/ destination/      # Archive + verbose
+rsync -avz source/ destination/     # Archive + compress
+
+# Remote sync
+rsync -avz /local/ user@remote:/remote/                     # Push to remote
+rsync -avz user@remote:/remote/ /local/                     # Pull from remote
+rsync -avz -e "ssh -p 2222" /local/ user@remote:/remote/    # Custom SSH port
+
+# Dry run
+rsync -avz --dry-run source/ destination/   # Test without changes
+rsync -avn source/ destination/             # Short form
+
+# Delete
+rsync -av --delete source/ destination/  # Delete files not in source
+
+# Exclude files
+rsync -av --exclude='*.log' source/ destination/
+rsync -av --exclude-from=exclude.txt source/ destination/
+
+# Progress and stats
+rsync -av --progress source/ destination/   # Show progress
+rsync -av --stats source/ destination/      # Show statistics
+
+# Bandwidth limit
+rsync -av --bwlimit=1000 source/ destination/  # Limit to 1000 KB/s
+
+# Partial transfers
+rsync -av --partial source/ destination/  # Keep partial files
+rsync -avP source/ destination/           # Partial + progress
+
+# Backup with timestamps
+rsync -av --backup --backup-dir=backup-$(date +%Y%m%d) source/ destination/
+dd (Disk Dump)
+
+# Disk/partition copy
+dd if=/dev/sda of=/dev/sdb      # Clone disk
+dd if=/dev/sda1 of=/dev/sdb1    # Clone partition
+dd if=/dev/sda of=disk.img      # Create disk image
+dd if=disk.img of=/dev/sdb      # Restore from image
+
+# Backup with compression
+dd if=/dev/sda | gzip > disk.img.gz
+gunzip -c disk.img.gz | dd of=/dev/sdb
+
+# Backup MBR
+dd if=/dev/sda of=mbr.img bs=512 count=1  # Backup MBR
+dd if=mbr.img of=/dev/sda bs=512 count=1  # Restore MBR
+
+# Progress monitoring
+dd if=/dev/sda of=/dev/sdb bs=4M status=progress
+
+# Create bootable USB
+dd if=iso_file.iso of=/dev/sdb bs=4M status=progress
+
+# Wipe disk
+dd if=/dev/zero of=/dev/sda bs=4M status=progress       # Write zeros
+dd if=/dev/urandom of=/dev/sda bs=4M status=progress    # Random data
+
+# Test disk speed
+dd if=/dev/zero of=/tmp/test bs=1M count=1024   # Write test
+dd if=/tmp/test of=/dev/null bs=1M              # Read test
+Backup with MySQL/MariaDB
+
+# Backup database
+mysqldump -u root -p database_name > backup.sql
+mysqldump -u root -p --all-databases > all_backup.sql
+mysqldump -u root -p database_name table_name > table_backup.sql
+mysqldump -u root -p --databases db1 db2 > multiple_backup.sql
+
+# Backup with compression
+mysqldump -u root -p database_name | gzip > backup.sql.gz
+
+# Backup structure only
+mysqldump -u root -p --no-data database_name > structure.sql
+
+# Backup data only
+mysqldump -u root -p --no-create-info database_name > data.sql
+
+# Restore database
+mysql -u root -p database_name < backup.sql
+mysql -u root -p < all_backup.sql                           # Restore all databases
+gunzip < backup.sql.gz | mysql -u root -p database_name     # Restore compressed
+Backup with PostgreSQL
+
+# Backup database
+pg_dump database_name > backup.sql
+pg_dump -U username database_name > backup.sql
+pg_dump -h hostname -U username database_name > backup.sql
+
+# Backup all databases
+pg_dumpall > all_backup.sql
+pg_dumpall -U postgres > all_backup.sql
+
+# Backup with compression
+pg_dump database_name | gzip > backup.sql.gz
+pg_dump -Fc database_name > backup.dump  # Custom format (compressed)
+
+# Backup specific table
+pg_dump -t table_name database_name > table_backup.sql
+
+# Restore database
+psql database_name < backup.sql
+psql -U username database_name < backup.sql
+gunzip < backup.sql.gz | psql database_name     # Restore compressed
+pg_restore -d database_name backup.dump         # Restore custom format
+Snapshot with LVM
+
+# Create LVM snapshot
+lvcreate -L 5G -s -n snap_lv /dev/vg_name/lv_name
+
+# Mount snapshot
+mkdir /mnt/snapshot
+mount /dev/vg_name/snap_lv /mnt/snapshot
+
+# Backup from snapshot
+tar -czvf backup.tar.gz -C /mnt/snapshot .
+
+# Remove snapshot
+umount /mnt/snapshot
+lvremove /dev/vg_name/snap_lv
+
+# Restore from snapshot (merge back)
+lvconvert --merge /dev/vg_name/snap_lv
+# System must reboot to complete merge
+28. AUTOMATION AND SCHEDULING
+cron (Scheduled Tasks)
+
+# View crontab
+crontab -l                   # List current user's crontab
+crontab -l -u username       # List specific user's crontab
+sudo crontab -l              # List root's crontab
+
+# Edit crontab
+crontab -e                   # Edit current user's crontab
+crontab -e -u username       # Edit specific user's crontab
+
+# Remove crontab
+crontab -r                   # Remove current user's crontab
+crontab -r -u username       # Remove specific user's crontab
+
+# Crontab format:
+# * * * * * command
+# │ │ │ │ │
+# │ │ │ │ └─── Day of week (0-7, 0 and 7 are Sunday)
+# │ │ │ └───── Month (1-12)
+# │ │ └─────── Day of month (1-31)
+# │ └───────── Hour (0-23)
+# └─────────── Minute (0-59)
+
+# Examples:
+# 0 2 * * * /path/to/script.sh         # Daily at 2 AM
+# */5 * * * * /path/to/script.sh       # Every 5 minutes
+# 0 */2 * * * /path/to/script.sh       # Every 2 hours
+# 0 9-17 * * 1-5 /path/to/script.sh    # 9 AM to 5 PM, Mon-Fri
+# 0 0 1 * * /path/to/script.sh         # First day of month
+# @reboot /path/to/script.sh           # At system boot
+# @daily /path/to/script.sh            # Daily
+# @weekly /path/to/script.sh           # Weekly
+# @monthly /path/to/script.sh          # Monthly
+
+# System-wide cron
+/etc/crontab                 # System crontab
+/etc/cron.d/                 # Additional cron files
+/etc/cron.daily/             # Daily scripts
+/etc/cron.weekly/            # Weekly scripts
+/etc/cron.monthly/           # Monthly scripts
+/etc/cron.hourly/            # Hourly scripts
+
+# Cron logs
+tail -f /var/log/cron        # Follow cron logs
+grep CRON /var/log/syslog    # Check cron execution (Ubuntu/Debian)
+at (One-Time Scheduled Tasks)
+
+# Schedule one-time task
+at 10:00                     # Schedule for 10:00 AM today
+at now + 5 minutes           # In 5 minutes
+at now + 2 hours             # In 2 hours
+at 22:00 tomorrow            # 10 PM tomorrow
+at 09:00 2024-12-25          # Specific date and time
+
+# In at prompt, enter commands, then Ctrl+D to save
+
+# List scheduled jobs
+atq                          # List all jobs
+at -l                        # Alternative
+
+# View job details
+at -c job_number             # Show job commands
+
+# Remove scheduled job
+atrm job_number              # Remove job
+at -r job_number             # Alternative
+
+# Examples:
+echo "/path/to/script.sh" | at now + 1 hour
+at 02:00 <<EOF
+/usr/bin/backup.sh
+/usr/bin/cleanup.sh
+EOF
+systemd Timers (Modern Alternative to Cron)
+
+# List all timers
+systemctl list-timers        # Active timers
+systemctl list-timers --all  # All timers
+
+# Create timer (requires .timer and .service files)
+# /etc/systemd/system/mytask.timer
+# /etc/systemd/system/mytask.service
+
+# Enable and start timer
+systemctl enable mytask.timer
+systemctl start mytask.timer
+
+# Check timer status
+systemctl status mytask.timer
+
+# Manual trigger
+systemctl start mytask.service
+
+# Reload after editing
+systemctl daemon-reload
+watch (Repeat Command)
+
+# Execute command repeatedly
+watch command                # Every 2 seconds (default)
+watch -n 5 command           # Every 5 seconds
+watch -d command             # Highlight differences
+watch -t command             # No title
+watch -b command             # Beep on error
+watch -x command             # Exec instead of sh -c
+
+# Examples:
+watch df -h                         # Monitor disk usage
+watch -n 1 'ps aux | grep httpd'    # Monitor processes
+watch -d free -m                    # Monitor memory with highlights
+watch kubectl get pods              # Monitor Kubernetes pods
+29. MISCELLANEOUS USEFUL COMMANDS
+File Compression/Decompression
+
+# gzip
+gzip file.txt                       # Compress (removes original)
+gzip -k file.txt                    # Keep original
+gzip -9 file.txt                    # Maximum compression
+gunzip file.txt.gz                  # Decompress
+gzip -d file.txt.gz                 # Alternative decompress
+gzip -c file.txt > file.txt.gz      # Keep original (redirect)
+gunzip -c file.txt.gz > file.txt    # Decompress, keep .gz
+
+# bzip2
+bzip2 file.txt               # Compress
+bzip2 -k file.txt            # Keep original
+bunzip2 file.txt.bz2         # Decompress
+bzip2 -d file.txt.bz2        # Alternative decompress
+
+# xz
+xz file.txt                  # Compress
+xz -k file.txt               # Keep original
+unxz file.txt.xz             # Decompress
+xz -d file.txt.xz            # Alternative decompress
+
+# zip/unzip
+zip archive.zip file1 file2  # Create zip
+zip -r archive.zip directory # Recursive
+unzip archive.zip            # Extract
+unzip -l archive.zip         # List contents
+unzip archive.zip -d /path   # Extract to directory
+System Information Commands
+
+# Hardware info
+lshw                         # List hardware
+lshw -short                  # Short format
+lshw -C cpu                  # CPU info only
+lshw -C memory               # Memory info
+lspci                        # PCI devices
+lspci -v                     # Verbose
+lsusb                        # USB devices
+lsusb -v                     # Verbose
+
+# CPU info
+lscpu                        # CPU architecture info
+cat /proc/cpuinfo            # Detailed CPU info
+
+# Memory info
+free -h                      # Memory usage
+dmidecode -t memory          # Detailed memory info
+
+# Disk info
+lsblk                        # List block devices
+fdisk -l                     # List disks and partitions
+hdparm -I /dev/sda           # Disk information
+smartctl -a /dev/sda         # SMART info (requires smartmontools)
+
+# System info
+uname -a                     # Kernel and system info
+hostnamectl                  # System hostname info
+timedatectl                  # Time and date info
+dmidecode                    # DMI/SMBIOS info
+Date and Time Commands
+
+# Display date/time
+date                         # Current date and time
+date +%Y-%m-%d               # Custom format (2024-01-06)
+date +%H:%M:%S               # Time only
+date +%s                     # Unix timestamp
+date -d "2024-01-01"         # Specific date
+date -d "yesterday"          # Yesterday
+date -d "next monday"        # Next Monday
+date -d "+5 days"            # 5 days from now
+date -d @1704501600          # Convert from timestamp
+
+# Set date/time (requires root)
+date -s "2024-01-06 10:30:00"               # Set date and time
+timedatectl set-time "2024-01-06 10:30:00"  # SystemD method
+
+# Timezone
+timedatectl list-timezones                                  # List available timezones
+timedatectl set-timezone America/New_York                   # Set timezone
+ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime  # Alternative
+
+# NTP sync
+timedatectl set-ntp true     # Enable NTP
+chronyc tracking             # Check chronyd status
+ntpq -p                      # Check ntpd status
+Calendar
+
+# Display calendar
+cal                          # Current month
+cal 2024                     # Entire year
+cal 12 2024                  # Specific month
+cal -3                       # Last, current, next month
+cal -y                       # Entire current year
+ncal                         # Alternative layout
+bc (Calculator)
+
+# Basic calculator
+bc                           # Start interactive calculator
+echo "5 + 3" | bc            # Calculate from echo
+bc <<< "5 + 3"               # Calculate with here string
+bc <<< "scale=2; 10/3"       # Floating point (2 decimals)
+bc <<< "sqrt(16)"            # Square root
+bc <<< "10^3"                # Exponentiation
+
+# Mathematical functions
+bc -l                        # Start with math library
+bc -l <<< "s(1)"             # Sine
+bc -l <<< "c(1)"             # Cosine
+bc -l <<< "l(10)"            # Natural log
+bc -l <<< "e(1)"             # Exponential
+Screen (Terminal Multiplexer)
+
+# Start screen
+screen                       # Start new session
+screen -S sessionname        # Named session
+
+# Inside screen:
+# Ctrl+a c    - Create new window
+# Ctrl+a n    - Next window
+# Ctrl+a p    - Previous window
+# Ctrl+a "    - List windows
+# Ctrl+a d    - Detach from session
+# Ctrl+a k    - Kill window
+
+# Outside screen:
+screen -ls                   # List sessions
+screen -r                    # Reattach to session
+screen -r sessionname        # Reattach to named session
+screen -d -r sessionname     # Detach and reattach
+screen -X -S sessionname quit  # Kill session
+tmux (Terminal Multiplexer)
+
+# Start tmux
+tmux                         # Start new session
+tmux new -s sessionname      # Named session
+
+# Inside tmux (default prefix: Ctrl+b):
+# Ctrl+b c    - Create new window
+# Ctrl+b n    - Next window
+# Ctrl+b p    - Previous window
+# Ctrl+b w    - List windows
+# Ctrl+b d    - Detach from session
+# Ctrl+b %    - Split pane vertically
+# Ctrl+b "    - Split pane horizontally
+# Ctrl+b arrow - Navigate panes
+
+# Outside tmux:
+tmux ls                             # List sessions
+tmux attach                         # Attach to last session
+tmux attach -t sessionname          # Attach to named session
+tmux kill-session -t sessionname    # Kill session
+alias (Command Shortcuts)
+
+# Create alias (temporary)
+alias ll='ls -la'            # Create alias
+alias grep='grep --color=auto'
+alias update='sudo dnf update'
+
+# View aliases
+alias                        # List all aliases
+alias ll                     # Show specific alias
+
+# Remove alias
+unalias ll                   # Remove alias
+unalias -a                   # Remove all aliases
+
+# Make permanent (add to ~/.rc or ~/._aliases)
+echo "alias ll='ls -la'" >> ~/.rc
+source ~/.rc             # Reload
+history (Command History)
+
+# View history
+history                      # Show all history
+history 20                   # Show last 20 commands
+history | grep ssh           # Search history
+
+# Execute from history
+!100                         # Execute command 100
+!!                           # Execute last command
+!-2                          # Execute 2 commands ago
+!ssh                         # Execute last command starting with ssh
+!?pattern                    # Execute last command containing pattern
+
+# History control
+history -c                          # Clear history
+history -d 100                      # Delete command 100
+export HISTSIZE=10000               # Set history size
+export HISTFILESIZE=20000           # Set history file size
+export HISTCONTROL=ignoredups       # Ignore duplicates
+export HISTIGNORE="ls:pwd:exit"     # Ignore specific commands
+
+# Search history
+Ctrl+r                       # Reverse search (interactive)
+
+
+SUMMARY
+This comprehensive command reference covers 29 major categories with 1000+ commands organized for rapid recall and muscle memory reinforcement:
+
+01. System Information & Navigation - Basic Linux exploration
+02. File Operations - Creating, copying, moving, finding files
+03. Text Editors - Vim and Nano
+04. File Permissions - chmod, chown, ACLs, attributes
+05. User & Group Management - Creating, modifying users/groups
+06. Process Management - Viewing, controlling, prioritizing processes
+07. systemd Service Management - Managing services and system state
+08. Package Management - DNF/YUM and RPM
+09. System Logging - rsyslog, journalctl, auditd
+10. Disk Management - Partitioning, LVM, filesystems, mounting
+11. Networking Basics - IP configuration, routing, testing
+12. Firewall Management - firewalld and iptables
+13. SSH - Secure shell, keys, tunneling, SCP, SFTP
+14. Text Processing - grep, sed, awk, cut, sort, etc.
+15. Scripting - Variables, loops, functions, arrays
+16. Python for DevOps - pip, virtual environments
+17. Git Version Control - All Git operations
+18. Docker - Containers, images, volumes, networks
+19. Kubernetes - kubectl for container orchestration
+20. Ansible - Configuration management and automation
+21. Terraform - Infrastructure as Code
+22. AWS CLI - Cloud resource management
+23. Monitoring - Prometheus, Grafana, ELK stack
+24. Security - fail2ban, SELinux, OpenSSL, GPG, scanning
+25. Performance Monitoring - iostat, vmstat, sar, tuning
+26. Backup & Recovery - tar, rsync, dd, database backups
+27. Automation - cron, at, systemd timers
+28. Miscellaneous - Compression, system info, calculators, multiplexers
+29. Useful One-Liners - Quick reference for common tasks
+
+Perfect for DevOps engineers who need rapid command lookup without project context or theoretical explanations.

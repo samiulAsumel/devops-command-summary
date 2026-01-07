@@ -1,0 +1,1793 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linux/DevOps Command Reference Guide - System Administration</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="scripts.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="part-links">
+        <strong>📚 Navigate:</strong>
+        <a href="index.html">🏠 HOME</a>
+        <a href="system-admin.html" class="active-part"
+          >Part 1: System Administration</a
+        >
+        <a href="devops-tools.html">Part 2: DevOps Tools</a>
+        <a href="monitoring-security.html">Part 3: Monitoring & Security</a>
+      </div>
+      <!--
+      <div class="download-section">
+        <h3>💾 Download & Export This Guide</h3>
+        <p>Save this reference guide for offline use:</p>
+        <a
+          href="javascript:void(0);"
+          onclick="downloadAsFile('linux-devops-system-admin.html')"
+          class="download-btn"
+          >📥 Download as HTML</a
+        >
+        <a href="javascript:void(0);" onclick="printPage()" class="download-btn"
+          >🖨️ Print to PDF</a
+        >
+      </div>
+      -->
+
+      <h1>📖 Linux/DevOps Command Reference Guide</h1>
+      <h2>Part 1: System Administration (10 Sections)</h2>
+
+      <div class="section-index">
+        <h3>📑 Table of Contents</h3>
+        <ul>
+          <li><a href="#system-info">1. System Information & Navigation</a></li>
+          <li><a href="#file-ops">2. File Operations</a></li>
+          <li><a href="#text-editors">3. Text Editors</a></li>
+          <li><a href="#permissions">4. File Permissions & Ownership</a></li>
+          <li><a href="#user-mgmt">5. User & Group Management</a></li>
+          <li><a href="#process-mgmt">6. Process Management</a></li>
+          <li><a href="#systemd">7. Systemd Service Management</a></li>
+          <li><a href="#package-mgmt">8. Package Management (DNF/YUM)</a></li>
+          <li><a href="#rpm">9. RPM Package Management</a></li>
+          <li><a href="#logging">10. System Logging</a></li>
+        </ul>
+      </div>
+
+      <h2 id="system-info">1. SYSTEM INFORMATION & NAVIGATION</h2>
+
+      <h3>Display System Information</h3>
+
+      <div class="command-block">
+        <h4>Hostname</h4>
+        <pre><code>
+hostname                                                        # Show hostname
+hostname -f                                                     # Fully qualified domain name
+hostname -I                                                     # All IP addresses</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>OS/Kernel</h4>
+        <pre><code>
+uname -a                                                        # All system information
+uname -r                                                        # Kernel version only
+uname -m                                                        # Machine hardware architecture
+cat /etc/os-release                                             # OS distribution details
+cat /etc/redhat-release                                         # RHEL-specific version
+lsb_release -a                                                  # LSB version (if available)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>CPU</h4>
+        <pre><code>
+lscpu                                                           # Detailed CPU architecture
+cat /proc/cpuinfo                                               # Raw CPU data
+nproc                                                           # Number of processing units</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Memory</h4>
+        <pre><code>
+free -h                                                         # Human-readable memory usage
+free -m                                                         # Memory in megabytes
+cat /proc/meminfo                                               # Detailed memory info
+vmstat                                                          # Virtual memory statistics
+vmstat 1 5                                                      # Update every 1 sec, 5 times</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Uptime/Users</h4>
+        <pre><code>
+uptime                                                          # System uptime and load average
+w                                                               # Who is logged in and what they're doing
+who                                                             # Show logged-in users
+last                                                            # Login history
+lastlog                                                         # Last login for all users</code></pre>
+      </div>
+
+      <h3>File System Navigation</h3>
+
+      <div class="command-block">
+        <h4>Directory operations</h4>
+        <pre><code>
+pwd                                                             # Print working directory
+cd /path/to/dir                                                 # Change directory
+cd ~                                                            # Home directory
+cd -                                                            # Previous directory
+cd ..                                                           # Parent directory
+cd ../..                                                        # Two levels up</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>List files</h4>
+        <pre><code>
+ls                                                              # List current directory
+ls -l                                                           # Long format with permissions
+ls -la                                                          # Include hidden files
+ls -lh                                                          # Human-readable sizes
+ls -lt                                                          # Sort by modification time
+ls -ltr                                                         # Reverse time order (oldest first)
+ls -lS                                                          # Sort by size
+ls -R                                                           # Recursive listing
+ls -i                                                           # Show inode numbers
+ls -d */                                                        # List only directories</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Tree view</h4>
+        <pre><code>
+tree                                                            # Tree view of current dir
+tree -L 2                                                       # Limit depth to 2 levels
+tree -d                                                         # Directories only
+tree -a                                                         # Include hidden files
+tree -h                                                         # Human-readable sizes</code></pre>
+      </div>
+
+      <h3>File System Hierarchy</h3>
+
+      <div class="command-block">
+        <h4>Explore standard directories</h4>
+        <pre><code>
+ls -l /                                                         # Root directory
+ls -l /bin                                                      # Essential user binaries
+ls -l /sbin                                                     # System binaries
+ls -l /usr/bin                                                  # User programs
+ls -l /usr/sbin                                                 # System admin programs
+ls -l /etc                                                      # Configuration files
+ls -l /var                                                      # Variable data (logs, spools)
+ls -l /var/log                                                  # System logs
+ls -l /tmp                                                      # Temporary files
+ls -l /home                                                     # User home directories
+ls -l /root                                                     # Root user home
+ls -l /opt                                                      # Optional software
+ls -l /proc                                                     # Process information (virtual)
+ls -l /sys                                                      # System/hardware info (virtual)
+ls -l /dev                                                      # Device files</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>RHEL-specific</h4>
+        <pre><code>
+ls -l /etc/sysconfig/                                           # RHEL system configuration
+ls -l /var/log/messages                                         # System messages log</code></pre>
+      </div>
+
+      <h2 id="file-ops">2. FILE OPERATIONS</h2>
+
+      <h3>Basic File Management</h3>
+
+      <div class="command-block">
+        <h4>Create files</h4>
+        <pre><code>
+touch file.txt                                                  # Create empty file or update timestamp
+touch file1 file2 file3                                         # Create multiple files
+touch -t 202301011200 file.txt                                  # Set specific timestamp</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy files</h4>
+        <pre><code>
+cp source dest                                                  # Copy file
+cp -r dir1 dir2                                                 # Copy directory recursively
+cp -p file dest                                                 # Preserve attributes
+cp -v file dest                                                 # Verbose output
+cp -i file dest                                                 # Interactive (prompt before overwrite)
+cp -a dir1 dir2                                                 # Archive mode (preserve all)
+cp -u source dest                                               # Update (copy only if newer)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Move/rename files</h4>
+        <pre><code>
+mv oldname newname                                              # Rename file
+mv file /path/to/dest                                           # Move file
+mv -i file dest                                                 # Interactive mode
+mv -v file dest                                                 # Verbose mode
+mv -u source dest                                               # Update only</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove files</h4>
+        <pre><code>
+rm file.txt                                                     # Remove file
+rm -f file.txt                                                  # Force remove (no prompt)
+rm -i file.txt                                                  # Interactive (prompt)
+rm -v file.txt                                                  # Verbose
+rm -r directory                                                 # Remove directory recursively
+rm -rf directory                                                # Force remove directory (DANGEROUS)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Create directories</h4>
+        <pre><code>
+mkdir newdir                                                    # Create directory
+mkdir -p /path/to/dir                                           # Create parent directories
+mkdir -m 755 dir                                                # Set permissions while creating
+mkdir -v dir                                                    # Verbose mode</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove directories</h4>
+        <pre><code>
+rmdir emptydir                                                  # Remove empty directory only
+rm -r directory                                                 # Remove directory with contents
+rm -rf directory                                                # Force remove (DANGEROUS - no confirmation)</code></pre>
+      </div>
+
+      <h3>Advanced File Operations</h3>
+
+      <div class="command-block">
+        <h4>Find files</h4>
+        <pre><code>
+find /path -name "*.txt"                                        # Find by name
+find /path -iname "*.TXT"                                       # Case-insensitive
+find /path -type f                                              # Files only
+find /path -type d                                              # Directories only
+find /path -size +100M                                          # Files larger than 100MB
+find /path -size -10k                                           # Files smaller than 10KB
+find /path -mtime -7                                            # Modified in last 7 days
+find /path -mtime +30                                           # Modified more than 30 days ago
+find /path -user username                                       # Files owned by user
+find /path -perm 777                                            # Files with specific permissions
+find /path -name "*.log" -delete                                # Find and delete
+find /path -type f -exec chmod 644 {} \;                        # Execute command on results
+find /path -empty                                               # Empty files/directories</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Locate (faster, uses database)</h4>
+        <pre><code>
+locate filename                                                 # Find file in database
+locate -i filename                                              # Case-insensitive
+updatedb                                                        # Update locate database (run as root)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Which/whereis</h4>
+        <pre><code>
+which command                                                   # Show path of executable
+which -a command                                                # Show all matches
+whereis command                                                 # Show binary, source, manual locations
+type command                                                    # Show command type (alias/function/builtin)</code></pre>
+      </div>
+
+      <h3>File Viewing and Reading</h3>
+
+      <div class="command-block">
+        <h4>View file contents</h4>
+        <pre><code>
+cat file.txt                                                    # Display entire file
+cat -n file.txt                                                 # Show line numbers
+cat -A file.txt                                                 # Show all characters (including non-printing)
+cat file1 file2                                                 # Concatenate multiple files
+cat file1 file2 > merged.txt                                    # Merge files</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Page through files</h4>
+        <pre><code>
+less file.txt                                                   # View file (scroll with space/arrows)
+more file.txt                                                   # View file (older pager)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View file portions</h4>
+        <pre><code>
+head file.txt                                                   # First 10 lines
+head -n 20 file.txt                                             # First 20 lines
+head -n -5 file.txt                                             # All except last 5 lines
+tail file.txt                                                   # Last 10 lines
+tail -n 20 file.txt                                             # Last 20 lines
+tail -f file.txt                                                # Follow file (real-time updates)
+tail -F file.txt                                                # Follow with retry (handles log rotation)
+tail -n +10 file.txt                                            # From line 10 to end</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Compare files</h4>
+        <pre><code>
+diff file1 file2                                                # Show differences
+diff -u file1 file2                                             # Unified format
+diff -y file1 file2                                             # Side-by-side comparison
+cmp file1 file2                                                 # Byte-by-byte comparison
+comm file1 file2                                                # Compare sorted files line-by-line</code></pre>
+      </div>
+
+      <h2 id="text-editors">3. TEXT EDITORS</h2>
+
+      <h3>Vim (Production Standard)</h3>
+
+      <div class="command-block">
+        <h4>Start vim</h4>
+        <pre><code>
+vim filename                                                    # Open/create file
+vim +10 filename                                                # Open at line 10
+vim +/pattern filename                                          # Open at first pattern match
+vim -R filename                                                 # Read-only mode
+view filename                                                   # Read-only mode (alias)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Navigation (Normal mode)</h4>
+        <pre><code>
+h, j, k, l                                                      # Left, down, up, right
+w, b                                                            # Word forward, word backward
+0, $                                                            # Line start, line end
+gg, G                                                           # File start, file end
+:10                                                             # Go to line 10
+Ctrl+f, Ctrl+b                                                  # Page down, page up</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Editing</h4>
+        <pre><code>
+i                                                               # Insert before cursor
+a                                                               # Insert after cursor
+o                                                               # Insert new line below
+O                                                               # Insert new line above
+dd                                                              # Delete line
+yy                                                              # Yank (copy) line
+p                                                               # Paste after cursor
+P                                                               # Paste before cursor
+u                                                               # Undo
+Ctrl+r                                                          # Redo</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search</h4>
+        <pre><code>
+/pattern                                                        # Search forward
+?pattern                                                        # Search backward
+n                                                               # Next match
+N                                                               # Previous match</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search and replace</h4>
+        <pre><code>
+:%s/old/new/g                                                   # Replace all in file
+:%s/old/new/gc                                                  # Replace with confirmation
+:10,20s/old/new/g                                               # Replace in lines 10-20</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Save and exit</h4>
+        <pre><code>
+:w                                                              # Save
+:q                                                              # Quit
+:wq or :x                                                       # Save and quit
+:q!                                                             # Quit without saving
+ZZ                                                              # Save and quit (Normal mode)</code></pre>
+      </div>
+
+      <h3>Nano (Simpler Alternative)</h3>
+
+      <div class="command-block">
+        <pre><code>
+nano filename                                                   # Open/create file
+nano +10 filename                                               # Open at line 10
+
+# Nano is menu-driven (shortcuts shown at bottom)
+# Ctrl+O - Save (WriteOut)
+# Ctrl+X - Exit
+# Ctrl+K - Cut line
+# Ctrl+U - Paste
+# Ctrl+W - Search
+# Ctrl+\ - Replace
+# Ctrl+G - Help</code></pre>
+      </div>
+
+      <h2 id="permissions">4. FILE PERMISSIONS & OWNERSHIP</h2>
+
+      <h3>Understanding Permissions</h3>
+
+      <div class="command-block">
+        <h4>View permissions</h4>
+        <pre><code>
+ls -l                                                           # Long format shows permissions
+ls -la                                                          # Include hidden files
+stat file.txt                                                   # Detailed file status including permissions</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Permission format: -rwxrwxrwx</h4>
+        <pre><code>
+Position 1: file type (- file, d directory, l link)
+Positions 2-4: owner (user) permissions
+Positions 5-7: group permissions
+Positions 8-10: others permissions
+r=read(4), w=write(2), x=execute(1)
+</code></pre>
+      </div>
+
+      <h3>Change Permissions (chmod)</h3>
+
+      <div class="command-block">
+        <h4>Symbolic mode</h4>
+        <pre><code>
+chmod u+x file                                                  # Add execute for user
+chmod g-w file                                                  # Remove write for group
+chmod o+r file                                                  # Add read for others
+chmod a+x file                                                  # Add execute for all
+chmod u+rw,g+r file                                             # Multiple changes
+chmod ugo+x file                                                # Execute for user, group, others</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Numeric (octal) mode</h4>
+        <pre><code>
+chmod 644 file                                                  # rw-r--r-- (common for files)
+chmod 755 file                                                  # rwxr-xr-x (common for scripts)
+chmod 777 file                                                  # rwxrwxrwx (DANGEROUS - avoid)
+chmod 600 file                                                  # rw------- (private file)
+chmod 700 directory                                             # rwx------ (private directory)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Recursive</h4>
+        <pre><code>
+chmod -R 755 directory                                          # Apply to directory and contents
+chmod -R u+x directory                                          # Add execute recursively</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Special permissions</h4>
+        <pre><code>
+chmod u+s file                                                  # Set SUID (setuid)
+chmod g+s directory                                             # Set SGID (setgid)
+chmod +t directory                                              # Set sticky bit
+chmod 4755 file                                                 # SUID + rwxr-xr-x
+chmod 2755 directory                                            # SGID + rwxr-xr-x
+chmod 1777 directory                                            # Sticky + rwxrwxrwx (like /tmp)</code></pre>
+      </div>
+
+      <h3>Change Ownership (chown)</h3>
+
+      <div class="command-block">
+        <h4>Change owner</h4>
+        <pre><code>
+chown newowner file                                             # Change file owner
+chown -R newowner dir                                           # Recursive</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change owner and group</h4>
+        <pre><code>
+chown user:group file                                           # Change both
+chown user: file                                                # Change user, group to user's primary group</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change only group (alternative to chgrp)</h4>
+        <pre><code>
+chown :group file                                               # Change group only</code></pre>
+      </div>
+
+      <h3>Change Group (chgrp)</h3>
+
+      <div class="command-block">
+        <pre><code>
+chgrp newgroup file                                             # Change group
+chgrp -R newgroup dir                                           # Recursive</code></pre>
+      </div>
+
+      <h3>Access Control Lists (ACL)</h3>
+
+      <div class="command-block">
+        <h4>View ACLs</h4>
+        <pre><code>
+getfacl file.txt                                                # Show ACL for file
+getfacl -R directory                                            # Recursive</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Set ACLs</h4>
+        <pre><code>
+setfacl -m u:username:rwx file                                  # Modify user ACL
+setfacl -m g:groupname:rx file                                  # Modify group ACL
+setfacl -m o::r file                                            # Modify others ACL
+setfacl -x u:username file                                      # Remove user ACL
+setfacl -b file                                                 # Remove all ACLs
+setfacl -R -m u:username:rx dir                                 # Recursive
+setfacl -d -m u:username:rwx dir                                # Set default ACL for new files</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Copy ACLs</h4>
+        <pre><code>
+getfacl file1 | setfacl --set-file=- file2                      # Copy ACL from file1 to file2</code></pre>
+      </div>
+
+      <h3>File Attributes (Extended)</h3>
+
+      <div class="command-block">
+        <h4>View attributes</h4>
+        <pre><code>
+lsattr file.txt                                                 # Show file attributes
+lsattr -a directory                                             # Include hidden files
+lsattr -d directory                                             # Show directory attributes</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Change attributes</h4>
+        <pre><code>
+chattr +i file                                                  # Immutable (cannot modify/delete)
+chattr -i file                                                  # Remove immutable
+chattr +a file                                                  # Append only
+chattr +A file                                                  # No atime updates
+chattr +c file                                                  # Compressed
+chattr +s file                                                  # Secure deletion
+chattr +u file                                                  # Undeletable</code></pre>
+      </div>
+
+      <h3>umask (Default Permissions)</h3>
+
+      <div class="command-block">
+        <pre><code>
+umask                                                           # Show current umask
+umask 022                                                       # Set umask (files: 644, dirs: 755)
+umask 027                                                       # Set umask (files: 640, dirs: 750)
+umask -S                                                        # Show in symbolic format
+
+# Make permanent (add to ~/.bashrc or /etc/profile)</code></pre>
+      </div>
+
+      <h2 id="user-mgmt">5. USER & GROUP MANAGEMENT</h2>
+
+      <h3>User Operations</h3>
+
+      <div class="command-block">
+        <h4>Create users</h4>
+        <pre><code>
+useradd username                                                # Create user (minimal setup)
+useradd -m username                                             # Create with home directory
+useradd -m -s /bin/bash username                                # Specify shell
+useradd -m -d /custom/home username                             # Custom home directory
+useradd -m -u 1500 username                                     # Specify UID
+useradd -m -g group username                                    # Specify primary group
+useradd -m -G group1,group2 username                            # Add to groups
+useradd -m -e 2024-12-31 username                               # Expiry date
+useradd -m -c "Full Name" username                              # Comment (GECOS)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Modify users</h4>
+        <pre><code>
+usermod -s /bin/zsh username                                    # Change shell
+usermod -d /new/home username                                   # Change home directory
+usermod -m -d /new/home username                                # Move home directory contents
+usermod -l newname oldname                                      # Change username
+usermod -L username                                             # Lock account
+usermod -U username                                             # Unlock account
+usermod -e 2024-12-31 username                                  # Set expiry date
+usermod -e "" username                                          # Remove expiry date
+usermod -g newgroup username                                    # Change primary group
+usermod -G group1,group2 username                               # Set supplementary groups (REPLACE)
+usermod -aG group username                                      # Add to group (APPEND)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete users</h4>
+        <pre><code>
+userdel username                                                # Delete user (keep home directory)
+userdel -r username                                             # Delete user and home directory
+userdel -f username                                             # Force delete (even if logged in)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Password management</h4>
+        <pre><code>
+passwd username                                                 # Set/change password
+passwd -l username                                              # Lock password
+passwd -u username                                              # Unlock password
+passwd -d username                                              # Delete password (passwordless)
+passwd -e username                                              # Expire password (force change)
+passwd -S username                                              # Show password status
+passwd -n 7 username                                            # Minimum password age (7 days)
+passwd -x 90 username                                           # Maximum password age (90 days)
+passwd -w 14 username                                           # Warning days before expiry</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Password aging</h4>
+        <pre><code>
+chage username                                                  # Interactive password aging
+chage -l username                                               # List aging information
+chage -E 2024-12-31 username                                    # Set account expiry
+chage -M 90 username                                            # Max days before password change
+chage -m 7 username                                             # Min days between password changes
+chage -W 14 username                                            # Warning days before expiry
+chage -I 30 username                                            # Inactive days after expiry</code></pre>
+      </div>
+
+      <h3>Group Operations</h3>
+
+      <div class="command-block">
+        <h4>Create groups</h4>
+        <pre><code>
+groupadd groupname                                              # Create group
+groupadd -g 5000 groupname                                      # Create with specific GID
+groupadd -r groupname                                           # Create system group</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Modify groups</h4>
+        <pre><code>
+groupmod -n newname oldname                                     # Rename group
+groupmod -g 6000 groupname                                      # Change GID</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Delete groups</h4>
+        <pre><code>
+groupdel groupname                                              # Delete group</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Add user to group</h4>
+        <pre><code>
+gpasswd -a username groupname                                   # Add user to group
+gpasswd -d username groupname                                   # Remove user from group
+gpasswd -M user1,user2 groupname                                # Set group members (REPLACE)
+gpasswd -A user groupname                                       # Set group admin
+
+# Alternative: usermod
+usermod -aG groupname username                                  # Add user to group</code></pre>
+      </div>
+
+      <h3>User/Group Information</h3>
+
+      <div class="command-block">
+        <h4>Current user information</h4>
+        <pre><code>
+id                                                              # Show user and group IDs
+id username                                                     # Show IDs for specific user
+whoami                                                          # Show current username
+who                                                             # Show who is logged in
+w                                                               # Show who is logged in and what they're doing
+users                                                           # List logged-in users
+last                                                            # Show login history
+last username                                                   # Login history for user
+lastlog                                                         # Last login for all users
+lastb                                                           # Failed login attempts</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Switch users</h4>
+        <pre><code>
+su username                                                     # Switch user (non-login shell)
+su - username                                                   # Switch user (login shell)
+su -                                                            # Switch to root (login shell)
+sudo command                                                    # Execute command as root
+sudo -u username command                                        # Execute as different user
+sudo -i                                                         # Interactive root shell
+sudo -s                                                         # Shell as root (non-login)
+sudo -l                                                         # List sudo privileges</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View user/group databases</h4>
+        <pre><code>
+cat /etc/passwd                                                 # User account database
+cat /etc/shadow                                                 # Password hashes (root only)
+cat /etc/group                                                  # Group database
+cat /etc/gshadow                                                # Group passwords (root only)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Get user info</h4>
+        <pre><code>
+getent passwd username                                          # Query user database
+getent group groupname                                          # Query group database
+getent passwd                                                   # Show all users
+getent group                                                    # Show all groups</code></pre>
+      </div>
+
+      <h3>sudo Configuration</h3>
+
+      <div class="command-block">
+        <h4>Edit sudoers file (ALWAYS use visudo)</h4>
+        <pre><code>
+visudo                                                          # Edit /etc/sudoers safely
+visudo -c                                                       # Check syntax without editing</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>sudoers examples (edit with visudo)</h4>
+        <pre><code>
+# username ALL=(ALL) ALL                                        # Full sudo access
+# username ALL=(ALL) NOPASSWD: ALL                              # No password required
+# %groupname ALL=(ALL) ALL                                      # Group access
+# username ALL=/usr/bin/systemctl                               # Specific command only
+</code></pre>
+      </div>
+
+      <h2 id="process-mgmt">6. PROCESS MANAGEMENT</h2>
+
+      <h3>View Processes</h3>
+
+      <div class="command-block">
+        <h4>ps (process status)</h4>
+        <pre><code>
+ps                                                              # Processes in current shell
+ps -e                                                           # All processes
+ps -ef                                                          # All processes (full format)
+ps -eF                                                          # Extra full format
+ps aux                                                          # BSD style (all users)
+ps aux | grep processname                                       # Find specific process
+ps -u username                                                  # Processes by user
+ps -p PID                                                       # Process by PID
+ps --ppid PPID                                                  # Processes by parent PID
+ps -C commandname                                               # Processes by command name
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem                      # Custom format, sorted</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>pgrep (process grep)</h4>
+        <pre><code>
+pgrep processname                                               # Find PID by name
+pgrep -u username                                               # PIDs by user
+pgrep -l processname                                            # Show PID and name
+pgrep -a processname                                            # Show full command line
+pgrep -f pattern                                                # Match full command line</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>pidof</h4>
+        <pre><code>
+pidof processname                                               # Find PID(s) by exact name</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Process tree</h4>
+        <pre><code>
+pstree                                                          # Show process tree
+pstree -p                                                       # Show PIDs
+pstree username                                                 # Tree for specific user
+pstree -a                                                       # Show command-line arguments</code></pre>
+      </div>
+
+      <h3>Interactive Process Monitoring</h3>
+
+      <div class="command-block">
+        <h4>top</h4>
+        <pre><code>
+top                                                             # Interactive process viewer
+# Inside top:
+# Press M - sort by memory
+# Press P - sort by CPU
+# Press k - kill process (enter PID)
+# Press r - renice process
+# Press f - select fields to display
+# Press q - quit
+
+top -u username                                                 # Show processes for user
+top -p PID                                                      # Monitor specific PID
+top -d 5                                                        # Update every 5 seconds
+top -b -n 1 > output.txt                                        # Batch mode, one iteration</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>htop (if installed)</h4>
+        <pre><code>
+htop                                                            # Interactive process viewer
+# F5 - tree view
+# F6 - sort
+# F9 - kill
+# F10 - quit</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>atop (comprehensive resource monitor)</h4>
+        <pre><code>
+atop                                                            # System and process monitor
+atop -w logfile                                                 # Write to log
+atop -r logfile                                                 # Read from log</code></pre>
+      </div>
+
+      <h3>Control Processes</h3>
+
+      <div class="command-block">
+        <h4>Kill processes</h4>
+        <pre><code>
+kill PID                                                        # Send SIGTERM (graceful)
+kill -9 PID                                                     # Send SIGKILL (force)
+kill -15 PID                                                    # SIGTERM (explicit)
+kill -1 PID                                                     # SIGHUP (reload config)
+kill -l                                                         # List all signals
+
+killall processname                                             # Kill all by name
+killall -9 processname                                          # Force kill all
+killall -u username                                             # Kill all processes by user
+killall -i processname                                          # Interactive (confirm each)
+
+pkill processname                                               # Kill by name (similar to killall)
+pkill -9 processname                                            # Force kill
+pkill -u username                                               # Kill by user
+pkill -f pattern                                                # Match full command line</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Send signals</h4>
+        <pre><code>
+kill -STOP PID                                                  # Pause process
+kill -CONT PID                                                  # Continue paused process</code></pre>
+      </div>
+
+      <h3>Background Jobs</h3>
+
+      <div class="command-block">
+        <h4>Run in background</h4>
+        <pre><code>
+command &                                                       # Run command in background
+nohup command &                                                 # Run immune to hangups
+nohup command > output.log 2>&1 &                               # Redirect output</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Job control</h4>
+        <pre><code>
+jobs                                                            # List background jobs
+jobs -l                                                         # Show PIDs
+bg                                                              # Continue job in background
+bg %1                                                           # Continue job number 1
+fg                                                              # Bring job to foreground
+fg %1                                                           # Bring job number 1 to foreground
+Ctrl+Z                                                          # Suspend current foreground job</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Disown jobs</h4>
+        <pre><code>
+disown                                                          # Remove job from shell's job table
+disown %1                                                       # Disown job number 1
+disown -a                                                       # Disown all jobs</code></pre>
+      </div>
+
+      <h3>Process Priority</h3>
+
+      <div class="command-block">
+        <h4>nice (set priority when starting)</h4>
+        <pre><code>
+nice command                                                    # Start with default niceness (+10)
+nice -n 10 command                                              # Start with niceness +10
+nice -n -10 command                                             # Start with niceness -10 (requires root)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>renice (change priority of running process)</h4>
+        <pre><code>
+renice 10 PID                                                   # Change to niceness +10
+renice -n 10 PID                                                # Same as above
+renice -n -10 PID                                               # Change to niceness -10 (requires root)
+renice -u username                                              # Change for all user's processes
+renice -g groupname                                             # Change for all group's processes</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Niceness range: -20 (highest priority) to +19 (lowest priority)</h4>
+      </div>
+
+      <h3>Resource Limits</h3>
+
+      <div class="command-block">
+        <h4>ulimit (per-process limits)</h4>
+        <pre><code>
+ulimit -a                                                       # Show all limits
+ulimit -u                                                       # Max user processes
+ulimit -n                                                       # Max open files
+ulimit -f                                                       # Max file size
+ulimit -c                                                       # Core dump size
+ulimit -t                                                       # Max CPU time</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Set limits</h4>
+        <pre><code>
+ulimit -n 4096                                                  # Set max open files to 4096
+ulimit -u 200                                                   # Set max processes to 200
+ulimit -c unlimited                                             # Unlimited core dumps</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Hard vs soft limits</h4>
+        <pre><code>
+ulimit -S -n                                                    # Show soft limit
+ulimit -H -n                                                    # Show hard limit
+ulimit -S -n 2048                                               # Set soft limit
+ulimit -H -n 4096                                               # Set hard limit (root only)</code></pre>
+      </div>
+
+      <h3>/proc Filesystem</h3>
+
+      <div class="command-block">
+        <h4>Process information</h4>
+        <pre><code>
+cat /proc/PID/status                                            # Process status
+cat /proc/PID/cmdline                                           # Command line
+cat /proc/PID/environ                                           # Environment variables
+cat /proc/PID/cwd                                               # Current working directory (symlink)
+cat /proc/PID/exe                                               # Executable path (symlink)
+cat /proc/PID/fd/                                               # Open file descriptors
+cat /proc/PID/maps                                              # Memory mappings
+cat /proc/PID/limits                                            # Resource limits</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>System information</h4>
+        <pre><code>
+cat /proc/cpuinfo                                               # CPU information
+cat /proc/meminfo                                               # Memory information
+cat /proc/version                                               # Kernel version
+cat /proc/uptime                                                # System uptime
+cat /proc/loadavg                                               # Load average
+cat /proc/sys/                                                  # Kernel parameters</code></pre>
+      </div>
+
+      <h2 id="systemd">7. SYSTEMD SERVICE MANAGEMENT</h2>
+
+      <h3>Basic Service Control</h3>
+
+      <div class="command-block">
+        <h4>Service status and control</h4>
+        <pre><code>
+systemctl status servicename                                    # Show service status
+systemctl start servicename                                     # Start service
+systemctl stop servicename                                      # Stop service
+systemctl restart servicename                                   # Restart service
+systemctl reload servicename                                    # Reload config (no restart)
+systemctl try-restart servicename                               # Restart only if running
+systemctl reload-or-restart servicename                         # Reload if possible, else restart</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Enable/disable services</h4>
+        <pre><code>
+systemctl enable servicename                                    # Enable at boot
+systemctl disable servicename                                   # Disable at boot
+systemctl enable --now servicename                              # Enable and start
+systemctl disable --now servicename                             # Disable and stop
+systemctl is-enabled servicename                                # Check if enabled
+systemctl is-active servicename                                 # Check if active
+systemctl is-failed servicename                                 # Check if failed</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Mask/unmask (prevent service from starting)</h4>
+        <pre><code>
+systemctl mask servicename                                      # Mask service (cannot start)
+systemctl unmask servicename                                    # Unmask service</code></pre>
+      </div>
+
+      <h3>List and Query Services</h3>
+
+      <div class="command-block">
+        <h4>List services</h4>
+        <pre><code>
+systemctl list-units                                            # List active units
+systemctl list-units --all                                      # List all units
+systemctl list-units --type=service                             # Services only
+systemctl list-units --state=running                            # Running services
+systemctl list-units --state=failed                             # Failed services
+systemctl list-unit-files                                       # List all unit files
+systemctl list-unit-files --type=service                        # Service unit files
+systemctl list-unit-files --state=enabled                       # Enabled services</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Show service details</h4>
+        <pre><code>
+systemctl show servicename                                      # Show all properties
+systemctl show servicename -p Property                          # Show specific property
+systemctl cat servicename                                       # Show unit file content</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Dependencies</h4>
+        <pre><code>
+systemctl list-dependencies servicename                         # Show dependencies
+systemctl list-dependencies --all servicename                   # All dependencies
+systemctl list-dependencies --reverse servicename               # What depends on this</code></pre>
+      </div>
+
+      <h3>System State Management</h3>
+
+      <div class="command-block">
+        <h4>System targets (runlevels)</h4>
+        <pre><code>
+systemctl get-default                                           # Show default target
+systemctl set-default multi-user.target                         # Set default target
+systemctl isolate multi-user.target                             # Switch to target
+systemctl isolate graphical.target                              # Switch to graphical</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Common targets</h4>
+        <pre><code>
+# multi-user.target (runlevel 3) - Multi-user text mode
+# graphical.target (runlevel 5) - Multi-user graphical mode
+# rescue.target (runlevel 1) - Rescue mode
+# emergency.target - Emergency mode
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>System control</h4>
+        <pre><code>
+systemctl reboot                                                # Reboot system
+systemctl poweroff                                              # Power off system
+systemctl halt                                                  # Halt system
+systemctl suspend                                               # Suspend system
+systemctl hibernate                                             # Hibernate system</code></pre>
+      </div>
+
+      <h3>Systemd Timers (Cron Alternative)</h3>
+
+      <div class="command-block">
+        <h4>List timers</h4>
+        <pre><code>
+systemctl list-timers                                           # Show all timers
+systemctl list-timers --all                                     # Include inactive</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Timer control</h4>
+        <pre><code>
+systemctl start timer-name.timer                                # Start timer
+systemctl enable timer-name.timer                               # Enable timer
+systemctl status timer-name.timer                               # Timer status</code></pre>
+      </div>
+
+      <h3>Journal (Logging)</h3>
+
+      <div class="command-block">
+        <h4>View logs</h4>
+        <pre><code>
+journalctl                                                      # All logs
+journalctl -f                                                   # Follow logs (like tail -f)
+journalctl -u servicename                                       # Logs for specific service
+journalctl -u servicename -f                                    # Follow service logs
+journalctl -b                                                   # Current boot logs
+journalctl -b -1                                                # Previous boot logs
+journalctl --since "2024-01-01"                                 # Since date
+journalctl --since "1 hour ago"                                 # Since time
+journalctl --since today                                        # Today's logs
+journalctl --until "2024-01-31"                                 # Until date
+journalctl -p err                                               # Priority: err and above
+journalctl -p warning                                           # Warning and above
+journalctl -k                                                   # Kernel messages only
+journalctl _PID=1234                                            # Logs for specific PID
+journalctl -n 100                                               # Last 100 lines
+journalctl --no-pager                                           # No paging</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Journal management</h4>
+        <pre><code>
+journalctl --disk-usage                                         # Show disk usage
+journalctl --vacuum-size=100M                                   # Keep only 100MB
+journalctl --vacuum-time=2weeks                                 # Keep only 2 weeks</code></pre>
+      </div>
+
+      <h3>Create Custom Service Unit</h3>
+
+      <div class="command-block">
+        <h4>Service unit file location</h4>
+        <pre><code>
+/etc/systemd/system/myservice.service                           # Service unit file location
+</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>After creating/editing unit file</h4>
+        <pre><code>
+systemctl daemon-reload                                         # Reload systemd configuration
+systemctl start myservice                                       # Start the service
+systemctl enable myservice                                      # Enable at boot</code></pre>
+      </div>
+
+      <h2 id="package-mgmt">8. PACKAGE MANAGEMENT (DNF/YUM)</h2>
+
+      <h3>DNF Package Operations</h3>
+
+      <div class="command-block">
+        <h4>Search and info</h4>
+        <pre><code>
+dnf search keyword                                              # Search for packages
+dnf search all keyword                                          # Search name and description
+dnf info packagename                                            # Show package information
+dnf list                                                        # List all packages
+dnf list installed                                              # List installed packages
+dnf list available                                              # List available packages
+dnf list updates                                                # List available updates
+dnf list --recent                                               # Recently added packages</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Install packages</h4>
+        <pre><code>
+dnf install packagename                                         # Install package
+dnf install package1 package2                                   # Install multiple
+dnf install -y packagename                                      # Auto-answer yes
+dnf reinstall packagename                                       # Reinstall package
+dnf downgrade packagename                                       # Downgrade to previous version</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove packages</h4>
+        <pre><code>
+dnf remove packagename                                          # Remove package
+dnf remove -y packagename                                       # Auto-answer yes
+dnf autoremove                                                  # Remove unneeded dependencies</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Update packages</h4>
+        <pre><code>
+dnf check-update                                                # Check for updates
+dnf update                                                      # Update all packages
+dnf update packagename                                          # Update specific package
+dnf update -y                                                   # Update with auto-yes
+dnf upgrade                                                     # Upgrade (same as update)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Package groups</h4>
+        <pre><code>
+dnf grouplist                                                   # List package groups
+dnf groupinfo "Group Name"                                      # Group information
+dnf groupinstall "Group Name"                                   # Install group
+dnf groupremove "Group Name"                                    # Remove group
+dnf groupupdate "Group Name"                                    # Update group</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Repository management</h4>
+        <pre><code>
+dnf repolist                                                    # List enabled repositories
+dnf repolist all                                                # List all repositories
+dnf repoinfo reponame                                           # Repository information
+dnf config-manager --add-repo URL                               # Add repository
+dnf config-manager --enable reponame                            # Enable repository
+dnf config-manager --disable reponame                           # Disable repository</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Cache operations</h4>
+        <pre><code>
+dnf makecache                                                   # Build cache
+dnf clean all                                                   # Clean all cache
+dnf clean packages                                              # Clean package cache
+dnf clean metadata                                              # Clean metadata cache</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>History and undo</h4>
+        <pre><code>
+dnf history                                                     # Show transaction history
+dnf history info ID                                             # Transaction details
+dnf history undo ID                                             # Undo transaction
+dnf history redo ID                                             # Redo transaction</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Dependency queries</h4>
+        <pre><code>
+dnf provides */filename                                         # Find package providing file
+dnf provides command                                            # Find package with command
+dnf deplist packagename                                         # List dependencies
+dnf repoquery --requires packagename                            # What does it require
+dnf repoquery --whatrequires packagename                        # What requires it
+dnf repoquery --whatprovides filename                           # What provides file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Module management (RHEL 8+)</h4>
+        <pre><code>
+dnf module list                                                 # List available modules
+dnf module list --installed                                     # Installed modules
+dnf module info modulename                                      # Module information
+dnf module enable modulename:stream                             # Enable module stream
+dnf module install modulename:stream                            # Install module
+dnf module disable modulename                                   # Disable module
+dnf module reset modulename                                     # Reset module</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Advanced options</h4>
+        <pre><code>
+dnf install --downloadonly packagename                          # Download without install
+dnf install --downloaddir=/path packagename                     # Download to directory
+dnf install --skip-broken                                       # Skip packages with problems
+dnf install --nobest                                            # Use older version if latest problematic</code></pre>
+      </div>
+
+      <h3>YUM (Legacy, similar to DNF)</h3>
+
+      <div class="command-block">
+        <h4>YUM commands are mostly identical to DNF</h4>
+        <pre><code>yum install packagename
+yum update
+yum remove packagename
+# YUM and DNF are compatible in RHEL 8+</code></pre>
+      </div>
+
+      <h2 id="rpm">9. RPM PACKAGE MANAGEMENT</h2>
+
+      <h3>Query Operations</h3>
+
+      <div class="command-block">
+        <h4>Query installed packages</h4>
+        <pre><code>
+rpm -qa                                                         # List all installed packages
+rpm -qa | grep packagename                                      # Search installed packages
+rpm -qi packagename                                             # Show package information
+rpm -ql packagename                                             # List files in package
+rpm -qc packagename                                             # List config files
+rpm -qd packagename                                             # List documentation files
+rpm -q --scripts packagename                                    # Show installation scripts
+rpm -q --changelog packagename                                  # Show changelog</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Query package files</h4>
+        <pre><code>
+rpm -qf /path/to/file                                           # Which package owns file
+rpm -qp package.rpm                                             # Query package file (not installed)
+rpm -qip package.rpm                                            # Info from package file
+rpm -qlp package.rpm                                            # List files in package file
+rpm -qcp package.rpm                                            # Config files in package file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Query capabilities</h4>
+        <pre><code>
+rpm -q --provides packagename                                   # What package provides
+rpm -q --requires packagename                                   # What package requires
+rpm -q --whatprovides filename                                  # What package provides file
+rpm -q --whatrequires packagename                               # What requires this package</code></pre>
+      </div>
+
+      <h3>Install and Remove Operations</h3>
+
+      <div class="command-block">
+        <h4>Install packages</h4>
+        <pre><code>
+rpm -ivh package.rpm                                            # Install with verbose and hash
+rpm -Uvh package.rpm                                            # Upgrade or install
+rpm -Fvh package.rpm                                            # Freshen (upgrade if installed)
+rpm -ivh --nodeps package.rpm                                   # Install ignoring dependencies (DANGEROUS)
+rpm -ivh --force package.rpm                                    # Force install (DANGEROUS)
+rpm -ivh --test package.rpm                                     # Test install (dry run)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Remove packages</h4>
+        <pre><code>
+rpm -e packagename                                              # Remove package
+rpm -ev packagename                                             # Remove with verbose
+rpm -e --nodeps packagename                                     # Remove ignoring dependencies (DANGEROUS)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Verify packages</h4>
+        <pre><code>
+rpm -V packagename                                              # Verify installed package
+rpm -Va                                                         # Verify all packages
+rpm -Vf /path/to/file                                           # Verify package owning file</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Database operations</h4>
+        <pre><code>
+rpm --rebuilddb                                                 # Rebuild RPM database
+rpm --initdb                                                    # Initialize RPM database
+rpm --import /path/to/GPG-KEY                                   # Import GPG key</code></pre>
+      </div>
+
+      <h3>Extract and Build</h3>
+
+      <div class="command-block">
+        <h4>Extract package contents</h4>
+        <pre><code>
+rpm2cpio package.rpm | cpio -idmv                               # Extract package files
+rpm2cpio package.rpm | cpio -t                                  # List files without extracting</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Query remote packages</h4>
+        <pre><code>
+rpm -qp http://url/package.rpm                                  # Query from URL</code></pre>
+      </div>
+
+      <h2 id="logging">10. SYSTEM LOGGING</h2>
+
+      <h3>rsyslog (System Logger)</h3>
+
+      <div class="command-block">
+        <h4>rsyslog configuration</h4>
+        <pre><code>
+/etc/rsyslog.conf                                               # Main configuration
+/etc/rsyslog.d/*.conf                                           # Additional configs</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Log file locations</h4>
+        <pre><code>
+/var/log/messages                                               # General system messages
+/var/log/secure                                                 # Authentication/security
+/var/log/maillog                                                # Mail server logs
+/var/log/cron                                                   # Cron job logs
+/var/log/boot.log                                               # Boot messages
+/var/log/dmesg                                                  # Kernel ring buffer
+/var/log/wtmp                                                   # Login records (binary)
+/var/log/btmp                                                   # Failed login attempts (binary)</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>View logs</h4>
+        <pre><code>
+tail -f /var/log/messages                                       # Follow system messages
+tail -100 /var/log/secure                                       # Last 100 auth lines
+less /var/log/messages                                          # Page through log
+grep ERROR /var/log/messages                                    # Search for errors
+grep -i fail /var/log/secure                                    # Case-insensitive search</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Service control</h4>
+        <pre><code>
+systemctl status rsyslog                                        # Check rsyslog status
+systemctl restart rsyslog                                       # Restart rsyslog
+systemctl enable rsyslog                                        # Enable at boot</code></pre>
+      </div>
+
+      <h3>journalctl (Systemd Journal)</h3>
+
+      <div class="command-block">
+        <h4>Basic viewing</h4>
+        <pre><code>
+journalctl                                                      # All journal entries
+journalctl -f                                                   # Follow journal
+journalctl -r                                                   # Reverse order (newest first)
+journalctl -n 50                                                # Last 50 entries
+journalctl --no-pager                                           # No paging</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by time</h4>
+        <pre><code>
+journalctl --since "2024-01-01 10:00:00"
+journalctl --since today
+journalctl --since yesterday
+journalctl --since "10 minutes ago"
+journalctl --since "1 hour ago"
+journalctl --until "2024-01-31"
+journalctl --since "2024-01-01" --until "2024-01-31"</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by unit/service</h4>
+        <pre><code>
+journalctl -u sshd                                              # SSH daemon logs
+journalctl -u httpd -f                                          # Follow Apache logs
+journalctl -u servicename --since today</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by priority</h4>
+        <pre><code>
+journalctl -p emerg                                             # Emergency only
+journalctl -p alert                                             # Alert and above
+journalctl -p crit                                              # Critical and above
+journalctl -p err                                               # Error and above
+journalctl -p warning                                           # Warning and above
+journalctl -p notice                                            # Notice and above
+journalctl -p info                                              # Info and above
+journalctl -p debug                                             # Debug and above</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by boot</h4>
+        <pre><code>
+journalctl -b                                                   # Current boot
+journalctl -b -1                                                # Previous boot
+journalctl -b -2                                                # Two boots ago
+journalctl --list-boots                                         # List all boots</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Filter by identifier</h4>
+        <pre><code>
+journalctl -t sshd                                              # By syslog identifier
+journalctl _COMM=sshd                                           # By command name
+journalctl _PID=1234                                            # By process ID
+journalctl _UID=1000                                            # By user ID</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Kernel messages</h4>
+        <pre><code>
+journalctl -k                                                   # Kernel messages only
+journalctl -kb                                                  # Kernel messages current boot</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Output formats</h4>
+        <pre><code>
+journalctl -o verbose                                           # Verbose output
+journalctl -o json                                              # JSON format
+journalctl -o json-pretty                                       # Pretty JSON
+journalctl -o cat                                               # Just messages, no metadata
+journalctl -o short-iso                                         # ISO timestamp format</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Journal maintenance</h4>
+        <pre><code>
+journalctl --disk-usage                                         # Show disk usage
+journalctl --verify                                             # Verify journal integrity
+journalctl --vacuum-size=1G                                     # Limit journal to 1GB
+journalctl --vacuum-time=1month                                 # Keep 1 month
+journalctl --vacuum-files=10                                    # Keep 10 journal files
+journalctl --rotate                                             # Rotate journal files</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Persistent journal configuration</h4>
+        <pre><code>
+# Edit /etc/systemd/journald.conf
+# Storage=persistent
+# Make journal persistent across reboots systemctl restart systemd-journald
+# Apply changes</code></pre>
+      </div>
+
+      <h3>Log Rotation (logrotate)</h3>
+
+      <div class="command-block">
+        <h4>Configuration</h4>
+        <pre><code>
+/etc/logrotate.conf                                             # Main configuration
+/etc/logrotate.d/                                               # Service-specific configs</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Manual rotation</h4>
+        <pre><code>
+logrotate /etc/logrotate.conf                                   # Run rotation
+logrotate -f /etc/logrotate.conf                                # Force rotation
+logrotate -d /etc/logrotate.conf                                # Debug mode (dry run)
+logrotate -v /etc/logrotate.conf                                # Verbose mode</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Check logrotate status</h4>
+        <pre><code>
+cat /var/lib/logrotate/logrotate.status                         # Rotation status</code></pre>
+      </div>
+
+      <h3>Audit System (auditd)</h3>
+
+      <div class="command-block">
+        <h4>Audit service</h4>
+        <pre><code>
+systemctl status auditd                                         # Check audit daemon
+systemctl start auditd                                          # Start audit daemon
+systemctl enable auditd                                         # Enable at boot</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Audit logs</h4>
+        <pre><code>
+/var/log/audit/audit.log                                        # Main audit log</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Search audit logs</h4>
+        <pre><code>
+ausearch -m LOGIN                                               # Search for login events
+ausearch -m USER_AUTH                                           # Authentication attempts
+ausearch -f /etc/passwd                                         # File access
+ausearch -k key-name                                            # Search by key
+ausearch -ts today                                              # Today's events
+ausearch -ts 10:00 -te 11:00                                    # Time range
+ausearch -ui 1000                                               # By user ID
+ausearch -p 1234                                                # By process ID
+ausearch --success yes                                          # Successful events only
+ausearch --success no                                           # Failed events only</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Audit reports</h4>
+        <pre><code>
+aureport                                                        # Summary report
+aureport -au                                                    # Authentication report
+aureport -l                                                     # Login report
+aureport -f                                                     # File access report
+aureport -m                                                     # Modification report
+aureport -x                                                     # Executable report
+aureport --summary                                              # Summary statistics
+aureport --failed                                               # Failed events</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Audit rules</h4>
+        <pre><code>
+auditctl -l                                                     # List current rules
+auditctl -w /etc/passwd -p wa -k passwd_changes                 # Watch file
+auditctl -a always,exit -F arch=b64 -S open -k file_open        # System call</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Audit configuration</h4>
+        <pre><code>
+/etc/audit/auditd.conf                                          # Audit daemon config
+/etc/audit/rules.d/                                             # Audit rules</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Generate readable output</h4>
+        <pre><code>
+ausearch -i                                                     # Interpret UIDs/GIDs to names</code></pre>
+      </div>
+
+      <div class="navigation" style="margin-top: 40px; text-align: center">
+        <strong>End of Part 1 - System Administration</strong><br />
+        <a href="#top">Back to Top</a>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript for download functionality
+      function downloadAsFile(filename) {
+        // Get the entire HTML content
+        const htmlContent = document.documentElement.outerHTML;
+
+        // Create a blob with the HTML content
+        const blob = new Blob([htmlContent], { type: "text/html" });
+
+        // Create a temporary link element
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename || "linux-devops-system-admin.html";
+
+        // Append to body, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function printPage() {
+        window.print();
+      }
+
+      // Add smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 20,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Add search functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // Create search input
+        const searchContainer = document.createElement("div");
+        searchContainer.style.cssText = "margin: 20px 0; text-align: center;";
+        searchContainer.innerHTML = `
+                <input type="text" id="commandSearch" placeholder="Search commands..." 
+                       style="padding: 10px; width: 80%; max-width: 500px; border: 2px solid #3498db; border-radius: 5px;">
+                <button onclick="searchCommands()" 
+                        style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; margin-left: 10px;">
+                    Search
+                </button>
+                <button onclick="clearSearch()" 
+                        style="padding: 10px 20px; background-color: #95a5a6; color: white; border: none; border-radius: 5px; margin-left: 5px;">
+                    Clear
+                </button>
+            `;
+
+        // Insert search at the beginning
+        const container = document.querySelector(".container");
+        container.insertBefore(searchContainer, container.firstChild);
+
+        // Add search results container
+        const resultsContainer = document.createElement("div");
+        resultsContainer.id = "searchResults";
+        resultsContainer.style.cssText = "margin: 20px 0; display: none;";
+        container.insertBefore(resultsContainer, searchContainer.nextSibling);
+      });
+
+      function searchCommands() {
+        const searchTerm = document
+          .getElementById("commandSearch")
+          .value.toLowerCase();
+        const resultsContainer = document.getElementById("searchResults");
+
+        if (!searchTerm) {
+          resultsContainer.innerHTML =
+            '<p style="color: #e74c3c;">Please enter a search term</p>';
+          resultsContainer.style.display = "block";
+          return;
+        }
+
+        // Get all pre elements (command blocks)
+        const preElements = document.querySelectorAll("pre");
+        let results = [];
+
+        preElements.forEach((pre, index) => {
+          const text = pre.textContent.toLowerCase();
+          if (text.includes(searchTerm)) {
+            // Get the heading for context
+            let heading = "Unknown Section";
+            let currentElement = pre.previousElementSibling;
+
+            // Find the nearest heading
+            while (currentElement) {
+              if (currentElement.tagName.match(/^H[2-4]$/)) {
+                heading = currentElement.textContent;
+                break;
+              }
+              currentElement = currentElement.previousElementSibling;
+            }
+
+            // Extract matching lines
+            const lines = pre.textContent.split("\n");
+            const matchingLines = lines
+              .filter((line) => line.toLowerCase().includes(searchTerm))
+              .slice(0, 3); // Show first 3 matching lines
+
+            if (matchingLines.length > 0) {
+              results.push({
+                heading: heading,
+                lines: matchingLines,
+                element: pre,
+              });
+            }
+          }
+        });
+
+        // Display results
+        if (results.length > 0) {
+          let html = `<h3>Found ${results.length} results for "${searchTerm}"</h3>`;
+
+          results.forEach((result, index) => {
+            html += `
+                        <div style="background-color: #f8f9fa; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db;">
+                            <h4 style="margin-top: 0;">${result.heading}</h4>
+                            <pre style="margin: 10px 0;">${result.lines.join(
+                              "\n"
+                            )}</pre>
+                            <button onclick="scrollToResult(${index})" 
+                                    style="padding: 5px 10px; background-color: #2ecc71; color: white; border: none; border-radius: 3px;">
+                                Go to Command
+                            </button>
+                        </div>
+                    `;
+          });
+
+          resultsContainer.innerHTML = html;
+          resultsContainer.style.display = "block";
+
+          // Store results for scrolling
+          window.searchResults = results;
+        } else {
+          resultsContainer.innerHTML = `<p style="color: #e74c3c;">No results found for "${searchTerm}"</p>`;
+          resultsContainer.style.display = "block";
+        }
+      }
+
+      function scrollToResult(index) {
+        if (window.searchResults && window.searchResults[index]) {
+          const element = window.searchResults[index].element;
+          window.scrollTo({
+            top: element.offsetTop - 20,
+            behavior: "smooth",
+          });
+
+          // Highlight the element temporarily
+          element.style.backgroundColor = "#fff3cd";
+          element.style.borderColor = "#ffc107";
+
+          setTimeout(() => {
+            element.style.backgroundColor = "";
+            element.style.borderColor = "";
+          }, 2000);
+        }
+      }
+
+      function clearSearch() {
+        document.getElementById("commandSearch").value = "";
+        const resultsContainer = document.getElementById("searchResults");
+        resultsContainer.style.display = "none";
+        resultsContainer.innerHTML = "";
+      }
+    </script>
+
+    <!-- Floating Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top-btn" onclick="scrollToTop()">
+      ↑ TOP
+    </button>
+
+    <script>
+      (function () {
+        if (window._backToTopInstalled) return;
+        window._backToTopInstalled = true;
+        window.scrollToTop =
+          window.scrollToTop ||
+          function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          };
+        const btn = document.getElementById("backToTopBtn");
+        if (!btn) return;
+        btn.style.display = "none";
+        window.addEventListener("scroll", function () {
+          btn.style.display = window.pageYOffset > 300 ? "flex" : "none";
+        });
+      })();
+    </script>
+
+    <style>
+      .back-to-top-btn {
+        display: none;
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        z-index: 99;
+        width: 60px;
+        height: 60px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0.95;
+      }
+      .back-to-top-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        opacity: 1;
+      }
+      .back-to-top-btn:active {
+        transform: translateY(-2px) scale(1.05);
+      }
+    </style>
+  </body>
+</html>

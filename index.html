@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linux/DevOps Command Reference - Home</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="scripts.js" defer></script>
+    <style>
+      .hero-section {
+        background: linear-gradient(135deg, #00d9ff 0%, #ff6b9d 100%);
+        color: #0d1117;
+        padding: 40px 20px;
+        border-radius: 10px;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+      .hero-section h1 {
+        color: #0d1117;
+        border: none;
+        font-size: 2.8em;
+        margin: 0 0 10px 0;
+      }
+      .hero-section p {
+        font-size: 1.2em;
+        margin: 10px 0;
+      }
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+      .card {
+        background: #161b22;
+        border: 2px solid #30363d;
+        border-radius: 8px;
+        padding: 25px;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .card:hover {
+        border-color: #00d9ff;
+        box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        transform: translateY(-5px);
+      }
+      .card h3 {
+        margin-top: 0;
+        color: #00d9ff;
+        font-size: 1.4em;
+      }
+      .card-number {
+        display: inline-block;
+        background: #00d9ff;
+        color: #0d1117;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .card-desc {
+        color: #c9d1d9;
+        margin: 10px 0;
+      }
+      .card-list {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0;
+      }
+      .card-list li {
+        color: #79c0ff;
+        padding: 5px 0;
+        padding-left: 20px;
+        position: relative;
+      }
+      .card-list li:before {
+        content: "▸ ";
+        position: absolute;
+        left: 0;
+        color: #ff6b9d;
+      }
+      .card-btn {
+        display: inline-block;
+        background: #00d9ff;
+        color: #0d1117;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 15px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+      }
+      .card-btn:hover {
+        background: #ff6b9d;
+        color: white;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 30px 0;
+      }
+      .feature {
+        background: #161b22;
+        border-left: 4px solid #00d9ff;
+        padding: 15px;
+        border-radius: 5px;
+      }
+      .feature h4 {
+        margin-top: 0;
+        color: #00d9ff;
+      }
+      .feature p {
+        font-size: 0.9em;
+        color: #c9d1d9;
+        margin: 5px 0;
+      }
+      .info-box {
+        background: #1a2a3a;
+        border-left: 4px solid #00d9ff;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+      }
+      .info-box h3 {
+        color: #00d9ff;
+        margin-top: 0;
+      }
+      .info-box ul {
+        margin-left: 20px;
+        color: #c9d1d9;
+      }
+      .info-box li {
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="hero-section">
+        <h1>📚 Linux/DevOps Command Reference</h1>
+        <p>Professional guide with 100+ commands organized in 3 parts</p>
+        <p style="font-size: 0.95em; opacity: 0.9">
+          Complete reference for system administration, DevOps tools, and
+          security monitoring
+        </p>
+      </div>
+
+      <h2 style="text-align: center; color: #00d9ff; margin: 40px 0 30px 0">
+        📖 Choose Your Path
+      </h2>
+      <div class="cards-grid">
+        <div class="card" onclick="window.location.href='system-admin.html'">
+          <div class="card-number">1</div>
+          <h3>System Administration</h3>
+          <p class="card-desc">
+            <strong>1,596 lines</strong> • <strong>10 sections</strong>
+          </p>
+          <ul class="card-list">
+            <li>System Information & Navigation</li>
+            <li>File Operations</li>
+            <li>Text Editors</li>
+            <li>File Permissions & Ownership</li>
+            <li>User & Group Management</li>
+            <li>Process Management</li>
+            <li>Systemd Services Management</li>
+            <li>Package Management (DNF/YUM)</li>
+            <li>RPM Management Management</li>
+            <li>System Logging</li>
+          </ul>
+          <button class="card-btn">Open Part 1 →</button>
+        </div>
+
+        <div class="card" onclick="window.location.href='devops-tools.html'">
+          <div class="card-number">2</div>
+          <h3>DevOps Tools</h3>
+          <p class="card-desc">
+            <strong>4,981 lines</strong> • <strong>13 sections</strong>
+          </p>
+          <ul class="card-list">
+            <li>Disk Management</li>
+            <li>Networking Basics</li>
+            <li>Firewall Management</li>
+            <li>SSH (Secure Shell)</li>
+            <li>Text Processing</li>
+            <li>Bash Scripting Essentials</li>
+            <li>Python for DevOps - Basics</li>
+            <li>Git Version Control</li>
+            <li>Docker Commands</li>
+            <li>Kubernetes (kubectl) Commands</li>
+            <li>Ansible Commands</li>
+            <li>Terraform Commands</li>
+            <li>AWS CLI Commands</li>
+          </ul>
+          <button class="card-btn">Open Part 2 →</button>
+        </div>
+
+        <div
+          class="card"
+          onclick="window.location.href='monitoring-security.html'"
+        >
+          <div class="card-number">3</div>
+          <h3>Monitoring & Security</h3>
+          <p class="card-desc">
+            <strong>1,499 lines</strong> • <strong>6 sections</strong>
+          </p>
+          <ul class="card-list">
+            <li>Monitoring Commands</li>
+            <li>Security & Hardening</li>
+            <li>Performance Monitoring & Tuning</li>
+            <li>Backup & Recovery</li>
+            <li>Automation & Scheduling</li>
+            <li>Miscellaneous Commands</li>
+            <li>Summary</li>
+          <button class="card-btn">Open Part 3 →</button>
+        </div>
+      </div>
+
+      <!--
+      <div class="info" style="margin-top: 40px">
+        <h2>✨ Features</h2>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+          "
+        >
+          <div>
+            <h4>🔍 Smart Search</h4>
+            <p>
+              Find commands instantly. Press <code>Ctrl+Shift+F</code> to search
+            </p>
+          </div>
+          <div>
+            <h4>📋 Copy Commands</h4>
+            <p>One-click copy to clipboard with visual feedback</p>
+          </div>
+          <div>
+            <h4>🌙 Dark Mode</h4>
+            <p>
+              Toggle dark mode. Press <code>Ctrl+Shift+T</code> or click button
+            </p>
+          </div>
+          <div>
+            <h4>💾 Download/Export</h4>
+            <p>Save guides as HTML files or export as JSON/CSV</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 style="text-align: center; color: #00d9ff; margin: 50px 0 30px 0">
+        ✨ Features
+      </h2>
+      <div class="features-grid">
+        <div class="feature">
+          <h4>🔍 Smart Search</h4>
+          <p>Find commands instantly with <code>Ctrl+Shift+F</code></p>
+        </div>
+        <div class="feature">
+          <h4>🌙 Dark Mode</h4>
+          <p>Toggle with <code>Ctrl+Shift+T</code> or button</p>
+        </div>
+        <div class="feature">
+          <h4>💾 Export</h4>
+          <p>Save as HTML, JSON, or CSV</p>
+        </div>
+        <div class="feature">
+          <h4>🖨️ Print Friendly</h4>
+          <p>Optimized for PDF export</p>
+        </div>
+        <div class="feature">
+          <h4>📱 Responsive Design</h4>
+          <p>Works on mobile, tablet, and desktop</p>
+        </div>
+      </div> 
+      -->
+
+
+      <div class="info-box">
+        <h3>⚠️ Important Notes</h3>
+        <ul>
+          <li>
+            <strong>Root/Sudo:</strong> Many commands require elevated
+            permissions
+          </li>
+          <li>
+            <strong>Test First:</strong> Always test in safe environment before
+            production
+          </li>
+          <li>
+            <strong>Version Differences:</strong> Commands vary by Linux
+            distribution
+          </li>
+          <li>
+            <strong>Documentation:</strong> Use man pages for detailed
+            information
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box" style="border-left-color: #ff6b9d">
+        <h3 style="color: #ff6b9d">🚀 Quick Start</h3>
+        <ul>
+          <li>Click any part to browse commands</li>
+          <li>Use <strong>Ctrl+Shift+F</strong> for search</li>
+          <li>Use <strong>Ctrl+Shift+T</strong> to toggle dark mode</li>
+          <li>Click "Download" on each page to save as HTML</li>
+          <li>Press button in top-right to go back to top</li>
+        </ul>
+      </div>
+
+      <div
+        style="
+          text-align: center;
+          margin-top: 50px;
+          padding: 30px;
+          background: #0d1117;
+          border-radius: 10px;
+          border: 2px solid #30363d;
+        "
+      >
+        <h3 style="color: #00d9ff; margin-top: 0">Ready to Get Started?</h3>
+        <p style="color: #c9d1d9; font-size: 1.1em">
+          Choose a part above to begin your journey
+        </p>
+        <p style="color: #79c0ff; font-size: 0.9em">
+          <strong>Total:</strong> 8,076 lines of commands • 29 sections • 100+
+          topic
+        </p>
+      </div>
+    </div>
+    <!-- Floating Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top-btn" onclick="scrollToTop()">
+      ↑ TOP
+    </button>
+
+    <script>
+      (function () {
+        if (window._backToTopInstalled) return;
+        window._backToTopInstalled = true;
+
+        function ensureScroll() {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        window.scrollToTop = window.scrollToTop || ensureScroll;
+
+        const btn = document.getElementById("backToTopBtn");
+        if (!btn) return;
+        btn.style.display = "none";
+
+        window.addEventListener("scroll", function () {
+          btn.style.display = window.pageYOffset > 300 ? "flex" : "none";
+        });
+      })();
+    </script>
+
+    <style>
+      .back-to-top-btn {
+        display: none;
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        z-index: 99;
+        width: 60px;
+        height: 60px;
+        border: none;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0.95;
+      }
+      .back-to-top-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        opacity: 1;
+      }
+      .back-to-top-btn:active {
+        transform: translateY(-2px) scale(1.05);
+      }
+    </style>
+  </body>
+</html>
