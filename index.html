@@ -333,7 +333,11 @@
           <strong>Total:</strong> 8,076 lines of commands • 29 sections • 100+
           topic
         </p>
+        <footer class="site-footer">
+          <p>© <span id="year"></span> samiulAsumel. All rights reserved.</p>
+        </footer>
       </div>
+      
     </div>
     <!-- Floating Back to Top Button -->
     <button id="backToTopBtn" class="back-to-top-btn" onclick="scrollToTop()">
@@ -359,6 +363,7 @@
           btn.style.display = window.pageYOffset > 300 ? "flex" : "none";
         });
       })();
+      document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 
     <style>
@@ -392,6 +397,13 @@
       }
       .back-to-top-btn:active {
         transform: translateY(-2px) scale(1.05);
+      }
+      .site-footer {
+        text-align: center;
+        padding: 15px 0;
+        font-size: 14px;
+        color: #777;
+        border-top: 1px solid #e5e5e5;
       }
     </style>
   </body>
