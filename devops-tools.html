@@ -2065,25 +2065,29 @@ function_name() {
     commands
 }
 
+<hr>
 # Alternative syntax
 function function_name {
     commands
 }
 
+<hr>
 # Function with parameters
 greet() {
     echo "Hello, $1"
 }
 greet "John"                                                    # Call function
 
-# Return value
+<hr>
+# Function with return value
 add() {
     local result=$(($1 + $2))
     echo $result
 }
 sum=$(add 5 3)                                                  # Capture return value
 
-# Return exit code
+<hr>
+# Function with return exit code
 check_file() {
     if [ -f "$1" ]; then
         return 0
@@ -2092,6 +2096,7 @@ check_file() {
     fi
 }
 
+<hr>
 # Local variables
 myfunc() {
     local var="value"                                           # Local to function
@@ -2166,8 +2171,8 @@ echo ${string/%World/Universe}                                  # Replace at end
       <div class="command-block">
         <h4>Remove pattern</h4>
         <pre><code>
-echo ${string                                                   # He} # Remove shortest match from beginning
-echo ${string                                                   # #He*o} # Remove longest match from beginning
+echo ${string#He}                                               # Remove shortest match from beginning
+echo ${string##He*o}                                            # Remove longest match from beginning
 echo ${string%ld}                                               # Remove shortest match from end
 echo ${string%%o*}                                              # Remove longest match from end
 </code></pre>
@@ -2364,17 +2369,13 @@ set -euo pipefail                                               # Strict mode
         <pre><code>
 trap 'commands' SIGNAL                                          # Execute commands on signal
 
-# Cleanup on exit
-trap 'rm -f /tmp/tempfile' EXIT
+trap 'rm -f /tmp/tempfile' EXIT                                 # Cleanup on exit
 
-# Handle Ctrl+C
-trap 'echo "Interrupted"; exit 1' INT
+trap 'echo "Interrupted"; exit 1' INT                           # Handle Ctrl+C
 
-# Handle errors
-trap 'echo "Error on line $LINENO"' ERR
+trap 'echo "Error on line $LINENO"' ERR                         # Handle errors
 
-# Multiple signals
-trap 'cleanup_function' EXIT INT TERM
+trap 'cleanup_function' EXIT INT TERM                           # Multiple signals
 
 # Ignore signal
 trap '' INT                                                     # Ignore Ctrl+C
@@ -2442,7 +2443,7 @@ python3 -i script.py                                            # Interactive mo
       <div class="command-block">
         <h4>Shebang for Python scripts</h4>
         <pre><code>
-# !/usr/bin/env python3       # Portable shebang
+# !/usr/bin/env python3                                         # Portable shebang
 </code></pre>
       </div>
 
@@ -3527,7 +3528,7 @@ kubectl describe service service-name
         <h4>Create service</h4>
         <pre><code>
 kubectl expose deployment deployment-name --port=80 --type=NodePort # Expose deployment
-kubectl create service clusterip myservice --tcp=80:8080        # ClusterIP service
+kubectl create service clusterip myservice --tcp=80:8080            # ClusterIP service
 </code></pre>
       </div>
 
@@ -3660,10 +3661,10 @@ kubectl describe node node-name
       <div class="command-block">
         <h4>Cordon/uncordon (maintenance)</h4>
         <pre><code>
-kubectl cordon node-name                                        # Mark node unschedulable
-kubectl uncordon node-name                                      # Mark node schedulable
-kubectl drain node-name                                         # Drain node for maintenance
-kubectl drain node-name --ignore-daemonsets --delete-emptydir-data # Force drain
+kubectl cordon node-name                                            # Mark node unschedulable
+kubectl uncordon node-name                                          # Mark node schedulable
+kubectl drain node-name                                             # Drain node for maintenance
+kubectl drain node-name --ignore-daemonsets --delete-emptydir-data  # Force drain
 </code></pre>
       </div>
 
@@ -3726,7 +3727,7 @@ kubectl debug pod-name -it --image=busybox                      # Add debug cont
       <div class="command-block">
         <h4>Copy resources</h4>
         <pre><code>
-kubectl get deployment deployment-name -o yaml > deployment.yaml # Export to file
+kubectl get deployment deployment-name -o yaml > deployment.yaml  # Export to file
 </code></pre>
       </div>
 
@@ -3893,10 +3894,10 @@ ansible all -m copy -a "src=/local/file dest=/remote/path mode=0644 owner=user"
       <div class="command-block">
         <h4>File operations</h4>
         <pre><code>
-ansible all -m file -a "path=/tmp/test state=touch"             # Create file
-ansible all -m file -a "path=/tmp/test state=absent"            # Delete file
-ansible all -m file -a "path=/tmp/dir state=directory mode=0755" # Create dir
-ansible all -m file -a "src=/path/file dest=/path/link state=link" # Symlink
+ansible all -m file -a "path=/tmp/test state=touch"                 # Create file
+ansible all -m file -a "path=/tmp/test state=absent"                # Delete file
+ansible all -m file -a "path=/tmp/dir state=directory mode=0755"    # Create dir
+ansible all -m file -a "src=/path/file dest=/path/link state=link"  # Symlink
 </code></pre>
       </div>
 
