@@ -313,12 +313,21 @@ fail2ban-client ping                                            # Test if runnin
       <h3>SELinux Commands</h3>
 
       <div class="command-block">
-        <h4>SELinux status</h4>
+        <h4>SELinux Management</h4>
         <pre><code>
-getenforce                                                      # Current mode
-sestatus                                                        # Detailed status
-setenforce 0                                                    # Permissive mode
-setenforce 1                                                    # Enforcing mode</code></pre>
+getenforce                                                      # Check SELinux status
+sestatus                                                        # Detailed SELinux status
+setenforce 1                                                    # Enable enforcing mode
+setenforce 0                                                    # Disable (permissive)
+semanage boolean -l                                             # List SELinux booleans
+semanage boolean --list -C                                      # List modified booleans
+semanage boolean --modify --on httpd_can_network_connect        # Modify boolean
+semanage port -l                                                # List port mappings
+semanage port -a -t http_port_t -p tcp 8080                     # Add port mapping
+restorecon -Rv /path/to/dir                                     # Restore default contexts
+chcon -t httpd_sys_content_t /var/www/html                      # Change file context
+ls -Z                                                           # View SELinux contexts
+ps -Z                                                           # View process contexts</code></pre>
       </div>
 
       <div class="command-block">

@@ -1551,6 +1551,19 @@ auditctl -a always,exit -F arch=b64 -S open -k file_open        # System call</c
 ausearch -i                                                     # Interpret UIDs/GIDs to names</code></pre>
       </div>
 
+      <div class="command-block">
+        <h4>Red Hat Subscription Management (RHEL Specific)</h4>
+        <pre><code>
+subscription-manager register --username user --password pass --auto-attach   # Register system
+subscription-manager list --available                                         # Show available subscriptions
+subscription-manager attach --pool=POOL_ID                                    # Attach subscription
+subscription-manager repos --list                                             # List enabled repos
+subscription-manager repos --enable=rhel-8-for-x86_64-appstream-rpms          # Enable repo
+subscription-manager refresh                                                  # Refresh subscription
+subscription-manager status                                                   # Subscription status
+subscription-manager remove --all                                             # Remove all subscriptions
+subscription-manager unregister                                               # Unregister system</code></pre>
+      </div>
       <div class="navigation" style="margin-top: 40px; text-align: center">
         <strong>End of Part 1 - System Administration</strong><br />
         <a href="devops-tools.html">Go to Part 2</a>
