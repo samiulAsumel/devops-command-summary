@@ -371,8 +371,8 @@ swapoff -a                                                      # Disable all sw
       <div class="command-block">
         <h4>Create RAID</h4>
         <pre><code>
-mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1 # RAID 1
-mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sdb1 /dev/sdc1 /dev/sdd1 # RAID 5
+mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1            # RAID 1
+mdadm --create /dev/md0 --level=5 --raid-devices=3 /dev/sdb1 /dev/sdc1 /dev/sdd1  # RAID 5
 </code></pre>
       </div>
 
@@ -770,7 +770,7 @@ nmcli connection down eth0                                      # Deactivate con
       <div class="command-block">
         <h4>Add connection</h4>
         <pre><code>
-nmcli connection add type ethernet con-name eth0 ifname eth0    # Basic
+nmcli connection add type ethernet con-name eth0 ifname eth0                                     # Basic
 nmcli connection add type ethernet con-name eth0 ifname eth0 ip4 192.168.1.10/24 gw4 192.168.1.1 # Static IP
 </code></pre>
       </div>
@@ -880,8 +880,8 @@ firewall-cmd --list-ports                                       # List all open 
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" accept'
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="10.0.0.5" port port="22" protocol="tcp" reject'
 firewall-cmd --add-rich-rule='rule service name="http" log limit value="4/m" accept'
-firewall-cmd --list-rich-rules                                  # List all rich rules
-firewall-cmd --remove-rich-rule='...'                           # Remove rich rule
+firewall-cmd --list-rich-rules                                                 # List all rich rules
+firewall-cmd --remove-rich-rule='...'                                          # Remove rich rule
 </code></pre>
       </div>
 
@@ -889,15 +889,15 @@ firewall-cmd --remove-rich-rule='...'                           # Remove rich ru
         <h4>Direct rules (iptables syntax)</h4>
         <pre><code>
 firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT
-firewall-cmd --direct --get-all-rules                           # List all direct rules
+firewall-cmd --direct --get-all-rules                                           # List all direct rules
 </code></pre>
       </div>
 
       <div class="command-block">
         <h4>Port forwarding</h4>
         <pre><code>
-firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080   # Forward 80 to 8080
-firewall-cmd --add-forward-port=port=80:proto=tcp:toaddr=192.168.1.10 # Forward to another host
+firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080                     # Forward 80 to 8080
+firewall-cmd --add-forward-port=port=80:proto=tcp:toaddr=192.168.1.10             # Forward to another host
 firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.10 # Forward with port change
 </code></pre>
       </div>
@@ -964,11 +964,11 @@ iptables -t mangle -L                                           # List mangle ta
       <div class="command-block">
         <h4>Add rules</h4>
         <pre><code>
-iptables -A INPUT -p tcp --dport 22 -j ACCEPT                   # Append to INPUT
-iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT                 # Insert at position 1
-iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT                   # Accept from network
-iptables -A INPUT -i eth0 -j ACCEPT                             # Accept from interface
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT # Stateful
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT                     # Append to INPUT
+iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT                   # Insert at position 1
+iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT                     # Accept from network
+iptables -A INPUT -i eth0 -j ACCEPT                               # Accept from interface
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT  # Stateful
 </code></pre>
       </div>
 
@@ -1196,8 +1196,8 @@ scp -i ~/.ssh/id_rsa file.txt user@hostname:/path/              # With key
       <div class="command-block">
         <h4>Copy from remote</h4>
         <pre><code>
-scp user@hostname:/path/file.txt .                              # Copy to current directory
-scp -r user@hostname:/path/directory .                          # Copy directory
+scp user@hostname:/path/file.txt .                                # Copy to current directory
+scp -r user@hostname:/path/directory .                            # Copy directory
 scp user@hostname:/path/file1.txt user@hostname:/path/file2.txt . # Multiple files
 </code></pre>
       </div>
@@ -1347,7 +1347,7 @@ grep -E 'pattern{2,5}' file                                     # Between 2 and 
 grep -i error /var/log/messages                                 # Find errors in log
 grep -rn "TODO" .                                               # Find TODO in code
 ps aux | grep httpd                                             # Find httpd processes
-grep -v '^                                                      # ' config.conf # Exclude comments
+grep -v '^#' config.conf                                        # Exclude comments
 </code></pre>
       </div>
 
@@ -1756,8 +1756,8 @@ diff -B file1 file2                                             # Ignore blank l
       <div class="command-block">
         <h4>Shebang (first line of script)</h4>
         <pre><code>
-# !/bin/bash                  # Standard bash shebang
-# !/usr/bin/env bash          # Portable shebang
+# !/bin/bash                                                    # Standard bash shebang
+# !/usr/bin/env bash                                            # Portable shebang
 </code></pre>
       </div>
 
@@ -1855,12 +1855,21 @@ if [ condition ]; then
     commands
 fi
 
+<hr>
 if [ condition ]; then
     commands
 else
     commands
 fi
 
+<hr>
+if [ condition1 ]; then
+    commands
+elif [ condition2 ]; then
+    commands
+fi
+
+<hr>
 if [ condition1 ]; then
     commands
 elif [ condition2 ]; then
@@ -1972,22 +1981,27 @@ for var in list; do
     commands
 done
 
+<hr>
 for i in 1 2 3 4 5; do
     echo $i
 done
 
+<hr>
 for file in *.txt; do
     echo $file
 done
 
+<hr>
 for i in {1..10}; do
     echo $i
 done
 
+<hr>
 for i in {1..10..2}; do                                         # Step by 2
     echo $i
 done
 
+<hr>
 # C-style for loop
 for ((i=1; i<=10; i++)); do
     echo $i
@@ -2002,6 +2016,7 @@ while [ condition ]; do
     commands
 done
 
+<hr>
 counter=1
 while [ $counter -le 10 ]; do
     echo $counter
@@ -2026,6 +2041,7 @@ while read line; do
     echo $line
 done < file.txt
 
+<hr>
 while IFS= read -r line; do                                     # Preserve whitespace
     echo "$line"
 done < file.txt
