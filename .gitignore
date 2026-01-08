@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Site build artifacts (if any)
+/site/build/
+
+# Temporary
+*.swp
+*.tmp
