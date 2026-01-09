@@ -630,6 +630,598 @@ git archive --format=zip HEAD > archive.zip                     # Create archive
 git archive --format=tar HEAD | gzip > archive.tar.gz           # Tar.gz archive
 </code></pre>
       </div>
+      <h3>Advanced Git Workflow & Best Practices</h3>
+
+        <div class="command-block">
+          <h4>Understanding Advanced Git Concepts</h4>
+          <pre><code>
+# Git Internal Architecture:
+# Working Directory → Staging Area (Index) → Local Repository → Remote Repository
+# Local Repository = Working Directory + Index
+# Three Trees in Git:
+# 1. HEAD - Last commit snapshot (current branch pointer)
+# 2. Index - Proposed next commit (staging area)
+# 3. Working Directory - Sandbox (actual files)
+
+# Git Objects:
+# Blob - File content
+# Tree - Directory structure
+# Commit - Snapshot with metadata
+# Tag - Named reference to commit
+
+# Refs (References):
+# HEAD - Current branch pointer
+# Branch - Movable pointer to commit
+# Tag - Fixed pointer to commit
+# Remote - Pointer to remote repository state
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Rebase vs Merge - Critical Differences</h4>
+          <pre><code>
+# MERGE - Preserves history, creates merge commit
+git checkout main
+git merge feature-branch
+# Result: Creates new merge commit, maintains both branch histories
+Pros: 
+#   - Safe (non-destructive)
+#   - Preserves complete history
+#   - Shows collaboration timeline
+Cons:
+#   - Pollutes history with merge commits
+#   - Harder to read git log
+Use when: Working on public branches, team collaboration
+
+# REBASE - Rewrites history, linear timeline
+git checkout feature-branch
+git rebase main
+# Result: Moves entire feature branch to tip of main
+Pros:
+#   - Clean, linear history
+#   - Easier to understand project progression
+#   - No merge commits
+Cons:
+#   - Rewrites commit history (dangerous for shared branches)
+#   - Can cause conflicts for team members
+Use when: Local branches, cleaning up before merge
+
+# Golden Rule of Rebasing:
+# ⚠️ NEVER rebase commits that have been pushed to public/shared branches
+
+# Interactive Rebase (Squash, Edit, Reorder commits)
+git rebase -i HEAD~5                                            # Last 5 commits
+# Inside editor:
+# pick abc1234 First commit
+# squash def5678 Second commit (will merge into first)
+# reword ghi9012 Third commit (will edit message)
+# edit jkl3456 Fourth commit (will stop for changes)
+# drop mno7890 Fifth commit (will remove)
+
+# Rebase Workflow Example:
+git checkout feature-branch
+git fetch origin
+git rebase origin/main                                          # Rebase on latest main
+# If conflicts occur:
+# 1. Fix conflicts in files
+# 2. git add <resolved-files>
+# 3. git rebase --continue
+# To abort: git rebase --abort
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Reset vs Revert - Understanding Undo Operations</h4>
+          <pre><code>
+# RESET - Moves branch pointer backward (rewrites history)
+# --mixed: Moves HEAD, unstages changes
+# --soft: Moves HEAD, keeps changes staged
+git reset --soft HEAD~1
+# Use case: Undo commit, keep all changes ready to recommit
+# Example: Wrong commit message, want to recommit with better message
+
+# --mixed (default): Moves HEAD, unstages changes
+git reset HEAD~1                                                # Same as --mixed
+git reset --mixed HEAD~1
+# Use case: Undo commit and staging, keep files modified
+# Example: Committed too many files, want to split into multiple commits
+
+# --hard: Moves HEAD, discards all changes (DANGEROUS)
+git reset --hard HEAD~1
+# Use case: Completely discard commits and changes
+# Example: Experimental changes didn't work, start fresh
+# ⚠️ WARNING: Cannot undo after --hard reset
+
+# Reset to specific commit
+git reset --hard abc1234                                        # Reset to commit abc1234
+git reset --hard origin/main                                    # Reset to match remote
+
+# REVERT - Creates new commit that undoes changes (safe)
+git revert HEAD                                                 # Revert last commit
+git revert abc1234                                              # Revert specific commit
+git revert HEAD~3..HEAD                                         # Revert multiple commits
+# Use case: Undo changes on public/shared branches
+# Result: History preserved, safe for collaboration
+# Example: Bug introduced in production, need to undo safely
+
+# Comparison Table:
+# Operation  | Changes History | Safe for Public | Use Case
+# -----------|-----------------|-----------------|---------------------------
+# reset      | YES (rewrites)  | NO              | Local cleanup, undo commits
+# revert     | NO (adds new)   | YES             | Undo on shared branches
+
+# Rule of Thumb:
+# - Local branch → Use reset
+# - Public/shared branch → Use revert
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Advanced Conflict Resolution</h4>
+          <pre><code>
+# Understanding Conflict Markers:
+# <<<<<<< HEAD
+# Your changes (current branch)
+# =======
+# Their changes (incoming branch)
+# >>>>>>> feature-branch
+
+# Conflict Resolution Strategies:
+
+# 1. Manual Resolution (recommended for complex conflicts)
+git merge feature-branch
+# Conflicts appear in files
+# Edit files manually, choose correct code
+git add <resolved-files>
+git commit                                                      # Complete merge
+
+# 2. Accept Ours (keep current branch changes)
+git merge feature-branch
+git checkout --ours <conflicted-file>                                            # Keep our version
+git add <conflicted-file>
+git commit
+
+# 3. Accept Theirs (keep incoming branch changes)
+git merge feature-branch
+git checkout --theirs <conflicted-file>                                          # Keep their version
+git add <conflicted-file>
+git commit
+
+# 4. Merge Tool (visual conflict resolution)
+git mergetool                                                   # Launch merge tool
+# Common tools: vimdiff, kdiff3, meld, Beyond Compare
+
+# Configure merge tool
+git config --global merge.tool vimdiff
+git config --global mergetool.prompt false
+
+# Rebase Conflict Resolution:
+git rebase main
+# If conflicts:
+git status                                                      # See conflicted files
+# Fix conflicts
+git add <resolved-files>
+git rebase --continue                                           # Continue rebase
+# OR
+git rebase --skip                                               # Skip current commit
+# OR
+git rebase --abort                                              # Cancel rebase
+
+# Show Conflicts:
+git diff                                                        # Show conflicts
+git diff --name-only --diff-filter=U                            # List conflicted files
+git diff --check                                                # Check for whitespace issues
+
+# Prevent Conflicts:
+# 1. Pull frequently (git pull --rebase)
+# 2. Small, focused commits
+# 3. Communicate with team about file changes
+# 4. Use feature branches for isolation
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>GitFlow Workflow - Professional Branching Model</h4>
+          <pre><code>
+# GitFlow Branch Structure:
+# 
+# main (production)          ← Production-ready code
+#   ↑
+# release/v1.2               ← Release preparation
+#   ↑
+# develop (integration)      ← Latest development
+#   ↑
+# feature/login              ← Feature development
+# feature/payment
+# 
+# hotfix/critical-bug        → Urgent production fixes (branches from main)
+
+# Branch Types:
+
+# 1. main/master - Production branch
+#    - Always deployable
+#    - Tagged with version numbers
+#    - No direct commits (only merges)
+
+# 2. develop - Integration branch
+#    - Latest development code
+#    - Base for feature branches
+#    - Continuous integration target
+
+# 3. feature/* - Feature development
+#    - Branch from: develop
+#    - Merge back to: develop
+#    - Naming: feature/feature-name
+git checkout develop
+git checkout -b feature/user-authentication
+# Work on feature
+git checkout develop
+git merge --no-ff feature/user-authentication                   # --no-ff preserves branch history
+git branch -d feature/user-authentication
+
+# 4. release/* - Release preparation
+#    - Branch from: develop
+#    - Merge to: main and develop
+#    - Naming: release/v1.2.0
+git checkout develop
+git checkout -b release/v1.2.0
+# Bug fixes, version bumps
+git checkout main
+git merge --no-ff release/v1.2.0
+git tag -a v1.2.0 -m "Release version 1.2.0"
+git checkout develop
+git merge --no-ff release/v1.2.0
+git branch -d release/v1.2.0
+
+# 5. hotfix/* - Emergency production fixes
+#    - Branch from: main
+#    - Merge to: main and develop
+#    - Naming: hotfix/critical-bug
+git checkout main
+git checkout -b hotfix/security-patch
+# Fix critical bug
+git checkout main
+git merge --no-ff hotfix/security-patch
+git tag -a v1.2.1 -m "Hotfix security patch"
+git checkout develop
+git merge --no-ff hotfix/security-patch
+git branch -d hotfix/security-patch
+
+# GitFlow Commands (with git-flow extension):
+git flow init                                                   # Initialize GitFlow
+git flow feature start feature-name                             # Start feature
+git flow feature finish feature-name                            # Finish feature
+git flow release start 1.2.0                                    # Start release
+git flow release finish 1.2.0                                   # Finish release
+git flow hotfix start critical-bug                              # Start hotfix
+git flow hotfix finish critical-bug                             # Finish hotfix
+
+# Alternative: Trunk-Based Development (Modern approach)
+# - Single main/trunk branch
+# - Short-lived feature branches (< 1 day)
+# - Feature flags for incomplete features
+# - Continuous integration/deployment
+# Better for: Small teams, rapid deployment
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Advanced Git Techniques</h4>
+          <pre><code>
+# Cherry-Pick - Apply specific commits from another branch
+git cherry-pick abc1234                                         # Apply single commit
+git cherry-pick abc1234 def5678                                 # Multiple commits
+git cherry-pick abc1234..ghi9012                                # Range of commits
+# Use case: Apply bug fix from develop to main without merging all changes
+
+# Reflog - Recover lost commits (Git's safety net)
+git reflog                                                      # Show reference log
+git reflog show HEAD                                            # HEAD history
+git reflog show feature-branch                                  # Branch history
+# Recover deleted branch:
+git checkout -b recovered-branch HEAD@{5}                       # Restore to specific reflog entry
+# Undo reset --hard:
+git reset --hard HEAD@{1}                                       # Go back one step in reflog
+
+# Bisect - Find bug-introducing commit (binary search)
+git bisect start                                                # Start bisect
+git bisect bad                                                  # Current commit is bad
+git bisect good abc1234                                         # Known good commit
+# Git will checkout middle commit, test it:
+git bisect good                                                 # If works
+git bisect bad                                                  # If broken
+# Repeat until bug-introducing commit found
+git bisect reset                                                # End bisect session
+
+# Worktree - Multiple working directories from same repo
+git worktree add ../feature-hotfix hotfix/critical-bug          # Create new worktree
+git worktree list                                               # List all worktrees
+git worktree remove ../feature-hotfix                           # Remove worktree
+# Use case: Work on hotfix while keeping feature branch intact
+
+# Submodules - Embed repositories within repositories
+git submodule add https://github.com/user/repo.git path/to/submodule
+git submodule init                                              # Initialize submodules
+git submodule update                                            # Update submodules
+git clone --recursive https://github.com/user/repo.git          # Clone with submodules
+# Update all submodules:
+git submodule update --remote --merge
+
+# Clean - Remove untracked files
+git clean -n                                                    # Dry run (show what would be deleted)
+git clean -f                                                    # Delete untracked files
+git clean -fd                                                   # Delete untracked files and directories
+git clean -fX                                                   # Delete only ignored files
+git clean -fx                                                   # Delete untracked and ignored
+
+# Blame - Find who changed each line (for debugging)
+git blame file.txt                                              # Show authors of each line
+git blame -L 10,20 file.txt                                     # Specific line range
+git blame -C file.txt                                           # Detect moved/copied lines
+git blame -w file.txt                                           # Ignore whitespace changes
+
+# Show - Display commit details
+git show abc1234                                                # Show commit details
+git show HEAD~3                                                 # Show 3 commits ago
+git show HEAD:file.txt                                          # Show file at HEAD
+git show branch:path/file.txt                                   # Show file from branch
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Git Performance Optimization</h4>
+          <pre><code>
+# Garbage Collection
+git gc                                                          # Cleanup unnecessary files
+git gc --aggressive                                             # Aggressive cleanup
+git gc --prune=now                                              # Remove old objects immediately
+
+# Optimize Repository Size
+git count-objects -vH                                           # Show repo size
+git prune                                                       # Remove unreachable objects
+git repack -a -d --depth=250 --window=250                       # Repack objects efficiently
+
+# Shallow Clone (faster for large repos)
+git clone --depth 1 https://github.com/user/repo.git            # Only last commit
+git clone --depth 10 https://github.com/user/repo.git           # Last 10 commits
+git fetch --unshallow                                           # Convert to full clone
+
+# Sparse Checkout (only specific directories)
+git clone --filter=blob:none --sparse https://github.com/user/repo.git
+cd repo
+git sparse-checkout init --cone
+git sparse-checkout set src/ docs/                              # Only checkout these dirs
+
+# Large File Storage (LFS) - for binary files
+git lfs install                                                 # Install LFS
+git lfs track "*.psd"                                           # Track Photoshop files
+git lfs track "*.mp4"                                           # Track videos
+git lfs ls-files                                                # List tracked files
+git lfs pull                                                    # Download LFS files
+
+# Commit Signing (GPG) - Verify commit authenticity
+git config --global user.signingkey YOUR_GPG_KEY_ID
+git config --global commit.gpgsign true                         # Sign all commits
+git commit -S -m "Signed commit"                                # Sign specific commit
+git log --show-signature                                        # Verify signatures
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Git Hooks - Automation & Enforcement</h4>
+          <pre><code>
+# Git Hooks Location: .git/hooks/
+
+# Common Hooks:
+
+# pre-commit - Run before commit (linting, tests)
+# File: .git/hooks/pre-commit
+#!/bin/bash
+npm run lint || exit 1                                          # Run linter
+npm test || exit 1                                              # Run tests
+
+# commit-msg - Validate commit message
+# File: .git/hooks/commit-msg
+#!/bin/bash
+commit_msg=$(cat "$1")
+if ! echo "$commit_msg" | grep -qE "^(feat|fix|docs|style|refactor|test|chore):"; then
+    echo "Invalid commit message format. Use: type: description"
+    echo "Types: feat, fix, docs, style, refactor, test, chore"
+    exit 1
+fi
+
+# pre-push - Run before push (integration tests)
+# File: .git/hooks/pre-push
+#!/bin/bash
+npm run test:integration || exit 1
+
+# post-merge - Run after merge (update dependencies)
+# File: .git/hooks/post-merge
+#!/bin/bash
+npm install                                                     # Update packages
+
+# Make hooks executable:
+chmod +x .git/hooks/pre-commit
+
+# Share hooks with team (using Husky - recommended):
+npm install --save-dev husky
+npx husky install
+npx husky add .husky/pre-commit "npm test"
+npx husky add .husky/commit-msg "npx commitlint --edit $1"
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Git Best Practices - Professional Standards</h4>
+          <pre><code>
+# Commit Message Standards (Conventional Commits):
+# 
+# Format: <type>(<scope>): <subject>
+# 
+# Types:
+# feat: New feature
+# fix: Bug fix
+# docs: Documentation changes
+# style: Code formatting (no logic change)
+# refactor: Code restructuring (no behavior change)
+# test: Add/update tests
+# chore: Build process, dependencies
+
+# Examples:
+# feat(auth): add JWT authentication
+# fix(api): resolve null pointer exception in user endpoint
+# docs(readme): update installation instructions
+# refactor(database): optimize query performance
+
+# Commit Best Practices:
+# 1. Small, focused commits (one logical change per commit)
+# 2. Descriptive messages (why, not what)
+# 3. Present tense ("Add feature" not "Added feature")
+# 4. Imperative mood ("Fix bug" not "Fixes bug")
+# 5. Reference issue numbers (fix #123)
+
+# Branch Naming Conventions:
+# feature/user-authentication
+# bugfix/login-validation
+# hotfix/security-patch
+# release/v1.2.0
+# docs/api-documentation
+
+# .gitignore Best Practices:
+# Always ignore:
+# - Dependencies (node_modules/, vendor/)
+# - Build artifacts (dist/, build/, target/)
+# - IDE files (.vscode/, .idea/, *.swp)
+# - Environment files (.env, .env.local)
+# - OS files (.DS_Store, Thumbs.db)
+# - Log files (*.log, logs/)
+# - Sensitive data (credentials, keys)
+
+# Security Best Practices:
+# 1. Never commit secrets (API keys, passwords)
+# 2. Use .gitignore for sensitive files
+# 3. Sign commits with GPG
+# 4. Use HTTPS with tokens (not passwords)
+# 5. Enable branch protection rules
+# 6. Require pull request reviews
+# 7. Regularly update dependencies
+
+# Performance Best Practices:
+# 1. Use .gitattributes for line endings
+# 2. Use shallow clones for CI/CD
+# 3. Enable Git LFS for large binaries
+# 4. Regular garbage collection
+# 5. Keep commits small (< 1000 lines)
+
+# Collaboration Best Practices:
+# 1. Pull before push (git pull --rebase)
+# 2. Create feature branches for all changes
+# 3. Use pull requests for code review
+# 4. Squash commits before merging
+# 5. Delete merged branches
+# 6. Communicate breaking changes
+# 7. Document in commit messages
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Git Aliases - Productivity Boosters</h4>
+          <pre><code>
+# Add to ~/.gitconfig or use git config --global
+
+[alias]
+    # Status & Log
+    st = status -sb                                             # Short status
+    lg = log --oneline --graph --all --decorate                 # Pretty log
+    last = log -1 HEAD --stat                                   # Last commit details
+    
+    # Branching
+    co = checkout
+    cob = checkout -b                                           # Create and checkout
+    br = branch
+    brd = branch -d                                             # Delete branch
+    
+    # Committing
+    ci = commit
+    ca = commit --amend                                         # Amend last commit
+    can = commit --amend --no-edit                              # Amend without editing message
+    
+    # Pushing/Pulling
+    ps = push
+    pl = pull --rebase                                          # Pull with rebase
+    pom = push origin main
+    
+    # Stashing
+    ss = stash save
+    sp = stash pop
+    sl = stash list
+    
+    # Undoing
+    undo = reset --soft HEAD~1                                  # Undo last commit
+    unstage = reset HEAD --                                     # Unstage files
+    discard = checkout --                                       # Discard changes
+    
+    # Information
+    contributors = shortlog -sn                                 # List contributors
+    aliases = config --get-regexp alias                         # List all aliases
+    
+    # Advanced
+    squash = rebase -i HEAD~5                                   # Interactive rebase last 5
+    cleanup = !git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d  # Delete merged branches
+
+# Usage examples:
+git st                                                          # Instead of git status -sb
+git lg                                                          # Instead of git log --oneline --graph
+git cob feature/new-feature                                     # Create and checkout branch
+git can                                                         # Amend without editing message
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Interview Questions - Advanced Git</h4>
+          <pre><code>
+# Q1: What's the difference between git reset and git revert?
+# A: reset rewrites history (moves HEAD), revert creates new commit.
+#    Use reset for local changes, revert for public branches.
+
+# Q2: When would you use git rebase vs git merge?
+# A: Rebase for clean linear history on local branches,
+#    Merge for preserving collaboration history on shared branches.
+
+# Q3: How do you recover a deleted branch?
+# A: git reflog to find commit, then git checkout -b recovered-branch HEAD@{n}
+
+# Q4: Explain git cherry-pick use case.
+# A: Apply specific commit from one branch to another without full merge.
+#    Example: Hotfix in develop needs to go to main immediately.
+
+# Q5: What are git hooks and name 3 use cases?
+# A: Scripts that run at specific Git events.
+#    1. pre-commit: Run linter/tests before commit
+#    2. commit-msg: Validate commit message format
+#    3. pre-push: Run integration tests before push
+
+# Q6: How do you squash multiple commits?
+# A: git rebase -i HEAD~N (where N is number of commits),
+#    Change 'pick' to 'squash' for commits to combine.
+
+# Q7: What's the difference between git stash pop and git stash apply?
+# A: pop removes stash after applying, apply keeps it in stash list.
+
+# Q8: How do you find which commit introduced a bug?
+# A: git bisect - binary search through commit history to find bug.
+
+# Q9: Explain GitFlow branching model.
+# A: main (production), develop (integration), feature/* (features),
+#    release/* (release prep), hotfix/* (emergency fixes).
+
+# Q10: How do you handle a merge conflict?
+# A: 1. git status to see conflicts
+#    2. Edit files, remove conflict markers
+#    3. git add <resolved-files>
+#    4. git commit to complete merge
+          </code></pre>
+        </div>
 
       <h2 id="docker">23. DOCKER COMMANDS</h2>
 
@@ -1884,6 +2476,865 @@ ansible-galaxy search elasticsearch
 ansible-galaxy info username.rolename
 </code></pre>
       </div>
+      <h3>Advanced Ansible - Production-Ready Skills</h3>
+
+        <div class="command-block">
+          <h4>Ansible Architecture & Job Market Value</h4>
+          <pre><code>
+# Why Ansible is THE Bridge from SysAdmin to DevOps:
+#
+# 1. Uses existing Linux knowledge (SSH-based)
+# 2. Agentless (no client installation needed)
+# 3. YAML-based (human-readable)
+# 4. Idempotent (safe to run multiple times)
+# 5. Massive adoption (60%+ companies use it)
+
+# Ansible vs Other Tools:
+#
+# Ansible vs Shell Scripts:
+#   Scripts: Imperative (how to do)
+#   Ansible: Declarative (what to achieve)
+#   Ansible handles errors, rollbacks, idempotency automatically
+#
+# Ansible vs Chef/Puppet:
+#   No agent required (push-based)
+#   Lower learning curve
+#   Faster deployment
+#   Better for cloud-native environments
+#
+# Ansible vs Terraform:
+#   Terraform: Infrastructure provisioning (IaC)
+#   Ansible: Configuration management (CM)
+#   Often used together: Terraform creates, Ansible configures
+
+# Market Demand (Bangladesh Context):
+# SysAdmin without Ansible: ৳30-45k
+# SysAdmin with Ansible: ৳50-70k
+# Junior DevOps with Ansible: ৳70-90k
+#
+# Interview Impact:
+# - 80% DevOps interviews ask Ansible
+# - Instantly differentiates from pure SysAdmins
+# - Shows automation mindset
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Ansible Inventory - Advanced Patterns</h4>
+          <pre><code>
+# Static Inventory (INI format) - /etc/ansible/hosts
+[webservers]
+web1.example.com
+web2.example.com
+web3.example.com
+
+[databases]
+db1.example.com ansible_host=192.168.1.10 ansible_port=2222
+db2.example.com ansible_host=192.168.1.11
+
+[loadbalancers]
+lb1.example.com ansible_user=admin ansible_ssh_private_key_file=~/.ssh/lb_key
+
+# Group of Groups (Parent-Child)
+[production:children]
+webservers
+databases
+
+[staging:children]
+webservers_staging
+databases_staging
+
+# Variables per Group
+[webservers:vars]
+http_port=80
+nginx_version=1.21
+max_connections=1000
+
+[databases:vars]
+mysql_port=3306
+mysql_max_connections=500
+
+# Dynamic Inventory (YAML format) - inventory.yml
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+  children:
+    webservers:
+      hosts:
+        web[1:3].example.com:  # Expands to web1, web2, web3
+      vars:
+        http_port: 80
+    databases:
+      hosts:
+        db[a:c].example.com:   # Expands to dba, dbb, dbc
+      vars:
+        mysql_port: 3306
+
+# AWS Dynamic Inventory (using aws_ec2 plugin)
+# File: aws_ec2.yml
+plugin: aws_ec2
+regions:
+  - us-east-1
+  - us-west-2
+filters:
+  tag:Environment: production
+keyed_groups:
+  - key: tags.Role
+    prefix: role
+  - key: placement.region
+    prefix: region
+
+# Usage:
+ansible-inventory -i aws_ec2.yml --graph           # View inventory structure
+ansible-inventory -i aws_ec2.yml --list            # List all hosts
+
+# Inventory Best Practices:
+# 1. Use dynamic inventory for cloud environments
+# 2. Group by function (webservers, databases) not location
+# 3. Use host variables for host-specific config
+# 4. Use group variables for shared config
+# 5. Keep sensitive data in ansible-vault
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Ansible Playbooks - Production Patterns</h4>
+          <pre><code>
+# Basic Playbook Structure
+---
+- name: Configure web servers
+  hosts: webservers
+  become: yes                    # Run with sudo
+  vars:
+    http_port: 80
+    max_clients: 200
+  
+  tasks:
+    - name: Install nginx
+      dnf:
+        name: nginx
+        state: present
+    
+    - name: Copy nginx config
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify: restart nginx
+    
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+  
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+# Multi-Play Playbook (Multiple hosts/tasks)
+---
+- name: Deploy database
+  hosts: databases
+  become: yes
+  tasks:
+    - name: Install MySQL
+      dnf:
+        name: mysql-server
+        state: present
+
+- name: Deploy application
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Deploy app code
+      git:
+        repo: https://github.com/company/app.git
+        dest: /var/www/app
+
+# Advanced Task Options
+tasks:
+  - name: Install packages
+    dnf:
+      name: "{{ item }}"
+      state: present
+    loop:                        # Loop through list
+      - nginx
+      - php-fpm
+      - mysql-client
+    when: ansible_os_family == "RedHat"  # Conditional
+    tags: packages               # Tag for selective execution
+    
+  - name: Check if service exists
+    stat:
+      path: /etc/systemd/system/myapp.service
+    register: service_status     # Save result to variable
+    
+  - name: Debug output
+    debug:
+      msg: "Service exists: {{ service_status.stat.exists }}"
+
+# Error Handling
+tasks:
+  - name: Attempt risky operation
+    command: /usr/bin/risky_command
+    register: result
+    ignore_errors: yes           # Continue even if fails
+    
+  - name: Handle failure
+    debug:
+      msg: "Operation failed, rolling back"
+    when: result.failed
+    
+  - name: Force failure
+    fail:
+      msg: "Critical check failed"
+    when: some_condition
+
+# Delegation & Local Actions
+tasks:
+  - name: Run on control node
+    command: aws s3 sync /backup s3://bucket/
+    delegate_to: localhost       # Run on Ansible controller
+    
+  - name: Run once for all hosts
+    command: /usr/local/bin/update_loadbalancer.sh
+    run_once: yes                # Execute only once, not per host
+
+# Async Tasks (Long-running operations)
+tasks:
+  - name: Long running backup
+    shell: /usr/local/bin/backup.sh
+    async: 3600                  # Max runtime: 1 hour
+    poll: 0                      # Don't wait (fire and forget)
+    register: backup_job
+    
+  - name: Check backup status
+    async_status:
+      jid: "{{ backup_job.ansible_job_id }}"
+    register: job_result
+    until: job_result.finished
+    retries: 30
+    delay: 60                    # Check every 60 seconds
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Ansible Roles - Reusable Automation</h4>
+          <pre><code>
+# Role Directory Structure
+roles/
+  nginx/
+    tasks/           # Main tasks
+      main.yml
+    handlers/        # Event handlers
+      main.yml
+    templates/       # Jinja2 templates
+      nginx.conf.j2
+    files/           # Static files
+      index.html
+    vars/            # Role variables
+      main.yml
+    defaults/        # Default variables (lowest priority)
+      main.yml
+    meta/            # Role metadata (dependencies)
+      main.yml
+
+# Create Role Structure
+ansible-galaxy init nginx        # Creates directory structure
+
+# Example Role - roles/nginx/tasks/main.yml
+---
+- name: Install nginx
+  dnf:
+    name: nginx
+    state: present
+
+- name: Copy nginx config
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: restart nginx
+
+- name: Ensure nginx is running
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+# Role Handlers - roles/nginx/handlers/main.yml
+---
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
+# Role Variables - roles/nginx/defaults/main.yml
+---
+nginx_port: 80
+nginx_user: nginx
+nginx_worker_processes: auto
+nginx_worker_connections: 1024
+
+# Using Roles in Playbook
+---
+- name: Configure web servers
+  hosts: webservers
+  roles:
+    - common           # Apply common role first
+    - nginx            # Then nginx role
+    - { role: mysql, mysql_port: 3306 }  # Role with parameters
+
+# Role Dependencies - roles/wordpress/meta/main.yml
+---
+dependencies:
+  - role: common
+  - role: nginx
+    nginx_port: 80
+  - role: php
+    php_version: 8.1
+  - role: mysql
+    mysql_version: 8.0
+
+# Ansible Galaxy - Share/Download Roles
+ansible-galaxy install geerlingguy.nginx           # Install from Galaxy
+ansible-galaxy install -r requirements.yml         # Install from file
+
+# requirements.yml
+---
+roles:
+  - name: geerlingguy.nginx
+    version: 3.1.4
+  - src: https://github.com/company/ansible-role-app.git
+    name: company-app
+    version: main
+
+# Role Best Practices:
+# 1. Keep roles focused (single responsibility)
+# 2. Use defaults for all variables
+# 3. Document role in README.md
+# 4. Test roles independently
+# 5. Version control roles separately
+# 6. Use Galaxy for common roles (don't reinvent)
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Ansible Variables & Templates - Dynamic Configuration</h4>
+          <pre><code>
+# Variable Precedence (lowest to highest):
+# 1. role defaults
+# 2. inventory file/script group vars
+# 3. inventory group_vars/all
+# 4. playbook group_vars/all
+# 5. inventory group_vars/*
+# 6. playbook group_vars/*
+# 7. inventory file/script host vars
+# 8. inventory host_vars/*
+# 9. playbook host_vars/*
+# 10. host facts
+# 11. play vars
+# 12. play vars_prompt
+# 13. play vars_files
+# 14. role vars (defined in role/vars/main.yml)
+# 15. block vars
+# 16. task vars
+# 17. include_vars
+# 18. set_facts / registered vars
+# 19. role (and include_role) params
+# 20. include params
+# 21. extra vars (command line -e)
+
+# Variable Files - group_vars/webservers.yml
+---
+http_port: 80
+https_port: 443
+ssl_certificate: /etc/ssl/certs/server.crt
+ssl_key: /etc/ssl/private/server.key
+max_connections: 1000
+
+# Host-Specific Variables - host_vars/web1.example.com.yml
+---
+server_id: 1
+backup_enabled: true
+monitoring_agent: datadog
+
+# Jinja2 Templates - templates/nginx.conf.j2
+user {{ nginx_user }};
+worker_processes {{ nginx_worker_processes }};
+
+events {
+    worker_connections {{ nginx_worker_connections }};
+}
+
+http {
+    server {
+        listen {{ http_port }};
+        server_name {{ ansible_hostname }};
+        
+        {% if ssl_enabled %}
+        listen {{ https_port }} ssl;
+        ssl_certificate {{ ssl_certificate }};
+        ssl_certificate_key {{ ssl_key }};
+        {% endif %}
+        
+        location / {
+            proxy_pass http://{{ backend_server }}:{{ backend_port }};
+        }
+    }
+}
+
+# Using Templates in Tasks
+- name: Configure nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+    validate: 'nginx -t -c %s'  # Validate before deploying
+  notify: restart nginx
+
+# Ansible Facts (Auto-discovered variables)
+- name: Display facts
+  debug:
+    msg: |
+      OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
+      IP: {{ ansible_default_ipv4.address }}
+      CPU: {{ ansible_processor_cores }}
+      RAM: {{ ansible_memtotal_mb }} MB
+      Hostname: {{ ansible_hostname }}
+
+# Custom Facts - /etc/ansible/facts.d/custom.fact
+[application]
+version=2.1.5
+environment=production
+
+# Accessing Custom Facts
+{{ ansible_local.custom.application.version }}
+
+# Registered Variables (Capture task output)
+- name: Check disk space
+  shell: df -h /
+  register: disk_output
+
+- name: Show disk space
+  debug:
+    var: disk_output.stdout_lines
+
+# Set Facts (Define variables dynamically)
+- name: Set environment-based variables
+  set_fact:
+    db_host: "{{ 'prod-db.example.com' if environment == 'production' else 'dev-db.example.com' }}"
+    cache_ttl: "{{ 3600 if environment == 'production' else 60 }}"
+
+# Prompting for Variables
+- name: Deploy application
+  hosts: webservers
+  vars_prompt:
+    - name: app_version
+      prompt: "Enter application version"
+      private: no
+    - name: db_password
+      prompt: "Enter database password"
+      private: yes  # Hide input
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Ansible Vault - Secrets Management</h4>
+          <pre><code>
+# Create Encrypted File
+ansible-vault create secrets.yml
+# Enter password, then edit file:
+---
+db_password: MySecretPassword123
+api_key: abc123xyz789
+aws_access_key: AKIAIOSFODNN7EXAMPLE
+
+# Encrypt Existing File
+ansible-vault encrypt group_vars/production.yml
+
+# Edit Encrypted File
+ansible-vault edit secrets.yml
+
+# Decrypt File
+ansible-vault decrypt secrets.yml
+
+# View Encrypted File (without decrypting)
+ansible-vault view secrets.yml
+
+# Change Vault Password
+ansible-vault rekey secrets.yml
+
+# Using Vault in Playbooks
+ansible-playbook site.yml --ask-vault-pass
+# OR
+ansible-playbook site.yml --vault-password-file ~/.vault_pass
+
+# Vault Password File (~/.vault_pass)
+MyVaultPassword123
+# Secure it:
+chmod 600 ~/.vault_pass
+
+# Encrypting Specific Variables (inline)
+# vars.yml
+---
+public_key: ssh-rsa AAAAB3NzaC1...
+private_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66386439653765386265663837353...
+
+# Encrypt String
+ansible-vault encrypt_string 'MySecretPassword' --name 'db_password'
+# Output:
+db_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66386439653765386265663837353...
+
+# Multiple Vault IDs (Different passwords for different environments)
+ansible-playbook site.yml --vault-id dev@prompt --vault-id prod@~/.vault_pass_prod
+
+# Best Practices:
+# 1. Never commit unencrypted secrets
+# 2. Use different vault passwords per environment
+# 3. Store vault password in CI/CD secrets
+# 4. Encrypt only sensitive data, not entire files
+# 5. Regular password rotation
+# 6. Use external secret managers (HashiCorp Vault) for production
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Real-World Ansible Scenarios - Job Interview Ready</h4>
+          <pre><code>
+# Scenario 1: Zero-Downtime Deployment
+---
+- name: Rolling deployment
+  hosts: webservers
+  serial: 1                      # Deploy one server at a time
+  max_fail_percentage: 0         # Fail if ANY server fails
+  
+  pre_tasks:
+    - name: Remove from load balancer
+      command: /usr/local/bin/remove_from_lb.sh {{ inventory_hostname }}
+      delegate_to: localhost
+    
+    - name: Wait for connections to drain
+      wait_for:
+        timeout: 30
+  
+  tasks:
+    - name: Deploy new application version
+      git:
+        repo: https://github.com/company/app.git
+        dest: /var/www/app
+        version: "{{ app_version }}"
+    
+    - name: Restart application
+      systemd:
+        name: myapp
+        state: restarted
+    
+    - name: Wait for application to be ready
+      wait_for:
+        port: 8080
+        delay: 5
+        timeout: 60
+  
+  post_tasks:
+    - name: Add back to load balancer
+      command: /usr/local/bin/add_to_lb.sh {{ inventory_hostname }}
+      delegate_to: localhost
+    
+    - name: Run smoke tests
+      uri:
+        url: http://{{ inventory_hostname }}:8080/health
+        status_code: 200
+
+# Scenario 2: Conditional Execution Based on OS
+---
+- name: Install packages across different OS
+  hosts: all
+  tasks:
+    - name: Install nginx on RedHat
+      dnf:
+        name: nginx
+        state: present
+      when: ansible_os_family == "RedHat"
+    
+    - name: Install nginx on Debian
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+    
+    - name: Configure nginx (all systems)
+      template:
+        src: nginx.conf.j2
+        dest: "{{ '/etc/nginx/nginx.conf' if ansible_os_family == 'RedHat' else '/etc/nginx/sites-available/default' }}"
+
+# Scenario 3: Database Backup Automation
+---
+- name: Automated MySQL backup
+  hosts: databases
+  become: yes
+  vars:
+    backup_dir: /backup/mysql
+    retention_days: 7
+  
+  tasks:
+    - name: Create backup directory
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: '0700'
+    
+    - name: Perform MySQL dump
+      mysql_db:
+        name: all
+        state: dump
+        target: "{{ backup_dir }}/backup_{{ ansible_date_time.iso8601_basic_short }}.sql.gz"
+      register: backup_result
+    
+    - name: Remove old backups
+      find:
+        paths: "{{ backup_dir }}"
+        age: "{{ retention_days }}d"
+        patterns: "backup_*.sql.gz"
+      register: old_backups
+    
+    - name: Delete old backup files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ old_backups.files }}"
+    
+    - name: Send backup to S3
+      aws_s3:
+        bucket: company-backups
+        object: mysql/{{ backup_result.target | basename }}
+        src: "{{ backup_result.target }}"
+        mode: put
+      delegate_to: localhost
+
+# Scenario 4: User Management Across Fleet
+---
+- name: Manage users across all servers
+  hosts: all
+  become: yes
+  vars:
+    users_to_create:
+      - { name: 'alice', groups: 'wheel', ssh_key: '~/.ssh/alice.pub' }
+      - { name: 'bob', groups: 'developers', ssh_key: '~/.ssh/bob.pub' }
+    users_to_remove:
+      - 'charlie'
+      - 'david'
+  
+  tasks:
+    - name: Create users
+      user:
+        name: "{{ item.name }}"
+        groups: "{{ item.groups }}"
+        shell: /bin/bash
+        create_home: yes
+      loop: "{{ users_to_create }}"
+    
+    - name: Add SSH keys
+      authorized_key:
+        user: "{{ item.name }}"
+        key: "{{ lookup('file', item.ssh_key) }}"
+      loop: "{{ users_to_create }}"
+    
+    - name: Remove old users
+      user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes
+      loop: "{{ users_to_remove }}"
+
+# Scenario 5: Security Hardening
+---
+- name: Harden SSH configuration
+  hosts: all
+  become: yes
+  tasks:
+    - name: Configure SSH daemon
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+      loop:
+        - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' }
+        - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication no' }
+        - { regexp: '^Port', line: 'Port 2222' }
+        - { regexp: '^MaxAuthTries', line: 'MaxAuthTries 3' }
+      notify: restart sshd
+    
+    - name: Install fail2ban
+      dnf:
+        name: fail2ban
+        state: present
+    
+    - name: Configure fail2ban
+      copy:
+        src: jail.local
+        dest: /etc/fail2ban/jail.local
+      notify: restart fail2ban
+  
+  handlers:
+    - name: restart sshd
+      systemd:
+        name: sshd
+        state: restarted
+    
+    - name: restart fail2ban
+      systemd:
+        name: fail2ban
+        state: restarted
+        enabled: yes
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Ansible Best Practices - Production Standards</h4>
+          <pre><code>
+# Directory Structure (Standard Layout)
+ansible-project/
+├── ansible.cfg              # Ansible configuration
+├── inventory/
+│   ├── production/
+│   │   ├── hosts
+│   │   └── group_vars/
+│   │       ├── all.yml
+│   │       ├── webservers.yml
+│   │       └── databases.yml
+│   └── staging/
+│       ├── hosts
+│       └── group_vars/
+├── roles/
+│   ├── common/
+│   ├── nginx/
+│   └── mysql/
+├── playbooks/
+│   ├── site.yml             # Master playbook
+│   ├── webservers.yml
+│   └── databases.yml
+├── group_vars/
+│   └── all/
+│       ├── vars.yml
+│       └── vault.yml        # Encrypted
+├── host_vars/
+├── files/
+├── templates/
+└── README.md
+
+# ansible.cfg (Project Configuration)
+[defaults]
+inventory = ./inventory/production/hosts
+remote_user = ansible
+private_key_file = ~/.ssh/ansible_key
+host_key_checking = False
+retry_files_enabled = False
+gathering = smart
+fact_caching = jsonfile
+fact_caching_connection = /tmp/ansible_facts
+fact_caching_timeout = 86400
+callback_whitelist = profile_tasks, timer
+
+[privilege_escalation]
+become = True
+become_method = sudo
+become_user = root
+become_ask_pass = False
+
+[ssh_connection]
+pipelining = True
+control_path = /tmp/ansible-ssh-%%h-%%p-%%r
+
+# Playbook Best Practices:
+# 1. Use roles for reusability
+# 2. One task = one action (atomic operations)
+# 3. Always use 'name' for tasks (documentation)
+# 4. Use 'changed_when' to control change status
+# 5. Tag tasks for selective execution
+# 6. Use 'check_mode' for validation
+# 7. Implement handlers for service restarts
+# 8. Use 'become' only when needed (security)
+# 9. Validate templates before deployment
+# 10. Keep playbooks idempotent
+
+# Testing Strategies:
+# 1. Syntax check
+ansible-playbook site.yml --syntax-check
+
+# 2. Dry run (check mode)
+ansible-playbook site.yml --check
+
+# 3. Diff mode (show changes)
+ansible-playbook site.yml --check --diff
+
+# 4. Limit to specific hosts
+ansible-playbook site.yml --limit webservers
+
+# 5. Step through tasks
+ansible-playbook site.yml --step
+
+# 6. Start at specific task
+ansible-playbook site.yml --start-at-task="Install nginx"
+
+# Performance Optimization:
+# 1. Enable pipelining (reduce SSH overhead)
+# 2. Use fact caching (avoid gathering every run)
+# 3. Disable fact gathering when not needed
+# 4. Use async for long-running tasks
+# 5. Increase forks (parallel execution)
+# 6. Use mitogen plugin (5-10x faster)
+
+# Security Best Practices:
+# 1. Use Ansible Vault for secrets
+# 2. Separate inventory per environment
+# 3. Use jump host for production access
+# 4. Implement RBAC (who can run what)
+# 5. Log all playbook executions
+# 6. Use --check before production runs
+# 7. Store playbooks in version control
+# 8. Review playbooks before execution
+
+# CI/CD Integration:
+# GitLab CI Example:
+deploy:
+  stage: deploy
+  script:
+    - ansible-playbook -i inventory/production playbooks/site.yml
+  only:
+    - main
+  when: manual
+
+# Interview Questions - Ansible:
+# Q1: Difference between playbook and role?
+# A: Playbook defines tasks, roles package related tasks/templates/handlers
+
+# Q2: How to achieve idempotency?
+# A: Use modules that check state (package, service, file)
+#    Avoid shell/command modules when possible
+#    Use 'creates' or 'removes' with command/shell
+
+# Q3: How to handle sensitive data?
+# A: Ansible Vault for encryption, separate vault per environment
+
+# Q4: Serial vs parallel execution?
+# A: serial: 1 = rolling deployment (one at a time)
+#    default = parallel execution (all hosts simultaneously)
+
+# Q5: Difference between include and import?
+# A: import: Static (processed at parse time)
+#    include: Dynamic (processed at runtime)
+          </code></pre>
+        </div>
 
       <h3>Ansible Configuration</h3>
 
