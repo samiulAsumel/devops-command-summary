@@ -33,284 +33,281 @@
         >
       </div>
       -->
-      <li>28. Monitoring Commands</li>
-      <li>29. Security And Hardening</li>
-      <li>30. Performance Monitoring & Tuning</li>
-      <li>31. Backup, Recovery, Monitoring & Security</li>
-      <li>Summary</li>
-      <h1>Linux/DevOps Command Reference Guide</h1>
 
-      <div class="warning">
-        <strong>Important Security Note:</strong> Many security commands require
-        root/sudo privileges. Use with caution and only on systems you own or
-        have permission to test.
-      </div>
-      <div class="section-index">
-        <h3>📑 Table of Contents</h3>
-        <ul id="toc-list">
-          <!-- JS will populate this automatically -->
-        </ul>
-      </div>
+      <div class="content">
+        <h1>Linux/DevOps Command Reference Guide</h1>
 
-      <h2 id="monitoring">29. MONITORING COMMANDS</h2>
+        <div class="warning">
+          <strong>Important Security Note:</strong> Many security commands
+          require root/sudo privileges. Use with caution and only on systems you
+          own or have permission to test.
+        </div>
+        <div class="section-index">
+          <h3>📑 Table of Contents</h3>
+          <ul id="toc-list">
+            <!-- JS will populate this automatically -->
+          </ul>
+        </div>
 
-      <h3>Prometheus Commands</h3>
+        <h2 id="monitoring">29. MONITORING COMMANDS</h2>
 
-      <div class="command-block">
-        <h4>Prometheus service (systemd)</h4>
-        <pre><code>
+        <h3>Prometheus Commands</h3>
+
+        <div class="command-block">
+          <h4>Prometheus service (systemd)</h4>
+          <pre><code>
 systemctl status prometheus
 systemctl start prometheus
 systemctl stop prometheus
 systemctl restart prometheus</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Prometheus configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Prometheus configuration</h4>
+          <pre><code>
 /etc/prometheus/prometheus.yml                                  # Main config file</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Reload configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Reload configuration</h4>
+          <pre><code>
 curl -X POST http://localhost:9090/-/reload
 kill -HUP $(pidof prometheus)</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Prometheus CLI</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Prometheus CLI</h4>
+          <pre><code>
 promtool check config prometheus.yml                                                  # Validate config
 promtool check rules rules.yml                                                        # Validate rules
 promtool query instant 'up{job="node"}'                                               # Query instant
 promtool query range 'up' --start="2024-01-01T00:00:00Z" --end="2024-01-02T00:00:00Z" # Query range</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>PromQL queries (via API or UI)</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>PromQL queries (via API or UI)</h4>
+          <pre><code>
 # up - Check if targets are up
 # rate(http_requests_total[5m]) - Request rate
 # sum(rate(http_requests_total[5m])) by (job) - Sum by job
 # avg(node_cpu_seconds_total) - Average CPU</code></pre>
-      </div>
+        </div>
 
-      <h3>Node Exporter Commands</h3>
+        <h3>Node Exporter Commands</h3>
 
-      <div class="command-block">
-        <h4>Node Exporter service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Node Exporter service</h4>
+          <pre><code>
 systemctl status node_exporter
 systemctl start node_exporter
 systemctl restart node_exporter</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Default metrics endpoint</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Default metrics endpoint</h4>
+          <pre><code>
 curl http://localhost:9100/metrics                              # View metrics</code></pre>
-      </div>
+        </div>
 
-      <h3>Grafana Commands</h3>
+        <h3>Grafana Commands</h3>
 
-      <div class="command-block">
-        <h4>Grafana service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Grafana service</h4>
+          <pre><code>
 systemctl status grafana-server
 systemctl start grafana-server
 systemctl stop grafana-server
 systemctl restart grafana-server</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Grafana CLI</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Grafana CLI</h4>
+          <pre><code>
 grafana-cli plugins list-remote                                 # List available plugins
 grafana-cli plugins install plugin-name                         # Install plugin
 grafana-cli plugins update plugin-name                          # Update plugin
 grafana-cli plugins remove plugin-name                          # Remove plugin
 grafana-cli admin reset-admin-password newpassword              # Reset admin password</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Grafana configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Grafana configuration</h4>
+          <pre><code>
 /etc/grafana/grafana.ini                                        # Main config file</code></pre>
-      </div>
+        </div>
 
-      <h3>Elasticsearch Commands</h3>
+        <h3>Elasticsearch Commands</h3>
 
-      <div class="command-block">
-        <h4>Elasticsearch service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Elasticsearch service</h4>
+          <pre><code>
 systemctl status elasticsearch
 systemctl start elasticsearch
 systemctl stop elasticsearch
 systemctl restart elasticsearch</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Cluster health</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Cluster health</h4>
+          <pre><code>
 curl -X GET "localhost:9200/_cluster/health?pretty"
 curl -X GET "localhost:9200/_cat/health?v"</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Nodes</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Nodes</h4>
+          <pre><code>
 curl -X GET "localhost:9200/_cat/nodes?v"</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Indices</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Indices</h4>
+          <pre><code>
 curl -X GET "localhost:9200/_cat/indices?v"
 curl -X PUT "localhost:9200/myindex"                            # Create index
 curl -X DELETE "localhost:9200/myindex"                         # Delete index</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Documents</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Documents</h4>
+          <pre><code>
 curl -X POST "localhost:9200/myindex/_doc/1" -H 'Content-Type: application/json' -d '{"field":"value"}'     # Index document
 curl -X GET "localhost:9200/myindex/_doc/1"                                                                 # Get document
 curl -X DELETE "localhost:9200/myindex/_doc/1"                                                              # Delete document</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Search</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Search</h4>
+          <pre><code>
 curl -X GET "localhost:9200/myindex/_search?pretty" -H 'Content-Type: application/json' -d '{"query":{"match_all":{}}}'</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Bulk operations</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Bulk operations</h4>
+          <pre><code>
 curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary "@bulk.json"</code></pre>
-      </div>
+        </div>
 
-      <h3>Logstash Commands</h3>
+        <h3>Logstash Commands</h3>
 
-      <div class="command-block">
-        <h4>Logstash service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Logstash service</h4>
+          <pre><code>
 systemctl status logstash
 systemctl start logstash
 systemctl stop logstash
 systemctl restart logstash</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Test configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Test configuration</h4>
+          <pre><code>
 /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf --config.test_and_exit</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Reload configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Reload configuration</h4>
+          <pre><code>
 systemctl reload logstash</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Run Logstash manually</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Run Logstash manually</h4>
+          <pre><code>
 /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf</code></pre>
-      </div>
+        </div>
 
-      <h3>Kibana Commands</h3>
+        <h3>Kibana Commands</h3>
 
-      <div class="command-block">
-        <h4>Kibana service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Kibana service</h4>
+          <pre><code>
 systemctl status kibana
 systemctl start kibana
 systemctl stop kibana
 systemctl restart kibana</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Kibana configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Kibana configuration</h4>
+          <pre><code>
 /etc/kibana/kibana.yml                                          # Main config file</code></pre>
-      </div>
+        </div>
 
-      <h3>Filebeat Commands</h3>
+        <h3>Filebeat Commands</h3>
 
-      <div class="command-block">
-        <h4>Filebeat service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Filebeat service</h4>
+          <pre><code>
 systemctl status filebeat
 systemctl start filebeat
 systemctl stop filebeat
 systemctl restart filebeat</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Test configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Test configuration</h4>
+          <pre><code>
 filebeat test config -c /etc/filebeat/filebeat.yml
 filebeat test output -c /etc/filebeat/filebeat.yml</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Setup</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Setup</h4>
+          <pre><code>
 filebeat setup -e                                               # Setup index template and dashboards
 filebeat modules list                                           # List available modules
 filebeat modules enable system                                  # Enable module
 filebeat modules disable system                                 # Disable module</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Filebeat configuration</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Filebeat configuration</h4>
+          <pre><code>
 /etc/filebeat/filebeat.yml                                      # Main config file</code></pre>
-      </div>
+        </div>
 
-      <h2 id="security">30. SECURITY AND HARDENING</h2>
+        <h2 id="security">30. SECURITY AND HARDENING</h2>
 
-      <div class="danger">
-        <strong>DANGER:</strong> Security commands can lock you out of your
-        system if misconfigured. Always test in a safe environment first.
-      </div>
+        <div class="danger">
+          <strong>DANGER:</strong> Security commands can lock you out of your
+          system if misconfigured. Always test in a safe environment first.
+        </div>
 
-      <h3>fail2ban Commands</h3>
+        <h3>fail2ban Commands</h3>
 
-      <div class="command-block">
-        <h4>fail2ban service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>fail2ban service</h4>
+          <pre><code>
 systemctl status fail2ban
 systemctl start fail2ban
 systemctl stop fail2ban
 systemctl restart fail2ban</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>fail2ban-client</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>fail2ban-client</h4>
+          <pre><code>
 fail2ban-client status                                          # Show status
 fail2ban-client status sshd                                     # Show jail status
 fail2ban-client set sshd banip 192.168.1.10                     # Ban IP
 fail2ban-client set sshd unbanip 192.168.1.10                   # Unban IP
 fail2ban-client reload                                          # Reload configuration
 fail2ban-client ping                                            # Test if running</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Configuration files</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Configuration files</h4>
+          <pre><code>
 /etc/fail2ban/jail.conf                                         # Main config (don't edit)
 /etc/fail2ban/jail.local                                        # Local overrides</code></pre>
-      </div>
+        </div>
 
-      <h3>SELinux Commands</h3>
+        <h3>SELinux Commands</h3>
 
-      <div class="command-block">
-        <h4>SELinux Management</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>SELinux Management</h4>
+          <pre><code>
 getenforce                                                      # Check SELinux status
 sestatus                                                        # Detailed SELinux status
 setenforce 1                                                    # Enable enforcing mode
@@ -324,286 +321,286 @@ restorecon -Rv /path/to/dir                                     # Restore defaul
 chcon -t httpd_sys_content_t /var/www/html                      # Change file context
 ls -Z                                                           # View SELinux contexts
 ps -Z                                                           # View process contexts</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Contexts</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Contexts</h4>
+          <pre><code>
 ls -Z file                                                      # Show file context
 ps -Z                                                           # Show process contexts
 chcon -t httpd_sys_content_t /var/www/html/index.html           # Change context
 restorecon -Rv /var/www/html                                    # Restore default contexts</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Booleans</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Booleans</h4>
+          <pre><code>
 getsebool -a                                                    # List all booleans
 getsebool httpd_can_network_connect                             # Check boolean
 setsebool -P httpd_can_network_connect on                       # Set boolean permanently</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Troubleshooting</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Troubleshooting</h4>
+          <pre><code>
 ausearch -m avc -ts recent                                      # Recent AVC denials
 audit2why < /var/log/audit/audit.log                            # Why was it denied
 audit2allow -a                                                  # Generate policy to allow</code></pre>
-      </div>
+        </div>
 
-      <h3>OpenSSL Commands</h3>
+        <h3>OpenSSL Commands</h3>
 
-      <div class="command-block">
-        <h4>Generate private key</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate private key</h4>
+          <pre><code>
 openssl genrsa -out private.key 2048                            # RSA 2048-bit
 openssl genrsa -out private.key 4096                            # RSA 4096-bit</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Generate public key from private</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate public key from private</h4>
+          <pre><code>
 openssl rsa -in private.key -pubout -out public.key</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Generate CSR (Certificate Signing Request)</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate CSR (Certificate Signing Request)</h4>
+          <pre><code>
 openssl req -new -key private.key -out cert.csr</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Generate self-signed certificate</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate self-signed certificate</h4>
+          <pre><code>
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out cert.crt</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>View certificate</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>View certificate</h4>
+          <pre><code>
 openssl x509 -in cert.crt -text -noout
 openssl x509 -in cert.crt -noout -dates                         # Show validity dates
 openssl x509 -in cert.crt -noout -subject                       # Show subject
 openssl x509 -in cert.crt -noout -issuer                        # Show issuer</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Verify certificate</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Verify certificate</h4>
+          <pre><code>
 openssl verify cert.crt</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Test SSL/TLS connection</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Test SSL/TLS connection</h4>
+          <pre><code>
 openssl s_client -connect google.com:443
 openssl s_client -connect google.com:443 -showcerts</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Convert certificate formats</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Convert certificate formats</h4>
+          <pre><code>
 openssl x509 -in cert.crt -out cert.pem                         # CRT to PEM
 openssl x509 -in cert.pem -outform DER -out cert.der            # PEM to DER</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Encrypt/Decrypt files</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Encrypt/Decrypt files</h4>
+          <pre><code>
 openssl enc -aes-256-cbc -salt -in file.txt -out file.txt.enc
 openssl enc -aes-256-cbc -d -in file.txt.enc -out file.txt</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Generate random data</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate random data</h4>
+          <pre><code>
 openssl rand -base64 32                                         # 32 bytes base64
 openssl rand -hex 16                                            # 16 bytes hex</code></pre>
-      </div>
+        </div>
 
-      <h3>GPG Commands</h3>
+        <h3>GPG Commands</h3>
 
-      <div class="command-block">
-        <h4>Generate key pair</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate key pair</h4>
+          <pre><code>
 gpg --gen-key                                                   # Interactive
 gpg --full-generate-key                                         # Full options</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>List keys</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>List keys</h4>
+          <pre><code>
 gpg --list-keys                                                 # Public keys
 gpg --list-secret-keys                                          # Private keys
 gpg --list-sigs                                                 # Keys with signatures</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Export keys</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Export keys</h4>
+          <pre><code>
 gpg --export -a "User Name" > public.key                        # Export public key (ASCII)
 gpg --export-secret-keys -a "User Name" > private.key           # Export private key</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Import keys</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Import keys</h4>
+          <pre><code>
 gpg --import public.key                                         # Import public key
 gpg --import private.key                                        # Import private key</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Encrypt/Decrypt files</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Encrypt/Decrypt files</h4>
+          <pre><code>
 gpg --encrypt --recipient "User Name" file.txt                  # Encrypt
 gpg --output file.txt --decrypt file.txt.gpg                    # Decrypt
 gpg -c file.txt                                                 # Symmetric encryption (password)
 gpg -d file.txt.gpg                                             # Decrypt symmetric</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Sign files</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Sign files</h4>
+          <pre><code>
 gpg --sign file.txt                                             # Sign file
 gpg --clearsign file.txt                                        # Sign with readable text
 gpg --detach-sign file.txt                                      # Detached signature
 gpg --verify file.txt.sig                                       # Verify signature</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Key management</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Key management</h4>
+          <pre><code>
 gpg --edit-key "User Name"                                      # Edit key (interactive)
 gpg --delete-keys "User Name"                                   # Delete public key
 gpg --delete-secret-keys "User Name"                            # Delete private key</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Trust keys</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Trust keys</h4>
+          <pre><code>
 gpg --edit-key "User Name"
 # In GPG prompt: trust, then select level (1-5)</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Send/receive keys (keyserver)</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Send/receive keys (keyserver)</h4>
+          <pre><code>
 gpg --keyserver keyserver.ubuntu.com --send-keys KEY_ID
 gpg --keyserver keyserver.ubuntu.com --recv-keys KEY_ID
 gpg --keyserver keyserver.ubuntu.com --search-keys "email@example.com"</code></pre>
-      </div>
+        </div>
 
-      <h3>Lynis (Security Auditing)</h3>
+        <h3>Lynis (Security Auditing)</h3>
 
-      <div class="command-block">
-        <h4>Install Lynis</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Install Lynis</h4>
+          <pre><code>
 dnf install lynis                                               # RHEL/CentOS
 apt install lynis                                               # Debian/Ubuntu</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Run audit</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Run audit</h4>
+          <pre><code>
 lynis audit system                                              # Full system audit
 lynis audit system --quick                                      # Quick scan
 lynis audit system --cronjob                                    # Cron mode (no colors)</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Show options</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Show options</h4>
+          <pre><code>
 lynis show options                                              # Display options
 lynis show version                                              # Show version
 lynis show commands                                             # List commands
 lynis show profiles                                             # Show profiles</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Update Lynis</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Update Lynis</h4>
+          <pre><code>
 lynis update info                                               # Check for updates</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Reports</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Reports</h4>
+          <pre><code>
 /var/log/lynis.log                                              # Audit log
 /var/log/lynis-report.dat                                       # Report data</code></pre>
-      </div>
+        </div>
 
-      <h3>ClamAV (Antivirus)</h3>
+        <h3>ClamAV (Antivirus)</h3>
 
-      <div class="command-block">
-        <h4>ClamAV service</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>ClamAV service</h4>
+          <pre><code>
 systemctl status clamd@scan                                     # Check service
 systemctl start clamd@scan                                      # Start service
 systemctl enable clamd@scan                                     # Enable at boot</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Update virus definitions</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Update virus definitions</h4>
+          <pre><code>
 freshclam                                                       # Update virus database</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Scan files</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Scan files</h4>
+          <pre><code>
 clamscan file.txt                                               # Scan single file
 clamscan -r /home                                               # Recursive scan
 clamscan -r --infected /home                                    # Show only infected files
 clamscan -r --remove /home                                      # Remove infected files
 clamscan -r --move=/quarantine /home                            # Move infected to quarantine
 clamscan -r -l scan.log /home                                   # Log to file</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Background scanning</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Background scanning</h4>
+          <pre><code>
 clamd                                                           # Start daemon
 clamdscan /path                                                 # Scan using daemon (faster)</code></pre>
-      </div>
+        </div>
 
-      <h3>AppArmor Commands</h3>
+        <h3>AppArmor Commands</h3>
 
-      <div class="command-block">
-        <h4>AppArmor status</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>AppArmor status</h4>
+          <pre><code>
 apparmor_status                                                 # Show AppArmor status
 aa-status                                                       # Alternative command</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Profile management</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Profile management</h4>
+          <pre><code>
 aa-enforce /etc/apparmor.d/usr.bin.program                      # Set to enforce mode
 aa-complain /etc/apparmor.d/usr.bin.program                     # Set to complain mode
 aa-disable /etc/apparmor.d/usr.bin.program                      # Disable profile</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Load/unload profiles</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Load/unload profiles</h4>
+          <pre><code>
 apparmor_parser -r /etc/apparmor.d/usr.bin.program              # Reload profile
 apparmor_parser -R /etc/apparmor.d/usr.bin.program              # Remove profile</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Generate profiles</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate profiles</h4>
+          <pre><code>
 aa-genprof /usr/bin/program                                     # Generate profile (interactive)
 aa-logprof                                                      # Update profiles from logs</code></pre>
-      </div>
+        </div>
 
-      <h2 id="performance">31. PERFORMANCE MONITORING & TUNING</h2>
+        <h2 id="performance">31. PERFORMANCE MONITORING & TUNING</h2>
 
-      <h3>iostat (I/O Statistics)</h3>
+        <h3>iostat (I/O Statistics)</h3>
 
-      <div class="command-block">
-        <h4>Basic I/O stats</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Basic I/O stats</h4>
+          <pre><code>
 iostat                                                          # Basic report
 iostat -x                                                       # Extended statistics
 iostat -x 1 10                                                  # Every 1 second, 10 times
@@ -612,94 +609,94 @@ iostat -c                                                       # CPU utilizatio
 iostat -p sda                                                   # Specific device
 iostat -m                                                       # Display in MB/s
 iostat -k                                                       # Display in KB/s</code></pre>
-      </div>
+        </div>
 
-      <h3>vmstat (Virtual Memory Statistics)</h3>
+        <h3>vmstat (Virtual Memory Statistics)</h3>
 
-      <div class="command-block">
-        <h4>Virtual memory stats</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Virtual memory stats</h4>
+          <pre><code>
 vmstat                                                          # Basic report
 vmstat 1 10                                                     # Every 1 second, 10 times
 vmstat -a                                                       # Active/inactive memory
 vmstat -s                                                       # Memory statistics summary
 vmstat -d                                                       # Disk statistics
 vmstat -p /dev/sda1                                             # Partition statistics</code></pre>
-      </div>
+        </div>
 
-      <h3>sar (System Activity Reporter)</h3>
+        <h3>sar (System Activity Reporter)</h3>
 
-      <div class="command-block">
-        <h4>CPU usage</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>CPU usage</h4>
+          <pre><code>
 sar                                                             # CPU usage (default)
 sar -u 1 10                                                     # CPU every 1 sec, 10 times
 sar -u ALL                                                      # All CPU statistics
 sar -P ALL                                                      # Per-CPU statistics</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Memory usage</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Memory usage</h4>
+          <pre><code>
 sar -r                                                          # Memory utilization
 sar -r 1 10                                                     # Memory every 1 sec
 sar -R                                                          # Memory statistics
 sar -S                                                          # Swap space utilization</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>I/O statistics</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>I/O statistics</h4>
+          <pre><code>
 sar -b                                                          # I/O transfer rate
 sar -d                                                          # Block device statistics
 sar -d -p                                                       # Pretty names for devices</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Network statistics</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Network statistics</h4>
+          <pre><code>
 sar -n DEV                                                      # Network interface statistics
 sar -n EDEV                                                     # Network errors
 sar -n TCP                                                      # TCP statistics
 sar -n SOCK                                                     # Socket statistics</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Load average</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Load average</h4>
+          <pre><code>
 sar -q                                                          # Queue length and load average</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Historical data</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Historical data</h4>
+          <pre><code>
 sar -f /var/log/sa/sa01                                         # Read from specific file
 sar -s 10:00:00 -e 11:00:00                                     # Time range</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Generate report</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Generate report</h4>
+          <pre><code>
 sar -A                                                          # All statistics
 sadf -d                                                         # Database format</code></pre>
-      </div>
+        </div>
 
-      <h3>mpstat (Multiprocessor Statistics)</h3>
+        <h3>mpstat (Multiprocessor Statistics)</h3>
 
-      <div class="command-block">
-        <h4>CPU statistics</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>CPU statistics</h4>
+          <pre><code>
 mpstat                                                          # All CPUs summary
 mpstat -P ALL                                                   # Per-CPU statistics
 mpstat -P ALL 1 10                                              # Every 1 second, 10 times
 mpstat -P 0                                                     # CPU 0 only</code></pre>
-      </div>
+        </div>
 
-      <h3>pidstat (Process Statistics)</h3>
+        <h3>pidstat (Process Statistics)</h3>
 
-      <div class="command-block">
-        <h4>Process statistics</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Process statistics</h4>
+          <pre><code>
 pidstat                                                         # Default statistics
 pidstat 1 10                                                    # Every 1 second, 10 times
 pidstat -p PID                                                  # Specific process
@@ -708,47 +705,47 @@ pidstat -r                                                      # Memory usage
 pidstat -d                                                      # I/O statistics
 pidstat -t                                                      # Thread statistics
 pidstat -C httpd                                                # Processes matching name</code></pre>
-      </div>
+        </div>
 
-      <h3>iotop (I/O Monitor)</h3>
+        <h3>iotop (I/O Monitor)</h3>
 
-      <div class="command-block">
-        <h4>I/O monitoring</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>I/O monitoring</h4>
+          <pre><code>
 iotop                                                           # Interactive I/O monitor
 iotop -o                                                        # Only processes doing I/O
 iotop -P                                                        # Show processes, not threads
 iotop -a                                                        # Accumulated I/O
 iotop -b -n 3                                                   # Batch mode, 3 iterations</code></pre>
-      </div>
+        </div>
 
-      <h3>nethogs (Network Monitor)</h3>
+        <h3>nethogs (Network Monitor)</h3>
 
-      <div class="command-block">
-        <h4>Network bandwidth per process</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Network bandwidth per process</h4>
+          <pre><code>
 nethogs                                                         # Monitor all interfaces
 nethogs eth0                                                    # Specific interface
 nethogs -d 5                                                    # Update every 5 seconds</code></pre>
-      </div>
+        </div>
 
-      <h3>iftop (Interface Monitor)</h3>
+        <h3>iftop (Interface Monitor)</h3>
 
-      <div class="command-block">
-        <h4>Network interface monitoring</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Network interface monitoring</h4>
+          <pre><code>
 iftop                                                           # Default interface
 iftop -i eth0                                                   # Specific interface
 iftop -n                                                        # No hostname lookup
 iftop -P                                                        # Show port numbers
 iftop -B                                                        # Display bandwidth in bytes</code></pre>
-      </div>
+        </div>
 
-      <h3>dstat (Versatile Resource Statistics)</h3>
+        <h3>dstat (Versatile Resource Statistics)</h3>
 
-      <div class="command-block">
-        <h4>Combined statistics</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Combined statistics</h4>
+          <pre><code>
 dstat                                                           # Default output
 dstat -c                                                        # CPU stats only
 dstat -d                                                        # Disk stats only
@@ -758,13 +755,13 @@ dstat -cdnm                                                     # Combined stats
 dstat --top-cpu                                                 # Show top CPU process
 dstat --top-mem                                                 # Show top memory process
 dstat --top-io                                                  # Show top I/O process</code></pre>
-      </div>
+        </div>
 
-      <h3>nmon (Performance Monitor)</h3>
+        <h3>nmon (Performance Monitor)</h3>
 
-      <div class="command-block">
-        <h4>Interactive performance monitor</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Interactive performance monitor</h4>
+          <pre><code>
 nmon                                                            # Start nmon
 # Press keys for different views:
 # c - CPU
@@ -773,91 +770,91 @@ nmon                                                            # Start nmon
 # n - Network
 # t - Top processes
 # q - Quit</code></pre>
-      </div>
+        </div>
 
-      <h3>Tuning Commands</h3>
+        <h3>Tuning Commands</h3>
 
-      <div class="command-block">
-        <h4>sysctl (Kernel parameters)</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>sysctl (Kernel parameters)</h4>
+          <pre><code>
 sysctl -a                                                       # Show all parameters
 sysctl kernel.hostname                                          # Show specific parameter
 sysctl -w net.ipv4.ip_forward=1                                 # Set parameter temporarily
 sysctl -p                                                       # Load from /etc/sysctl.conf
 sysctl -p /etc/sysctl.d/custom.conf                             # Load from specific file</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Common tuning parameters</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Common tuning parameters</h4>
+          <pre><code>
 # /etc/sysctl.conf or /etc/sysctl.d/*.conf
 # net.ipv4.ip_forward = 1
 # net.ipv4.tcp_tw_reuse = 1
 # vm.swappiness = 10
 # fs.file-max = 65536</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Transparent Huge Pages</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Transparent Huge Pages</h4>
+          <pre><code>
 cat /sys/kernel/mm/transparent_hugepage/enabled                 # Check status
 echo never > /sys/kernel/mm/transparent_hugepage/enabled        # Disable</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>CPU governor</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>CPU governor</h4>
+          <pre><code>
 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor                 # Check
 echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  # Set</code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>I/O scheduler</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>I/O scheduler</h4>
+          <pre><code>
 cat /sys/block/sda/queue/scheduler                              # Check scheduler
 echo deadline > /sys/block/sda/queue/scheduler                  # Set scheduler</code></pre>
-      </div>
+        </div>
 
-      <h2 id="backup-monitoring-security">
-        32. BACKUP, RECOVERY, MOMITORING & SECURITY
-      </h2>
-      <h3>Backup & Recovery (Security Perspective)</h3>
+        <h2 id="backup-monitoring-security">
+          32. BACKUP, RECOVERY, MOMITORING & SECURITY
+        </h2>
+        <h3>Backup & Recovery (Security Perspective)</h3>
 
-      <div class="command-block">
-        <h4>Basic Backup Commands</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Basic Backup Commands</h4>
+          <pre><code>
 tar -cvf backup.tar /path/to/data                  # Create backup archive
 tar -xvf backup.tar                                # Extract backup archive
 rsync -av /source/ /destination/                   # Sync directories
 rsync -av --delete /source/ /destination/          # Mirror directories
 dd if=/dev/sda of=/mnt/backup/sda.img bs=4M        # Disk-level backup
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Encrypted Backups</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Encrypted Backups</h4>
+          <pre><code>
 gpg -c backup.tar                                                           # Encrypt backup with passphrase
 gpg --output backup.tar.gpg --encrypt --recipient user@example.com backup.tar   # Asymmetric encryption
 openssl enc -aes-256-cbc -salt -in backup.tar -out backup.enc                   # OpenSSL encryption
 openssl enc -d -aes-256-cbc -in backup.enc -out backup.tar                      # Decrypt backup
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Backup Verification</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Backup Verification</h4>
+          <pre><code>
 tar -tvf backup.tar                                # List archive contents
 sha256sum backup.tar                               # Generate checksum
 sha256sum -c backup.tar.sha256                     # Verify checksum
 gpg --verify backup.tar.gpg                        # Verify GPG encrypted backup
 rsync --dry-run -av /source/ /destination/         # Test sync without actual copy
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Offsite / Remote Backups</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Offsite / Remote Backups</h4>
+          <pre><code>
 scp backup.tar user@remote:/path/to/backup         # Copy backup to remote server
 rsync -av /local/dir/ user@remote:/backup/         # Sync to remote host
 rclone copy /local/dir remote:backup               # Cloud storage backup
@@ -865,13 +862,13 @@ aws s3 cp backup.tar s3://bucket-name/             # Upload backup to S3
 aws s3 sync /local/dir s3://bucket-name/           # Sync to S3 bucket
 duplicity /local/dir scp://user@remote//backup     # Encrypted incremental backups
 </code></pre>
-      </div>
+        </div>
 
-      <h3>Monitoring & Security</h3>
+        <h3>Monitoring & Security</h3>
 
-      <div class="command-block">
-        <h4>Prometheus Monitoring</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Prometheus Monitoring</h4>
+          <pre><code>
 # Node Exporter
 ./node_exporter                                   # Start node exporter on target host
 # Prometheus server
@@ -879,21 +876,21 @@ prometheus --config.file=prometheus.yml           # Start Prometheus
 # Alert rules
 promtool check rules alert_rules.yml              # Validate alert rules
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Grafana Visualization</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Grafana Visualization</h4>
+          <pre><code>
 grafana-server                                    # Start Grafana
 # Access Grafana web UI: http://server_ip:3000
 grafana-cli plugins install plugin_name           # Install plugins
 grafana-cli admin reset-admin-password newpass    # Reset Grafana admin password
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>ELK Stack (Log Monitoring)</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>ELK Stack (Log Monitoring)</h4>
+          <pre><code>
 # Elasticsearch
 systemctl start elasticsearch
 # Logstash
@@ -904,11 +901,11 @@ systemctl start kibana
 filebeat -e -c filebeat.yml                      # Ship logs to ELK
 auditbeat -e -c auditbeat.yml                    # Monitor audit events
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Security Hardening</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Security Hardening</h4>
+          <pre><code>
 # Fail2Ban
 systemctl start fail2ban
 fail2ban-client status                                                  # Check status
@@ -930,11 +927,11 @@ nmap -sV target_host                                                    # Servic
 lynis audit system                                                      # Security audit
 ossec-logtest                                                           # Test OSSEC rules
 </code></pre>
-      </div>
+        </div>
 
-      <div class="command-block">
-        <h4>Performance Monitoring & Tuning</h4>
-        <pre><code>
+        <div class="command-block">
+          <h4>Performance Monitoring & Tuning</h4>
+          <pre><code>
 iostat -xz 5                                      # CPU, disk I/O statistics
 vmstat 5                                          # CPU, memory, swap
 sar -u 5 3                                        # CPU usage history
@@ -946,6 +943,7 @@ sysctl -w net.ipv4.ip_forward=1                   # Enable IP forwarding
 echo "vm.swappiness=10" >> /etc/sysctl.conf       # Persistent swappiness
 sysctl -p                                         # Apply kernel changes
 </code></pre>
+        </div>
       </div>
 
       <h2 id="summary">SUMMARY</h2>
