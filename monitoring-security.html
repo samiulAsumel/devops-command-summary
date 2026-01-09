@@ -345,7 +345,10 @@ setsebool -P httpd_can_network_connect on                       # Set boolean pe
           <pre><code>
 ausearch -m avc -ts recent                                      # Recent AVC denials
 audit2why < /var/log/audit/audit.log                            # Why was it denied
-audit2allow -a                                                  # Generate policy to allow</code></pre>
+audit2allow -a                                                  # Generate policy to allow
+ausearch -m USER_LOGIN -ts today                                # Show today’s login events
+aureport -u                                                     # User login summary
+</code></pre>
         </div>
 
         <h3>OpenSSL Commands</h3>
@@ -816,18 +819,19 @@ echo deadline > /sys/block/sda/queue/scheduler                  # Set scheduler<
         </div>
 
         <h2 id="backup-monitoring-security">
-          32. BACKUP, RECOVERY, MOMITORING & SECURITY
+          32. BACKUP, RECOVERY, MONITORING & SECURITY
         </h2>
         <h3>Backup & Recovery (Security Perspective)</h3>
 
         <div class="command-block">
           <h4>Basic Backup Commands</h4>
           <pre><code>
-tar -cvf backup.tar /path/to/data                  # Create backup archive
-tar -xvf backup.tar                                # Extract backup archive
-rsync -av /source/ /destination/                   # Sync directories
-rsync -av --delete /source/ /destination/          # Mirror directories
-dd if=/dev/sda of=/mnt/backup/sda.img bs=4M        # Disk-level backup
+tar -cvf backup.tar /path/to/data                   # Create backup archive
+tar -xvf backup.tar                                 # Extract backup archive
+rsync -av /source/ /destination/                    # Sync directories
+rsync -av --delete /source/ /destination/           # Mirror directories
+rsync -av --ignore-existing /source/ /destination/  # Sync Without overwriting existing files
+dd if=/dev/sda of=/mnt/backup/sda.img bs=4M         # Disk-level backup
 </code></pre>
         </div>
 
@@ -933,6 +937,9 @@ ossec-logtest                                                           # Test O
           <h4>Performance Monitoring & Tuning</h4>
           <pre><code>
 iostat -xz 5                                      # CPU, disk I/O statistics
+# -x : extended stats
+# -z : omit zero values
+#  5 : interval in seconds
 vmstat 5                                          # CPU, memory, swap
 sar -u 5 3                                        # CPU usage history
 sar -r 5 3                                        # Memory usage history

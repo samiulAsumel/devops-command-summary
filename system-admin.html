@@ -2699,9 +2699,9 @@ scp -i ~/.ssh/id_rsa file.txt user@hostname:/path/              # With key
         <div class="command-block">
           <h4>Copy from remote</h4>
           <pre><code>
-scp user@hostname:/path/file.txt .                                # Copy to current directory
-scp -r user@hostname:/path/directory .                            # Copy directory
-scp user@hostname:/path/file1.txt user@hostname:/path/file2.txt . # Multiple files
+scp user@hostname:/path/file.txt .                                  # Copy to current directory
+scp -r user@hostname:/path/directory .                              # Copy directory
+scp user@hostname:/path/file1.txt user@hostname:/path/file2.txt .   # Multiple files
 </code></pre>
         </div>
 
@@ -2891,7 +2891,7 @@ sed '5d' file                                                   # Delete line 5
 sed '5,10d' file                                                # Delete lines 5-10
 sed '/pattern/d' file                                           # Delete lines matching pattern
 sed '/^$/d' file                                                # Delete empty lines
-sed '/^                                                         # /d' file # Delete comment lines
+sed '/^#/d' file                                                # Delete comment lines
 </code></pre>
         </div>
 
@@ -3648,7 +3648,7 @@ done
           <h4>String length</h4>
           <pre><code>
 string="Hello World"
-echo ${                                                         # string} # Length of string
+echo ${&#35;string}                                                # Length of string
 </code></pre>
         </div>
 
@@ -3871,13 +3871,9 @@ set -euo pipefail                                               # Strict mode
           <h4>trap (signal handling)</h4>
           <pre><code>
 trap 'commands' SIGNAL                                          # Execute commands on signal
-
 trap 'rm -f /tmp/tempfile' EXIT                                 # Cleanup on exit
-
 trap 'echo "Interrupted"; exit 1' INT                           # Handle Ctrl+C
-
 trap 'echo "Error on line $LINENO"' ERR                         # Handle errors
-
 trap 'cleanup_function' EXIT INT TERM                           # Multiple signals
 
 # Ignore signal
@@ -4704,9 +4700,9 @@ whereis command                               # Locate binary, source, man page
         <div class="command-block">
           <h4>Text Editors</h4>
           <pre><code>
-vim filename                                  # Open file in Vim
+vim filename                                   # Open file in Vim
 # In Vim: i=insert, :w=save, :q=quit, /pattern=search
-nano filename                                 # Open file in Nano
+nano filename                                  # Open file in Nano
 # Ctrl+O=save, Ctrl+X=exit, Ctrl+W=search
 </code></pre>
         </div>
