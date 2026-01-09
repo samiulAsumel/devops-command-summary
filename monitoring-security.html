@@ -50,6 +50,50 @@
         </div>
 
         <h2 id="monitoring">32. MONITORING COMMANDS</h2>
+        <div class="command-block">
+          <h4>Understanding Modern Monitoring Stack</h4>
+          <pre><code>
+# The Monitoring Ecosystem:
+# 
+# Prometheus (Metrics Collection & Alerting)
+#   ↓ scrapes metrics from
+# Exporters (Node Exporter, MySQL Exporter, etc.)
+#   ↓ stores time-series data
+# TSDB (Time Series Database)
+#   ↓ visualized by
+# Grafana (Dashboards & Visualization)
+#   ↓ alerts via
+# Alertmanager (Alert Routing & Notifications)
+
+# Why Prometheus?
+# - Pull-based model (scrapes metrics from targets)
+# - Service discovery (automatic target detection)
+# - Powerful query language (PromQL)
+# - Multi-dimensional data model (labels)
+# - No external dependencies
+
+# Prometheus vs Traditional Monitoring:
+# Traditional: Agent pushes metrics to central server
+# Prometheus: Server pulls metrics from targets
+#   - Better for dynamic environments (Kubernetes)
+#   - Easier troubleshooting (see what's scraped)
+#   - No agent configuration needed
+
+# Key Concepts:
+# Metric: Named time series (e.g., http_requests_total)
+# Label: Key-value pair for dimensions (e.g., method="GET")
+# Target: Endpoint to scrape (e.g., localhost:9100/metrics)
+# Job: Collection of similar targets (e.g., node-exporters)
+# Scrape: Act of collecting metrics from target
+
+# Common Exporters:
+# node_exporter - System metrics (CPU, memory, disk, network)
+# mysqld_exporter - MySQL database metrics
+# blackbox_exporter - Endpoint availability (HTTP, TCP, ICMP)
+# postgres_exporter - PostgreSQL metrics
+# redis_exporter - Redis metrics
+          </code></pre>
+        </div>
 
         <h3>Prometheus Commands</h3>
 
@@ -108,7 +152,7 @@ systemctl restart alertmanager
         <div class="command-block">
           <h4>Configuration</h4>
           <pre><code>
-/etc/alertmanager/alertmanager.yml        # Main configuration file
+/etc/alertmanager/alertmanager.yml                                  # Main configuration file
   </code></pre>
         </div>
 
@@ -239,6 +283,71 @@ systemctl restart logstash</code></pre>
         </div>
 
         <div class="command-block">
+          <h4>Understanding ELK/EFK Stack Architecture</h4>
+          <pre><code>
+# ELK Stack Components:
+# 
+# Elasticsearch (Storage & Search Engine)
+#   ↑ receives data from
+# Logstash (Processing & Transformation)
+#   ↑ collects logs from
+# Beats (Lightweight Shippers)
+#   ↑ monitors
+# Applications/Systems (Log Sources)
+#   ↓ visualized by
+# Kibana (Visualization & Dashboards)
+
+# EFK Stack (Alternative):
+# Replace Logstash with Fluentd (lighter, more flexible)
+
+# Why ELK Stack?
+# 1. Centralized logging - All logs in one place
+# 2. Full-text search - Find anything instantly
+# 3. Real-time analysis - Live log monitoring
+# 4. Scalability - Horizontal scaling (add nodes)
+# 5. Flexibility - Custom parsers, filters, outputs
+
+# Elasticsearch Concepts:
+# Index: Collection of documents (like database)
+# Document: Basic unit of data (like row in table)
+# Shard: Subset of index for distribution
+# Replica: Copy of shard for redundancy
+# Node: Single Elasticsearch instance
+# Cluster: Group of nodes working together
+
+# Logstash Pipeline:
+# Input → Filter → Output
+#
+# Input: Where data comes from (files, beats, syslog)
+# Filter: Transform data (grok, mutate, date parsing)
+# Output: Where to send (elasticsearch, file, kafka)
+
+# Beats Family:
+# Filebeat - Log files
+# Metricbeat - System metrics
+# Packetbeat - Network packets
+# Auditbeat - Audit events
+# Heartbeat - Uptime monitoring
+# Winlogbeat - Windows event logs
+
+# Common Use Cases:
+# - Application log analysis
+# - Security event monitoring (SIEM)
+# - Infrastructure monitoring
+# - APM (Application Performance Monitoring)
+# - Business analytics
+
+# Data Flow Example:
+# Application → Filebeat → Logstash → Elasticsearch → Kibana
+# 1. App writes logs to file
+# 2. Filebeat tails log file
+# 3. Logstash parses and enriches logs
+# 4. Elasticsearch indexes logs
+# 5. Kibana displays dashboards
+          </code></pre>
+        </div>
+
+        <div class="command-block">
           <h4>Reload configuration</h4>
           <pre><code>
 systemctl reload logstash</code></pre>
@@ -308,7 +417,7 @@ filebeat modules disable system                                 # Disable module
         <div class="command-block">
           <h4>Forward System Logs</h4>
           <pre><code>
-rsyslogd -N1                                           # Check rsyslog config
+rsyslogd -N1                                             # Check rsyslog config
 systemctl restart rsyslog                                # Restart logging service
 journalctl -f | nc logserver.example.com 514             # Forward logs to central server
 filebeat setup -e                                        # Setup dashboards and indices
@@ -340,9 +449,9 @@ groups:
         <div class="command-block">
           <h4>OpenTelemetry Collector</h4>
           <pre><code>
-otelcol --config otel-config.yaml                       # Start collector with config
-curl http://localhost:4317                               # Verify gRPC metrics endpoint
-otel-collector logs/otel.log                             # Tail collector logs
+otelcol --config otel-config.yaml                         # Start collector with config
+curl http://localhost:4317                                # Verify gRPC metrics endpoint
+otel-collector logs/otel.log                              # Tail collector logs
   </code></pre>
         </div>
 
@@ -376,9 +485,9 @@ systemctl restart auditd
         <div class="command-block">
           <h4>Audit rules management</h4>
           <pre><code>
-auditctl -l                                  # List active rules
-auditctl -w /etc/passwd -p wa -k passwd_chg # Watch passwd changes
-auditctl -w /var/log/secure -p wa            # Monitor auth logs
+auditctl -l                                                       # List active rules
+auditctl -w /etc/passwd -p wa -k passwd_chg                       # Watch passwd changes
+auditctl -w /var/log/secure -p wa                                 # Monitor auth logs
   </code></pre>
         </div>
 
@@ -421,6 +530,84 @@ fail2ban-client ping                                            # Test if runnin
         </div>
 
         <h3>SELinux Commands</h3>
+
+        <div class="command-block">
+          <h4>Understanding SELinux (Security-Enhanced Linux)</h4>
+          <pre><code>
+# What is SELinux?
+# - Mandatory Access Control (MAC) system
+# - Originally developed by NSA
+# - Built into Linux kernel
+# - Default security system in RHEL/CentOS/Fedora
+
+# SELinux vs Traditional Linux Security:
+# Traditional: Discretionary Access Control (DAC)
+#   - Users control their own files
+#   - root user has unlimited access
+#   - Relies on file permissions (rwx)
+#
+# SELinux: Mandatory Access Control (MAC)
+#   - System-wide security policy
+#   - Even root is restricted
+#   - Based on security contexts
+
+# SELinux Modes:
+# Enforcing - SELinux policy is enforced (blocks violations)
+# Permissive - Policy not enforced, only logs violations
+# Disabled - SELinux is turned off (not recommended)
+
+# SELinux Context Format:
+# user:role:type:level
+#
+# Example: system_u:object_r:httpd_sys_content_t:s0
+#   user: system_u (SELinux user)
+#   role: object_r (object role)
+#   type: httpd_sys_content_t (most important - defines access)
+#   level: s0 (MLS/MCS security level)
+
+# Type Enforcement (TE):
+# - Most common SELinux policy
+# - Controls what processes (domains) can access what files (types)
+# - Example: httpd_t domain can read httpd_sys_content_t files
+
+# Common SELinux Types:
+# httpd_sys_content_t - Web server content (read-only)
+# httpd_sys_rw_content_t - Web server content (read-write)
+# httpd_sys_script_exec_t - CGI scripts
+# user_home_t - User home directories
+# tmp_t - Temporary files
+
+# SELinux Booleans:
+# - Toggle specific SELinux policies on/off
+# - Allow exceptions without writing custom policies
+# - Example: httpd_can_network_connect (allow Apache to make network connections)
+
+# Common SELinux Issues:
+# 1. New service won't start
+#    Solution: Check AVC denials, set correct context
+#
+# 2. Custom port for service
+#    Solution: semanage port -a -t http_port_t -p tcp 8080
+#
+# 3. Files in non-standard location
+#    Solution: restorecon -Rv /custom/path or chcon
+
+# Troubleshooting Workflow:
+# 1. Check if SELinux is the problem: setenforce 0
+# 2. If it works, SELinux is blocking it
+# 3. Check logs: ausearch -m avc -ts recent
+# 4. Understand why: audit2why < /var/log/audit/audit.log
+# 5. Fix: Either set context or modify policy
+# 6. Re-enable SELinux: setenforce 1
+
+# Best Practices:
+# - Never disable SELinux in production
+# - Use permissive mode for testing
+# - Always check AVC denials before writing custom policies
+# - Use semanage for permanent changes
+# - Document any custom policies
+          </code></pre>
+        </div>
 
         <div class="command-block">
           <h4>SELinux Management</h4>
@@ -469,6 +656,84 @@ aureport -u                                                     # User login sum
         </div>
 
         <h3>OpenSSL Commands</h3>
+        <div class="command-block">
+          <h4>Understanding SSL/TLS Certificates</h4>
+          <pre><code>
+# Certificate Components:
+#
+# Private Key - Secret key (NEVER share)
+#   ↓ generates
+# Public Key - Can be shared freely
+#   ↓ creates
+# CSR (Certificate Signing Request) - Request for certificate
+#   ↓ sent to
+# CA (Certificate Authority) - Trusted third party
+#   ↓ signs and returns
+# Certificate - Signed public key + identity info
+
+# Certificate Types:
+# 1. Self-Signed Certificate
+#    - Signed by own private key (not trusted by browsers)
+#    - Use: Testing, internal services, development
+#    - Command: openssl req -x509 -newkey rsa:2048 -nodes -out cert.crt
+#
+# 2. CA-Signed Certificate
+#    - Signed by trusted Certificate Authority
+#    - Use: Production websites, public services
+#    - Examples: Let's Encrypt, DigiCert, Comodo
+#
+# 3. Wildcard Certificate
+#    - Valid for *.example.com (all subdomains)
+#    - More expensive but covers unlimited subdomains
+
+# SSL/TLS Versions:
+# SSL 2.0 - Deprecated (insecure)
+# SSL 3.0 - Deprecated (POODLE vulnerability)
+# TLS 1.0 - Deprecated (weak)
+# TLS 1.1 - Deprecated (weak)
+# TLS 1.2 - Current standard (widely used)
+# TLS 1.3 - Latest (faster, more secure)
+
+# Certificate Validity:
+# - Typically 1-2 years for CA-signed certs
+# - Let's Encrypt: 90 days (auto-renewal recommended)
+# - Check expiry: openssl x509 -in cert.crt -noout -dates
+
+# Common Use Cases:
+# 1. HTTPS websites (Apache, Nginx)
+# 2. Email encryption (SMTP, IMAP)
+# 3. VPN connections
+# 4. Code signing
+# 5. SSH key pairs (different format, but similar concept)
+
+# Certificate Chain:
+# Server Certificate
+#   ↓ signed by
+# Intermediate CA Certificate
+#   ↓ signed by
+# Root CA Certificate (pre-installed in browsers/OS)
+
+# File Formats:
+# .pem - Base64 encoded (most common, text format)
+# .crt - Certificate only (can be PEM or DER)
+# .key - Private key
+# .csr - Certificate Signing Request
+# .der - Binary format (compact)
+# .p12/.pfx - PKCS#12 (contains certificate + private key)
+
+# Common OpenSSL Operations:
+# Generate private key → Create CSR → Send to CA → Receive certificate
+#
+# For self-signed (testing):
+# openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365
+
+# Verify Certificate Chain:
+# openssl verify -CAfile ca-bundle.crt server.crt
+
+# Test SSL/TLS:
+# openssl s_client -connect example.com:443 -servername example.com
+          </code></pre>
+        </div>
 
         <div class="command-block">
           <h4>Generate private key</h4>
@@ -742,6 +1007,106 @@ cat /etc/shadow
         <h2 id="performance">36. PERFORMANCE MONITORING & TUNING</h2>
 
         <h3>iostat (I/O Statistics)</h3>
+        <div class="command-block">
+          <h4>Understanding Performance Monitoring Tools</h4>
+          <pre><code>
+# Linux Performance Observability Tools:
+#
+# CPU Monitoring:
+# - top/htop - Real-time process viewer
+# - mpstat - Per-CPU statistics
+# - sar -u - Historical CPU usage
+# - pidstat -u - Per-process CPU
+#
+# Memory Monitoring:
+# - free - Memory usage overview
+# - vmstat - Virtual memory stats
+# - sar -r - Historical memory
+# - pidstat -r - Per-process memory
+#
+# Disk I/O Monitoring:
+# - iostat - I/O statistics
+# - iotop - I/O by process
+# - sar -d - Historical disk I/O
+# - pidstat -d - Per-process I/O
+#
+# Network Monitoring:
+# - ss/netstat - Socket statistics
+# - sar -n DEV - Network interface stats
+# - nethogs - Bandwidth by process
+# - iftop - Interface bandwidth monitor
+
+# Key Performance Metrics:
+#
+# Load Average (uptime):
+# - 1, 5, 15 minute averages
+# - Number of processes waiting for CPU
+# - Rule of thumb: < number of CPU cores is good
+# - Example: Load of 2.0 on dual-core system = 100% utilized
+#
+# CPU Usage (%):
+# - us (user) - User-space processes
+# - sy (system) - Kernel-space processes
+# - id (idle) - Idle time (higher = less utilized)
+# - wa (iowait) - Waiting for I/O (high = I/O bottleneck)
+# - st (steal) - Time stolen by hypervisor (VM environments)
+#
+# Memory Usage:
+# - total - Total physical RAM
+# - used - Used memory
+# - free - Unused memory
+# - available - Memory available for new apps (includes cache)
+# - buffers/cache - Kernel buffers and page cache
+# - swap - Virtual memory on disk (high swap usage = low RAM)
+#
+# Disk I/O:
+# - tps (transactions per second) - I/O operations
+# - kB_read/s - Kilobytes read per second
+# - kB_wrtn/s - Kilobytes written per second
+# - %util - Disk utilization (>80% = bottleneck)
+
+# Performance Bottleneck Identification:
+#
+# CPU Bottleneck:
+# - High load average (> CPU cores)
+# - Low %id (idle) in top
+# - High %us or %sy
+# Solution: Add CPU cores, optimize code, use caching
+#
+# Memory Bottleneck:
+# - Low "available" memory
+# - High swap usage
+# - Frequent page faults
+# Solution: Add RAM, optimize memory usage, tune swappiness
+#
+# Disk I/O Bottleneck:
+# - High %iowait in top
+# - High %util in iostat
+# - Long response times
+# Solution: Use SSD, RAID, optimize queries, add cache
+#
+# Network Bottleneck:
+# - Packet drops/errors
+# - High bandwidth utilization
+# - Connection timeouts
+# Solution: Upgrade bandwidth, use CDN, optimize traffic
+
+# Monitoring Best Practices:
+# 1. Establish baseline metrics (normal system behavior)
+# 2. Monitor trends over time (not just current values)
+# 3. Set up alerts for thresholds
+# 4. Collect metrics at regular intervals (e.g., every 5 min)
+# 5. Archive historical data for analysis
+# 6. Use visualization tools (Grafana) for easier interpretation
+
+# Common Performance Issues:
+#
+# High Load Average + Low CPU Usage = I/O bottleneck
+# High CPU Usage + Low Load = CPU-intensive but not waiting
+# High Memory Usage + Swap = Need more RAM
+# Network Drops + Low Bandwidth = Configuration issue
+          </code></pre>
+        </div>
 
         <div class="command-block">
           <h4>Basic I/O stats</h4>
@@ -964,6 +1329,127 @@ echo deadline > /sys/block/sda/queue/scheduler                  # Set scheduler<
           37. BACKUP, RECOVERY, MONITORING & SECURITY
         </h2>
         <h3>Backup & Recovery (Security Perspective)</h3>
+        <div class="command-block">
+          <h4>Understanding Backup Strategies</h4>
+          <pre><code>
+# The 3-2-1 Backup Rule:
+# 3 - Keep 3 copies of data
+# 2 - Store on 2 different media types
+# 1 - Keep 1 copy offsite (cloud, remote datacenter)
+
+# Backup Types:
+#
+# Full Backup:
+# - Complete copy of all data
+# - Pros: Simple restore, single point recovery
+# - Cons: Slow, storage-intensive, time-consuming
+# - When: Weekly or monthly
+#
+# Incremental Backup:
+# - Only changed files since last backup (any type)
+# - Pros: Fast, minimal storage
+# - Cons: Restore requires all incremental backups
+# - When: Daily
+#
+# Differential Backup:
+# - Changed files since last FULL backup
+# - Pros: Faster restore than incremental
+# - Cons: Grows larger as week progresses
+# - When: Daily between full backups
+
+# Backup Strategy Example:
+# Sunday - Full backup
+# Monday-Saturday - Incremental backups
+#
+# Restore on Friday needs:
+# - Sunday full backup
+# - Monday, Tuesday, Wednesday, Thursday, Friday incrementals
+
+# RPO vs RTO:
+# RPO (Recovery Point Objective):
+# - Maximum acceptable data loss
+# - Example: RPO = 1 hour means can lose up to 1 hour of data
+# - Determines backup frequency
+#
+# RTO (Recovery Time Objective):
+# - Maximum acceptable downtime
+# - Example: RTO = 4 hours means must restore within 4 hours
+# - Determines backup/restore method
+
+# Backup Tools Comparison:
+#
+# tar:
+# - Simple, universal
+# - No compression by default (use tar + gzip)
+# - Good for: Full backups, archives
+#
+# rsync:
+# - Incremental by default (only transfers changes)
+# - Network-efficient (delta transfer)
+# - Good for: Sync directories, remote backups
+#
+# dd:
+# - Bit-by-bit disk copy
+# - Creates exact disk image
+# - Good for: Disk cloning, disaster recovery
+#
+# dump/restore:
+# - Filesystem-aware (ext2/3/4)
+# - Supports incremental levels (0-9)
+# - Good for: Unix/Linux filesystems
+#
+# Database-specific:
+# - mysqldump, pg_dump (logical backups)
+# - Filesystem snapshots (physical backups)
+# - Good for: Database consistency
+
+# Backup Verification:
+# CRITICAL: Always verify backups can be restored
+#
+# 1. Test restores regularly (monthly)
+# 2. Check backup logs for errors
+# 3. Verify checksums (sha256sum)
+# 4. Monitor backup completion
+# 5. Document restore procedures
+
+# Backup Security:
+#
+# Encryption at Rest:
+# - Encrypt backup files (gpg, openssl)
+# - Prevents unauthorized access to backup media
+#
+# Encryption in Transit:
+# - Use SSH/TLS for remote backups
+# - Prevents interception during transfer
+#
+# Access Control:
+# - Restrict backup file permissions (600)
+# - Separate backup admin accounts
+# - Audit backup access logs
+
+# Backup Rotation (GFS):
+# Grandfather-Father-Son
+#
+# Daily (Son) - Last 7 days
+# Weekly (Father) - Last 4 weeks
+# Monthly (Grandfather) - Last 12 months
+#
+# Balances: Storage costs vs retention requirements
+
+# Cloud Backup Considerations:
+# Pros:
+# - Offsite automatically
+# - No hardware maintenance
+# - Scalable storage
+#
+# Cons:
+# - Ongoing costs
+# - Internet dependency
+# - Data sovereignty concerns
+#
+# Tools: rclone, aws s3, duplicity, restic
+          </code></pre>
+        </div>
 
         <div class="command-block">
           <h4>Basic Backup Commands</h4>
@@ -1137,6 +1623,135 @@ journalctl -p 3 -xb   # Shows high-priority (error-level) systemd logs from curr
         38. HIGH AVAILABILITY & LOAD BALANCING (HAProxy, Nginx LB,
         Pacemaker/Corosync clusters)
       </h2>
+      <div class="command-block">
+        <h4>Understanding High Availability Concepts</h4>
+        <pre><code>
+# High Availability (HA):
+# - System continues operating despite component failures
+# - Minimizes downtime and data loss
+# - Measured in "nines" of uptime
+
+# Availability Levels:
+# 99%       = 3.65 days downtime/year
+# 99.9%     = 8.77 hours downtime/year
+# 99.99%    = 52.6 minutes downtime/year
+# 99.999%   = 5.26 minutes downtime/year (five nines)
+# 99.9999%  = 31.5 seconds downtime/year (six nines)
+
+# HA Architecture Components:
+#
+# Load Balancer:
+# - Distributes traffic across multiple servers
+# - Health checks to detect failures
+# - Examples: HAProxy, Nginx, AWS ELB
+#
+# Cluster:
+# - Group of servers working together
+# - Shared resources (IP, storage)
+# - Automatic failover
+# - Examples: Pacemaker, Corosync, Keepalived
+#
+# Redundancy:
+# - Multiple copies of critical components
+# - Active-Active: All nodes handle traffic
+# - Active-Passive: Standby nodes wait for failure
+
+# Load Balancing Algorithms:
+#
+# Round Robin:
+# - Requests distributed evenly (server1, server2, server3, repeat)
+# - Simple, fair distribution
+# - Ignores server load
+#
+# Least Connections:
+# - Send to server with fewest active connections
+# - Better for long-lived connections
+# - Adapts to varying server load
+#
+# IP Hash:
+# - Client IP determines server
+# - Session persistence (sticky sessions)
+# - Same client always goes to same server
+#
+# Weighted:
+# - Servers assigned weights based on capacity
+# - More powerful servers get more traffic
+
+# HAProxy vs Nginx Load Balancing:
+#
+# HAProxy:
+# - Dedicated load balancer (L4 + L7)
+# - Advanced health checks
+# - SSL termination
+# - Better for complex routing rules
+#
+# Nginx:
+# - Web server + load balancer
+# - Simpler configuration
+# - Better for HTTP/HTTPS
+# - Can serve static content + load balance
+
+# Pacemaker/Corosync Cluster:
+#
+# Pacemaker:
+# - Cluster Resource Manager
+# - Manages services (resources)
+# - Decides where resources run
+# - Handles failover
+#
+# Corosync:
+# - Cluster Communication System
+# - Heartbeat between nodes
+# - Detects node failures
+# - Quorum management
+#
+# Resources:
+# - Services managed by cluster (IP, database, web server)
+# - Can be moved between nodes
+# - Start/stop managed automatically
+
+# Split-Brain Problem:
+# - Cluster nodes can't communicate
+# - Each thinks others are down
+# - Both try to become active (data corruption risk)
+#
+# Solutions:
+# - Quorum: Require majority of nodes to operate
+# - Fencing: Shut down suspected failed nodes
+# - STONITH: "Shoot The Other Node In The Head"
+
+# Virtual IP (VIP):
+# - Floating IP address
+# - Moves between cluster nodes
+# - Clients always connect to same IP
+# - Automatic failover transparent to clients
+
+# Health Checks:
+# - TCP check: Port is open
+# - HTTP check: Returns 200 OK
+# - Custom script: Application-specific test
+# - Interval: How often to check (e.g., every 5 sec)
+# - Timeout: Max wait time for response
+# - Failures: How many failures before marked down
+
+# Session Persistence:
+# - Sticky sessions (same client → same server)
+# - Needed for stateful applications
+# - Methods:
+#   - Cookie-based (load balancer inserts cookie)
+#   - IP-based (hash client IP)
+#   - Session sharing (external session store like Redis)
+
+# HA Best Practices:
+# 1. No single point of failure
+# 2. Automate failover (don't rely on manual intervention)
+# 3. Test failover regularly
+# 4. Monitor all components
+# 5. Plan for split-brain scenarios
+# 6. Document recovery procedures
+# 7. Use automation (Ansible, Terraform)
+        </code></pre>
+      </div>
 
       <h3>HAProxy Load Balancer</h3>
       <div class="command-block">
