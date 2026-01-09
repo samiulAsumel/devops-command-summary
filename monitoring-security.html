@@ -49,7 +49,7 @@
           </ul>
         </div>
 
-        <h2 id="monitoring">29. MONITORING COMMANDS</h2>
+        <h2 id="monitoring">32. MONITORING COMMANDS</h2>
 
         <h3>Prometheus Commands</h3>
 
@@ -91,6 +91,39 @@ promtool query range 'up' --start="2024-01-01T00:00:00Z" --end="2024-01-02T00:00
 # rate(http_requests_total[5m]) - Request rate
 # sum(rate(http_requests_total[5m])) by (job) - Sum by job
 # avg(node_cpu_seconds_total) - Average CPU</code></pre>
+        </div>
+
+        <h3>Alertmanager Commands</h3>
+
+        <div class="command-block">
+          <h4>Alertmanager service</h4>
+          <pre><code>
+systemctl status alertmanager
+systemctl start alertmanager
+systemctl stop alertmanager
+systemctl restart alertmanager
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Configuration</h4>
+          <pre><code>
+/etc/alertmanager/alertmanager.yml        # Main configuration file
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Validate configuration</h4>
+          <pre><code>
+amtool check-config /etc/alertmanager/alertmanager.yml
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Reload configuration</h4>
+          <pre><code>
+kill -HUP $(pidof alertmanager)
+  </code></pre>
         </div>
 
         <h3>Node Exporter Commands</h3>
@@ -266,12 +299,96 @@ filebeat modules disable system                                 # Disable module
           <pre><code>
 /etc/filebeat/filebeat.yml                                      # Main config file</code></pre>
         </div>
+        <h2 id="logging-auditing">
+          33. LOGGING & AUDITING (Advanced ELK/EFK stack, centralized logging,
+          alerting rules)
+        </h2>
 
-        <h2 id="security">30. SECURITY AND HARDENING</h2>
+        <h3>Centralized Logging</h3>
+        <div class="command-block">
+          <h4>Forward System Logs</h4>
+          <pre><code>
+rsyslogd -N1                                           # Check rsyslog config
+systemctl restart rsyslog                                # Restart logging service
+journalctl -f | nc logserver.example.com 514             # Forward logs to central server
+filebeat setup -e                                        # Setup dashboards and indices
+  </code></pre>
+        </div>
+
+        <h3>Alerting Rules</h3>
+        <div class="command-block">
+          <h4>Create Alerts in Prometheus</h4>
+          <pre><code>
+groups:
+- name: node_alerts
+  rules:
+  - alert: HighCPU
+    expr: 100 - (avg by(instance)(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High CPU usage detected"
+  </code></pre>
+        </div>
+
+        <h2 id="observability">
+          34. OBSERVABILITY (Metrics + Logs + Traces, OpenTelemetry)
+        </h2>
+
+        <h3>Metrics, Logs, Traces</h3>
+        <div class="command-block">
+          <h4>OpenTelemetry Collector</h4>
+          <pre><code>
+otelcol --config otel-config.yaml                       # Start collector with config
+curl http://localhost:4317                               # Verify gRPC metrics endpoint
+otel-collector logs/otel.log                             # Tail collector logs
+  </code></pre>
+        </div>
+
+        <h3>Instrument Application</h3>
+        <div class="command-block">
+          <h4>Python Example</h4>
+          <pre><code>
+from opentelemetry import metrics, trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+# Initialize tracer and metrics to send telemetry data to collector
+  </code></pre>
+        </div>
+
+        <h2 id="security">35. SECURITY AND HARDENING</h2>
 
         <div class="danger">
           <strong>DANGER:</strong> Security commands can lock you out of your
           system if misconfigured. Always test in a safe environment first.
+        </div>
+        <h3>Auditd Commands (System Auditing)</h3>
+
+        <div class="command-block">
+          <h4>Audit service</h4>
+          <pre><code>
+systemctl status auditd
+systemctl start auditd
+systemctl restart auditd
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Audit rules management</h4>
+          <pre><code>
+auditctl -l                                  # List active rules
+auditctl -w /etc/passwd -p wa -k passwd_chg # Watch passwd changes
+auditctl -w /var/log/secure -p wa            # Monitor auth logs
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Search audit logs</h4>
+          <pre><code>
+ausearch -k passwd_chg
+ausearch -m USER_LOGIN -ts today
+aureport -x --summary
+  </code></pre>
         </div>
 
         <h3>fail2ban Commands</h3>
@@ -596,8 +713,33 @@ apparmor_parser -R /etc/apparmor.d/usr.bin.program              # Remove profile
 aa-genprof /usr/bin/program                                     # Generate profile (interactive)
 aa-logprof                                                      # Update profiles from logs</code></pre>
         </div>
+        <h3>Falco (Runtime Threat Detection)</h3>
 
-        <h2 id="performance">31. PERFORMANCE MONITORING & TUNING</h2>
+        <div class="command-block">
+          <h4>Falco service</h4>
+          <pre><code>
+systemctl status falco
+systemctl start falco
+systemctl restart falco
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Test Falco rules</h4>
+          <pre><code>
+falco --validate /etc/falco/falco_rules.yaml
+falco --list
+  </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Trigger test event</h4>
+          <pre><code>
+cat /etc/shadow
+  </code></pre>
+        </div>
+
+        <h2 id="performance">36. PERFORMANCE MONITORING & TUNING</h2>
 
         <h3>iostat (I/O Statistics)</h3>
 
@@ -819,19 +961,19 @@ echo deadline > /sys/block/sda/queue/scheduler                  # Set scheduler<
         </div>
 
         <h2 id="backup-monitoring-security">
-          32. BACKUP, RECOVERY, MONITORING & SECURITY
+          37. BACKUP, RECOVERY, MONITORING & SECURITY
         </h2>
         <h3>Backup & Recovery (Security Perspective)</h3>
 
         <div class="command-block">
           <h4>Basic Backup Commands</h4>
           <pre><code>
-tar -cvf backup.tar /path/to/data                   # Create backup archive
-tar -xvf backup.tar                                 # Extract backup archive
-rsync -av /source/ /destination/                    # Sync directories
-rsync -av --delete /source/ /destination/           # Mirror directories
-rsync -av --ignore-existing /source/ /destination/  # Sync Without overwriting existing files
-dd if=/dev/sda of=/mnt/backup/sda.img bs=4M         # Disk-level backup
+tar -cvf backup.tar /path/to/data                                # Create backup archive
+tar -xvf backup.tar                                              # Extract backup archive
+rsync -av /source/ /destination/                                 # Sync directories
+rsync -av --delete /source/ /destination/                        # Mirror directories
+rsync -av --ignore-existing /source/ /destination/               # Sync Without overwriting existing files
+dd if=/dev/sda of=/mnt/backup/sda.img bs=4M                      # Disk-level backup
 </code></pre>
         </div>
 
@@ -866,6 +1008,16 @@ aws s3 cp backup.tar s3://bucket-name/             # Upload backup to S3
 aws s3 sync /local/dir s3://bucket-name/           # Sync to S3 bucket
 duplicity /local/dir scp://user@remote//backup     # Encrypted incremental backups
 </code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Rclone Configuration</h4>
+          <pre><code>
+rclone config                                      # Configure cloud remotes
+rclone listremotes                                 # Show configured remotes
+rclone sync /data remote:backup                    # Sync to cloud
+rclone copy /data remote:backup                    # Copy without deletion
+rclone check /data remote:backup                   # Verify integrity
+          </code></pre>
         </div>
 
         <h3>Monitoring & Security</h3>
@@ -902,8 +1054,8 @@ logstash -f logstash.conf
 # Kibana
 systemctl start kibana
 # Beats
-filebeat -e -c filebeat.yml                      # Ship logs to ELK
-auditbeat -e -c auditbeat.yml                    # Monitor audit events
+filebeat -e -c filebeat.yml                         # Ship logs to ELK
+auditbeat -e -c auditbeat.yml                       # Monitor audit events
 </code></pre>
         </div>
 
@@ -951,6 +1103,81 @@ echo "vm.swappiness=10" >> /etc/sysctl.conf       # Persistent swappiness
 sysctl -p                                         # Apply kernel changes
 </code></pre>
         </div>
+        <div class="command-block">
+          <h4>Process & File Limits</h4>
+          <pre><code>
+ulimit -a                                         # View current limits
+ulimit -n 65535                                   # Increase open files (session)
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Persistent limits</h4>
+          <pre><code>
+/etc/security/limits.conf
+* soft nofile 65535
+* hard nofile 65535
+          </code></pre>
+        </div>
+        <div class="command-block">
+          <h4>System Health One-Liners</h4>
+          <pre><code>
+uptime                # Shows system running time, load average (1, 5, 15 min) – quick health check
+df -h                 # Displays disk usage in human-readable format
+free -h               # Displays RAM and swap usage in human-readable format (used, free, available)
+df -hT                # Shows disk usage by filesystem type (ext4, xfs, nfs) – capacity & mount validation
+top -b -n1 | head     # Non-interactive snapshot of top CPU/memory-consuming processes (automation-friendly)
+ss -tulnp             # Lists listening TCP/UDP ports with associated services and PIDs (network security check)
+journalctl -p 3 -xb   # Shows high-priority (error-level) systemd logs from current boot for troubleshooting
+
+          </code></pre>
+        </div>
+      </div>
+      <h2 id="ha-load-balancing">
+        38. HIGH AVAILABILITY & LOAD BALANCING (HAProxy, Nginx LB,
+        Pacemaker/Corosync clusters)
+      </h2>
+
+      <h3>HAProxy Load Balancer</h3>
+      <div class="command-block">
+        <h4>Basic Commands</h4>
+        <pre><code>
+systemctl start haproxy
+systemctl enable haproxy
+haproxy -c -f /etc/haproxy/haproxy.cfg                       # Check config
+haproxy -f /etc/haproxy/haproxy.cfg -d                       # Start in debug mode
+  </code></pre>
+      </div>
+
+      <h3>Nginx Load Balancing</h3>
+      <div class="command-block">
+        <h4>Configuration Example</h4>
+        <pre><code>
+upstream backend {
+    server web1.example.com;
+    server web2.example.com;
+}
+
+server {
+    listen 80;
+    location / {
+        proxy_pass http://backend;
+    }
+}
+systemctl restart nginx
+  </code></pre>
+      </div>
+
+      <h3>Pacemaker / Corosync Clusters</h3>
+      <div class="command-block">
+        <h4>Cluster Commands</h4>
+        <pre><code>
+pcs cluster setup --name mycluster node1 node2
+pcs cluster start --all
+pcs status                                               # Check cluster status
+pcs resource create VirtualIP ocf:heartbeat:IPaddr ip=192.168.1.100 cidr_netmask=24
+pcs resource enable VirtualIP
+  </code></pre>
       </div>
 
       <h2 id="summary">SUMMARY</h2>

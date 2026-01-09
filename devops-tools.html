@@ -86,6 +86,17 @@ pip3 search package                                             # Search for pac
       </div>
 
       <h3>Virtual Environments</h3>
+      <div class="command-block">
+        <h4>Why use virtual environments?</h4>
+        <pre><code>
+# Virtual environments isolate project dependencies
+# Benefits:
+# - Prevents conflicts between different project requirements
+# - Each project can have its own package versions
+# - Clean separation of development environments
+# - Easy to replicate environments across systems
+        </code></pre>
+      </div>
 
       <div class="command-block">
         <h4>venv (built-in)</h4>
@@ -420,6 +431,20 @@ git push --force-with-lease                                     # Safer force pu
       </div>
 
       <h3>Stashing</h3>
+      <div class="command-block">
+        <h4>When to use git stash</h4>
+        <pre><code>
+# Common use cases:
+# 1. Save work-in-progress when switching branches
+# 2. Temporarily save uncommitted changes
+# 3. Pull latest changes without committing incomplete work
+# 4. Apply saved changes later when ready
+      
+# Example workflow:
+# Working on feature → Need to fix urgent bug → Stash current work
+# → Switch to main → Fix bug → Return to feature → Apply stash
+        </code></pre>
+      </div>
 
       <div class="command-block">
         <h4>Stash changes</h4>
@@ -812,6 +837,27 @@ docker attach container_id                                      # Attach to runn
       </div>
 
       <h3>Docker Volumes</h3>
+      <div class="command-block">
+        <h4>Volume Types Explained</h4>
+        <pre><code>
+# Named Volume (Docker-managed, recommended for production)
+docker run -v myvolume:/data image
+# - Docker manages storage location
+# - Portable across systems
+# - Survives container deletion
+
+# Bind Mount (Direct host path mapping)
+docker run -v /host/path:/container/path image
+# - Direct access to host filesystem
+# - Useful for development
+# - Changes reflect immediately
+
+# tmpfs Mount (Stored in memory, temporary)
+docker run --tmpfs /app/temp image
+# - Fast performance
+# - Data lost on container stop
+        </code></pre>
+      </div>
 
       <div class="command-block">
         <h4>List volumes</h4>
@@ -1349,6 +1395,30 @@ kubectl get deployment deployment-name -o yaml > deployment.yaml  # Export to fi
       </div>
 
       <h3>RBAC (Role-Based Access Control)</h3>
+      <div class="command-block">
+        <h4>Understanding RBAC Components</h4>
+        <pre><code>
+# Role vs ClusterRole:
+#
+# Role: Namespace-scoped permissions
+kubectl create role pod-reader --verb=get,list --resource=pods -n dev
+# - Applies only to specific namespace
+# - Use for namespace-specific resources (pods, services, deployments)
+#
+# ClusterRole: Cluster-wide permissions
+kubectl create clusterrole node-reader --verb=get,list --resource=nodes
+# - Applies across entire cluster
+# - Use for cluster-scoped resources (nodes, PVs, namespaces)
+
+# RoleBinding vs ClusterRoleBinding:
+# - RoleBinding: Grants permissions within a namespace
+# - ClusterRoleBinding: Grants permissions cluster-wide
+
+# Security best practice:
+# Always use Role/RoleBinding for namespace-scoped access
+# Only use ClusterRole/ClusterRoleBinding when necessary
+        </code></pre>
+      </div>
 
       <div class="command-block">
         <h4>Service accounts</h4>
@@ -1890,6 +1960,31 @@ terraform destroy -target=resource.name                         # Destroy specif
       </div>
 
       <h3>Terraform State</h3>
+      <div class="command-block">
+        <h4>State Management - Critical Safety Guidelines</h4>
+        <pre><code>
+# NEVER manually edit state files directly
+# State file corruption can destroy infrastructure
+
+# Always backup state before modifications
+terraform state pull > backup-$(date +%Y%m%d-%H%M%S).tfstate
+
+# State operations are DANGEROUS in production:
+# - terraform state rm: Removes from tracking (doesn't destroy)
+# - terraform state mv: Can break resource references
+# - Manual state edits: HIGH RISK of data loss
+
+# Best Practices:
+# 1. Use remote state (S3, Terraform Cloud) with locking
+# 2. Enable state versioning
+# 3. Test state operations in dev environment first
+# 4. Always review changes with 'terraform plan' before 'apply'
+# 5. Use workspaces for environment isolation
+
+# State locking prevents concurrent modifications
+# Without locking, multiple users can corrupt state
+        </code></pre>
+      </div>
 
       <div class="command-block">
         <h4>State management</h4>
@@ -2021,23 +2116,56 @@ terraform apply -replace=resource.name                          # Force replacem
 
       <h3>AWS CLI Configuration</h3>
 
-      <div class="command-block">
-        <h4>Configure AWS CLI</h4>
-        <pre><code>
+      <h3>AWS CLI Configuration</h3>
+
+<div class="command-block">
+  <h4>Understanding AWS Configuration Files</h4>
+  <pre><code>
+# ~/.aws/credentials - Stores access keys (NEVER commit to git)
+[default]
+aws_access_key_id = AKIAIOSFODNN7EXAMPLE
+aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+
+[production]
+aws_access_key_id = AKIAI44QH8DHBEXAMPLE
+aws_secret_access_key = je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+
+# ~/.aws/config - Stores region and output preferences
+[default]
+region = us-east-1
+output = json
+
+[profile production]
+region = us-west-2
+output = table
+
+# Configuration precedence (highest to lowest):
+# 1. Command line options (--region us-west-2)
+# 2. Environment variables (AWS_REGION, AWS_ACCESS_KEY_ID)
+# 3. AWS credentials file (~/.aws/credentials)
+# 4. AWS config file (~/.aws/config)
+# 5. Instance metadata (for EC2 instances with IAM roles)
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>Configure AWS CLI</h4>
+  <pre><code>
 aws configure                                                   # Interactive configuration
 aws configure list                                              # List configuration
 aws configure get region                                        # Get specific value
 aws configure set region us-west-2                              # Set specific value
-</code></pre>
-      </div>
+  </code></pre>
+</div>
 
-      <div class="command-block">
-        <h4>Named profiles</h4>
-        <pre><code>
+<div class="command-block">
+  <h4>Named profiles</h4>
+  <pre><code>
 aws configure --profile myprofile
 aws s3 ls --profile myprofile
-</code></pre>
-      </div>
+export AWS_PROFILE=myprofile                                    # Set default profile for session
+  </code></pre>
+</div>
 
       <div class="command-block">
         <h4>Configuration files</h4>
@@ -2404,65 +2532,161 @@ aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Sta
 aws ec2 describe-instances --query 'Reservations[*].Instances[?State.Name==`running`].[InstanceId]' --output text
 </code></pre>
       </div>
+      <h2 id="container-security">28. CONTAINER SECURITY (Image scanning, Pod security policies, K8s RBAC)</h2>
 
-      <h2 id="automation">28. AUTOMATION ONE-LINERS COMMANDS</h2>
+<h3>Image Scanning</h3>
+<div class="command-block">
+  <h4>Scan Docker Images</h4>
+  <pre><code>
+docker scan image_name                                # Scan Docker image for vulnerabilities
+trivy image_name                                      # Scan container image using Trivy
+  </code></pre>
+</div>
+
+<h3>Pod Security Policies & RBAC</h3>
+<div class="command-block">
+  <h4>Create Role and RoleBinding in Kubernetes</h4>
+  <pre><code>
+kubectl create role pod-reader --verb=get,list,watch --resource=pods
+kubectl create rolebinding pod-reader-binding --role=pod-reader --user=dev_user
+kubectl get roles
+kubectl get rolebindings
+  </code></pre>
+</div>
+
+<h2 id="cicd-tools">29. CI/CD TOOLS (Jenkins, GitHub Actions, GitLab CI pipelines)</h2>
+
+<h3>Jenkins CLI</h3>
+<div class="command-block">
+  <h4>Basic Jenkins Commands</h4>
+  <pre><code>
+java -jar jenkins-cli.jar -s http://jenkins_url build job_name       # Trigger build
+java -jar jenkins-cli.jar -s http://jenkins_url list-jobs            # List jobs
+java -jar jenkins-cli.jar -s http://jenkins_url get-job job_name     # Get job configuration
+  </code></pre>
+</div>
+
+<h3>GitHub Actions</h3>
+<div class="command-block">
+  <h4>Workflow Commands</h4>
+  <pre><code>
+gh workflow list                                          # List workflows
+gh workflow run workflow.yml                              # Trigger workflow run
+gh run list                                               # Show workflow runs
+  </code></pre>
+</div>
+
+<h3>GitLab CI</h3>
+<div class="command-block">
+  <h4>Pipeline Commands</h4>
+  <pre><code>
+gitlab-runner list                                         # List registered runners
+gitlab-runner exec docker job_name                         # Run job locally
+curl --header "PRIVATE-TOKEN: <token>" https://gitlab.com/api/v4/projects/:id/pipelines  # Trigger pipeline via API
+  </code></pre>
+</div>
+
+<h2 id="advanced-cloud">30. ADVANCED CLOUD (Terraform modules, AWS services: S3, EC2, RDS, IAM, Multi-cloud)</h2>
+
+<h3>Terraform Commands</h3>
+<div class="command-block">
+  <h4>Manage Infrastructure</h4>
+  <pre><code>
+terraform init                                              # Initialize working directory
+terraform plan                                              # Preview changes
+terraform apply                                             # Apply infrastructure changes
+terraform destroy                                           # Destroy infrastructure
+terraform fmt                                               # Format configuration files
+terraform validate                                          # Validate configuration
+terraform state list                                        # List resources in state
+  </code></pre>
+</div>
+
+<h3>AWS Services via CLI</h3>
+<div class="command-block">
+  <h4>EC2, S3, RDS, IAM</h4>
+  <pre><code>
+aws ec2 describe-instances                                  # List EC2 instances
+aws s3 ls                                                   # List S3 buckets
+aws s3 cp file s3://bucket_name/                            # Upload file to S3
+aws rds describe-db-instances                               # List RDS instances
+aws iam list-users                                          # List IAM users
+aws iam create-role --role-name MyRole --assume-role-policy-document file://trust-policy.json
+  </code></pre>
+</div>
+
+<h3>Multi-Cloud / Advanced Terraform</h3>
+<div class="command-block">
+  <h4>Modules and Workspaces</h4>
+  <pre><code>
+module "vpc" {
+  source = "./modules/vpc"
+  cidr_block = "10.0.0.0/16"
+}
+
+terraform workspace new azure
+terraform workspace select aws
+  </code></pre>
+</div>
+
+
+      <h2 id="automation">31. AUTOMATION ONE-LINERS COMMANDS</h2>
       <h3>Automation One-Liners</h3>
 
 <div class="command-block">
   <h4>Python & Pip</h4>
   <pre><code>
-python3 --version                               # Python version
-pip install package_name                        # Install Python package
-pip uninstall package_name                      # Uninstall package
-pip list                                        # List installed packages
-pip show package_name                           # Show package details
-python3 -m venv env_name                        # Create virtual environment
-source env_name/bin/activate                    # Activate virtual environment
-deactivate                                      # Deactivate virtual environment
-virtualenv env_name                             # Alternative virtual environment
+python3 --version                                               # Python version
+pip install package_name                                        # Install Python package
+pip uninstall package_name                                      # Uninstall package
+pip list                                                        # List installed packages
+pip show package_name                                           # Show package details
+python3 -m venv env_name                                        # Create virtual environment
+source env_name/bin/activate                                    # Activate virtual environment
+deactivate                                                      # Deactivate virtual environment
+virtualenv env_name                                             # Alternative virtual environment
 </code></pre>
 </div>
 
 <div class="command-block">
   <h4>Git Version Control</h4>
   <pre><code>
-git clone repo_url                              # Clone repository
-git status                                      # Show repo status
-git add file                                    # Stage file
-git commit -m "message"                         # Commit changes
-git push                                        # Push changes
-git pull                                        # Pull latest changes
-git branch                                      # List branches
-git checkout branch_name                        # Switch branch
-git merge branch_name                           # Merge branch
-git rebase branch_name                          # Rebase branch
-git stash                                       # Stash changes
-git stash pop                                   # Apply stashed changes
-git reset --hard commit_id                      # Reset repo to commit
-git diff                                        # Show differences
-git log                                         # Show commit log
-</code></pre>
+git clone repo_url                                              # Clone repository
+git status                                                      # Show repo status
+git add file                                                    # Stage file
+git commit -m "message"                                         # Commit changes
+git push                                                        # Push changes
+git pull                                                        # Pull latest changes
+git branch                                                      # List branches
+git checkout branch_name                                        # Switch branch
+git merge branch_name                                           # Merge branch
+git rebase branch_name                                          # Rebase branch
+git stash                                                       # Stash changes
+git stash pop                                                   # Apply stashed changes
+git reset --hard commit_id                                      # Reset repo to commit
+git diff                                                        # Show differences
+git log                                                         # Show commit log
 </div>
 
 <div class="command-block">
   <h4>Docker</h4>
   <pre><code>
-docker run -it --name container_name image       # Run container interactively
-docker ps                                        # List running containers
-docker ps -a                                     # List all containers
-docker exec -it container_name bash              # Enter running container
-docker stop container_name                       # Stop container
-docker rm container_name                         # Remove container
-docker build -t image_name .                     # Build Docker image
-docker pull image_name                           # Pull image from registry
-docker push image_name                           # Push image to registry
-docker images                                    # List images
-docker rmi image_name                            # Remove image
-docker volume create volume_name                 # Create volume
-docker volume ls                                 # List volumes
-docker network create network_name               # Create network
-docker network ls                                # List networks
-docker network inspect network_name              # Inspect network
+docker run -it --name container_name image                      # Run container interactively
+docker ps                                                       # List running containers
+docker ps -a                                                    # List all containers
+docker exec -it container_name bash                             # Enter running container
+docker stop container_name                                      # Stop container
+docker rm container_name                                        # Remove container
+docker build -t image_name .                                    # Build Docker image
+docker pull image_name                                          # Pull image from registry
+docker push image_name                                          # Push image to registry
+docker images                                                   # List images
+docker rmi image_name                                           # Remove image
+docker volume create volume_name                                # Create volume
+docker volume ls                                                # List volumes
+docker network create network_name                              # Create network
+docker network ls                                               # List networks
+docker network inspect network_name                             # Inspect network
 </code></pre>
 </div>
 
@@ -2488,68 +2712,68 @@ kubectl create secret generic secret_name --from-literal key=value  # Create sec
 <div class="command-block">
   <h4>Ansible</h4>
   <pre><code>
-ansible all -m ping                                       # Test connectivity
-ansible-playbook playbook.yml                             # Run playbook
-ansible-playbook -i inventory.ini playbook.yml            # Specify inventory
-ansible-playbook playbook.yml --check                     # Dry run
-ansible-playbook playbook.yml --diff                      # Show changes
-ansible all -m yum -a "name=package state=present"        # Install package
-ansible all -m copy -a "src=file dest=/tmp/"              # Copy file
-ansible all -m template -a "src=file.j2 dest=/tmp/file"   # Template file
-ansible all -m service -a "name=httpd state=started"      # Manage service
-ansible-galaxy install role_name                          # Install role
-ansible-vault encrypt file.yml                            # Encrypt file
-ansible-vault decrypt file.yml                            # Decrypt file
+ansible all -m ping                                                 # Test connectivity
+ansible-playbook playbook.yml                                       # Run playbook
+ansible-playbook -i inventory.ini playbook.yml                      # Specify inventory
+ansible-playbook playbook.yml --check                               # Dry run
+ansible-playbook playbook.yml --diff                                # Show changes
+ansible all -m yum -a "name=package state=present"                  # Install package
+ansible all -m copy -a "src=file dest=/tmp/"                        # Copy file
+ansible all -m template -a "src=file.j2 dest=/tmp/file"             # Template file
+ansible all -m service -a "name=httpd state=started"                # Manage service
+ansible-galaxy install role_name                                    # Install role
+ansible-vault encrypt file.yml                                      # Encrypt file
+ansible-vault decrypt file.yml                                      # Decrypt file
 </code></pre>
 </div>
 
 <div class="command-block">
   <h4>Terraform</h4>
   <pre><code>
-terraform init                                   # Initialize working directory
-terraform plan                                   # Show execution plan
-terraform apply                                  # Apply infrastructure changes
-terraform destroy                                # Destroy infrastructure
-terraform fmt                                    # Format code
-terraform validate                               # Validate configuration
-terraform state list                             # List resources in state
-terraform state show resource_name               # Show resource in state
-terraform providers                              # Show providers
-terraform providers lock                         # Lock provider versions
-terraform providers mirror dir                   # Mirror providers
-terraform providers schema -json                 # Provider schema
+terraform init                                                      # Initialize working directory
+terraform plan                                                      # Show execution plan
+terraform apply                                                     # Apply infrastructure changes
+terraform destroy                                                   # Destroy infrastructure
+terraform fmt                                                       # Format code
+terraform validate                                                  # Validate configuration
+terraform state list                                                # List resources in state
+terraform state show resource_name                                  # Show resource in state
+terraform providers                                                 # Show providers
+terraform providers lock                                            # Lock provider versions
+terraform providers mirror dir                                      # Mirror providers
+terraform providers schema -json                                    # Provider schema
 </code></pre>
 </div>
 
 <div class="command-block">
   <h4>AWS CLI</h4>
   <pre><code>
-aws configure                                           # Configure profile & region
-aws s3 ls                                               # List S3 buckets
-aws s3 cp file s3://bucket/                             # Copy file to S3
-aws s3 sync local/ s3://bucket/                         # Sync directory to S3
-aws ec2 describe-instances                              # List EC2 instances
-aws ec2 start-instances --instance-ids i-12345          # Start EC2 instance
-aws ec2 stop-instances --instance-ids i-12345           # Stop EC2 instance
-aws iam list-users                                      # List IAM users
-aws rds describe-db-instances                           # List RDS instances
-aws cloudwatch get-metric-statistics                    # Retrieve metrics
-aws lambda invoke --function-name fn_name output.json   # Invoke Lambda
+aws configure                                                       # Configure profile & region
+aws s3 ls                                                           # List S3 buckets
+aws s3 cp file s3://bucket/                                         # Copy file to S3
+aws s3 sync local/ s3://bucket/                                     # Sync directory to S3
+aws ec2 describe-instances                                          # List EC2 instances
+aws ec2 start-instances --instance-ids i-12345                      # Start EC2 instance
+aws ec2 stop-instances --instance-ids i-12345                       # Stop EC2 instance
+aws iam list-users                                                  # List IAM users
+aws rds describe-db-instances                                       # List RDS instances
+aws cloudwatch get-metric-statistics                                # Retrieve metrics
+aws lambda invoke --function-name fn_name output.json               # Invoke Lambda
 </code></pre>
 </div>
 
 <div class="command-block">
   <h4>Shell Automation</h4>
   <pre><code>
-#!/bin/bash                                         # Script header
-for i in {1..5}; do echo $i; done                   # Loop example
-while [ condition ]; do ...; done                   # While loop
-if [ condition ]; then ...; fi                      # Conditional
-case $var in pattern) ... ;; esac                   # Case statement
-read -p "Enter value: " var                         # Input
-cronjob: crontab -e                                 # Schedule recurring tasks
-at 12:00 command                                    # One-time scheduled task
-systemctl list-timers                               # List systemd timers
+#!/bin/bash                                                         # Script header
+for i in {1..5}; do echo $i; done                                   # Loop example
+while [ condition ]; do ...; done                                   # While loop
+if [ condition ]; then ...; fi                                      # Conditional
+case $var in pattern) ... ;; esac                                   # Case statement
+read -p "Enter value: " var                                         # Input
+cronjob: crontab -e                                                 # Schedule recurring tasks
+at 12:00 command                                                    # One-time scheduled task
+systemctl list-timers                                               # List systemd timers
 </code></pre>
 </div>
 </div>
@@ -2822,4 +3046,4 @@ systemctl list-timers                               # List systemd timers
       }
     </style>
   </body>
-</html
+</html>
