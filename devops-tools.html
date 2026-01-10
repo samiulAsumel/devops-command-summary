@@ -84,6 +84,40 @@ pip3 freeze > requirements.txt                                  # Export require
 pip3 search package                                             # Search for package (deprecated)
 </code></pre>
       </div>
+      <h3>Poetry (Modern dependency management)</h3>
+
+        <div class="command-block">
+          <h4>Poetry commands</h4>
+          <pre><code>
+curl -sSL https://install.python-poetry.org | python3 -        # Install Poetry
+poetry new myproject                                            # Create new project
+poetry init                                                     # Initialize existing project
+poetry add package                                              # Add dependency
+poetry add --dev pytest                                         # Add dev dependency
+poetry install                                                  # Install dependencies
+poetry update                                                   # Update dependencies
+poetry remove package                                           # Remove dependency
+poetry show                                                     # List installed packages
+poetry run python script.py                                     # Run script in virtual env
+poetry shell                                                    # Activate virtual environment
+poetry export -f requirements.txt --output requirements.txt     # Export to requirements.txt</code></pre>
+        </div>
+
+        <h3>pipenv (Alternative dependency management)</h3>
+
+        <div class="command-block">
+          <h4>pipenv commands</h4>
+          <pre><code>
+pip install pipenv                                              # Install pipenv
+pipenv install                                                  # Install from Pipfile
+pipenv install package                                          # Add package
+pipenv install --dev pytest                                     # Add dev package
+pipenv uninstall package                                        # Remove package
+pipenv shell                                                    # Activate virtual environment
+pipenv run python script.py                                     # Run script
+pipenv lock                                                     # Generate Pipfile.lock
+pipenv graph                                                    # Show dependency graph</code></pre>
+        </div>
 
       <h3>Virtual Environments</h3>
       <div class="command-block">
@@ -1259,6 +1293,29 @@ docker images --digests                                         # Show digests
 docker images --filter "dangling=true"                          # Dangling images
 </code></pre>
       </div>
+      <div class="command-block">
+        <h4>Multi-stage builds (Production optimization)</h4>
+        <pre><code>
+# Dockerfile example - Multi-stage build
+FROM node:18 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+EXPOSE 3000
+CMD ["node", "dist/index.js"]
+
+# Benefits:
+# - Smaller final image (only runtime dependencies)
+# - Faster builds (cached layers)
+# - More secure (no build tools in production image)</code></pre>
+      </div>
 
       <div class="command-block">
         <h4>Pull images</h4>
@@ -1486,9 +1543,9 @@ docker volume prune                                             # Remove unused 
       <div class="command-block">
         <h4>Use volumes</h4>
         <pre><code>
-docker run -v myvolume:/data image                              # Named volume
-docker run -v /host/path:/container/path image                  # Bind mount
-docker run --mount type=volume,source=myvolume,target=/data image # Long syntax
+docker run -v myvolume:/data image                                  # Named volume
+docker run -v /host/path:/container/path image                      # Bind mount
+docker run --mount type=volume,source=myvolume,target=/data image   # Long syntax
 </code></pre>
       </div>
 
@@ -1559,6 +1616,21 @@ docker-compose config                                           # Validate and v
 docker-compose scale service=3                                  # Scale service
 </code></pre>
       </div>
+      <div class="command-block">
+        <h4>Docker Compose v2 (Modern syntax)</h4>
+        <pre><code>
+docker compose version                                          # Show Docker Compose version
+docker compose up -d                                            # Start services in detached mode
+docker compose down                                             # Stop and remove containers
+docker compose ps                                               # List containers
+docker compose logs -f                                          # Follow logs
+docker compose exec service sh                                  # Execute command in service
+docker compose build --no-cache                                 # Build without cache
+docker compose pull                                             # Pull service images
+docker compose push                                             # Push service images
+docker compose config                                           # Validate and view config
+docker compose top                                              # Display running processes</code></pre>
+      </div>
 
       <h3>Docker System Management</h3>
 
@@ -1622,6 +1694,16 @@ kubectl api-resources                                           # List API resou
 kubectl api-versions                                            # List API versions
 </code></pre>
       </div>
+      <div class="command-block">
+        <h4>Context management (Multi-cluster)</h4>
+        <pre><code>
+kubectl config get-clusters                                     # List all clusters
+kubectl config set-cluster cluster-name --server=https://1.2.3.4:6443  # Add cluster
+kubectl config set-credentials user-name --token=bearer_token   # Add credentials
+kubectl config set-context context-name --cluster=cluster-name --user=user-name --namespace=default  # Create context
+kubectl config delete-context context-name                      # Delete context
+kubectl config rename-context old-name new-name                 # Rename context</code></pre>
+      </div>
 
       <div class="command-block">
         <h4>Configuration</h4>
@@ -1648,6 +1730,13 @@ kubectl get pods -o yaml                                        # YAML output
 kubectl get pods --show-labels                                  # Show labels
 kubectl get pods -l app=myapp                                   # Filter by label
 </code></pre>
+      </div>
+      <div class="command-block">
+        <h4>Resource management (requests/limits)</h4>
+        <pre><code>
+kubectl set resources deployment deployment-name --limits=cpu=200m,memory=512Mi --requests=cpu=100m,memory=256Mi
+kubectl describe pod pod-name | grep -A 5 "Limits"             # View pod resource limits
+kubectl describe pod pod-name | grep -A 5 "Requests"           # View pod resource requests</code></pre>
       </div>
 
       <div class="command-block">
@@ -1747,10 +1836,10 @@ kubectl rollout restart deployment/deployment-name              # Restart deploy
       <div class="command-block">
         <h4>Deployment rollout</h4>
         <pre><code>
-kubectl rollout status deployment/deployment-name               # Check status
-kubectl rollout history deployment/deployment-name              # View history
-kubectl rollout undo deployment/deployment-name                 # Rollback
-kubectl rollout undo deployment/deployment-name --to-revision=2 # Specific revision
+kubectl rollout status deployment/deployment-name                 # Check status
+kubectl rollout history deployment/deployment-name                # View history
+kubectl rollout undo deployment/deployment-name                   # Rollback
+kubectl rollout undo deployment/deployment-name --to-revision=2   # Specific revision
 </code></pre>
       </div>
 
@@ -1760,6 +1849,17 @@ kubectl rollout undo deployment/deployment-name --to-revision=2 # Specific revis
 kubectl delete deployment deployment-name
 </code></pre>
       </div>
+      <h3>Horizontal Pod Autoscaler (HPA)</h3>
+
+        <div class="command-block">
+          <h4>HPA management</h4>
+          <pre><code>
+kubectl get hpa                                                                 # List HPAs
+kubectl get hpa -A                                                              # All namespaces
+kubectl autoscale deployment deployment-name --cpu-percent=50 --min=1 --max=10  # Create HPA
+kubectl describe hpa hpa-name                                                   # HPA details
+kubectl delete hpa hpa-name                                                     # Delete HPA</code></pre>
+        </div>
 
       <h3>Services</h3>
 
@@ -1782,8 +1882,8 @@ kubectl describe service service-name
       <div class="command-block">
         <h4>Create service</h4>
         <pre><code>
-kubectl expose deployment deployment-name --port=80 --type=NodePort # Expose deployment
-kubectl create service clusterip myservice --tcp=80:8080            # ClusterIP service
+kubectl expose deployment deployment-name --port=80 --type=NodePort   # Expose deployment
+kubectl create service clusterip myservice --tcp=80:8080              # ClusterIP service
 </code></pre>
       </div>
 
@@ -3355,6 +3455,36 @@ ansible-config dump                                             # Dump current s
 ./ansible.cfg                                                   # Project-specific (highest priority)
 </code></pre>
       </div>
+      <h3>Ansible Performance Optimization</h3>
+
+        <div class="command-block">
+          <h4>Speed up playbook execution</h4>
+          <pre><code>
+# ansible.cfg optimizations
+[defaults]
+forks = 50                                                      # Parallel execution (default: 5)
+gathering = smart                                               # Smart fact gathering
+fact_caching = jsonfile                                         # Cache facts
+fact_caching_connection = /tmp/ansible_facts
+fact_caching_timeout = 86400                                    # 24 hours
+host_key_checking = False                                       # Skip SSH key verification
+pipelining = True                                               # SSH pipelining (faster)
+
+# Disable fact gathering when not needed
+ansible-playbook playbook.yml --skip-tags facts
+# OR in playbook:
+gather_facts: no</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Mitogen plugin (5-10x faster)</h4>
+          <pre><code>
+pip install mitogen
+# ansible.cfg
+[defaults]
+strategy_plugins = /path/to/mitogen/ansible_mitogen/plugins/strategy
+strategy = mitogen_linear</code></pre>
+        </div>
 
       <h2 id="terraform">26. TERRAFORM COMMANDS</h2>
 
@@ -3436,6 +3566,32 @@ terraform state pull > backup-$(date +%Y%m%d-%H%M%S).tfstate
 # Without locking, multiple users can corrupt state
         </code></pre>
       </div>
+      <div class="command-block">
+        <h4>Remote state backend (S3 example)</h4>
+        <pre><code>
+# backend.tf
+terraform {
+backend "s3" {
+  bucket         = "my-terraform-state"
+  key            = "prod/terraform.tfstate"
+  region         = "us-east-1"
+  encrypt        = true
+  dynamodb_table = "terraform-locks"                          # State locking
+}
+}
+
+# Initialize with backend
+terraform init
+
+# Migrate state to remote backend
+terraform init -migrate-state
+
+# Benefits:
+# - Shared state for team collaboration
+# - State locking (prevents concurrent modifications)
+# - Encryption at rest
+# - Version history (S3 versioning)</code></pre>
+      </div>
 
       <div class="command-block">
         <h4>State management</h4>
@@ -3468,6 +3624,32 @@ terraform workspace new dev                                     # Create new wor
 terraform workspace select dev                                  # Switch workspace
 terraform workspace delete dev                                  # Delete workspace
 </code></pre>
+      </div>
+      <div class="command-block">
+        <h4>Workspace use cases</h4>
+        <pre><code>
+# Workspaces for environment separation (development, staging, production)
+terraform workspace new dev
+terraform workspace new staging
+terraform workspace new prod
+
+# Use workspace name in configuration
+resource "aws_instance" "example" {
+tags = {
+  Environment = terraform.workspace
+  Name        = "server-${terraform.workspace}"
+}
+}
+
+# Switch between environments
+terraform workspace select dev
+terraform apply                                                 # Applies only to dev workspace
+
+# Best Practices:
+# - Use workspaces for similar infrastructure across environments
+# - Don't use workspaces for completely different infrastructure
+# - Consider separate state files for production (safer)
+# - Workspaces share same backend configuration</code></pre>
       </div>
 
       <h3>Terraform Output</h3>
@@ -3963,6 +4145,71 @@ aws ec2 describe-route-tables
 aws ec2 create-route --route-table-id rtb-12345678 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-12345678
 </code></pre>
       </div>
+      <h3>AWS CloudFormation Commands</h3>
+
+        <div class="command-block">
+          <h4>Stack management</h4>
+          <pre><code>
+aws cloudformation create-stack --stack-name mystack --template-body file://template.yml
+aws cloudformation update-stack --stack-name mystack --template-body file://template.yml
+aws cloudformation delete-stack --stack-name mystack
+aws cloudformation describe-stacks --stack-name mystack         # Stack details
+aws cloudformation list-stacks                                  # List all stacks
+aws cloudformation list-stack-resources --stack-name mystack    # List stack resources</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Stack validation</h4>
+          <pre><code>
+aws cloudformation validate-template --template-body file://template.yml  # Validate template</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Change sets (preview changes)</h4>
+          <pre><code>
+aws cloudformation create-change-set --stack-name mystack --change-set-name mychangeset --template-body file://template.yml
+aws cloudformation describe-change-set --change-set-name mychangeset --stack-name mystack
+aws cloudformation execute-change-set --change-set-name mychangeset --stack-name mystack
+aws cloudformation delete-change-set --change-set-name mychangeset --stack-name mystack</code></pre>
+        </div>
+        <h3>AWS ECS Commands</h3>
+
+        <div class="command-block">
+          <h4>Cluster management</h4>
+          <pre><code>
+aws ecs list-clusters                                           # List ECS clusters
+aws ecs create-cluster --cluster-name mycluster                 # Create cluster
+aws ecs describe-clusters --clusters mycluster                  # Cluster details
+aws ecs delete-cluster --cluster mycluster                      # Delete cluster</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Task definitions</h4>
+          <pre><code>
+aws ecs register-task-definition --cli-input-json file://task-definition.json  # Register task definition
+aws ecs list-task-definitions                                   # List task definitions
+aws ecs describe-task-definition --task-definition mytask:1     # Task definition details
+aws ecs deregister-task-definition --task-definition mytask:1   # Deregister task definition</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Services</h4>
+          <pre><code>
+aws ecs create-service --cluster mycluster --service-name myservice --task-definition mytask --desired-count 2
+aws ecs list-services --cluster mycluster                                         # List services
+aws ecs describe-services --cluster mycluster --services myservice                # Service details
+aws ecs update-service --cluster mycluster --service myservice --desired-count 5  # Scale service
+aws ecs delete-service --cluster mycluster --service myservice                    # Delete service</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Tasks</h4>
+          <pre><code>
+aws ecs run-task --cluster mycluster --task-definition mytask   # Run task
+aws ecs list-tasks --cluster mycluster                          # List running tasks
+aws ecs describe-tasks --cluster mycluster --tasks task-id      # Task details
+aws ecs stop-task --cluster mycluster --task task-id            # Stop task</code></pre>
+        </div>
 
       <h3>AWS CLI Output Formatting</h3>
 
@@ -4016,6 +4263,123 @@ java -jar jenkins-cli.jar -s http://jenkins_url list-jobs            # List jobs
 java -jar jenkins-cli.jar -s http://jenkins_url get-job job_name     # Get job configuration
   </code></pre>
 </div>
+<h3>Jenkins Pipeline Examples</h3>
+
+        <div class="command-block">
+          <h4>Jenkinsfile (Declarative pipeline)</h4>
+          <pre><code>
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker build -t myapp:latest .'
+                sh 'docker push myapp:latest'
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}</code></pre>
+        </div>
+
+        <h3>GitHub Actions Workflow</h3>
+
+        <div class="command-block">
+          <h4>.github/workflows/ci.yml</h4>
+          <pre><code>
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm test
+    
+    - name: Build Docker image
+      run: docker build -t myapp:latest .
+    
+    - name: Push to registry
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+        docker push myapp:latest</code></pre>
+        </div>
+
+        <h3>GitLab CI Pipeline</h3>
+
+        <div class="command-block">
+          <h4>.gitlab-ci.yml</h4>
+          <pre><code>
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_IMAGE: registry.gitlab.com/myproject/myapp
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+test:
+  stage: test
+  script:
+    - npm test
+
+deploy:
+  stage: deploy
+  script:
+    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHA .
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHA
+  only:
+    - main</code></pre>
+        </div>
 
 <h3>GitHub Actions</h3>
 <div class="command-block">
@@ -4031,9 +4395,9 @@ gh run list                                               # Show workflow runs
 <div class="command-block">
   <h4>Pipeline Commands</h4>
   <pre><code>
-gitlab-runner list                                         # List registered runners
-gitlab-runner exec docker job_name                         # Run job locally
-curl --header "PRIVATE-TOKEN: <token>" https://gitlab.com/api/v4/projects/:id/pipelines  # Trigger pipeline via API
+gitlab-runner list                                                                 # List registered runners
+gitlab-runner exec docker job_name                                                 # Run job locally
+curl --header "PRIVATE-TOKEN: <token>" https://gitlab.com/api/v4/projects/:id/pipelines   # Trigger pipeline via API
   </code></pre>
 </div>
 

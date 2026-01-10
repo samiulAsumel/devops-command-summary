@@ -169,6 +169,17 @@ amtool check-config /etc/alertmanager/alertmanager.yml
 kill -HUP $(pidof alertmanager)
   </code></pre>
         </div>
+        <div class="command-block">
+          <h4>Alertmanager CLI (amtool)</h4>
+          <pre><code>
+amtool alert query                                              # Query active alerts
+amtool alert add alertname instance=host --start=now            # Add test alert
+amtool silence add alertname instance=host --duration=1h        # Silence alert for 1 hour
+amtool silence query                                            # List active silences
+amtool silence expire SILENCE_ID                                # Expire specific silence
+amtool config routes                                            # Show routing tree
+amtool config routes test --config.file=alertmanager.yml        # Test routing configuration</code></pre>
+        </div>
 
         <h3>Node Exporter Commands</h3>
 
@@ -263,6 +274,15 @@ curl -X GET "localhost:9200/myindex/_search?pretty" -H 'Content-Type: applicatio
           <h4>Bulk operations</h4>
           <pre><code>
 curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary "@bulk.json"</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Snapshots (Backup/Restore)</h4>
+          <pre><code>
+curl -X PUT "localhost:9200/_snapshot/backup_repo" -H 'Content-Type: application/json' -d '{"type":"fs","settings":{"location":"/mnt/backups"}}'  # Create repository
+curl -X PUT "localhost:9200/_snapshot/backup_repo/snapshot_1?wait_for_completion=true"    # Create snapshot
+curl -X GET "localhost:9200/_snapshot/backup_repo/_all"                                   # List snapshots
+curl -X POST "localhost:9200/_snapshot/backup_repo/snapshot_1/_restore"                   # Restore snapshot
+curl -X DELETE "localhost:9200/_snapshot/backup_repo/snapshot_1"                          # Delete snapshot</code></pre>
         </div>
 
         <h3>Logstash Commands</h3>
@@ -408,6 +428,41 @@ filebeat modules disable system                                 # Disable module
           <pre><code>
 /etc/filebeat/filebeat.yml                                      # Main config file</code></pre>
         </div>
+        <h3>Metricbeat Commands</h3>
+
+        <div class="command-block">
+          <h4>Metricbeat service</h4>
+          <pre><code>
+systemctl status metricbeat
+systemctl start metricbeat
+systemctl stop metricbeat
+systemctl restart metricbeat</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Test configuration</h4>
+          <pre><code>
+metricbeat test config -c /etc/metricbeat/metricbeat.yml
+metricbeat test output -c /etc/metricbeat/metricbeat.yml
+metricbeat test modules system                                  # Test specific module</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Module management</h4>
+          <pre><code>
+metricbeat modules list                                         # List available modules
+metricbeat modules enable system                                # Enable module
+metricbeat modules disable system                               # Disable module
+metricbeat setup -e                                             # Setup dashboards and index templates</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Metricbeat configuration</h4>
+          <pre><code>
+/etc/metricbeat/metricbeat.yml                                  # Main config file
+/etc/metricbeat/modules.d/                                      # Module configurations</code></pre>
+        </div>
+
         <h2 id="logging-auditing">
           33. LOGGING & AUDITING (Advanced ELK/EFK stack, centralized logging,
           alerting rules)
@@ -464,6 +519,22 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExport
 # Initialize tracer and metrics to send telemetry data to collector
   </code></pre>
         </div>
+        <h3>Jaeger Distributed Tracing</h3>
+
+        <div class="command-block">
+          <h4>Jaeger all-in-one</h4>
+          <pre><code>
+jaeger-all-in-one --collector.zipkin.host-port=:9411                # Start Jaeger with Zipkin compatibility
+# Access Jaeger UI: http://localhost:16686
+docker run -d --name jaeger -p 16686:16686 -p 14268:14268 jaegertracing/all-in-one:latest  # Docker deployment</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Query traces</h4>
+          <pre><code>
+curl "http://localhost:16686/api/services"                            # List services
+curl "http://localhost:16686/api/traces?service=myservice&limit=20"   # Query traces for service</code></pre>
+        </div>
 
         <h2 id="security">35. SECURITY AND HARDENING</h2>
 
@@ -499,6 +570,38 @@ ausearch -m USER_LOGIN -ts today
 aureport -x --summary
   </code></pre>
         </div>
+        <h3>OpenSCAP (Security Compliance)</h3>
+
+        <div class="command-block">
+          <h4>Install OpenSCAP</h4>
+          <pre><code>
+dnf install openscap-scanner scap-security-guide               # RHEL/CentOS
+apt install libopenscap8 ssg-base ssg-debderived               # Debian/Ubuntu</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Scan system compliance</h4>
+          <pre><code>
+# PCI-DSS scan
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+# CIS benchmark
+oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+# Generate HTML report
+oscap xccdf eval --report report.html --profile pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml                     </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>List available profiles</h4>
+          <pre><code>
+oscap info /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml    # Show available profiles</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Remediate findings</h4>
+          <pre><code>
+# Auto-remediate (CAUTION)
+oscap xccdf eval --remediate --profile pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml  </code></pre>
+        </div>
 
         <h3>fail2ban Commands</h3>
 
@@ -527,6 +630,27 @@ fail2ban-client ping                                            # Test if runnin
           <pre><code>
 /etc/fail2ban/jail.conf                                         # Main config (don't edit)
 /etc/fail2ban/jail.local                                        # Local overrides</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Persistent audit rules</h4>
+          <pre><code>
+/etc/audit/rules.d/audit.rules                                  # Persistent rules file
+# Add rules to this file, then reload:
+augenrules --load                                               # Load rules from /etc/audit/rules.d/
+service auditd restart                                          # Restart to apply changes
+auditctl -R /etc/audit/audit.rules                              # Reload specific rules file</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Common audit rules</h4>
+          <pre><code>
+# File integrity monitoring
+auditctl -w /etc/shadow -p wa -k shadow_changes
+auditctl -w /etc/sudoers -p wa -k sudoers_changes
+# Privileged command monitoring
+auditctl -a always,exit -F arch=b64 -S execve -F euid=0 -k root_commands
+# Network modifications
+auditctl -w /etc/sysconfig/network-scripts/ -p wa -k network_config</code></pre>
         </div>
 
         <h3>SELinux Commands</h3>
@@ -913,6 +1037,33 @@ lynis update info                                               # Check for upda
 /var/log/lynis.log                                              # Audit log
 /var/log/lynis-report.dat                                       # Report data</code></pre>
         </div>
+        <h3>AIDE (File Integrity Monitoring)</h3>
+
+        <div class="command-block">
+          <h4>Initialize AIDE database</h4>
+          <pre><code>
+aide --init                                                     # Create initial database
+mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz        # Move database to production</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Check for changes</h4>
+          <pre><code>
+aide --check                                                    # Check for file changes
+aide --check --config=/etc/aide.conf                            # Specify config file
+aide --update                                                   # Update database after changes
+mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz        # Replace old database</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>AIDE configuration</h4>
+          <pre><code>
+/etc/aide.conf                                                  # Main configuration file
+# Example rules:
+# /bin    R+b+sha256                                            # Monitor /bin directory
+# /etc    R+b+sha256                                            # Monitor /etc directory
+# !/var/log                                                     # Exclude /var/log</code></pre>
+        </div>
 
         <h3>ClamAV (Antivirus)</h3>
 
@@ -1133,6 +1284,28 @@ vmstat -s                                                       # Memory statist
 vmstat -d                                                       # Disk statistics
 vmstat -p /dev/sda1                                             # Partition statistics</code></pre>
         </div>
+        <h3>strace/ltrace (System Call Tracing)</h3>
+
+        <div class="command-block">
+          <h4>strace (system calls)</h4>
+          <pre><code>
+strace command                                                  # Trace system calls
+strace -p PID                                                   # Attach to running process
+strace -c command                                               # Count calls summary
+strace -e open,read,write command                               # Trace specific calls
+strace -o output.txt command                                    # Save to file
+strace -f command                                               # Follow child processes
+strace -T command                                               # Show time spent in calls</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>ltrace (library calls)</h4>
+          <pre><code>
+ltrace command                                                  # Trace library calls
+ltrace -p PID                                                   # Attach to running process
+ltrace -c command                                               # Count calls summary
+ltrace -o output.txt command                                    # Save to file</code></pre>
+        </div>
 
         <h3>sar (System Activity Reporter)</h3>
 
@@ -1280,6 +1453,27 @@ nmon                                                            # Start nmon
 # n - Network
 # t - Top processes
 # q - Quit</code></pre>
+        </div>
+        <h3>perf (Linux Profiling)</h3>
+
+        <div class="command-block">
+          <h4>CPU profiling</h4>
+          <pre><code>
+perf top                                                        # Real-time CPU profiler
+perf top -p PID                                                 # Profile specific process
+perf record -a -g sleep 10                                      # Record system-wide for 10 seconds
+perf record -p PID -g sleep 10                                  # Record specific process
+perf report                                                     # Analyze recorded data
+perf report --stdio                                             # Text-based report</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Event statistics</h4>
+          <pre><code>
+perf stat command                                               # Run command and show stats
+perf stat -p PID sleep 10                                       # Stats for running process
+perf list                                                       # List available events
+perf stat -e cache-misses,cache-references command             # Specific events</code></pre>
         </div>
 
         <h3>Tuning Commands</h3>
@@ -1793,6 +1987,32 @@ pcs status                                               # Check cluster status
 pcs resource create VirtualIP ocf:heartbeat:IPaddr ip=192.168.1.100 cidr_netmask=24
 pcs resource enable VirtualIP
   </code></pre>
+      </div>
+      <h3>Keepalived (VRRP for IP Failover)</h3>
+
+      <div class="command-block">
+        <h4>Keepalived service</h4>
+        <pre><code>
+systemctl start keepalived
+systemctl enable keepalived
+systemctl status keepalived
+systemctl restart keepalived</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Configuration</h4>
+        <pre><code>
+/etc/keepalived/keepalived.conf                                 # Main configuration file
+# Test configuration
+keepalived -t -f /etc/keepalived/keepalived.conf                # Check config syntax</code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>Monitor VRRP status</h4>
+        <pre><code>
+ip addr show                                                    # Check if VIP is assigned
+journalctl -u keepalived -f                                     # Follow keepalived logs
+tcpdump -i eth0 vrrp                                            # Monitor VRRP packets</code></pre>
       </div>
 
       <h2 id="summary">SUMMARY</h2>
