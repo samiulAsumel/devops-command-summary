@@ -111,6 +111,32 @@ systemctl restart prometheus</code></pre>
           <pre><code>
 /etc/prometheus/prometheus.yml                                  # Main config file</code></pre>
         </div>
+        <div class="command-block">
+          <h4>Basic prometheus.yml configuration</h4>
+          <pre><code>
+        # /etc/prometheus/prometheus.yml
+        global:
+          scrape_interval: 15s
+          evaluation_interval: 15s
+
+        alerting:
+          alertmanagers:
+            - static_configs:
+                - targets:
+                  - localhost:9093
+
+        rule_files:
+          - "alert_rules.yml"
+
+        scrape_configs:
+          - job_name: 'node'
+            static_configs:
+              - targets: ['localhost:9100']
+          - job_name: 'prometheus'
+            static_configs:
+              - targets: ['localhost:9090']
+          </code></pre>
+        </div>
 
         <div class="command-block">
           <h4>Reload configuration</h4>
@@ -154,6 +180,40 @@ systemctl restart alertmanager
           <pre><code>
 /etc/alertmanager/alertmanager.yml                                  # Main configuration file
   </code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Alertmanager routing configuration</h4>
+          <pre><code>
+        # /etc/alertmanager/alertmanager.yml
+        route:
+          group_by: ['alertname', 'cluster']
+          group_wait: 10s
+          group_interval: 10s
+          repeat_interval: 1h
+          receiver: 'web.hook'
+          routes:
+            - match:
+                severity: critical
+              receiver: 'pager'
+            - match:
+                severity: warning
+              receiver: 'email'
+
+        receivers:
+          - name: 'web.hook'
+            webhook_configs:
+              - url: 'http://127.0.0.1:5001/'
+          - name: 'pager'
+            pagerduty_configs:
+              - service_key: '<your-service-key>'
+          - name: 'email'
+            email_configs:
+              - to: 'admin@example.com'
+                from: 'alertmanager@example.com'
+                smarthost: 'smtp.example.com:587'
+                auth_username: 'user'
+                auth_password: 'password'
+          </code></pre>
         </div>
 
         <div class="command-block">
@@ -216,6 +276,35 @@ grafana-cli plugins install plugin-name                         # Install plugin
 grafana-cli plugins update plugin-name                          # Update plugin
 grafana-cli plugins remove plugin-name                          # Remove plugin
 grafana-cli admin reset-admin-password newpassword              # Reset admin password</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Import dashboard from Grafana.com</h4>
+          <pre><code>
+        # Get dashboard ID from https://grafana.com/grafana/dashboards/
+        # Example: Node Exporter Full dashboard ID: 1860
+
+        # Method 1: Web UI
+        # Go to Dashboards → Import → Enter dashboard ID
+
+        # Method 2: API
+        curl -X POST http://admin:admin@localhost:3000/api/dashboards/db \
+          -H "Content-Type: application/json" \
+          -d '{"dashboard": { "id": null, "title": "Node Exporter Full", ... }, "overwrite": true}'
+
+        # Method 3: Provisioning (recommended for production)
+        # /etc/grafana/provisioning/dashboards/dashboards.yml
+        apiVersion: 1
+        providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: false
+            updateIntervalSeconds: 10
+            allowUiUpdates: true
+            options:
+              path: /var/lib/grafana/dashboards
+          </code></pre>
         </div>
 
         <div class="command-block">
@@ -394,6 +483,30 @@ systemctl restart kibana</code></pre>
           <h4>Kibana configuration</h4>
           <pre><code>
 /etc/kibana/kibana.yml                                          # Main config file</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Create Kibana index pattern via API</h4>
+          <pre><code>
+        # List existing indices in Elasticsearch
+        curl -X GET "localhost:9200/_cat/indices?v"
+
+        # Create index pattern in Kibana (for filebeat-* indices)
+        curl -X POST "localhost:5601/api/saved_objects/index-pattern/filebeat-*" \
+          -H 'kbn-xsrf: true' \
+          -H 'Content-Type: application/json' \
+          -d '{
+            "attributes": {
+              "title": "filebeat-*",
+              "timeFieldName": "@timestamp"
+            }
+          }'
+
+        # Set as default index pattern
+        curl -X POST "localhost:5601/api/kibana/settings/defaultIndex" \
+          -H 'kbn-xsrf: true' \
+          -H 'Content-Type: application/json' \
+          -d '{"value": "filebeat-*"}'
+          </code></pre>
         </div>
 
         <h3>Filebeat Commands</h3>
@@ -630,6 +743,29 @@ fail2ban-client ping                                            # Test if runnin
           <pre><code>
 /etc/fail2ban/jail.conf                                         # Main config (don't edit)
 /etc/fail2ban/jail.local                                        # Local overrides</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Custom fail2ban filter for Nginx</h4>
+          <pre><code>
+        # /etc/fail2ban/filter.d/nginx-404.conf
+        [Definition]
+        failregex = ^&lt;HOST&gt;.*"GET.* 404 .*$
+        ignoreregex =
+
+        # /etc/fail2ban/jail.local
+        [nginx-404]
+        enabled = true
+        port    = http,https
+        filter  = nginx-404
+        logpath = /var/log/nginx/access.log
+        maxretry = 10
+        findtime = 600
+        bantime = 3600
+        action = iptables[name=nginx, port=http, protocol=tcp]
+
+        # Test the filter
+        fail2ban-regex /var/log/nginx/access.log /etc/fail2ban/filter.d/nginx-404.conf
+          </code></pre>
         </div>
         <div class="command-block">
           <h4>Persistent audit rules</h4>
