@@ -1679,6 +1679,446 @@ docker push registry.example.com/image:tag                      # Push to privat
 docker tag local:tag registry.example.com/image:tag
 </code></pre>
       </div>
+      <h3>Advanced Docker - Production Deployment Skills</h3>
+
+        <div class="command-block">
+          <h4>Docker Multi-Stage Builds - Image Optimization</h4>
+          <pre><code>
+# Why Multi-Stage Builds?
+# - 70-90% smaller images
+# - Faster deployments
+# - More secure (no build tools in production)
+# - Better CI/CD performance
+
+# ❌ Single-Stage (Bad - 1.2GB image)
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install                    # Includes dev dependencies
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
+
+# ✅ Multi-Stage (Good - 150MB image)
+# Stage 1: Build
+FROM node:18 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production       # Production deps only
+COPY . .
+RUN npm run build
+
+# Stage 2: Production
+FROM node:18-alpine                # Smaller base
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+USER node                          # Security: non-root
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
+# Result: 150MB (87% smaller)
+
+# Real Example: Go Application
+FROM golang:1.21 AS builder
+WORKDIR /build
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /build/main .
+EXPOSE 8080
+CMD ["./main"]
+# Result: 15MB (from 800MB)
+
+# Python Flask API
+FROM python:3.11 AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY --from=builder /root/.local /root/.local
+COPY . .
+ENV PATH=/root/.local/bin:$PATH
+USER nobody
+CMD ["python", "app.py"]
+
+# Build Commands
+docker build -t myapp:v1 .
+docker build -t myapp:v1 --target builder .  # Build specific stage only
+docker buildx build --platform linux/amd64,linux/arm64 -t myapp:latest --push .
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Docker Volumes - Production Data Management</h4>
+          <pre><code>
+# Volume Types & Use Cases:
+
+# 1. Named Volume (Production Databases)
+docker volume create pgdata
+docker run -d \
+  --name postgres \
+  -v pgdata:/var/lib/postgresql/data \
+  -e POSTGRES_PASSWORD=secret \
+  postgres:15
+# Managed by Docker, survives container deletion
+
+# 2. Bind Mount (Development)
+docker run -d \
+  -v $(pwd)/app:/usr/src/app \
+  -v $(pwd)/config.yml:/etc/app/config.yml:ro \
+  myapp
+# Direct host access, changes reflect immediately
+
+# 3. tmpfs (Temporary Caches)
+docker run --tmpfs /app/cache:size=512m myapp
+# RAM-based, fast, auto-cleanup
+
+# Production Database Setup
+docker run -d \
+  --name mysql-prod \
+  -e MYSQL_ROOT_PASSWORD=secret \
+  -v mysql-data:/var/lib/mysql \
+  -v mysql-config:/etc/mysql/conf.d:ro \
+  -v mysql-backup:/backup \
+  --restart unless-stopped \
+  mysql:8.0
+
+# Backup Volume to Host
+docker run --rm \
+  -v mysql-data:/data:ro \
+  -v $(pwd)/backups:/backup \
+  alpine tar czf /backup/mysql-$(date +%Y%m%d).tar.gz /data
+
+# Restore from Backup
+docker run --rm \
+  -v mysql-data:/data \
+  -v $(pwd)/backups:/backup \
+  alpine tar xzf /backup/mysql-20250110.tar.gz -C /
+
+# Volume Management
+docker volume ls
+docker volume inspect mysql-data
+docker volume prune -f               # Remove unused volumes
+
+# NFS Volume (Shared Storage)
+docker volume create \
+  --driver local \
+  --opt type=nfs \
+  --opt o=addr=192.168.1.100,rw \
+  --opt device=:/mnt/nfs \
+  nfs-volume
+
+# Docker Compose with Volumes
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  web:
+    image: myapp
+    volumes:
+      - uploads:/app/uploads
+volumes:
+  pgdata:
+  uploads:
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Docker Networks - Microservices Architecture</h4>
+          <pre><code>
+# Network Types:
+
+# Bridge (Default) - Isolated network
+docker network create app-network
+docker run -d --name api --network app-network myapi
+docker run -d --name web --network app-network nginx
+# Containers communicate via name: http://api:8080
+
+# Host Network - No isolation
+docker run --network host nginx
+# Uses host IP directly, no port mapping
+
+# None - Completely isolated
+docker run --network none alpine
+
+# Real-World 3-Tier Application
+# Frontend → API → Database
+
+# Create networks
+docker network create frontend
+docker network create backend
+
+# Database (backend only)
+docker run -d \
+  --name postgres \
+  --network backend \
+  -e POSTGRES_PASSWORD=secret \
+  postgres:15
+
+# API (both networks)
+docker run -d \
+  --name api \
+  --network frontend \
+  --network backend \
+  -e DATABASE_URL=postgres://postgres:secret@postgres:5432/mydb \
+  myapi:v1
+
+# Web (frontend + exposed)
+docker run -d \
+  --name web \
+  --network frontend \
+  -p 80:80 \
+  -e API_URL=http://api:8080 \
+  nginx
+
+# Network Commands
+docker network ls
+docker network inspect app-network
+docker network connect backend redis
+docker network disconnect backend redis
+
+# Custom Subnet
+docker network create \
+  --subnet 172.20.0.0/16 \
+  --gateway 172.20.0.1 \
+  custom-net
+
+docker run --network custom-net --ip 172.20.0.10 nginx
+
+# DNS Resolution Test
+docker run --rm --network app-network alpine ping -c 3 api
+# Should successfully ping 'api' container
+
+# Network Alias
+docker run -d \
+  --network app-network \
+  --network-alias database \
+  --network-alias db \
+  postgres
+# Accessible as: database, db, or container name
+
+# Docker Compose Networks
+version: '3.8'
+services:
+  web:
+    networks:
+      - frontend
+  api:
+    networks:
+      - frontend
+      - backend
+  db:
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+    internal: true    # No external access
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Resource Limits - Production Stability</h4>
+          <pre><code>
+# Why Resource Limits?
+# - Prevent resource exhaustion
+# - Ensure fair resource distribution
+# - Enable capacity planning
+# - Required for Kubernetes migration
+
+# Memory Limits
+docker run -m 512m nginx                    # Max 512MB
+docker run --memory-reservation 256m nginx  # Soft limit
+docker run -m 1g --memory-swap 2g nginx     # 1GB RAM + 1GB swap
+
+# CPU Limits
+docker run --cpus=1.5 nginx                 # Max 1.5 cores
+docker run --cpu-shares=512 nginx           # Relative weight
+docker run --cpuset-cpus="0,1" nginx        # Specific cores only
+
+# Production API Server
+docker run -d \
+  --name api-prod \
+  --memory 2g \
+  --memory-reservation 1g \
+  --cpus 4 \
+  --restart unless-stopped \
+  -p 8080:8080 \
+  myapi:v2
+
+# High-Traffic Web Application
+docker run -d \
+  --name web-prod \
+  --memory 4g \
+  --cpus 8 \
+  --pids-limit 200 \
+  --restart unless-stopped \
+  --health-cmd="curl -f http://localhost/health || exit 1" \
+  --health-interval=30s \
+  --health-timeout=3s \
+  --health-retries=3 \
+  -p 80:80 \
+  nginx
+
+# Disk I/O Limits
+docker run \
+  --device-read-bps /dev/sda:10mb \
+  --device-write-bps /dev/sda:5mb \
+  myapp
+
+# Monitor Resource Usage
+docker stats                                # Live stats
+docker stats --no-stream                    # Snapshot
+docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}"
+
+# Update Running Container
+docker update --cpus 2 --memory 1g my-container
+
+# Docker Compose with Limits
+version: '3.8'
+services:
+  api:
+    image: myapi
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '1'
+          memory: 512M
+    restart: unless-stopped
+
+# OOM (Out of Memory) Handling
+docker run -m 512m --oom-kill-disable nginx     # Don't kill (dangerous)
+docker run -m 512m --oom-score-adj=-500 nginx   # Less likely to be killed
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>Container Debugging - Production Troubleshooting</h4>
+          <pre><code>
+# Container Won't Start - Debugging Steps:
+
+# 1. Check Logs (First Step Always)
+docker logs mycontainer
+docker logs --tail 100 mycontainer          # Last 100 lines
+docker logs --since 10m mycontainer         # Last 10 minutes
+docker logs -f mycontainer                  # Follow (live)
+docker logs --timestamps mycontainer        # With timestamps
+
+# 2. Inspect Container (Full Details)
+docker inspect mycontainer
+docker inspect mycontainer | grep -i status
+docker inspect mycontainer | jq '.[0].State'
+docker inspect --format='{{.State.Status}}' mycontainer
+docker inspect --format='{{.NetworkSettings.IPAddress}}' mycontainer
+
+# 3. Container Status
+docker ps -a                                            # All containers
+docker ps --filter "status=exited"                      # Failed containers
+docker ps --filter "status=exited" --filter "exited=1"  # Exit code 1
+
+# 4. Execute Commands in Container
+docker exec -it mycontainer bash            # Interactive shell
+docker exec mycontainer ps aux              # List processes
+docker exec mycontainer netstat -tlnp       # Network connections
+docker exec mycontainer df -h               # Disk space
+docker exec mycontainer env                 # Environment variables
+
+# 5. Copy Files for Analysis
+docker cp mycontainer:/var/log/app.log ./   # Copy from container
+docker cp config.yml mycontainer:/etc/app/  # Copy to container
+
+# 6. Check Resource Usage
+docker stats mycontainer                    # Live stats
+docker top mycontainer                      # Running processes
+
+# 7. Network Debugging
+docker exec mycontainer ping -c 3 google.com
+docker exec mycontainer curl -v http://api:8080/health
+docker exec mycontainer nslookup database
+
+# 8. Health Check Status
+docker inspect --format='{{.State.Health.Status}}' mycontainer
+docker inspect --format='{{range .State.Health.Log}}{{.Output}}{{end}}' mycontainer
+
+# Common Issues & Solutions:
+
+# Issue: Container exits immediately
+docker logs mycontainer                     # Check why
+docker run -it --entrypoint /bin/bash myapp # Override entrypoint
+
+# Issue: Port already in use
+netstat -tlnp | grep 8080                   # Find what's using port
+docker run -p 8081:8080 myapp               # Use different port
+
+# Issue: Permission denied
+docker exec mycontainer ls -la /app
+docker run --user $(id -u):$(id -g) myapp   # Run as current user
+
+# Issue: Out of disk space
+docker system df                            # Check disk usage
+docker system prune -a                      # Cleanup
+
+# Issue: Network connectivity
+docker network inspect bridge
+docker exec mycontainer cat /etc/resolv.conf
+docker run --dns 8.8.8.8 myapp              # Custom DNS
+
+# Debug Container that Won't Start
+docker run --rm -it --entrypoint /bin/sh myapp  # Interactive debug
+docker run --rm myapp ls -la /app               # Check files exist
+
+# Container Performance Issues
+docker stats --no-stream mycontainer          # Check resources
+docker top mycontainer                        # CPU usage per process
+docker exec mycontainer ps aux --sort=-%mem   # Memory hogs
+
+# Advanced: strace in Container
+docker run --cap-add SYS_PTRACE myapp
+docker exec mycontainer strace -p 1         # Trace PID 1
+
+# Export Container for Analysis
+docker export mycontainer > container.tar
+tar -tf container.tar | grep -i log         # Find log files
+
+# Commit Container State for Debug
+docker commit mycontainer debug-image
+docker run -it debug-image /bin/bash        # Inspect saved state
+
+# Interview Questions - Docker:
+# Q1: Difference between CMD and ENTRYPOINT?
+# A: CMD provides defaults (can be overridden)
+#    ENTRYPOINT is main command (appended to, not replaced)
+
+# Q2: How to reduce Docker image size?
+# A: Multi-stage builds, alpine base, .dockerignore,
+#    remove cache, combine RUN commands
+
+# Q3: How to share data between containers?
+# A: Volumes (named or bind mounts), or network shares
+
+# Q4: Container vs VM?
+# A: Container shares host kernel (lightweight)
+#    VM has full OS (heavier, more isolated)
+
+# Q5: How to troubleshoot networking?
+# A: docker network inspect, exec into container,
+#    check DNS, ping other containers by name
+          </code></pre>
+        </div>
 
       <h2 id="kubernetes">24. KUBERNETES (kubectl) COMMANDS</h2>
 
