@@ -93,6 +93,15 @@ who                                                             # Show logged-in
 last                                                            # Login history
 lastlog                                                         # Last login for all users</code></pre>
         </div>
+        <div class="command-block">
+          <h4>BIOS/UEFI and Hardware Details</h4>
+          <pre><code>
+dmidecode -t system                                             # System manufacturer and model
+dmidecode -t bios                                               # BIOS version and date
+dmidecode -t processor                                          # Processor details
+lshw -class system                                              # Hardware configuration summary
+systool -c cpu                                                  # CPU topology (requires sysfsutils)</code></pre>
+        </div>
 
         <h3>File System Navigation</h3>
 
@@ -130,6 +139,19 @@ tree -L 2                                                       # Limit depth to
 tree -d                                                         # Directories only
 tree -a                                                         # Include hidden files
 tree -h                                                         # Human-readable sizes</code></pre>
+        </div>
+        <h3>System Performance Profiles (tuned)</h3>
+
+        <div class="command-block">
+          <h4>Manage performance profiles</h4>
+          <pre><code>
+tuned-adm list                                                  # List available profiles
+tuned-adm active                                                # Show active profile
+tuned-adm recommend                                             # Recommended profile for system
+tuned-adm profile throughput-performance                        # Set performance profile
+tuned-adm off                                                   # Disable tuned
+systemctl enable --now tuned                                    # Enable tuned service
+</code></pre>
         </div>
 
         <h3>File System Hierarchy</h3>
@@ -1123,6 +1145,24 @@ journalctl --no-pager                                           # No paging</cod
         </div>
 
         <div class="command-block">
+          <h4>Output formats</h4>
+          <pre><code>
+journalctl --output=cat                                         # Show logs as text
+journalctl --output=json                                        # Show logs as JSON
+journalctl --output=xml                                         # Show logs as XML</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Configure persistent journal storage</h4>
+          <pre><code>
+mkdir -p /var/log/journal                                       # Create journal directory
+systemd-tmpfiles --create --prefix /var/log/journal             # Set ownership/permissions
+systemctl restart systemd-journald                              # Apply changes
+# Edit /etc/systemd/journald.conf and set Storage=persistent
+journalctl --verify                                             # Verify journal integrity after config
+</code></pre>
+        </div>
+
+        <div class="command-block">
           <h4>Journal management</h4>
           <pre><code>
 journalctl --disk-usage                                         # Show disk usage
@@ -1699,6 +1739,20 @@ find / -type f -size +1G                                        # Files over 1GB
 du -ah / 2>/dev/null | sort -rh | head -20                      # Top 20 largest
 </code></pre>
         </div>
+        <h3>iSCSI Initiator (Enterprise Storage)</h3>
+
+        <div class="command-block">
+          <h4>Configure iSCSI initiator</h4>
+          <pre><code>
+systemctl enable --now iscsid                                   # Enable iSCSI service
+cat /etc/iscsi/initiatorname.iscsi                              # Show initiator IQN
+iscsiadm -m discovery -t st -p 192.168.1.100                    # Discover iSCSI targets
+iscsiadm -m node -T iqn.target.name -p 192.168.1.100 --login    # Login to target
+iscsiadm -m node -T iqn.target.name -p 192.168.1.100 --logout   # Logout from target
+iscsiadm -m session                                             # Show active sessions
+iscsiadm -m node -o delete -T iqn.target.name                   # Delete target configuration
+</code></pre>
+        </div>
 
         <h3>Partitioning</h3>
 
@@ -1823,6 +1877,22 @@ lvreduce -L -5G /dev/vg_name/lv_name                            # Reduce by 5GB 
 lvremove /dev/vg_name/lv_name                                   # Remove LV
 lvrename vg_name old_lv new_lv                                  # Rename LV
 lvresize -L 15G /dev/vg_name/lv_name                            # Resize to 15GB
+</code></pre>
+        </div>
+        <h3>Stratis (Next-Gen Storage - RHEL 8+)</h3>
+
+        <div class="command-block">
+          <h4>Stratis pool and filesystem management</h4>
+          <pre><code>
+systemctl enable --now stratisd                                 # Enable Stratis daemon
+stratis pool create pool1 /dev/sdb                              # Create storage pool
+stratis pool add-data pool1 /dev/sdc                            # Add disk to pool
+stratis pool list                                               # List pools
+stratis filesystem create pool1 fs1                             # Create filesystem
+stratis filesystem list                                         # List filesystems
+mount /dev/stratis/pool1/fs1 /mnt                               # Mount Stratis filesystem
+stratis filesystem snapshot pool1 fs1 snap1                     # Create snapshot
+stratis pool destroy pool1                                      # Destroy pool
 </code></pre>
         </div>
 
@@ -2024,6 +2094,20 @@ mdadm /dev/md0 --add /dev/sde1                                  # Add disk
 mdadm --detail --scan >> /etc/mdadm.conf                        # Save config
 </code></pre>
         </div>
+        <h3>VDO (Deduplication and Compression - RHEL 8+)</h3>
+
+        <div class="command-block">
+          <h4>VDO volume management</h4>
+          <pre><code>
+vdo create --name=vdo1 --device=/dev/sdb --vdoLogicalSize=10T   # Create VDO volume
+vdo list                                                        # List VDO volumes
+vdo status --name=vdo1                                          # Show VDO status
+vdostats --human-readable                                       # VDO statistics
+mkfs.xfs -K /dev/mapper/vdo1                                    # Create filesystem on VDO
+vdo remove --name=vdo1                                          # Remove VDO volume
+systemctl enable --now vdo                                      # Enable VDO service
+</code></pre>
+        </div>
 
         <h2 id="networking">12. NETWORKING BASICS</h2>
 
@@ -2218,6 +2302,16 @@ ping google.com                                                 # Ping hostname
 ping6 ::1                                                       # Ping IPv6
 </code></pre>
         </div>
+        <div class="command-block">
+          <h4>Advanced network diagnostics</h4>
+          <pre><code>
+ip -s link show eth0                                            # Interface statistics
+ethtool eth0                                                    # NIC settings and status
+ethtool -S eth0                                                 # Detailed NIC statistics
+tc qdisc show dev eth0                                          # Traffic control queuing
+ip neigh show                                                   # ARP cache (modern alternative)
+</code></pre>
+        </div>
 
         <div class="command-block">
           <h4>Traceroute</h4>
@@ -2364,6 +2458,14 @@ hostnamectl                                                     # Show detailed 
 hostnamectl set-hostname newhostname                            # Set hostname
 hostnamectl set-hostname --static newhostname                   # Set static hostname
 hostnamectl set-hostname --transient newhostname                # Set transient hostname
+</code></pre>
+        </div>
+        <div class="command-block">
+          <h4>Persistent hostname configuration</h4>
+          <pre><code>
+nmcli general hostname newhostname                              # Set hostname via NetworkManager
+hostnamectl set-hostname --pretty "My Server"                   # Set pretty hostname
+cat /etc/hostname                                               # Verify persistent hostname
 </code></pre>
         </div>
 
@@ -2654,6 +2756,53 @@ firewall-cmd --query-panic                                      # Check panic st
 /etc/firewalld/firewalld.conf                                   # Main configuration
 /etc/firewalld/zones/                                           # Zone configurations
 /usr/lib/firewalld/services/                                    # Service definitions
+</code></pre>
+        </div>
+        <h3>SELinux (Security-Enhanced Linux)</h3>
+
+        <div class="command-block">
+          <h4>SELinux status and modes</h4>
+          <pre><code>
+getenforce                                                      # Show current SELinux mode
+sestatus                                                        # Detailed SELinux status
+setenforce 0                                                    # Set to Permissive (temporary)
+setenforce 1                                                    # Set to Enforcing (temporary)
+cat /etc/selinux/config                                         # View persistent configuration
+# Edit /etc/selinux/config and set SELINUX=enforcing|permissive|disabled
+</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>SELinux contexts</h4>
+          <pre><code>
+ls -Z file                                                      # Show SELinux context of file
+ps -eZ                                                          # Show process contexts
+id -Z                                                           # Show user context
+chcon -t httpd_sys_content_t /var/www/html/file                # Change file context (temporary)
+semanage fcontext -a -t httpd_sys_content_t "/custom/path(/.*)?" # Add persistent context rule
+restorecon -Rv /var/www/html                                    # Restore default contexts
+</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>SELinux booleans</h4>
+          <pre><code>
+getsebool -a                                                    # List all booleans
+getsebool httpd_can_network_connect                             # Check specific boolean
+setsebool httpd_can_network_connect on                          # Set boolean (temporary)
+setsebool -P httpd_can_network_connect on                       # Set boolean (persistent)
+semanage boolean -l                                             # List booleans with descriptions
+</code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>SELinux troubleshooting</h4>
+          <pre><code>
+ausearch -m avc -ts recent                                      # Recent SELinux denials
+sealert -a /var/log/audit/audit.log                             # Analyze audit log (requires setroubleshoot)
+audit2why < /var/log/audit/audit.log                            # Why denials occurred
+audit2allow -a                                                  # Generate allow rules from denials
+semodule -l                                                     # List loaded policy modules
 </code></pre>
         </div>
 
