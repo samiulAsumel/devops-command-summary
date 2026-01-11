@@ -2094,6 +2094,37 @@ mdadm /dev/md0 --add /dev/sde1                                  # Add disk
 mdadm --detail --scan >> /etc/mdadm.conf                        # Save config
 </code></pre>
         </div>
+        <h3>Stratis (Next-Gen Storage - RHEL 8+)</h3>
+
+        <div class="command-block">
+          <h4>Stratis pool and filesystem management</h4>
+          <pre><code>
+systemctl enable --now stratisd                                 # Enable Stratis daemon
+stratis pool create pool1 /dev/sdb                              # Create storage pool
+stratis pool add-data pool1 /dev/sdc                            # Add disk to pool
+stratis pool list                                               # List pools
+stratis filesystem create pool1 fs1                             # Create filesystem
+stratis filesystem list                                         # List filesystems
+mount /dev/stratis/pool1/fs1 /mnt                               # Mount Stratis filesystem
+stratis filesystem snapshot pool1 fs1 snap1                     # Create snapshot
+stratis pool destroy pool1                                      # Destroy pool
+</code></pre>
+        </div>
+
+        <h3>VDO (Deduplication and Compression - RHEL 8+)</h3>
+
+        <div class="command-block">
+          <h4>VDO volume management</h4>
+          <pre><code>
+vdo create --name=vdo1 --device=/dev/sdb --vdoLogicalSize=10T   # Create VDO volume
+vdo list                                                        # List VDO volumes
+vdo status --name=vdo1                                          # Show VDO status
+vdostats --human-readable                                       # VDO statistics
+mkfs.xfs -K /dev/mapper/vdo1                                    # Create filesystem on VDO
+vdo remove --name=vdo1                                          # Remove VDO volume
+systemctl enable --now vdo                                      # Enable VDO service
+</code></pre>
+        </div>
         <h3>VDO (Deduplication and Compression - RHEL 8+)</h3>
 
         <div class="command-block">
@@ -5188,42 +5219,42 @@ Ctrl+r                                                          # Reverse search
         <div class="command-block">
           <h4>System Information & Navigation</h4>
           <pre><code>
-uname -a                                      # Kernel version and system info
-hostnamectl                                   # Hostname and OS info
-uptime                                        # System uptime
-top                                           # Interactive process monitor
-htop                                          # Enhanced process monitor
-df -h                                         # Disk usage human-readable
-du -sh *                                      # Directory size summary
-ls -lh                                        # List files with sizes
-cd /path                                      # Change directory
-pwd                                           # Print working directory
-tree                                          # Directory tree view
+uname -a                                                        # Kernel version and system info
+hostnamectl                                                     # Hostname and OS info
+uptime                                                          # System uptime
+top                                                             # Interactive process monitor
+htop                                                            # Enhanced process monitor
+df -h                                                           # Disk usage human-readable
+du -sh *                                                        # Directory size summary
+ls -lh                                                          # List files with sizes
+cd /path                                                        # Change directory
+pwd                                                             # Print working directory
+tree                                                            # Directory tree view
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>File Operations</h4>
           <pre><code>
-touch file.txt                                # Create empty file
-echo "text" > file.txt                        # Create file with content
-cat > file.txt                                # Create/edit file
-cp source dest                                # Copy file or directory
-mv source dest                                # Move or rename file
-rsync -av source/ dest/                       # Sync directories
-find / -name "filename"                       # Find file by name
-locate filename                               # Locate file in DB
-which command                                 # Locate executable
-whereis command                               # Locate binary, source, man page
+touch file.txt                                                  # Create empty file
+echo "text" > file.txt                                          # Create file with content
+cat > file.txt                                                  # Create/edit file
+cp source dest                                                  # Copy file or directory
+mv source dest                                                  # Move or rename file
+rsync -av source/ dest/                                         # Sync directories
+find / -name "filename"                                         # Find file by name
+locate filename                                                 # Locate file in DB
+which command                                                   # Locate executable
+whereis command                                                 # Locate binary, source, man page
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Text Editors</h4>
           <pre><code>
-vim filename                                   # Open file in Vim
+vim filename                                                    # Open file in Vim
 # In Vim: i=insert, :w=save, :q=quit, /pattern=search
-nano filename                                  # Open file in Nano
+nano filename                                                   # Open file in Nano
 # Ctrl+O=save, Ctrl+X=exit, Ctrl+W=search
 </code></pre>
         </div>
@@ -5231,218 +5262,218 @@ nano filename                                  # Open file in Nano
         <div class="command-block">
           <h4>File Permissions</h4>
           <pre><code>
-chmod 644 file                                 # Change permissions
-chown user:group file                          # Change ownership
-chgrp group file                               # Change group ownership
-getfacl file                                   # View ACLs
-setfacl -m u:user:rwx file                     # Modify ACLs
-lsattr file                                    # List file attributes
-chattr +i file                                 # Make file immutable
+chmod 644 file                                                  # Change permissions
+chown user:group file                                           # Change ownership
+chgrp group file                                                # Change group ownership
+getfacl file                                                    # View ACLs
+setfacl -m u:user:rwx file                                      # Modify ACLs
+lsattr file                                                     # List file attributes
+chattr +i file                                                  # Make file immutable
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>User & Group Management</h4>
           <pre><code>
-useradd username                                # Add user
-usermod -aG group username                      # Add user to group
-userdel username                                # Delete user
-groupadd groupname                              # Add group
-groupmod -n newname oldname                     # Rename group
-groupdel groupname                              # Delete group
-passwd username                                 # Change user password
-chage -l username                               # Check password aging
-id username                                     # Show UID/GID and groups
-groups username                                 # Show user's groups
-cat /etc/passwd                                 # List users
-cat /etc/group                                  # List groups
+useradd username                                                # Add user
+usermod -aG group username                                      # Add user to group
+userdel username                                                # Delete user
+groupadd groupname                                              # Add group
+groupmod -n newname oldname                                     # Rename group
+groupdel groupname                                              # Delete group
+passwd username                                                 # Change user password
+chage -l username                                               # Check password aging
+id username                                                     # Show UID/GID and groups
+groups username                                                 # Show user's groups
+cat /etc/passwd                                                 # List users
+cat /etc/group                                                  # List groups
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Process Management</h4>
           <pre><code>
-ps aux                                          # View all processes
-top                                             # Interactive process monitor
-htop                                            # Interactive process monitor
-kill PID                                        # Kill process by PID
-pkill processname                               # Kill process by name
-killall processname                             # Kill all processes with name
-nice -n 10 command                              # Start process with priority
-renice -n 10 PID                                # Change running process priority
-jobs                                            # List background jobs
-bg %1                                           # Move job to background
-fg %1                                           # Bring job to foreground
+ps aux                                                          # View all processes
+top                                                             # Interactive process monitor
+htop                                                            # Interactive process monitor
+kill PID                                                        # Kill process by PID
+pkill processname                                               # Kill process by name
+killall processname                                             # Kill all processes with name
+nice -n 10 command                                              # Start process with priority
+renice -n 10 PID                                                # Change running process priority
+jobs                                                            # List background jobs
+bg %1                                                           # Move job to background
+fg %1                                                           # Bring job to foreground
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Systemd Service Management</h4>
           <pre><code>
-systemctl start service                        # Start service
-systemctl stop service                         # Stop service
-systemctl restart service                      # Restart service
-systemctl status service                       # Check service status
-systemctl enable service                       # Enable at boot
-systemctl disable service                      # Disable at boot
-systemctl is-active service                    # Check if active
-systemctl list-units                           # List all systemd units
+systemctl start service                                         # Start service
+systemctl stop service                                          # Stop service
+systemctl restart service                                       # Restart service
+systemctl status service                                        # Check service status
+systemctl enable service                                        # Enable at boot
+systemctl disable service                                       # Disable at boot
+systemctl is-active service                                     # Check if active
+systemctl list-units                                            # List all systemd units
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Package Management</h4>
           <pre><code>
-rpm -ivh package.rpm                           # Install RPM
-rpm -Uvh package.rpm                           # Upgrade/Install RPM
-rpm -q package                                 # Query installed RPM
-dnf install package                            # Install package
-dnf remove package                             # Remove package
-dnf update                                     # Update all packages
-yum repolist                                   # List yum repos
-yum history                                    # Yum transaction history
-dnf history undo ID                            # Undo transaction
+rpm -ivh package.rpm                                            # Install RPM
+rpm -Uvh package.rpm                                            # Upgrade/Install RPM
+rpm -q package                                                  # Query installed RPM
+dnf install package                                             # Install package
+dnf remove package                                              # Remove package
+dnf update                                                      # Update all packages
+yum repolist                                                    # List yum repos
+yum history                                                     # Yum transaction history
+dnf history undo ID                                             # Undo transaction
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>System Logging</h4>
           <pre><code>
-tail -f /var/log/messages                       # Follow system log
-journalctl -u sshd -f                           # Follow SSH logs
-grep -i fail /var/log/secure                    # Authentication failures
-ausearch -m LOGIN -ts today                     # Audit login events
-aureport -au                                    # Audit authentication report
+tail -f /var/log/messages                                       # Follow system log
+journalctl -u sshd -f                                           # Follow SSH logs
+grep -i fail /var/log/secure                                    # Authentication failures
+ausearch -m LOGIN -ts today                                     # Audit login events
+aureport -au                                                    # Audit authentication report
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Disk Management</h4>
           <pre><code>
-fdisk -l                                        # List partitions
-parted /dev/sda print                           # Partition info
-pvcreate /dev/sdb                               # Initialize physical volume
-vgcreate vgname /dev/sdb                        # Create volume group
-lvcreate -L 10G -n lvname vgname                # Create logical volume
-lvextend -L +5G /dev/vgname/lvname              # Extend logical volume
-mkfs.ext4 /dev/sda1                             # Create ext4 filesystem
-mkfs.xfs /dev/sda1                              # Create XFS filesystem
-tune2fs -l /dev/sda1                            # Filesystem info
-xfs_growfs /mountpoint                          # Extend XFS filesystem
-mount /dev/sda1 /mnt                            # Mount filesystem
-umount /mnt                                     # Unmount filesystem
-cat /etc/fstab                                  # View mount table
+fdisk -l                                                        # List partitions
+parted /dev/sda print                                           # Partition info
+pvcreate /dev/sdb                                               # Initialize physical volume
+vgcreate vgname /dev/sdb                                        # Create volume group
+lvcreate -L 10G -n lvname vgname                                # Create logical volume
+lvextend -L +5G /dev/vgname/lvname                              # Extend logical volume
+mkfs.ext4 /dev/sda1                                             # Create ext4 filesystem
+mkfs.xfs /dev/sda1                                              # Create XFS filesystem
+tune2fs -l /dev/sda1                                            # Filesystem info
+xfs_growfs /mountpoint                                          # Extend XFS filesystem
+mount /dev/sda1 /mnt                                            # Mount filesystem
+umount /mnt                                                     # Unmount filesystem
+cat /etc/fstab                                                  # View mount table
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Networking Basics</h4>
           <pre><code>
-ip addr                                         # Show IP addresses
-ifconfig                                        # Show network interfaces
-ip route                                        # Show routing table
-route -n                                        # Legacy routing info
-ping -c 4 8.8.8.8                               # Connectivity test
-traceroute google.com                           # Trace route
-curl -I http://example.com                      # Check HTTP headers
-dig example.com                                 # DNS lookup
+ip addr                                                         # Show IP addresses
+ifconfig                                                        # Show network interfaces
+ip route                                                        # Show routing table
+route -n                                                        # Legacy routing info
+ping -c 4 8.8.8.8                                               # Connectivity test
+traceroute google.com                                           # Trace route
+curl -I http://example.com                                      # Check HTTP headers
+dig example.com                                                 # DNS lookup
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Firewall Management</h4>
           <pre><code>
-firewall-cmd --list-all                         # Show active rules
-firewall-cmd --zone=public --list-all           # List zone rules
-firewall-cmd --permanent --add-service=http     # Add service rule
-firewall-cmd --reload                           # Reload firewall
-iptables -L                                     # List iptables rules
-iptables -t nat -L                              # List NAT rules
+firewall-cmd --list-all                                         # Show active rules
+firewall-cmd --zone=public --list-all                           # List zone rules
+firewall-cmd --permanent --add-service=http                     # Add service rule
+firewall-cmd --reload                                           # Reload firewall
+iptables -L                                                     # List iptables rules
+iptables -t nat -L                                              # List NAT rules
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>SSH</h4>
           <pre><code>
-ssh user@host                                   # Connect to remote host
-ssh-keygen -t rsa                               # Generate SSH key
-ssh-copy-id user@host                           # Copy key to remote host
-scp file user@host:/path                        # Secure copy
-sftp user@host                                  # Secure file transfer
-ssh -L 8080:localhost:80 user@host              # Local port forwarding
+ssh user@host                                                   # Connect to remote host
+ssh-keygen -t rsa                                               # Generate SSH key
+ssh-copy-id user@host                                           # Copy key to remote host
+scp file user@host:/path                                        # Secure copy
+sftp user@host                                                  # Secure file transfer
+ssh -L 8080:localhost:80 user@host                              # Local port forwarding
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Text Processing</h4>
           <pre><code>
-grep "pattern" file                              # Search pattern in file
-egrep "pattern1|pattern2" file                   # Extended regex search
-fgrep "string" file                              # Fixed string search
-sed 's/old/new/g' file                           # Stream editor substitution
-awk '{print $1,$3}' file                         # Field extraction
-cut -d: -f1 /etc/passwd                          # Extract fields
-sort file                                        # Sort lines
-uniq file                                        # Unique lines
-wc -l file                                       # Count lines
-tr 'a-z' 'A-Z'                                   # Translate characters
+grep "pattern" file                                             # Search pattern in file
+egrep "pattern1|pattern2" file                                  # Extended regex search
+fgrep "string" file                                             # Fixed string search
+sed 's/old/new/g' file                                          # Stream editor substitution
+awk '{print $1,$3}' file                                        # Field extraction
+cut -d: -f1 /etc/passwd                                         # Extract fields
+sort file                                                       # Sort lines
+uniq file                                                       # Unique lines
+wc -l file                                                      # Count lines
+tr 'a-z' 'A-Z'                                                  # Translate characters
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Bash Scripting</h4>
           <pre><code>
-#!/bin/bash                                      # Script header
-var="value"                                      # Variable
-for i in {1..5}; do echo $i; done                # For loop
-while [ condition ]; do ...; done                # While loop
-if [ condition ]; then ...; fi                   # If statement
-case $var in pattern) ... ;; esac                # Case statement
-function_name() { ... }                          # Define function
-arr=(val1 val2 val3)                             # Array
-read -p "Enter value: " var                      # Read input
+#!/bin/bash                                                     # Script header
+var="value"                                                     # Variable
+for i in {1..5}; do echo $i; done                               # For loop
+while [ condition ]; do ...; done                               # While loop
+if [ condition ]; then ...; fi                                  # If statement
+case $var in pattern) ... ;; esac                               # Case statement
+function_name() { ... }                                         # Define function
+arr=(val1 val2 val3)                                            # Array
+read -p "Enter value: " var                                     # Read input
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Backup & Recovery</h4>
           <pre><code>
-tar -czvf backup.tar.gz /path                    # Compress directory
-tar -xzvf backup.tar.gz                          # Extract archive
-rsync -av /source/ /destination/                 # Sync directories
-dd if=/dev/sda of=/backup/sda.img                # Disk backup
-mysqldump -u user -p dbname > db.sql             # MySQL backup
-pg_dump dbname > db.sql                          # PostgreSQL backup
+tar -czvf backup.tar.gz /path                                   # Compress directory
+tar -xzvf backup.tar.gz                                         # Extract archive
+rsync -av /source/ /destination/                                # Sync directories
+dd if=/dev/sda of=/backup/sda.img                               # Disk backup
+mysqldump -u user -p dbname > db.sql                            # MySQL backup
+pg_dump dbname > db.sql                                         # PostgreSQL backup
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Automation</h4>
           <pre><code>
-crontab -e                                       # Edit user cron jobs
-at 12:00                                         # Schedule one-time job
-systemctl list-timers                            # List systemd timers
+crontab -e                                                      # Edit user cron jobs
+at 12:00                                                        # Schedule one-time job
+systemctl list-timers                                           # List systemd timers
 </code></pre>
         </div>
 
         <div class="command-block">
           <h4>Miscellaneous</h4>
           <pre><code>
-gzip file                                        # Compress file
-gunzip file.gz                                   # Decompress file
-bzip2 file                                       # Compress with bzip2
-xz file                                          # Compress with xz
-zip -r archive.zip /path                         # Zip archive
-unzip archive.zip                                # Extract zip
-lscpu                                            # CPU info
-free -h                                          # Memory usage
-uptime                                           # System uptime
-bc                                               # Calculator
-expr 5 + 3                                       # Arithmetic
-tmux                                             # Terminal multiplexer
-screen                                           # Terminal multiplexer
-alias ll='ls -la'                                # Create alias
-history | grep command                           # Search command history
+gzip file                                                       # Compress file
+gunzip file.gz                                                  # Decompress file
+bzip2 file                                                      # Compress with bzip2
+xz file                                                         # Compress with xz
+zip -r archive.zip /path                                        # Zip archive
+unzip archive.zip                                               # Extract zip
+lscpu                                                           # CPU info
+free -h                                                         # Memory usage
+uptime                                                          # System uptime
+bc                                                              # Calculator
+expr 5 + 3                                                      # Arithmetic
+tmux                                                            # Terminal multiplexer
+screen                                                          # Terminal multiplexer
+alias ll='ls -la'                                               # Create alias
+history | grep command                                          # Search command history
 </code></pre>
         </div>
       </div>
