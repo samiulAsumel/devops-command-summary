@@ -379,23 +379,34 @@ subscription-manager repos --list        # List enabled repos
         <h3>Basic File Management</h3>
 
         <div class="command-block">
-          <h4>Create files</h4>
+          <h4>Create Files</h4>
           <pre><code>
-touch file.txt                                                  # Create empty file or update timestamp
-touch file1 file2 file3                                         # Create multiple files
-touch -t 202301011200 file.txt                                  # Set specific timestamp</code></pre>
+touch filename                              # Create empty file
+touch file1 file2 file3                      # Create multiple files at once
+echo "text" > filename                       # Create file with content (overwrite)
+echo "text" >> filename                      # Append text to file
+cat > filename                               # Create file and enter text interactively (Ctrl+D to save)
+cat >> filename                              # Append text interactively (Ctrl+D to save)
+install -D /dev/null filename                # Create file with specific permissions
+          </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>Copy files</h4>
+          <h4>Copy/Move Files</h4>
           <pre><code>
-cp source dest                                                  # Copy file
-cp -r dir1 dir2                                                 # Copy directory recursively
-cp -p file dest                                                 # Preserve attributes
-cp -v file dest                                                 # Verbose output
-cp -i file dest                                                 # Interactive (prompt before overwrite)
-cp -a dir1 dir2                                                 # Archive mode (preserve all)
-cp -u source dest                                               # Update (copy only if newer)</code></pre>
+cp source_file destination_file                # Copy file
+cp file1 file2 /path/to/destination/          # Copy multiple files
+cp -r source_dir/ destination_dir/            # Copy directory recursively
+cp -i source_file destination_file            # Interactive copy (ask before overwrite)
+cp -u source_file destination_file            # Copy only if source is newer
+
+mv source_file destination_file                # Move or rename file
+mv file1 file2 /path/to/destination/          # Move multiple files
+mv -i source_file destination_file            # Interactive move (ask before overwrite)
+
+rsync -av source_dir/ destination_dir/        # Copy files/directories with progress and archive
+rsync -av --progress source_file destination_file
+          </code></pre>
         </div>
 
         <div class="command-block">
