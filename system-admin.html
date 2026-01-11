@@ -410,34 +410,30 @@ rsync -av --progress source_file destination_file
         </div>
 
         <div class="command-block">
-          <h4>Move/rename files</h4>
+          <h4>Move/Rename Files</h4>
           <pre><code>
-mv oldname newname                                              # Rename file
-mv file /path/to/dest                                           # Move file
-mv -i file dest                                                 # Interactive mode
-mv -v file dest                                                 # Verbose mode
-mv -u source dest                                               # Update only</code></pre>
+        mv source_file destination_file                # Move file to new location
+        mv file1 file2 /path/to/destination/          # Move multiple files
+        mv -i source_file destination_file            # Interactive move (ask before overwrite)
+        mv old_filename new_filename                   # Rename file
+        mv -u source_file destination_file            # Move only if source is newer
+          </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>Remove files</h4>
+          <h4>Remove Files</h4>
           <pre><code>
-rm file.txt                                                     # Remove file
-rm -f file.txt                                                  # Force remove (no prompt)
-rm -i file.txt                                                  # Interactive (prompt)
-rm -v file.txt                                                  # Verbose
-rm -r directory                                                 # Remove directory recursively
-rm -rf directory                                                # Force remove directory (DANGEROUS)</code></pre>
+        rm filename                                    # Remove a file
+        rm file1 file2                                 # Remove multiple files
+        rm -i filename                                 # Interactive: ask before removing
+        rm -f filename                                 # Force remove, ignore nonexistent files, no prompts
+        rm -v filename                                 # Verbose: show what is removed
+        rm -rf /path/to/dir                            # Recursively remove directory and its contents (dangerous!)
+        unlink filename                                # Remove a single file (alternative to rm)
+          </code></pre>
         </div>
 
-        <div class="command-block">
-          <h4>Create directories</h4>
-          <pre><code>
-mkdir newdir                                                    # Create directory
-mkdir -p /path/to/dir                                           # Create parent directories
-mkdir -m 755 dir                                                # Set permissions while creating
-mkdir -v dir                                                    # Verbose mode</code></pre>
-        </div>
+        Create directories
 
         <div class="command-block">
           <h4>Remove directories</h4>

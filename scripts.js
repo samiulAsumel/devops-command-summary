@@ -477,5 +477,17 @@ function improveAccessibility() {
   window.addEventListener("DOMContentLoaded", formatComments);
 })();
 
+// Function: Remove extra leading spaces inside <pre><code> blocks
+function cleanCodeBlocks() {
+  document.querySelectorAll("pre code").forEach((block) => {
+    const lines = block.innerText.split("\n");
+    const cleanedLines = lines.map((line) => line.replace(/^\s+/, "")); // Remove leading spaces
+    block.innerText = cleanedLines.join("\n");
+  });
+}
+
+// Run the function after the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", cleanCodeBlocks);
+
 // Initialize accessibility on load
 window.addEventListener("load", improveAccessibility);
