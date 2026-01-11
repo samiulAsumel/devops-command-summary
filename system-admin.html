@@ -107,19 +107,19 @@ dmidecode -t processor                               # Detailed CPU info from BI
         <div class="command-block">
           <h4>Memory (RAM) Information</h4>
           <pre><code>
-free -h                                                # Show total, used, free memory in human-readable format
-free -m                                                # Show total, used, free memory in megabytes
-cat /proc/meminfo                                      # Detailed memory info
-vmstat                                                 # Memory, CPU, I/O stats
-vmstat 1 5                                             # Memory, CPU, I/O stats in intervals
-top                                                    # Real-time memory usage per process
-htop                                                   # Interactive memory and process monitoring
-sar -r 1 3                                             # Memory usage over time (requires sysstat)
-watch -n 1 "free -h"                                   # Live memory monitoring
-grep MemTotal /proc/meminfo                            # Total RAM
-grep MemAvailable /proc/meminfo                        # Available RAM
-swapon -s                                              # Active swap partitions/files
-cat /proc/swaps                                        # Swap summary
+free -h                                           # Show total, used, free memory in human-readable format
+free -m                                           # Show total, used, free memory in megabytes
+cat /proc/meminfo                                 # Detailed memory info
+vmstat                                            # Memory, CPU, I/O stats
+vmstat 1 5                                        # Memory, CPU, I/O stats in intervals
+top                                               # Real-time memory usage per process
+htop                                              # Interactive memory and process monitoring
+sar -r 1 3                                        # Memory usage over time (requires sysstat)
+watch -n 1 "free -h"                              # Live memory monitoring
+grep MemTotal /proc/meminfo                       # Total RAM
+grep MemAvailable /proc/meminfo                   # Available RAM
+swapon -s                                         # Active swap partitions/files
+cat /proc/swaps                                   # Swap summary
         </code></pre>
         </div>
 
