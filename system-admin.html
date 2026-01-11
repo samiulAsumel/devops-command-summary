@@ -50,137 +50,328 @@
         <div class="command-block">
           <h4>Hostname</h4>
           <pre><code>
-hostname                                                        # Show hostname
-hostname -f                                                     # Fully qualified domain name
-hostname -I                                                     # All IP addresses</code></pre>
+hostname                                                 # Show current hostname
+hostnamectl                                              # Show detailed hostname and system info
+hostname -f                                              # Show fully qualified domain name (FQDN)
+hostname -I                                              # Show all IP addresses assigned to host
+hostname -s                                              # Short hostname (without domain)
+hostnamectl status                                       # Check static, transient, pretty hostname
+hostnamectl set-hostname newname                         # Set permanent hostname
+hostnamectl set-hostname "My Server" --pretty            # Set human-friendly hostname
+cat /etc/hostname                                        # View static hostname file
+cat /etc/hosts                                           # Map hostname to IPs (local resolution)
+ping $(hostname)                                         # Test hostname resolution
+ping $(hostname -I)                                      # Test IP address resolution
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>OS/Kernel</h4>
+          <h4>OS & Kernel Information</h4>
           <pre><code>
-uname -a                                                        # All system information
-uname -r                                                        # Kernel version only
-uname -m                                                        # Machine hardware architecture
-cat /etc/os-release                                             # OS distribution details
-cat /etc/redhat-release                                         # RHEL-specific version
-lsb_release -a                                                  # LSB version (if available)</code></pre>
+uname -a                                                 # Show kernel name, version, architecture, hostname
+uname -r                                                 # Show kernel release
+uname -v                                                 # Show kernel version
+uname -m                                                 # Show machine hardware name (x86_64, i386)
+uname -p                                                 # Show processor type
+uname -i                                                 # Show hardware platform
+uname -o                                                 # Show operating system
+cat /etc/os-release                                      # Detailed OS information (name, version, ID)
+lsb_release -a                                           # OS info (distribution, release, codename)
+hostnamectl                                              # Full system info including OS, Kernel, hostname
+dmesg | head                                             # Kernel ring buffer (boot messages)
+cat /proc/version                                        # Kernel version and GCC info
+cat /proc/sys/kernel/osrelease                           # Kernel release only
+cat /proc/sys/kernel/version                             # Kernel version only
+systemctl status                                         # Check systemd status & OS info
+uptime                                                   # Show system uptime & load averages
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>CPU</h4>
+          <h4>CPU Information</h4>
           <pre><code>
-lscpu                                                           # Detailed CPU architecture
-cat /proc/cpuinfo                                               # Raw CPU data
-nproc                                                           # Number of processing units</code></pre>
+lscpu                                                # Detailed CPU architecture info
+cat /proc/cpuinfo                                    # CPU details per core (model, cores, threads, cache)
+nproc                                                # Number of processing units (cores/threads)
+top                                                  # Real-time CPU usage per process
+htop                                                 # Interactive process & CPU monitoring
+mpstat -P ALL 1 3                                    # CPU usage per core (requires sysstat)
+vmstat 1 5                                           # CPU, memory, I/O, system stats
+uptime                                               # Load averages (1, 5, 15 minutes)
+grep 'model name' /proc/cpuinfo                      # Show CPU model names
+grep 'cpu MHz' /proc/cpuinfo                         # Show CPU clock speeds
+dmidecode -t processor                               # Detailed CPU info from BIOS (root)
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>Memory</h4>
+          <h4>Memory (RAM) Information</h4>
           <pre><code>
-free -h                                                         # Human-readable memory usage
-free -m                                                         # Memory in megabytes
-cat /proc/meminfo                                               # Detailed memory info
-vmstat                                                          # Virtual memory statistics
-vmstat 1 5                                                      # Update every 1 sec, 5 times</code></pre>
+free -h                                                # Show total, used, free memory in human-readable format
+free -m                                                # Show total, used, free memory in megabytes
+cat /proc/meminfo                                      # Detailed memory info
+vmstat                                                 # Memory, CPU, I/O stats
+vmstat 1 5                                             # Memory, CPU, I/O stats in intervals
+top                                                    # Real-time memory usage per process
+htop                                                   # Interactive memory and process monitoring
+sar -r 1 3                                             # Memory usage over time (requires sysstat)
+watch -n 1 "free -h"                                   # Live memory monitoring
+grep MemTotal /proc/meminfo                            # Total RAM
+grep MemAvailable /proc/meminfo                        # Available RAM
+swapon -s                                              # Active swap partitions/files
+cat /proc/swaps                                        # Swap summary
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>Uptime/Users</h4>
+          <h4>Uptime & Users</h4>
           <pre><code>
-uptime                                                          # System uptime and load average
-w                                                               # Who is logged in and what they're doing
-who                                                             # Show logged-in users
-last                                                            # Login history
-lastlog                                                         # Last login for all users</code></pre>
+uptime                                                     # Show system uptime, load averages
+who                                                        # Show logged-in users
+w                                                          # Logged-in users + what they are doing
+users                                                      # List logged-in usernames only
+last                                                       # Show login history
+lastb                                                      # Show failed login attempts
+whoami                                                     # Show current user
+id                                                         # User ID, group ID, and groups
+groups                                                     # Groups current user belongs to
+finger username                                            # Detailed info about a user (if installed)
+        </code></pre>
         </div>
+
         <div class="command-block">
-          <h4>BIOS/UEFI and Hardware Details</h4>
+          <h4>BIOS / UEFI & Hardware Details</h4>
           <pre><code>
-dmidecode -t system                                             # System manufacturer and model
-dmidecode -t bios                                               # BIOS version and date
-dmidecode -t processor                                          # Processor details
-lshw -class system                                              # Hardware configuration summary
-systool -c cpu                                                  # CPU topology (requires sysfsutils)</code></pre>
+dmidecode                                                  # Full hardware details (requires root)
+dmidecode -t bios                                          # BIOS information
+dmidecode -t system                                        # System manufacturer, model, serial
+dmidecode -t baseboard                                     # Motherboard info
+dmidecode -t processor                                     # CPU info
+dmidecode -t memory                                        # RAM info
+lshw                                                       # Full hardware listing (requires root)
+lshw -short                                                # Short summary
+lscpu                                                      # CPU architecture and details
+lspci                                                      # PCI devices
+lsusb                                                      # USB devices
+lsblk                                                      # Block devices
+udevadm info --query=all --name=/dev/sda                   # Device info
+hwinfo                                                     # Hardware info (if installed)
+inxi -Fxz                                                  # Full system info (if installed)
+        </code></pre>
         </div>
 
         <h3>File System Navigation</h3>
 
         <div class="command-block">
-          <h4>Directory operations</h4>
+          <h4>Directory Operations</h4>
           <pre><code>
-pwd                                                             # Print working directory
-cd /path/to/dir                                                 # Change directory
-cd ~                                                            # Home directory
-cd -                                                            # Previous directory
-cd ..                                                           # Parent directory
-cd ../..                                                        # Two levels up</code></pre>
+pwd                                               # Print current working directory
+cd /path/to/dir                                   # Change directory
+cd ~                                              # Home directory
+cd -                                              # Previous directory
+cd ..                                             # Parent directory
+cd ../..                                          # Grandparent directory
+ls                                                # List files in directory
+ls -l                                             # Long listing with permissions, owner, size, date
+ls -a                                             # Include hidden files
+ls -lh                                            # Human-readable sizes
+ls -R                                             # Recursive listing
+tree                                              # Show directory tree (if installed)
+mkdir dirname                                     # Create new directory
+mkdir -p /path/to/dir                             # Create nested directories
+rmdir dirname                                     # Remove empty directory
+rm -r dirname                                     # Remove directory recursively
+pushd /path/to/dir                                # Push directory to stack and change
+popd                                              # Pop directory from stack
+stat filename                                     # Show detailed file/directory info
+find /path -type d -name "dirname"                # Search for directories by name
+du -sh /path/to/dir                               # Disk usage of directory
+tree -L 2 /path/to/dir                            # Directory tree up to level 2
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>List files</h4>
+          <h4>List Files</h4>
           <pre><code>
-ls                                                              # List current directory
-ls -l                                                           # Long format with permissions
-ls -la                                                          # Include hidden files
-ls -lh                                                          # Human-readable sizes
-ls -lt                                                          # Sort by modification time
-ls -ltr                                                         # Reverse time order (oldest first)
-ls -lS                                                          # Sort by size
-ls -R                                                           # Recursive listing
-ls -i                                                           # Show inode numbers
-ls -d */                                                        # List only directories</code></pre>
+ls                                                 # List files in current directory
+ls -l                                              # Long format listing (permissions, owner, size, date)
+ls -a                                              # Include hidden files (starting with .)
+ls -lh                                             # Long format with human-readable sizes
+ls -R                                              # Recursive listing of directories
+ls -lt                                             # Sort by modification time (newest first)
+ls -ltr                                            # Sort by modification time (oldest first)
+ls -lS                                             # Sort by file size (largest first)
+ls -1                                              # List one file per line
+ls --color=auto                                    # Colorize output based on file type
+ls -d */                                           # List directories only
+ls -p                                              # Append / to directories
+ls -i                                              # Show inode number
+ls -F                                              # Append indicator (/, *, @) to entries
+tree                                               # Show directory tree (if installed)
+find . -maxdepth 1 -type f                         # List files only in current directory
+find . -maxdepth 1 -type d                         # List directories only in current directory
+stat filename                                      # Show detailed information of a file
+file filename                                      # Show file type
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>Tree view</h4>
+          <h4>Tree View</h4>
           <pre><code>
-tree                                                            # Tree view of current dir
-tree -L 2                                                       # Limit depth to 2 levels
-tree -d                                                         # Directories only
-tree -a                                                         # Include hidden files
-tree -h                                                         # Human-readable sizes</code></pre>
+tree                                                       # Display directory tree
+tree -L 1                                                  # Limit depth to 1 level
+tree -L 2                                                  # Limit depth to 2 levels
+tree -a                                                    # Include hidden files
+tree -d                                                    # Show directories only
+tree -f                                                    # Show full path prefix for each file
+tree -h                                                    # Human-readable sizes
+tree -C                                                    # Colorize output
+tree -P "*.txt"                                            # Include only files matching pattern
+tree -I "node_modules|.git"                                # Exclude files/directories
+tree -s                                                    # Show size of files
+tree -t                                                    # Sort by modification time
+tree -i                                                    # No indentation lines
+tree --prune                                               # Prune empty directories
+        </code></pre>
         </div>
+
         <h3>System Performance Profiles (tuned)</h3>
 
         <div class="command-block">
-          <h4>Manage performance profiles</h4>
+          <h4>Performance Profiles</h4>
           <pre><code>
-tuned-adm list                                                  # List available profiles
-tuned-adm active                                                # Show active profile
-tuned-adm recommend                                             # Recommended profile for system
-tuned-adm profile throughput-performance                        # Set performance profile
-tuned-adm off                                                   # Disable tuned
-systemctl enable --now tuned                                    # Enable tuned service
+# List available performance profiles
+tuned-adm list
+
+# Show current active profile
+tuned-adm active
+
+# Activate a profile
+sudo tuned-adm profile balanced
+sudo tuned-adm profile throughput-performance
+sudo tuned-adm profile latency-performance
+
+# Revert to default profile
+sudo tuned-adm profile default
+
+# Check current tuning settings
+tuned-adm active
+
+# Start/Enable tuned service
+systemctl status tuned
+systemctl start tuned
+systemctl enable tuned
+
+# Custom profile
+# Profiles are stored in /etc/tuned/ or /usr/lib/tuned/
+sudo vi /etc/tuned/custom_profile/tuned.conf
+
+# Apply custom profile
+sudo tuned-adm profile custom_profile
+
+# Reload tuned service after changes
+sudo systemctl restart tuned
 </code></pre>
         </div>
 
         <h3>File System Hierarchy</h3>
 
         <div class="command-block">
-          <h4>Explore standard directories</h4>
+          <h4>Standard Directories</h4>
           <pre><code>
-ls -l /                                                         # Root directory
-ls -l /bin                                                      # Essential user binaries
-ls -l /sbin                                                     # System binaries
-ls -l /usr/bin                                                  # User programs
-ls -l /usr/sbin                                                 # System admin programs
-ls -l /etc                                                      # Configuration files
-ls -l /var                                                      # Variable data (logs, spools)
-ls -l /var/log                                                  # System logs
-ls -l /tmp                                                      # Temporary files
-ls -l /home                                                     # User home directories
-ls -l /root                                                     # Root user home
-ls -l /opt                                                      # Optional software
-ls -l /proc                                                     # Process information (virtual)
-ls -l /sys                                                      # System/hardware info (virtual)
-ls -l /dev                                                      # Device files</code></pre>
+# Home directories
+ls ~                                     # List home directory contents
+cd ~                                     # Go to home directory
+
+# Root directory
+cd /                                     # Go to root
+ls /                                     # List root directory contents
+
+# System binaries
+cd /bin
+ls                                       # Basic system commands
+cd /sbin
+ls                                       # System binaries (root only)
+
+# User binaries
+cd /usr/bin
+ls                                       # User commands
+cd /usr/sbin
+ls                                       # System admin commands
+
+# Libraries
+cd /lib
+ls
+cd /usr/lib
+ls
+
+# Configuration files
+cd /etc
+ls                                       # System-wide config files
+
+# Logs
+cd /var/log
+ls                                       # System logs
+
+# Temporary files
+cd /tmp
+ls                                       # Temporary files
+
+# Variable data
+cd /var
+ls                                       # Variable files like spool, cache, lock
+
+# Optional files and apps
+cd /opt
+ls                                       # Optional application software
+
+# Media and mounts
+cd /mnt
+ls                                       # Mount points
+cd /media
+ls                                       # Removable media
+
+# Device files
+cd /dev
+ls                                       # Devices
+        </code></pre>
         </div>
 
         <div class="command-block">
-          <h4>RHEL-specific</h4>
+          <h4>RHEL-Specific Directories & Commands</h4>
           <pre><code>
-ls -l /etc/sysconfig/                                           # RHEL system configuration
-ls -l /var/log/messages                                         # System messages log</code></pre>
+# RHEL Release Info
+cat /etc/redhat-release                  # Show RHEL version
+cat /etc/os-release                      # Detailed OS info
+rpm -q redhat-release                    # Query release package
+
+# Kernel & Boot
+uname -r                                 # Kernel version
+dmesg | less                             # Kernel boot messages
+systemctl status                         # System services status
+
+# RHEL Config Directories
+cd /etc/sysconfig                        # RHEL service and network configs
+ls                                       # Check for network, firewall, services configs
+
+# RHEL Logs
+cd /var/log
+ls                                       # RHEL logs including secure, messages, yum.log
+
+# RHEL Network
+nmcli device status                      # Network device status
+nmcli connection show                    # Network connections
+firewall-cmd --list-all                  # Firewall status (firewalld)
+
+# RHEL Package Management
+dnf repolist                             # Enabled repositories
+dnf list installed                       # Installed packages
+rpm -qa                                  # All RPM packages
+# RHEL Subscription
+subscription-manager status              # Subscription details
+subscription-manager list --available    # Available subscriptions
+subscription-manager repos --list        # List enabled repos
+          </code></pre>
         </div>
 
         <h2 id="file-ops">2. FILE OPERATIONS</h2>
