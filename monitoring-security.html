@@ -747,24 +747,22 @@ fail2ban-client ping                                            # Test if runnin
         <div class="command-block">
           <h4>Custom fail2ban filter for Nginx</h4>
           <pre><code>
-        # /etc/fail2ban/filter.d/nginx-404.conf
-        [Definition]
-        failregex = ^&lt;HOST&gt;.*"GET.* 404 .*$
-        ignoreregex =
-
-        # /etc/fail2ban/jail.local
-        [nginx-404]
-        enabled = true
-        port    = http,https
-        filter  = nginx-404
-        logpath = /var/log/nginx/access.log
-        maxretry = 10
-        findtime = 600
-        bantime = 3600
-        action = iptables[name=nginx, port=http, protocol=tcp]
-
-        # Test the filter
-        fail2ban-regex /var/log/nginx/access.log /etc/fail2ban/filter.d/nginx-404.conf
+# /etc/fail2ban/filter.d/nginx-404.conf
+[Definition]
+failregex = ^&lt;HOST&gt;.*"GET.* 404 .*$
+ignoreregex =
+# /etc/fail2ban/jail.local
+[nginx-404]
+enabled = true
+port    = http,https
+filter  = nginx-404
+logpath = /var/log/nginx/access.log
+maxretry = 10
+findtime = 600
+bantime = 3600
+action = iptables[name=nginx, port=http, protocol=tcp]
+# Test the filter
+fail2ban-regex /var/log/nginx/access.log /etc/fail2ban/filter.d/nginx-404.conf
           </code></pre>
         </div>
         <div class="command-block">

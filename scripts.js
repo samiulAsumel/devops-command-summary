@@ -412,5 +412,70 @@ function improveAccessibility() {
   });
 }
 
+/*
+  FINAL COMMENT FORMATTER
+  - Min 35 spaces before #
+  - Long comments move to next line
+  - Pure comments untouched
+  - Auto-run on page load
+*/
+
+(function () {
+  "use strict";
+
+  const MIN_GAP = 9;
+  const MAX_LINE_LENGTH = 100; // beyond this, comment goes to next line
+
+  function formatComments() {
+    document.querySelectorAll("pre code").forEach((codeBlock) => {
+      const lines = codeBlock.innerText.split("\n");
+
+      let maxCmdLen = 0;
+
+      // Pass 1: find longest command
+      lines.forEach((line) => {
+        const idx = line.indexOf("#");
+        if (idx > 0 && !line.trim().startsWith("#")) {
+          const cmd = line.slice(0, idx).trimEnd();
+          maxCmdLen = Math.max(maxCmdLen, cmd.length);
+        }
+      });
+
+      const baseColumn = Math.max(maxCmdLen + 2, MIN_GAP);
+      const result = [];
+
+      // Pass 2: format
+      lines.forEach((line) => {
+        const idx = line.indexOf("#");
+
+        // untouched cases
+        if (idx === -1 || line.trim().startsWith("#")) {
+          result.push(line);
+          return;
+        }
+
+        const cmd = line.slice(0, idx).trimEnd();
+        const commentText = line.slice(idx).trim();
+
+        const paddedLine =
+          cmd + " ".repeat(Math.max(2, baseColumn - cmd.length)) + commentText;
+
+        // If too long → move comment to next line
+        if (paddedLine.length > MAX_LINE_LENGTH) {
+          result.push(cmd);
+          result.push("# " + commentText.replace(/^#\s*/, ""));
+        } else {
+          result.push(paddedLine);
+        }
+      });
+
+      codeBlock.textContent = result.join("\n");
+    });
+  }
+
+  // Auto-run on page load
+  window.addEventListener("DOMContentLoaded", formatComments);
+})();
+
 // Initialize accessibility on load
 window.addEventListener("load", improveAccessibility);
