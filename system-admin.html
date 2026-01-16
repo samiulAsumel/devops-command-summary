@@ -1194,115 +1194,108 @@ srm -r sensitive_directory      # Secure remove (install secure-delete)
         </div>
 
         <div class="command-block">
-  <h4>mkdir – Create directories (Basic Usage)</h4>
+  <h4>mkdir – Directory Creation (Core Command)</h4>
   <pre><code>
-mkdir dir1                          # Create a single directory
-mkdir dir1 dir2 dir3                # Create multiple directories
-mkdir my_directory                  # Create directory in current path
-mkdir /tmp/testdir                  # Create directory with absolute path
+mkdir dir1                               # Create a single directory
+mkdir dir1 dir2 dir3                     # Create multiple directories at once
+mkdir /opt/app                           # Create directory using absolute path
+mkdir ./data                             # Create directory using relative path
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>mkdir -p – Parent directories (Most Used)</h4>
+  <h4>mkdir -p – Parent & Nested Directory Creation (Production Standard)</h4>
   <pre><code>
-mkdir -p /opt/app/logs              # Create parent + child directories
-mkdir -p project/{src,bin,conf}    # Create multiple dirs at once
-mkdir -p /data/db/{prod,dev,test}  # Nested directory structure
-mkdir -p ~/backup/2026/jan          # Safe creation (no error if exists)
+mkdir -p /opt/app/logs                   # Create full directory tree
+mkdir -p project/src/main/java           # Nested structure creation
+mkdir -p ~/backup/2026/january           # Home directory usage
+mkdir -p /data/{db,files,media}          # Multiple subdirectories safely
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>mkdir -v – Verbose mode (Exam Friendly)</h4>
+  <h4>mkdir -v – Verbose Output (Audit & Exam Friendly)</h4>
   <pre><code>
-mkdir -v newdir                     # Show directory creation
-mkdir -pv /opt/app/{bin,logs}       # Verbose + parents
+mkdir -v reports                         # Display creation message
+mkdir -pv /var/app/{bin,logs,conf}       # Verbose + parent directories
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Setting Permissions at Creation</h4>
+  <h4>Permission Control at Creation Time</h4>
   <pre><code>
-mkdir -m 755 webroot                # Create dir with permissions
-mkdir -m 700 secure_dir             # Owner-only access
-mkdir -m 775 shared_dir             # Group writable
+mkdir -m 755 webroot                     # Standard web directory
+mkdir -m 700 secure_data                 # Private directory (owner only)
+mkdir -m 775 shared_workspace            # Group collaboration directory
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Ownership Management (Post Creation)</h4>
+  <h4>Ownership & Group Assignment (Post-Creation)</h4>
   <pre><code>
 mkdir appdata
-chown root:root appdata             # Change owner and group
-chown -R appuser:appgroup appdata   # Recursive ownership
+chown appuser:appgroup appdata           # Assign owner and group
+chown -R appuser:appgroup /opt/app       # Recursive ownership
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Brace Expansion (Power Technique)</h4>
+  <h4>Brace Expansion – High-Speed Structure Creation</h4>
   <pre><code>
-mkdir project/{docs,src,tests}      # Create multiple folders
-mkdir -p logs/{nginx,apache,app}    # Structured log directories
-mkdir {day1,day2,day3}              # Exam-speed directory creation
+mkdir project/{docs,src,tests}            # Development layout
+mkdir -p logs/{nginx,apache,app}          # Centralized logging
+mkdir envs/{dev,qa,prod}                  # Environment segregation
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Creating Directories with find / xargs</h4>
+  <h4>Automation & Scripting Use Cases</h4>
   <pre><code>
-find . -type d -exec mkdir -p {} \; # Replicate directory tree
-xargs mkdir < dirs.txt              # Create dirs from file list
+mkdir -p /backup/$(date +%F)              # Daily backup directories
+mkdir -p /var/log/myapp/{error,access}    # Application logging
+mkdir -p /srv/{ftp,http,nfs}              # Service directories
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Production & SysAdmin Use Cases</h4>
+  <h4>Error Handling & Safety Considerations</h4>
   <pre><code>
-mkdir -p /var/www/html/site         # Web hosting
-mkdir -p /var/log/myapp             # Application logs
-mkdir -p /backup/$(date +%F)        # Daily backups
-mkdir -p /data/{db,files,media}     # Storage layout
+mkdir data                                # Fails if directory exists
+mkdir -p data                             # Safe: no error if exists
+mkdir /root/test                          # Permission denied (non-root)
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Error Handling & Safety</h4>
+  <h4>Verification & Validation</h4>
   <pre><code>
-mkdir dir1                          # Fails if exists
-mkdir -p dir1                       # No error if exists
-mkdir /root/test                    # Permission denied (non-root)
+ls -ld project                            # Verify permissions and owner
+stat project                              # Detailed directory metadata
+tree project                              # Visualize directory structure
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>RHCSA / Interview Focus</h4>
+  <h4>RHCSA / Interview Key Points</h4>
   <pre><code>
-# RHCSA Exam & Interview Essential Commands
-# These are the most frequently tested mkdir concepts
-
-mkdir -p                            # Mandatory knowledge - parent creation
-mkdir -m                            # Permission control during creation
-Brace expansion {}                  # Fast structure creation technique
-Absolute vs relative paths          # Must understand path concepts
+mkdir                                   # Basic directory creation
+mkdir -p                                # Mandatory for automation
+mkdir -m                                # Permission control at creation
+Brace expansion {}                      # Rapid structure generation
+Absolute vs relative paths              # Core Linux concept
   </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>Best Practices (Enterprise Standard)</h4>
+  <h4>Enterprise Best Practices</h4>
   <pre><code>
-# Enterprise Directory Creation Best Practices
-# Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
-# Follow these standards for production environments
-
-Always use -p for automation                # Prevents failures in scripts
-Set permissions during creation              # More secure than post-creation
-Avoid creating dirs as root unless required  # Follow principle of least privilege
-Use structured layouts for apps              # Maintainable directory hierarchy
-Verify with ls -ld directory_name           # Confirm creation and permissions
+Always use -p in scripts and automation
+Define permissions during creation when possible
+Avoid using root unless operationally required
+Maintain standardized directory layouts
+Validate ownership and permissions after creation
   </code></pre>
 </div>
-
 
         <div class="command-block">
           <h4>Remove Directories - Enterprise Directory Management</h4>
