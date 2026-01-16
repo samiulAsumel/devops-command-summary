@@ -1,4 +1,4 @@
-/* Main Styles */
+  /* Main Styles */
 * {
   margin: 0;
   padding: 0;
@@ -40,7 +40,7 @@ body {
   width: 90% !important;
 }
 
-/* Header Styles */
+  /* Header Styles */
 h1 {
   color: #00d9ff;
   border: none;
@@ -68,7 +68,7 @@ h4 {
   font-size: 1.2em;
 }
 
-/* Navigation */
+  /* Navigation */
 .navigation {
   background-color: var(--primary-color);
   color: white;
@@ -105,7 +105,7 @@ h4 {
   transform: translateY(-2px);
 }
 
-/* Part Links */
+  /* Part Links */
 .part-links {
   background: rgba(0, 0, 0, 0.8);
   border-radius: 8px;
@@ -154,28 +154,86 @@ h4 {
   box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
 }
 
-/* Hero Section */
+  /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  background: linear-gradient(;
+  135deg,
+  var(--primary-color) 0%,
+  var(--accent-color) 100%
+  );
   color: #0d1117;
   padding: 40px 20px;
-  border-radius: 10px;
-  margin-bottom: 40px;
+  margin: 20px 0;
+  border-radius: 12px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(;
+  135deg,
+  rgba(0, 217, 255, 0.1) 0%,
+  rgba(255, 107, 157, 0.1) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-section h1 {
   border: none;
   font-size: 2.8em;
   margin: 0 0 10px 0;
+  color: #00d9ff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.2em;
+  color: #ff6b9d;
+  margin: 0 0 15px 0;
+  font-weight: 600;
 }
 
 .hero-description {
-  font-size: 0.95em;
-  opacity: 0.9;
+  font-size: 1em;
+  color: #c9d1d9;
+  margin: 0 0 20px 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Download Button Styles */
+.hero-features {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.hero-badge {
+  background: rgba(0, 217, 255, 0.2);
+  color: #00d9ff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 500;
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+  /* Download Button Styles */
 .download-btn {
   display: inline-block;
   padding: 10px 20px;
@@ -203,7 +261,7 @@ h4 {
   background: #2980b9;
 }
 
-/* Copy Buttons */
+  /* Copy Buttons */
 .copy-btn {
   position: absolute;
   top: 10px;
@@ -229,7 +287,7 @@ h4 {
   transform: scale(0.95);
 }
 
-/* Cards Grid */
+  /* Cards Grid */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -322,7 +380,7 @@ h4 {
   transform: translateY(-2px);
 }
 
-/* Progress Bar */
+  /* Progress Bar */
 .progress-bar {
   width: 100%;
   height: 4px;
@@ -334,19 +392,29 @@ h4 {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+  background: linear-gradient(;
+  90deg,
+  var(--secondary-color),
+  var(--accent-color)
+  );
   border-radius: 2px;
   transition: width 0.5s ease;
   animation: progressPulse 2s infinite;
 }
 
 @keyframes progressPulse {
-  0% { opacity: 0.8; }
-  50% { opacity: 1; }
-  100% { opacity: 0.8; }
+0% {
+  opacity: 0.8;
+}
+50% {
+  opacity: 1;
+}
+100% {
+  opacity: 0.8;
+}
 }
 
-/* TOC Container */
+  /* TOC Container */
 .toc-container {
   background: #161b22;
   border: 2px solid var(--border-color);
@@ -438,7 +506,7 @@ h4 {
   margin-right: 10px;
 }
 
-/* Features Grid */
+  /* Features Grid */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -464,7 +532,7 @@ h4 {
   margin: 5px 0;
 }
 
-/* Info Box */
+  /* Info Box */
 .info-box {
   background: var(--bg-color);
   border-left: 4px solid var(--secondary-color);
@@ -488,7 +556,7 @@ h4 {
   line-height: 1.4;
 }
 
-/* Command Blocks */
+  /* Command Blocks */
 .command-block {
   background: var(--bg-color);
   border-left: 4px solid var(--accent-color);
@@ -512,7 +580,7 @@ h4 {
   border-radius: 5px;
   padding: 15px;
   overflow-x: auto;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 17px;
   line-height: 1.5;
   color: var(--text-color);
@@ -522,11 +590,11 @@ h4 {
 
 .command-block code {
   color: var(--text-color);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 17px;
 }
 
-/* Section Index */
+  /* Section Index */
 .section-index {
   background: var(--bg-color);
   border: 1px solid var(--border-color);
@@ -566,13 +634,13 @@ h4 {
   text-decoration: underline;
 }
 
-/* Content Sections */
+  /* Content Sections */
 .content {
   flex: 1;
   width: 100%;
 }
 
-/* Search Results */
+  /* Search Results */
 .search-results {
   background: var(--bg-color);
   border: 1px solid var(--border-color);
@@ -611,32 +679,32 @@ h4 {
   line-height: 1.4;
 }
 
-/* Responsive Design */
+  /* Responsive Design */
 @media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
-  
-  .cards-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .card {
-    padding: 15px;
-  }
-  
-  .toc-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .toc-item {
-    padding: 15px;
-  }
+.container {
+  padding: 10px;
 }
 
-/* Download Section */
+.cards-grid {
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.card {
+  padding: 15px;
+}
+
+.toc-grid {
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.toc-item {
+  padding: 15px;
+}
+}
+
+  /* Download Section */
 .download-section {
   background: linear-gradient(135deg, #00d9ff 0%, #ff6b9d 100%);
   color: #0d1117;
@@ -678,7 +746,7 @@ h4 {
   box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);
 }
 
-/* Section Index */
+  /* Section Index */
 .section-index {
   background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
   padding: 30px;
@@ -729,7 +797,7 @@ h4 {
   color: #ff6b9d;
 }
 
-/* Table of Contents Level Styling */
+  /* Table of Contents Level Styling */
 .toc-level-2 {
   margin-left: 0;
   font-weight: 600;
@@ -748,13 +816,13 @@ h4 {
   padding: 5px 0;
 }
 
-.toc-level-2 a:hover,
+.toc-level-2 a:hover,;
 .toc-level-3 a:hover {
   color: #ff6b9d;
   text-decoration: underline;
 }
 
-/* Command Blocks */
+  /* Command Blocks */
 .command-block {
   background-color: #0d1117;
   border-left: 4px solid #ff6b9d;
@@ -799,7 +867,7 @@ h4 {
   border-radius: 3px;
 }
 
-/* Enhanced Search Bar */
+  /* Enhanced Search Bar */
 .search-container {
   margin-bottom: 20px;
   position: sticky;
@@ -851,7 +919,7 @@ h4 {
   transform: translateY(-2px);
 }
 
-/* Search Clear Button */
+  /* Search Clear Button */
 .search-clear-btn {
   padding: 8px 12px;
   background: #dc3545;
@@ -875,7 +943,7 @@ h4 {
   transform: scale(0.95);
 }
 
-/* Alert Boxes */
+  /* Alert Boxes */
 .warning {
   background-color: #3a3a1a;
   border-left: 4px solid #d29922;
@@ -903,7 +971,7 @@ h4 {
   color: #3fb950;
 }
 
-/* Tables */
+  /* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -940,7 +1008,7 @@ table tr:hover {
   color: white;
 }
 
-/* Light Mode (Optional) */
+  /* Light Mode (Optional) */
 body.light-mode {
   background-color: #f6f8fa;
   color: #24292f;
@@ -979,114 +1047,114 @@ body.light-mode h4 {
   color: #24292f;
 }
 
-/* Responsive Design */
-/* Responsive Design */
+  /* Responsive Design */
+  /* Responsive Design */
 @media (max-width: 1024px) {
-  .container {
-    max-width: 90% !important;
-    padding: 14px;
-    margin: 0 auto !important;
-    width: 90% !important;
-  }
+.container {
+  max-width: 90% !important;
+  padding: 14px;
+  margin: 0 auto !important;
+  width: 90% !important;
+}
 
-  h1 {
-    font-size: 2em;
-  }
+h1 {
+  font-size: 2em;
+}
 
-  h2 {
-    font-size: 1.6em;
-  }
+h2 {
+  font-size: 1.6em;
+}
 
-  .navigation,
-  .part-links {
-    flex-direction: column;
-    gap: 8px;
-  }
+.navigation,
+.part-links {
+  flex-direction: column;
+  gap: 8px;
+}
 
-  .navigation a,
-  .part-links a {
-    width: 100%;
-    text-align: center;
-    padding: 10px 12px;
-  }
+.navigation a,
+.part-links a {
+  width: 100%;
+  text-align: center;
+  padding: 10px 12px;
+}
 
   /* Make long code lines wrap better and allow horizontal scroll when needed */
-  .command-block pre {
-    font-size: 0.95em;
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+.command-block pre {
+  font-size: 0.95em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
-  .command-block code {
-    font-size: 0.95em;
-  }
+.command-block code {
+  font-size: 0.95em;
+}
 
   /* Make section index scrollable instead of pushing layout off-screen */
-  .section-index {
-    max-height: 260px;
-    overflow-y: auto;
-    padding: 16px;
-  }
+.section-index {
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 16px;
+}
 
-  table th,
-  table td {
-    font-size: 0.95em;
-  }
+table th,
+table td {
+  font-size: 0.95em;
+}
 
-  .theme-toggle {
-    top: 12px;
-    right: 12px;
-    padding: 8px 10px;
-    font-size: 0.9em;
-  }
+.theme-toggle {
+  top: 12px;
+  right: 12px;
+  padding: 8px 10px;
+  font-size: 0.9em;
+}
 }
 
 @media (max-width: 480px) {
-  .container {
-    max-width: 90% !important;
-    padding: 10px !important;
-    margin: 0 auto !important;
-    width: 90% !important;
-  }
-
-  h1 {
-    font-size: 1.6em;
-  }
-
-  h2 {
-    font-size: 1.25em;
-  }
-
-  body {
-    font-size: 15px;
-  }
-
-  .navigation a,
-  .part-links a {
-    padding: 8px 10px;
-    font-size: 0.95em;
-  }
-
-  /* Reduce command block padding to fit narrow screens */
-  .command-block {
-    padding: 10px;
-  }
-
-  .command-block pre {
-    font-size: 0.85em;
-  }
-
-  /* Ensure tables and images fit the screen */
-  table,
-  img {
-    max-width: 100%;
-    height: auto;
-  }
+.container {
+  max-width: 90% !important;
+  padding: 10px !important;
+  margin: 0 auto !important;
+  width: 90% !important;
 }
 
-/* Utilities */
+h1 {
+  font-size: 1.6em;
+}
+
+h2 {
+  font-size: 1.25em;
+}
+
+body {
+  font-size: 15px;
+}
+
+.navigation a,
+.part-links a {
+  padding: 8px 10px;
+  font-size: 0.95em;
+}
+
+  /* Reduce command block padding to fit narrow screens */
+.command-block {
+  padding: 10px;
+}
+
+.command-block pre {
+  font-size: 0.85em;
+}
+
+  /* Ensure tables and images fit the screen */
+table,
+img {
+  max-width: 100%;
+  height: auto;
+}
+}
+
+  /* Utilities */
 .text-center {
   text-align: center;
 }
@@ -1108,13 +1176,18 @@ body.light-mode h4 {
   padding: 2px 5px;
 }
 
-/* Index Page Specific Styling */
+  /* Index Page Specific Styling */
 body.index-page {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
 body.index-page .container {
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 50%, rgba(15, 52, 96, 0.95) 100%);
+  background: linear-gradient(;
+  135deg,
+  rgba(26, 26, 46, 0.95) 0%,
+  rgba(22, 33, 62, 0.95) 50%,
+  rgba(15, 52, 96, 0.95) 100%
+  );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 217, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 217, 255, 0.15);
@@ -1128,7 +1201,11 @@ body.index-page h1 {
 }
 
 body.index-page .hero-section {
-  background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
+  background: linear-gradient(;
+  135deg,
+  rgba(0, 217, 255, 0.1) 0%,
+  rgba(255, 107, 157, 0.1) 100%
+  );
   border: 1px solid rgba(0, 217, 255, 0.3);
   backdrop-filter: blur(5px);
 }
@@ -1145,7 +1222,7 @@ body.index-page .card:hover {
   transform: translateY(-5px);
 }
 
-/* Other Pages Styling */
+  /* Other Pages Styling */
 body:not(.index-page) {
   background-color: #0a0a0a;
 }
@@ -1165,22 +1242,22 @@ body:not(.index-page) .command-block:hover {
   box-shadow: 0 5px 15px rgba(0, 217, 255, 0.2);
 }
 
-/* Print Styles */
+  /* Print Styles */
 @media print {
   .navigation,
   .part-links,
   .download-section,
   .theme-toggle,
-  .search-container {
-    display: none !important;
-  }
+.search-container {
+  display: none !important;
+}
 
-  .container {
-    box-shadow: none;
-    max-width: 100%;
-  }
+.container {
+  box-shadow: none;
+  max-width: 100%;
+}
 
-  .command-block {
-    page-break-inside: avoid;
-  }
+.command-block {
+  page-break-inside: avoid;
+}
 }
