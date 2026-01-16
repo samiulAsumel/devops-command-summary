@@ -1,3 +1,51 @@
+// Initialize Collapsible H2 Elements - DISABLED
+// function initCollapsibleH2() {
+//   const h2Elements = document.querySelectorAll('h2[id]');
+//
+//   h2Elements.forEach(h2 => {
+//     // Add collapsed class by default
+//     h2.classList.add('collapsed');
+//
+//     // Find the next sibling elements until the next H2 or end of content
+//     let nextElement = h2.nextElementSibling;
+//     const contentToCollapse = [];
+//
+//     while (nextElement && nextElement.tagName !== 'H2') {
+//       contentToCollapse.push(nextElement);
+//       nextElement = nextElement.nextElementSibling;
+//     }
+//
+//     // Wrap content in a collapsible container
+//     if (contentToCollapse.length > 0) {
+//       const wrapper = document.createElement('div');
+//       wrapper.className = 'collapsible-content collapsed';
+//
+//       // Move all content to wrapper
+//       contentToCollapse.forEach(element => {
+//         wrapper.appendChild(element);
+//       });
+//
+//       // Insert wrapper after H2
+//       h2.parentNode.insertBefore(wrapper, h2.nextSibling);
+//
+//       // Add click event listener
+//       h2.addEventListener('click', function() {
+//         toggleCollapsible(this);
+//       });
+//     }
+//   });
+// }
+
+// Toggle collapsible content - DISABLED
+// function toggleCollapsible(h2Element) {
+//   h2Element.classList.toggle('collapsed');
+//
+//   const nextElement = h2Element.nextElementSibling;
+//   if (nextElement && nextElement.classList.contains('collapsible-content')) {
+//     nextElement.classList.toggle('collapsed');
+//   }
+// }
+
 // Dark Mode Toggle
 function initDarkMode() {
   const theme = localStorage.getItem("theme") || "light";
@@ -44,43 +92,43 @@ function initBackToTop() {
 function formatComments() {
   document.querySelectorAll("pre code").forEach((codeBlock) => {
     let text = codeBlock.innerText;
-    
+
     // Remove all leading spaces from all lines first
     let lines = text.split("\n");
-    lines = lines.map(line => line.replace(/^\s+/, ""));
-    
+    lines = lines.map((line) => line.replace(/^\s+/, ""));
+
     // Find the longest command length for proper alignment
     let maxCmdLen = 0;
-    lines.forEach(line => {
+    lines.forEach((line) => {
       const idx = line.indexOf("#");
       if (idx > 0 && !line.trim().startsWith("#")) {
         const cmd = line.slice(0, idx).trimEnd();
         maxCmdLen = Math.max(maxCmdLen, cmd.length);
       }
     });
-    
+
     // Format each line
     const MIN_GAP = 13;
     const MAX_LINE_LENGTH = 113;
     const baseColumn = Math.max(maxCmdLen + 2, MIN_GAP);
     const result = [];
-    
-    lines.forEach(line => {
+
+    lines.forEach((line) => {
       const idx = line.indexOf("#");
-      
+
       // Skip pure comments and lines without comments
       if (idx === -1 || line.trim().startsWith("#")) {
         result.push(line);
         return;
       }
-      
+
       const cmd = line.slice(0, idx).trimEnd();
       const commentText = line.slice(idx).replace(/^#\s*/, "# "); // Ensure single space after #
-      
+
       // Calculate proper spacing
       const spacesNeeded = Math.max(2, baseColumn - cmd.length);
       const paddedLine = cmd + " ".repeat(spacesNeeded) + commentText;
-      
+
       // If too long, move comment to next line
       if (paddedLine.length > MAX_LINE_LENGTH) {
         result.push(cmd);
@@ -89,7 +137,7 @@ function formatComments() {
         result.push(paddedLine);
       }
     });
-    
+
     codeBlock.innerText = result.join("\n");
   });
 }
@@ -122,35 +170,36 @@ function improveAccessibility() {
 
 // Table of Contents Generator
 function generateTOC() {
-  const tocList = document.getElementById('toc-list');
+  const tocList = document.getElementById("toc-list");
   if (!tocList) return;
-  
-  const headings = document.querySelectorAll('h2, h3');
+
+  const headings = document.querySelectorAll("h2, h3");
   const tocItems = [];
-  
+
   headings.forEach((heading, index) => {
     if (heading.id) {
       const level = parseInt(heading.tagName.charAt(1));
       const title = heading.textContent.trim();
-      
-      const li = document.createElement('li');
+
+      const li = document.createElement("li");
       li.className = `toc-level-${level}`;
-      
-      const a = document.createElement('a');
+
+      const a = document.createElement("a");
       a.href = `#${heading.id}`;
       a.textContent = title;
-      
+
       li.appendChild(a);
       tocItems.push(li);
     }
   });
-  
-  tocList.innerHTML = '';
-  tocItems.forEach(item => tocList.appendChild(item));
+
+  tocList.innerHTML = "";
+  tocItems.forEach((item) => tocList.appendChild(item));
 }
 
 // Initialize everything on page load
 window.addEventListener("DOMContentLoaded", function () {
+  // initCollapsibleH2(); // DISABLED
   initDarkMode();
   initBackToTop();
   formatComments();

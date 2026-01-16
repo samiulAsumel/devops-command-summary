@@ -54,6 +54,13 @@ h2 {
   padding-left: 15px;
   margin: 40px 0 20px 0;
   font-size: 1.8em;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+h2:hover {
+  background-color: rgba(0, 217, 255, 0.1);
+  border-left-color: var(--accent-color);
 }
 
 h3 {
@@ -156,7 +163,11 @@ h4 {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--accent-color) 100%
+  );
   color: #0d1117;
   padding: 40px 20px;
   border-radius: 10px;
@@ -334,16 +345,26 @@ h4 {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color),
+    var(--accent-color)
+  );
   border-radius: 2px;
   transition: width 0.5s ease;
   animation: progressPulse 2s infinite;
 }
 
 @keyframes progressPulse {
-  0% { opacity: 0.8; }
-  50% { opacity: 1; }
-  100% { opacity: 0.8; }
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
 }
 
 /* TOC Container */
@@ -512,7 +533,7 @@ h4 {
   border-radius: 5px;
   padding: 15px;
   overflow-x: auto;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 17px;
   line-height: 1.5;
   color: var(--text-color);
@@ -522,7 +543,7 @@ h4 {
 
 .command-block code {
   color: var(--text-color);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 17px;
 }
 
@@ -616,21 +637,21 @@ h4 {
   .container {
     padding: 10px;
   }
-  
+
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 15px;
   }
-  
+
   .card {
     padding: 15px;
   }
-  
+
   .toc-grid {
     grid-template-columns: 1fr;
     gap: 15px;
   }
-  
+
   .toc-item {
     padding: 15px;
   }
@@ -1114,7 +1135,12 @@ body.index-page {
 }
 
 body.index-page .container {
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 50%, rgba(15, 52, 96, 0.95) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 46, 0.95) 0%,
+    rgba(22, 33, 62, 0.95) 50%,
+    rgba(15, 52, 96, 0.95) 100%
+  );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 217, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 217, 255, 0.15);
@@ -1128,7 +1154,11 @@ body.index-page h1 {
 }
 
 body.index-page .hero-section {
-  background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 217, 255, 0.1) 0%,
+    rgba(255, 107, 157, 0.1) 100%
+  );
   border: 1px solid rgba(0, 217, 255, 0.3);
   backdrop-filter: blur(5px);
 }
