@@ -140,18 +140,18 @@ h4 {
 }
 
 .part-links a:hover {
-  background: var(--accent-color);
+  background: linear-gradient(135deg, #00d9ff 0%, #00a8cc 100%);
   color: white;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
-  border-color: var(--accent-color);
+  box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+  border-color: #00d9ff;
 }
 
 .part-links a.active-part {
-  background: var(--accent-color);
+  background: linear-gradient(135deg, #00d9ff 0%, #00a8cc 100%);
   color: white;
-  border-color: var(--accent-color);
-  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+  border-color: #00d9ff;
+  box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
 }
 
   /* Hero Section */
