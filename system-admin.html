@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6426,14 +6426,12 @@
   # ✅ CORRECT:
   database:
   host: localhost
-  port: 5432
-  name: myapp
 
   # ❌ WRONG (mixed tabs and spaces):
   database:
-  host: localhost		# Tab character
-  port: 5432
-  name: myapp
+    host: localhost
+    port: 5432
+    name: myapp
 
   # 2. Key-Value Pairs
   # Basic structure: key: value
@@ -6446,8 +6444,8 @@
   is_active: true
 
   # ❌ WRONG (no space after colon):
-  name:John Doe		# Missing space
-  age:25		# Missing space
+  name: John Doe
+  age: 25
 
   # 3. Comments
   # Use # for comments

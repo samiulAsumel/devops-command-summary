@@ -176,7 +176,6 @@ function initNavigationButtons() {
   upBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("UP button clicked - Going to top!");
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -187,7 +186,6 @@ function initNavigationButtons() {
   downBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("DOWN button clicked - Going to bottom!");
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
     window.scrollTo({

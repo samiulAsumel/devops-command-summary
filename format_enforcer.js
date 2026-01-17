@@ -2,8 +2,6 @@
 // This script ensures consistent formatting across all HTML files
 
 function applyPerfectFormat() {
-  console.log("🔧 Applying perfect format to all code blocks...");
-
   const codeBlocks = document.querySelectorAll("pre code");
   let blocksProcessed = 0;
   let linesFixed = 0;
@@ -93,10 +91,6 @@ function applyPerfectFormat() {
     block.textContent = finalLines.join("\n");
     blocksProcessed++;
   });
-
-  console.log();
-  console.log();
-  console.log("🎉 Perfect format applied!");
 }
 
 // Auto-apply on page load
