@@ -31,6 +31,64 @@
         </div>
         <div class="content">
 
+          <!-- MONITORING & SECURITY COMMAND REFERENCE HEADER -->
+          <div style="background: #1a1f2e; border: 2px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+            <h1 style="color: #00d9ff; margin-top: 0;">MONITORING & SECURITY COMMAND REFERENCE</h1>
+            <p style="color: #c9d1d9; font-size: 1.1em; margin-bottom: 15px;">
+              <strong>Purpose:</strong> This section provides commands for monitoring system health, incident investigation, and security checks in production environments.
+            </p>
+          </div>
+
+          <!-- SEVERITY LEVELS -->
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+            <h3 style="color: #ffc107; margin-top: 0;">Severity Levels:</h3>
+            <div style="color: #c9d1d9; font-family: monospace;">
+              <div><span style="color: #17a2b8;">[INFO]</span>     Informational checks</div>
+              <div><span style="color: #ffc107;">[WARN]</span>     Early warning indicators</div>
+              <div><span style="color: #dc3545; font-weight: bold;">[CRITICAL]</span> Immediate attention required</div>
+            </div>
+          </div>
+
+        <!-- COMMAND CLASSIFICATION SYSTEM -->
+        <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+          <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 20px;">🏷️ Command Classification System</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; font-family: 'Fira Code', 'Courier New', monospace;">
+            <div style="background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #28a745; font-weight: bold; font-size: 1.1em;">[COMMON]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Frequently used in daily operations</div>
+            </div>
+            <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #ffc107; font-weight: bold; font-size: 1.1em;">[PRODUCTION]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in live/production environments</div>
+            </div>
+            <div style="background: rgba(23, 162, 184, 0.1); border-left: 4px solid #17a2b8; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #17a2b8; font-weight: bold; font-size: 1.1em;">[DEBUG]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used for troubleshooting and investigation</div>
+            </div>
+            <div style="background: rgba(108, 117, 125, 0.1); border-left: 4px solid #6c757d; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #6c757d; font-weight: bold; font-size: 1.1em;">[RARE]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in specific or uncommon scenarios</div>
+            </div>
+            <div style="background: rgba(220, 53, 69, 0.15); border-left: 4px solid #dc3545; padding: 12px; border-radius: 6px; transition: all 0.3s ease; animation: pulse-danger 2s infinite;">
+              <span style="color: #dc3545; font-weight: bold; font-size: 1.1em; text-shadow: 0 0 8px rgba(220, 53, 69, 0.3);">[DANGEROUS]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">⚠️ Can cause data loss or system outage if misused</div>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          @keyframes pulse-danger {
+            0%, 100% {
+              transform: scale(1);
+              box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+            }
+            50% {
+              transform: scale(1.05);
+              box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.2);
+            }
+          }
+        </style>
+
           <h1>📚 Linux/DevOps Command Reference Guide</h1>
 
           <div class="warning">
@@ -46,6 +104,13 @@
           </div>
 
           <h2 id="monitoring">📊 42. MONITORING COMMANDS</h2>
+
+          <!-- WHEN TO USE THESE COMMANDS SECTION -->
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+            <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+            <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system health monitoring, performance analysis, infrastructure observability, metric collection, alert setup, and production environment troubleshooting</strong></p>
+          </div>
+
           <div class="command-block">
             <h4>📊 Understanding Modern Monitoring Stack</h4>
             <pre><code>
@@ -866,6 +931,12 @@
 
 <h2 id="logging-auditing">📋 43. LOGGING & AUDITING (Advanced ELK/EFK stack, centralized logging, alerting rules)</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">log aggregation, security auditing, compliance monitoring, centralized logging setup, log analysis, forensic investigations, and SIEM implementation</strong></p>
+</div>
+
 <h3>📝 Centralized Logging</h3>
 <div class="command-block">
   <h4>📤 Forward System Logs</h4>
@@ -895,6 +966,12 @@
 </div>
 
 <h2 id="observability">🔍 44. OBSERVABILITY (Metrics + Logs + Traces, OpenTelemetry)</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">distributed tracing, performance monitoring, microservices observability, application performance analysis, root cause analysis, and full-stack visibility implementation</strong></p>
+</div>
 
 <h3>📊 Metrics, Logs, Traces</h3>
 <div class="command-block">
@@ -936,6 +1013,12 @@
 </div>
 
 <h2 id="security">🛡️ 45. SECURITY AND HARDENING</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system hardening, security audits, vulnerability assessments, penetration testing, compliance checks, and security incident response</strong></p>
+</div>
 
 <div class="danger">
   <strong>DANGER:</strong> Security commands can lock you out of your
@@ -998,6 +1081,13 @@
   <pre><code>
   oscap info /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml  # Show available profiles
 </code></pre>
+</div>
+
+<!-- COMPLIANCE NOTE -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 10px; margin: 15px 0;">
+  <p style="color: #17a2b8; margin: 0; font-size: 0.9em;">
+    <strong>Compliance Note:</strong> These commands are commonly used during internal security reviews and compliance audits such as ISO 27001 and SOC 2.
+  </p>
 </div>
 
 <div class="command-block">
@@ -1625,6 +1715,12 @@
 </div>
 
 <h2 id="performance">⚡ 46. PERFORMANCE MONITORING & TUNING</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">performance bottleneck analysis, system optimization, resource utilization monitoring, capacity planning, and performance tuning exercises</strong></p>
+</div>
 
 <h3>💾 iostat (I/O Statistics)</h3>
 <div class="command-block">
@@ -2277,6 +2373,13 @@
 </div>
 
 <h2 id="backup-monitoring-security">💾 47. BACKUP, RECOVERY, MONITORING & SECURITY</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">data backup operations, disaster recovery testing, backup monitoring, data restoration procedures, and backup security implementation</strong></p>
+</div>
+
 <h3>💿 Backup & Recovery (Security Perspective)</h3>
 <div class="command-block">
   <h4>📚 Understanding Backup Strategies</h4>
@@ -2557,17 +2660,29 @@
 <div class="command-block">
   <h4>🏥 System Health One-Liners</h4>
   <pre><code>
+  # [INFO]
   uptime               # Shows system running time, load average (1, 5, 15 min) – quick health check
   df -h                # Displays disk usage in human-readable format
   free -h              # Displays RAM and swap usage in human-readable format (used, free, available)
+
+  # [WARN]
   df -hT               # Shows disk usage by filesystem type (ext4, xfs, nfs) – capacity & mount validation
   top -b -n1 | head    # Non-interactive snapshot of top CPU/memory-consuming processes (automation-friendly)
   ss -tulnp            # Lists listening TCP/UDP ports with associated services and PIDs (network security check)
+
+  # [CRITICAL]
   journalctl -p 3 -xb  # Shows high-priority (error-level) systemd logs from current boot for troubleshooting
 </code></pre>
 </div>
 </div>
 <h2 id="ha-load-balancing">⚖️ 48. HIGH AVAILABILITY & LOAD BALANCING (HAProxy, Nginx LB, Pacemaker/Corosync clusters)</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">high availability setup, load balancer configuration, cluster management, failover testing, and traffic distribution optimization</strong></p>
+</div>
+
 <div class="command-block">
   <h4>📚 Understanding High Availability Concepts</h4>
   <pre><code>
@@ -2771,6 +2886,12 @@
 
 <h2 id="advanced-kubernetes">🏭 49. ADVANCED KUBERNETES PRODUCTION PATTERNS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes production deployment, cluster scaling, resource optimization, production troubleshooting, and enterprise container orchestration</strong></p>
+</div>
+
 <div class="command-block">
   <h4>🏭 Production Cluster Setup</h4>
   <pre><code>
@@ -2832,6 +2953,12 @@
 
 <h2 id="kubernetes-security">🔐 50. KUBERNETES SECURITY & RBAC</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes security hardening, RBAC implementation, pod security policies, network policies setup, and container security auditing</strong></p>
+</div>
+
 <div class="command-block">
   <h4>🔐 RBAC Configuration</h4>
   <pre><code>
@@ -2888,6 +3015,12 @@
 </div>
 
 <h2 id="kubernetes-monitoring">📊 51. KUBERNETES MONITORING & OBSERVABILITY</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes cluster monitoring, container metrics collection, pod performance analysis, and Kubernetes observability stack deployment</strong></p>
+</div>
 
 <div class="command-block">
   <h4>📊 Prometheus Stack</h4>
@@ -2946,6 +3079,12 @@
 </div>
 
 <h2 id="enterprise-cicd">🏗️ 52. ENTERPRISE CI/CD PIPELINES</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">CI/CD pipeline setup, build automation, deployment orchestration, continuous integration, and enterprise DevOps workflows</strong></p>
+</div>
 
 <div class="command-block">
   <h4>🏗️ Jenkins Enterprise Setup</h4>
@@ -3044,6 +3183,12 @@
 
 <h2 id="gitops-advanced">🌀 53. ADVANCED GITOPS & AUTOMATION</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">GitOps workflows, infrastructure as code, automated deployments, configuration management, and Git-driven operations</strong></p>
+</div>
+
 <div class="command-block">
   <h4>🌀 Flux CD GitOps</h4>
   <pre><code>
@@ -3126,6 +3271,12 @@
 
 <h2 id="cloud-architecture">☁️ 54. CLOUD ARCHITECTURE PATTERNS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">cloud architecture design, multi-cloud deployment, hybrid cloud setup, cloud migration, and enterprise cloud strategy</strong></p>
+</div>
+
 <div class="command-block">
   <h4>☁️ Multi-Cloud Strategy</h4>
   <pre><code>
@@ -3133,6 +3284,13 @@
   aws ec2 describe-instances --filters Name=tag:Environment,Values=Production
   aws s3 ls --recursive s3://my-bucket/
   aws cloudformation deploy --template-file template.yaml --stack-name my-stack --capabilities CAPABILITY_IAM
+
+  # CLOUD CONTEXT NOTE
+  <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 10px; margin: 15px 0;">
+    <p style="color: #17a2b8; margin: 0; font-size: 0.9em;">
+      <strong>Cloud Context:</strong> In cloud environments, these commands are often used alongside provider-native monitoring services such as AWS CloudWatch.
+    </p>
+  </div>
 
   # Azure CLI
   az vm list --resource-group my-rg
@@ -3180,6 +3338,12 @@
 </div>
 
 <h2 id="cost-optimization">💰 55. COST OPTIMIZATION STRATEGIES</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">cloud cost analysis, resource optimization, budget monitoring, rightsizing, and expense management</strong></p>
+</div>
 
 <div class="command-block">
   <h4>⚡ Resource Optimization</h4>
@@ -3230,6 +3394,12 @@
 </div>
 
 <h2 id="devsecops">🛡️ 56. DEVSECOPS PRACTICES</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">DevSecOps implementation, security scanning, vulnerability assessment, security automation, and secure pipeline development</strong></p>
+</div>
 
 <div class="command-block">
   <h4>🔍 Security Scanning in CI/CD</h4>
@@ -3286,6 +3456,12 @@
 
 <h2 id="security-automation">🤖 57. SECURITY AUTOMATION & COMPLIANCE</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">security automation, compliance checking, policy enforcement, security testing, and automated governance</strong></p>
+</div>
+
 <div class="command-block">
   <h4>🤖 Automated Security Testing</h4>
   <pre><code>
@@ -3339,6 +3515,12 @@
 </div>
 
 <h2 id="interview-prep">🎯 58. INTERVIEW PREPARATION - SYSTEM DESIGN</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">technical interview preparation, system design practice, DevOps interview questions, and career development</strong></p>
+</div>
 
 <div class="command-block">
   <h4>🏗️ Common System Design Questions</h4>
@@ -3423,6 +3605,12 @@
 
 <h2 id="career-advancement">📈 59. CAREER ADVANCEMENT & CERTIFICATIONS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">professional development, certification preparation, career planning, skill assessment, and industry recognition</strong></p>
+</div>
+
 <div class="command-block">
   <h4>🏆 Industry Certifications</h4>
   <pre><code>
@@ -3506,6 +3694,12 @@
 
 <h2 id="performance-optimization">⚡ 60. PERFORMANCE OPTIMIZATION & TUNING</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system performance tuning, bottleneck analysis, resource optimization, benchmarking, and performance engineering</strong></p>
+</div>
+
 <div class="command-block">
   <h4>⚡ System Performance Tuning</h4>
   <pre><code>
@@ -3569,6 +3763,12 @@
 </div>
 
 <h2 id="advanced-troubleshooting">🔧 61. ADVANCED TROUBLESHOOTING METHODOLOGIES</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system troubleshooting, root cause analysis, incident response, debugging complex issues, and problem resolution</strong></p>
+</div>
 
 <div class="command-block">
   <h4>🔧 System Troubleshooting Framework</h4>
@@ -3645,6 +3845,12 @@
 </div>
 
 <h2 id="real-projects">🌍 62. REAL-WORLD PROJECT EXAMPLES</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">real-world implementations, project deployments, infrastructure setup, production environments, and practical DevOps scenarios</strong></p>
+</div>
 
 <div class="command-block">
   <h4>🛒 E-commerce Platform Infrastructure</h4>
@@ -3760,6 +3966,12 @@
 </div>
 
 <h2 id="project-templates">📁 63. PROJECT TEMPLATES & STARTERS</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">project initialization, template setup, boilerplate creation, scaffolding, and rapid development</strong></p>
+</div>
 
 <div class="command-block">
   <h4>☸️ Kubernetes Application Template</h4>
@@ -3938,6 +4150,12 @@
 
 <h2 id="certification-guides">🎓 64. CERTIFICATION PREPARATION GUIDES</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">certification exam preparation, skill validation, practice testing, exam simulation, and professional development</strong></p>
+</div>
+
 <div class="command-block">
   <h4>🎓 RHCSA Exam Preparation</h4>
   <pre><code>
@@ -4095,6 +4313,12 @@ podman generate systemd --name webserver --files
 
 <h2 id="exam-strategies">📚 65. EXAM STRATEGIES & CAREER DEVELOPMENT</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">exam preparation, study planning, career development, skill enhancement, and professional growth</strong></p>
+</div>
+
 <div class="command-block">
   <h4>📚 Exam Preparation Strategies</h4>
   <pre><code>
@@ -4226,6 +4450,12 @@ podman generate systemd --name webserver --files
 </div>
 
 <h2 id="final-resources">📚 66. FINAL RESOURCES & REFERENCE</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">resource discovery, reference lookup, documentation access, learning materials, and quick guides</strong></p>
+</div>
 
 <div class="command-block">
   <h4>📚 Essential DevOps Resources</h4>
@@ -4368,6 +4598,12 @@ podman generate systemd --name webserver --files
 </div>
 
 <h2 id="summary">📋 67. SUMMARY</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">knowledge review, concept reinforcement, quick reference, study consolidation, and DevOps mastery</strong></p>
+</div>
 
 <div class="info">
   <p>

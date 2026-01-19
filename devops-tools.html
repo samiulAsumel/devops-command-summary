@@ -28,6 +28,68 @@
         </div>
         <div class="content">
 
+          <!-- DEVOPS TOOLS COMMAND REFERENCE HEADER -->
+          <div style="background: #1a1f2e; border: 2px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+            <h1 style="color: #00d9ff; margin-top: 0;">DEVOPS TOOLS COMMAND REFERENCE</h1>
+            <p style="color: #c9d1d9; font-size: 1.1em; margin-bottom: 15px;">
+              <strong>Purpose:</strong> This section contains command references for commonly used DevOps tools. It focuses strictly on syntax and operational usage.
+            </p>
+          </div>
+
+          <!-- VERSION ASSUMPTIONS -->
+          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+            <h3 style="color: #ffc107; margin-top: 0;">Version Assumptions:</h3>
+            <div style="color: #c9d1d9; font-family: monospace;">
+              <div>- Git 2.40+</div>
+              <div>- Docker 24.x</div>
+              <div>- Kubernetes 1.27+</div>
+              <div>- Terraform 1.5+</div>
+            </div>
+            <p style="color: #c9d1d9; margin: 10px 0 0 0; font-size: 0.9em;">
+              Command behavior may vary across versions.
+            </p>
+          </div>
+
+        <!-- COMMAND CLASSIFICATION SYSTEM -->
+        <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+          <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 20px;">🏷️ Command Classification System</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; font-family: 'Fira Code', 'Courier New', monospace;">
+            <div style="background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #28a745; font-weight: bold; font-size: 1.1em;">[COMMON]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Frequently used in daily operations</div>
+            </div>
+            <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #ffc107; font-weight: bold; font-size: 1.1em;">[PRODUCTION]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in live/production environments</div>
+            </div>
+            <div style="background: rgba(23, 162, 184, 0.1); border-left: 4px solid #17a2b8; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #17a2b8; font-weight: bold; font-size: 1.1em;">[DEBUG]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used for troubleshooting and investigation</div>
+            </div>
+            <div style="background: rgba(108, 117, 125, 0.1); border-left: 4px solid #6c757d; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+              <span style="color: #6c757d; font-weight: bold; font-size: 1.1em;">[RARE]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in specific or uncommon scenarios</div>
+            </div>
+            <div style="background: rgba(220, 53, 69, 0.15); border-left: 4px solid #dc3545; padding: 12px; border-radius: 6px; transition: all 0.3s ease; animation: pulse-danger 2s infinite;">
+              <span style="color: #dc3545; font-weight: bold; font-size: 1.1em; text-shadow: 0 0 8px rgba(220, 53, 69, 0.3);">[DANGEROUS]</span>
+              <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">⚠️ Can cause data loss or system outage if misused</div>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          @keyframes pulse-danger {
+            0%, 100% {
+              transform: scale(1);
+              box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+            }
+            50% {
+              transform: scale(1.05);
+              box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.2);
+            }
+          }
+        </style>
+
           <h1>📚 Linux/DevOps Command Reference Guide</h1>
 
           <div class="section-index">
@@ -39,11 +101,17 @@
 
           <h2 id="aws-from-scratch">☁️ 25. AMAZON WEB SERVICES (AWS) - FROM SCRATCH</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">AWS cloud setup, infrastructure provisioning, cloud resource management, AWS service deployment, and cloud automation</strong></p>
+</div>
+
           <div>
-            <h3>☁️ AWS Cloud Platform - From Scratch to Hero</h3>
+            <h3>☁️ AWS Cloud Platform - Command Reference</h3>
 
             <div class="command-block">
-              <h4>📚 Chapter 1: AWS Fundamentals (Absolute Beginner)</h4>
+              <h4>📚 AWS Fundamentals Reference</h4>
               <pre><code>
               # What is AWS?
               # AWS = Amazon Web Services
@@ -75,7 +143,7 @@
           </div>
 
           <div class="command-block">
-            <h4>🚀 Chapter 2: AWS CLI Installation and Setup</h4>
+            <h4>🚀 AWS CLI Installation and Setup Reference</h4>
             <pre><code>
             # Step 1: Install AWS CLI
             # On Linux/Mac:
@@ -270,11 +338,17 @@
 
     <h2 id="docker-from-scratch">🐳 26. DOCKER CONTAINERIZATION - FROM SCRATCH</h2>
 
-    <div>
-      <h3>🐳 Docker Containers - From Scratch to Hero</h3>
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Docker container creation, container management, image building, container orchestration, and application containerization</strong></p>
+</div>
+
+<div>
+      <h3>🐳 Docker Containers - Command Reference</h3>
 
       <div class="command-block">
-        <h4>📚 Chapter 1: Docker Fundamentals (Absolute Beginner)</h4>
+        <h4>📚 Docker Fundamentals Reference</h4>
         <pre><code>
         # What is Docker?
         # Docker = Containerization platform
@@ -305,7 +379,7 @@
     </div>
 
     <div class="command-block">
-      <h4>🚀 Chapter 2: Docker Installation and Setup</h4>
+      <h4>🚀 Docker Installation and Setup Reference</h4>
       <pre><code>
       # Step 1: Install Docker
       # On Ubuntu/Debian:
@@ -533,11 +607,17 @@
 
 <h2 id="terraform-from-scratch">🏗️ 27. TERRAFORM IAC - FROM SCRATCH</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">infrastructure as code deployment, Terraform configuration, resource provisioning, state management, and cloud automation</strong></p>
+</div>
+
 <div>
-  <h3>🏗️ Terraform Infrastructure as Code - From Scratch to Hero</h3>
+  <h3>🏗️ Terraform Infrastructure as Code - Command Reference</h3>
 
   <div class="command-block">
-    <h4>📚 Chapter 1: Terraform Fundamentals (Absolute Beginner)</h4>
+    <h4>📚 Terraform Fundamentals Reference</h4>
     <pre><code>
     # What is Terraform?
     # Terraform = Infrastructure as Code tool
@@ -568,7 +648,7 @@
 </div>
 
 <div class="command-block">
-  <h4>🚀 Chapter 2: Terraform Installation and Setup</h4>
+  <h4>🚀 Terraform Installation and Setup Reference</h4>
   <pre><code>
   # Step 1: Install Terraform
   # On Linux:
@@ -775,11 +855,17 @@
 
 <h2 id="python">🐍 28. PYTHON FOR DEVOPS - BASICS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Python scripting, automation development, DevOps tooling, API integration, and infrastructure automation</strong></p>
+</div>
+
 <div>
-  <h3>🐍 Python Programming - From Scratch to Hero (Complete Tutorial)</h3>
+  <h3>🐍 Python for DevOps - Command Reference</h3>
 
   <div class="command-block">
-    <h4>📚 Chapter 1: What is Python? (Absolute Beginner)</h4>
+    <h4>📚 Python Fundamentals Reference</h4>
     <pre><code>
     # What is Python?
     # Python = High-level programming language
@@ -2041,6 +2127,18 @@
 
 <h2 id="git">📦 29. GIT VERSION CONTROL</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">version control, code collaboration, branch management, merge operations, and source code management</strong></p>
+</div>
+
+<!-- SCENARIO CONTEXT -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h3 style="color: #ffc107; margin-top: 0;">Scenario:</h3>
+  <p style="color: #c9d1d9; margin-bottom: 0;">Use the following commands when troubleshooting real-world DevOps workflows such as failed builds, broken deployments, or unhealthy containers.</p>
+</div>
+
 <div>
   <h3>⚙️ Git Configuration</h3>
 
@@ -3259,6 +3357,12 @@
 
 <h2 id="docker">🐳 30. DOCKER COMMANDS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">container management, image operations, Docker administration, container troubleshooting, and application deployment</strong></p>
+</div>
+
 <div>
   <h3>🐳 Docker System</h3>
 
@@ -4344,6 +4448,12 @@
 
 <h2 id="kubernetes">☸️ 31. KUBERNETES (kubectl) COMMANDS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes cluster management, pod operations, service deployment, container orchestration, and cluster administration</strong></p>
+</div>
+
 <div>
   <h3>🔍 Cluster Information</h3>
 
@@ -5144,11 +5254,17 @@
 
   <h2 id="ansible">🤖 32. ANSIBLE COMMANDS</h2>
 
-  <div>
-    <h3>🤖 Ansible Automation - From Scratch to Hero (Complete Tutorial)</h3>
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">configuration management, automation deployment, infrastructure provisioning, server orchestration, and DevOps automation</strong></p>
+</div>
+
+<div>
+    <h3>🤖 Ansible Automation - Command Reference</h3>
 
     <div class="command-block">
-      <h4>📚 Chapter 1: What is Ansible? (Absolute Beginner)</h4>
+      <h4>📚 Ansible Fundamentals Reference</h4>
       <pre><code>
       # What is Ansible?
       # Ansible = Open-source automation tool
@@ -5181,7 +5297,7 @@
   </div>
 
   <div class="command-block">
-    <h4>🚀 Chapter 2: Ansible Installation and Setup</h4>
+    <h4>🚀 Ansible Installation and Setup Reference</h4>
     <pre><code>
     # Step 1: Install Ansible on Control Node
     # On Red Hat/CentOS/Fedora:
@@ -7508,6 +7624,12 @@
 
 <h2 id="terraform">🏗️ 33. TERRAFORM COMMANDS</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">infrastructure provisioning, state management, resource deployment, Terraform operations, and IaC workflows</strong></p>
+</div>
+
 <div>
   <h3>🏗️ Terraform Initialization</h3>
 
@@ -7896,6 +8018,12 @@
 </div>
 
 <h2 id="aws">☁️ 34. AWS CLI COMMANDS</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">AWS resource management, cloud operations, CLI automation, AWS service administration, and cloud infrastructure control</strong></p>
+</div>
 
 <div>
   <h3>☁️ AWS CLI Configuration</h3>
@@ -10071,6 +10199,12 @@
 
 <h2 id="container-security">🔒 35. CONTAINER SECURITY (Image scanning, Pod security policies, K8s RBAC)</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">container security scanning, vulnerability assessment, pod security policy enforcement, RBAC implementation, and container hardening</strong></p>
+</div>
+
 <div>
   <h3>🖼️ Image Scanning</h3>
   <div class="command-block">
@@ -10098,6 +10232,12 @@
 </div>
 
 <h2 id="cicd-tools">🔄 36. CI/CD TOOLS (Jenkins, GitHub Actions, GitLab CI pipelines)</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">CI/CD pipeline setup, build automation, deployment workflows, continuous integration, and delivery automation</strong></p>
+</div>
 
 <div>
   <h3>🔧 Jenkins CLI</h3>
@@ -10295,6 +10435,12 @@
 
 <h2 id="advanced-cloud">☁️ 37. ADVANCED CLOUD (Terraform modules, AWS services: S3, EC2, RDS, IAM, Multi-cloud)</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">advanced cloud operations, Terraform module development, AWS service management, multi-cloud deployment, and enterprise cloud architecture</strong></p>
+</div>
+
 <div>
   <h3>🏗️ Terraform Commands</h3>
   <div class="command-block">
@@ -10355,6 +10501,12 @@
 </div>
 
 <h2 id="advanced-devops">⚡ 38. ADVANCED DEVOPS WORKFLOWS</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">advanced DevOps workflows, automation orchestration, pipeline optimization, workflow management, and enterprise DevOps processes</strong></p>
+</div>
 
 <div>
   <div class="command-block">
@@ -10585,6 +10737,12 @@
 
 <h2 id="monitoring-observability">📊 39. MONITORING & OBSERVABILITY STACK</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">monitoring stack setup, observability implementation, metrics collection, log aggregation, and performance monitoring</strong></p>
+</div>
+
 <div>
   <div class="command-block">
     <h4>📊 Prometheus Advanced Configuration</h4>
@@ -10778,6 +10936,12 @@
 
 <h2 id="security-compliance">🛡️ 40. SECURITY & COMPLIANCE AUTOMATION</h2>
 
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">security automation, compliance checking, policy enforcement, security scanning, and automated governance</strong></p>
+</div>
+
 <div>
   <div class="command-block">
     <h4>🔍 Container Security Scanning</h4>
@@ -10945,6 +11109,13 @@
 </div>
 
 <h2 id="automation">🤖 41. AUTOMATION ONE-LINERS COMMANDS</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">quick automation tasks, one-liner scripting, rapid system administration, efficient problem solving, and command-line productivity</strong></p>
+</div>
+
 <h3>⚡ Automation One-Liners</h3>
 
 <div>
@@ -11828,6 +11999,17 @@ resultsContainer.innerHTML = "";
 
 <style>
 </style>
+
+<!-- COMMON MISTAKES TO AVOID SECTION -->
+<div style="background: #721c24; border: 2px solid #f5c6cb; border-radius: 10px; padding: 20px; margin: 30px 0;">
+  <h3 style="color: #f8d7da; margin-top: 0;">Common Mistakes to Avoid:</h3>
+  <ul style="color: #f8d7da; margin: 0; padding-left: 20px;">
+    <li>Running <code>git push -f</code> on shared branches</li>
+    <li>Deleting Kubernetes Pods without identifying the owning controller</li>
+    <li>Running containers as root in production</li>
+    <li>Making infrastructure changes without version control</li>
+  </ul>
+</div>
 
 <div class="info-box" style="border-left-color: #ff6b9d; margin-top: 50px;">
   <h3 style="color: #ff6b9d">🎯 Section Complete?</h3>

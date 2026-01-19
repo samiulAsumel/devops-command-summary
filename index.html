@@ -10,6 +10,47 @@
   </head>
   <body class="index-page">
     <div class="container">
+      <!-- REFERENCE DISCLAIMER -->
+      <div style="background: #1a1f2e; border: 2px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center;">
+        <h1 style="color: #00d9ff; margin-top: 0; font-size: 2.2rem;">LINUX / DEVOPS / CLOUD COMMAND & CODE REFERENCE</h1>
+        <p style="color: #c9d1d9; font-size: 1.1em; margin-bottom: 15px;">
+          This documentation is a command and code reference for Linux, DevOps, Cloud, and Site Reliability Engineers.
+        </p>
+        <p style="color: #c9d1d9; font-size: 1.0em; margin-bottom: 15px;">
+          It is <strong>NOT</strong> a tutorial or learning guide. Basic conceptual understanding of operating systems, networking, and DevOps tools is assumed.
+        </p>
+        <p style="color: #ff6b9d; font-size: 1.1em; font-weight: bold; margin-bottom: 0;">
+          ⚠️ Do NOT execute commands blindly on production systems.
+        </p>
+      </div>
+
+      <!-- COMMAND TAG LEGEND -->
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 20px;">🏷️ Command Classification System</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; font-family: 'Fira Code', 'Courier New', monospace;">
+          <div style="background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+            <span style="color: #28a745; font-weight: bold; font-size: 1.1em;">[COMMON]</span>
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Frequently used in daily operations</div>
+          </div>
+          <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+            <span style="color: #ffc107; font-weight: bold; font-size: 1.1em;">[PRODUCTION]</span>
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in live/production environments</div>
+          </div>
+          <div style="background: rgba(23, 162, 184, 0.1); border-left: 4px solid #17a2b8; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+            <span style="color: #17a2b8; font-weight: bold; font-size: 1.1em;">[DEBUG]</span>
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used for troubleshooting and investigation</div>
+          </div>
+          <div style="background: rgba(108, 117, 125, 0.1); border-left: 4px solid #6c757d; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
+            <span style="color: #6c757d; font-weight: bold; font-size: 1.1em;">[RARE]</span>
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in specific or uncommon scenarios</div>
+          </div>
+          <div style="background: rgba(220, 53, 69, 0.15); border-left: 4px solid #dc3545; padding: 12px; border-radius: 6px; transition: all 0.3s ease; animation: pulse-danger 2s infinite;">
+            <span style="color: #dc3545; font-weight: bold; font-size: 1.1em; text-shadow: 0 0 8px rgba(220, 53, 69, 0.3);">[DANGEROUS]</span>
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">⚠️ Can cause data loss or system outage if misused</div>
+          </div>
+        </div>
+      </div>
+
       <div class="hero-section">
         <div class="hero-background">
           <div class="hero-particles"></div>
@@ -65,12 +106,25 @@
         </div>
       </div>
 
+      <style>
+        @keyframes pulse-danger {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+          }
+          50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.2);
+          }
+        }
+      </style>
+
       <div class="section-header floating-section">
         <div class="section-container">
           <div class="section-title-content">
             <span class="title-icon">🚀</span>
             <div class="title-text-container">
-              <span class="title-text">Choose Your Learning Path</span>
+              <span class="title-text">Choose Your Reference Path</span>
               <div class="title-underline"></div>
             </div>
             <span class="title-icon">🚀</span>
@@ -241,11 +295,11 @@
                 Administration, DevOps Tools, or Monitoring & Security
               </li>
               <li>
-                <strong>📚 Progressive Learning:</strong> Start with basics,
-                advance to enterprise-level topics
+                <strong>📚 Progressive Reference:</strong> Start with fundamentals,
+                advance to enterprise-level commands
               </li>
               <li>
-                <strong>🔍 Navigate & Learn:</strong> Browse sections
+                <strong>🔍 Navigate & Reference:</strong> Browse sections
                 systematically or use Ctrl+F to find specific commands
               </li>
               <li>
