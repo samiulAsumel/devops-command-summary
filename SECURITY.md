@@ -206,7 +206,7 @@ add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsaf
 def validate_token(token: str) -> Dict:
     """Validate JWT token with security checks."""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, os.getenv('JWT_SECRET', 'default-secret-key'), algorithms=['HS256'])
 
         # Check token expiration
         if datetime.utcnow() > payload['exp']:

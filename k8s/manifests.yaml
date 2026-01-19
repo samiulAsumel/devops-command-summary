@@ -1,0 +1,684 @@
+# DevOps Command Reference - Kubernetes Enterprise Manifests
+# Enterprise-Grade Production Deployment Configuration
+# Version: 1.0.0
+# Compliance: ISO 27001, SOC 2 Type II, GDPR, HIPAA
+
+---
+# 🏷️ Namespace Configuration
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-command-reference
+  labels:
+    name: devops-command-reference
+    environment: production
+    compliance: enterprise
+    security-level: high
+  annotations:
+    description: "DevOps Command Reference Application Namespace"
+    contact: "devops@command-reference.com"
+    cost-center: "engineering"
+---
+# 🔐 Secret Management - Enterprise Grade
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    security: sensitive
+  annotations:
+    description: "Application secrets and credentials"
+type: Opaque
+data:
+  # Base64 encoded values
+  DATABASE_URL: <BASE64_ENCODED_DB_URL>
+  REDIS_URL: <BASE64_ENCODED_REDIS_URL>
+  JWT_SECRET: <BASE64_ENCODED_JWT_SECRET>
+  API_KEY: <BASE64_ENCODED_API_KEY>
+---
+# 📊 ConfigMap - Application Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    config-type: application
+  annotations:
+    description: "Application configuration settings"
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  METRICS_ENABLED: "true"
+  TRACING_ENABLED: "true"
+  RATE_LIMITING: "true"
+  SECURITY_HEADERS: "true"
+  CORS_ORIGINS: "https://devops-command-reference.com"
+  SESSION_TIMEOUT: "3600"
+  MAX_UPLOAD_SIZE: "10MB"
+---
+# 🚀 Frontend Deployment - Enterprise Web Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    component: web-app
+    version: v2.0.0
+  annotations:
+    description: "Frontend web application deployment"
+    deployment.kubernetes.io/revision: "1"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: devops-command-reference
+      tier: frontend
+      component: web-app
+  template:
+    metadata:
+      labels:
+        app: devops-command-reference
+        tier: frontend
+        component: web-app
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: frontend
+          image: devops-command-reference/frontend:2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: APP_ENV
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: LOG_LEVEL
+            - name: METRICS_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: METRICS_ENABLED
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: DATABASE_URL
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /var/cache/nginx
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+      imagePullSecrets:
+        - name: registry-credentials
+---
+# 📊 Backend API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: backend
+    component: api
+    version: v2.0.0
+  annotations:
+    description: "Backend API deployment"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: devops-command-reference
+      tier: backend
+      component: api
+  template:
+    metadata:
+      labels:
+        app: devops-command-reference
+        tier: backend
+        component: api
+        version: v2.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+        - name: backend
+          image: devops-command-reference/backend:2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+              name: api
+              protocol: TCP
+            - containerPort: 9090
+              name: metrics
+              protocol: TCP
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: APP_ENV
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: DATABASE_URL
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REDIS_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: JWT_SECRET
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      imagePullSecrets:
+        - name: registry-credentials
+---
+# 🌐 Frontend Service - Load Balancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    component: web-app
+  annotations:
+    description: "Frontend web application service"
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 443
+      targetPort: 80
+      protocol: TCP
+      name: https
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: devops-command-reference
+    tier: frontend
+    component: web-app
+---
+# 🔌 Backend API Service - Internal
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: backend
+    component: api
+  annotations:
+    description: "Backend API internal service"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5000
+      targetPort: 5000
+      protocol: TCP
+      name: api
+    - port: 9090
+      targetPort: 9090
+      protocol: TCP
+      name: metrics
+  selector:
+    app: devops-command-reference
+    tier: backend
+    component: api
+---
+# 📈 Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontend-hpa
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    component: web-app
+  annotations:
+    description: "Frontend horizontal pod autoscaler"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+---
+# 🛡️ Network Policy - Security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: devops-command-reference-netpol
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    security: network-policy
+  annotations:
+    description: "Network security policy for application"
+spec:
+  podSelector:
+    matchLabels:
+      app: devops-command-reference
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+    - from:
+        - podSelector:
+            matchLabels:
+              app: devops-command-reference
+      ports:
+        - protocol: TCP
+          port: 5000
+        - protocol: TCP
+          port: 9090
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app: devops-command-reference
+      ports:
+        - protocol: TCP
+          port: 5000
+        - protocol: TCP
+          port: 9090
+---
+# 🔒 Pod Security Policy
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: devops-command-reference-psp
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    security: pod-security
+  annotations:
+    description: "Pod security policy for application"
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  volumes:
+    - "configMap"
+    - "emptyDir"
+    - "projected"
+    - "secret"
+    - "downwardAPI"
+    - "persistentVolumeClaim"
+  runAsUser:
+    rule: "MustRunAsNonRoot"
+  seLinux:
+    rule: "RunAsAny"
+  fsGroup:
+    rule: "RunAsAny"
+---
+# 📊 Service Monitor - Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devops-command-reference-monitor
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    monitoring: prometheus
+  annotations:
+    description: "Prometheus service monitor"
+spec:
+  selector:
+    matchLabels:
+      app: devops-command-reference
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics
+      honorLabels: true
+---
+# 🚨 Prometheus Rule - Alerting
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: devops-command-reference-alerts
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    monitoring: prometheus
+    alerting: rules
+  annotations:
+    description: "Prometheus alerting rules"
+spec:
+  groups:
+    - name: devops-command-reference.rules
+      rules:
+        - alert: FrontendHighCPUUsage
+          expr: rate(container_cpu_usage_seconds_total{pod=~"frontend-.*"}[5m]) > 0.8
+          for: 5m
+          labels:
+            severity: warning
+            service: frontend
+          annotations:
+            summary: "High CPU usage on frontend pods"
+            description: "Frontend pod {{ $labels.pod }} CPU usage is above 80% for more than 5 minutes"
+        - alert: BackendHighMemoryUsage
+          expr: container_memory_usage_bytes{pod=~"backend-.*"} / container_spec_memory_limit_bytes > 0.9
+          for: 5m
+          labels:
+            severity: critical
+            service: backend
+          annotations:
+            summary: "High memory usage on backend pods"
+            description: "Backend pod {{ $labels.pod }} memory usage is above 90% for more than 5 minutes"
+        - alert: ServiceDown
+          expr: up{job=~"frontend|backend"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Service is down"
+            description: "Service {{ $labels.job }} has been down for more than 1 minute"
+---
+# 📋 Ingress - HTTPS Termination
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-command-reference-ingress
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    component: ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    description: "HTTPS ingress with SSL termination"
+spec:
+  tls:
+    - hosts:
+        - devops-command-reference.com
+        - www.devops-command-reference.com
+      secretName: devops-command-reference-tls
+  rules:
+    - host: devops-command-reference.com
+      http:
+        paths:
+          - path: /api(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 5000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+---
+# 📊 Pod Disruption Budget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: frontend-pdb
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: frontend
+    component: pdb
+  annotations:
+    description: "Pod disruption budget for frontend"
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: devops-command-reference
+      tier: frontend
+      component: web-app
+---
+# 📊 Pod Disruption Budget - Backend
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: backend-pdb
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    tier: backend
+    component: pdb
+  annotations:
+    description: "Pod disruption budget for backend"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: devops-command-reference
+      tier: backend
+      component: api
+
+---
+# 📋 Resource Quota - Namespace Limits
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: devops-command-reference-quota
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    resource-management: quota
+  annotations:
+    description: "Resource quota for namespace"
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    persistentvolumeclaims: "4"
+    pods: "20"
+    services: "10"
+    secrets: "10"
+    configmaps: "10"
+---
+# 📋 Limit Range - Pod Resource Limits
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: devops-command-reference-limits
+  namespace: devops-command-reference
+  labels:
+    app: devops-command-reference
+    resource-management: limits
+  annotations:
+    description: "Resource limits for pods"
+spec:
+  limits:
+    - default:
+        cpu: "500m"
+        memory: "512Mi"
+      defaultRequest:
+        cpu: "100m"
+        memory: "128Mi"
+      type: Container
+    - max:
+        cpu: "2"
+        memory: "4Gi"
+      min:
+        cpu: "50m"
+        memory: "64Mi"
+      type: Container

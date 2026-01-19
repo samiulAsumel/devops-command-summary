@@ -1,0 +1,783 @@
+# DevOps Command Reference - Ansible Enterprise Automation
+# Enterprise-Grade Configuration Management and Deployment
+# Version: 1.0.0
+# Compliance: ISO 27001, SOC 2 Type II, GDPR, HIPAA
+
+---
+# 📋 Ansible Configuration
+ansible_user: ubuntu
+ansible_ssh_private_key_file: ~/.ssh/devops-command-reference-key
+ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+ansible_python_interpreter: /usr/bin/python3
+
+# 🏢 Enterprise Variables
+project_name: devops-command-reference
+environment: production
+domain_name: devops-command-reference.com
+aws_region: us-east-1
+
+# 🔐 Security Configuration
+ssh_port: 22
+firewall_enabled: true
+fail2ban_enabled: true
+security_updates: true
+
+# 📊 Monitoring Configuration
+prometheus_enabled: true
+grafana_enabled: true
+alertmanager_enabled: true
+node_exporter_enabled: true
+
+# 🗄️ Database Configuration
+database_engine: postgresql
+database_version: 15
+database_instance_class: db.t3.medium
+database_storage: 100
+database_backup_retention: 7
+
+# 📦 Application Configuration
+app_replicas: 3
+app_memory_limit: 512Mi
+app_cpu_limit: 500m
+app_image_tag: 2.0.0
+
+# 🔧 Kubernetes Configuration
+k8s_namespace: devops-command-reference
+k8s_cluster_name: "{{ project_name }}-eks"
+k8s_node_groups:
+  - name: general
+    instance_types: ["t3.large", "t3.xlarge"]
+    min_size: 2
+    max_size: 6
+    desired_size: 3
+  - name: system
+    instance_types: ["t3.medium"]
+    min_size: 1
+    max_size: 3
+    desired_size: 2
+
+---
+# 🎯 Playbook: Enterprise Infrastructure Setup
+- name: Enterprise Infrastructure Setup
+  hosts: all
+  become: yes
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: 📋 Update system packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: 📋 Update system packages
+      yum:
+        name: "*"
+        state: latest
+        update_cache: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: 🔐 Install security packages
+      package:
+        name:
+          - fail2ban
+          - ufw
+          - auditd
+          - rsyslog
+          - logrotate
+        state: present
+
+    - name: 🔧 Configure UFW firewall
+      ufw:
+        state: enabled
+        policy: deny
+        rule: allow
+        name: OpenSSH
+      when: firewall_enabled
+
+    - name: 🔧 Configure Fail2Ban
+      copy:
+        dest: /etc/fail2ban/jail.local
+        content: |
+          [DEFAULT]
+          bantime = 3600
+          findtime = 600
+          maxretry = 3
+
+          [sshd]
+          enabled = true
+          port = {{ ssh_port }}
+          logpath = /var/log/auth.log
+          maxretry = 3
+      notify: restart fail2ban
+      when: fail2ban_enabled
+
+    - name: 🔧 Configure auditd
+      copy:
+        dest: /etc/audit/rules.d/enterprise.rules
+        content: |
+          # Enterprise audit rules
+          -a always,exit -F arch=b64 -S execve -k process_creation
+          -a always,exit -F arch=b32 -S execve -k process_creation
+          -a always,exit -F arch=b64 -S open,openat,openat2 -k file_access
+          -a always,exit -F arch=b32 -S open,openat,openat2 -k file_access
+          -w /etc/passwd -p wa -k identity
+          -w /etc/shadow -p wa -k identity
+          -w /etc/sudoers -p wa -k sudo
+          -w /var/log/audit/ -p wa -k audit_logs
+      notify: restart auditd
+
+    - name: 📦 Install Docker
+      package:
+        name:
+          - docker.io
+          - docker-compose
+          - python3-docker
+        state: present
+
+    - name: 🔧 Configure Docker daemon
+      copy:
+        dest: /etc/docker/daemon.json
+        content: |
+          {
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "10m",
+              "max-file": "3"
+            },
+            "storage-driver": "overlay2",
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "live-restore": true,
+            "userland-proxy": false,
+            "experimental": false
+          }
+      notify: restart docker
+
+    - name: 👥 Add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: 📦 Install Kubernetes tools
+      package:
+        name:
+          - kubectl
+          - kubelet
+          - kubeadm
+        state: present
+      when: "'kubernetes' in group_names"
+
+    - name: 📦 Install monitoring tools
+      package:
+        name:
+          - prometheus-node-exporter
+          - grafana
+          - alertmanager
+        state: present
+      when: prometheus_enabled or grafana_enabled or alertmanager_enabled
+
+    - name: 🔧 Configure Prometheus
+      copy:
+        dest: /etc/prometheus/prometheus.yml
+        content: |
+          global:
+            scrape_interval: 15s
+            evaluation_interval: 15s
+
+          rule_files:
+            - "alert_rules.yml"
+
+          alerting:
+            alertmanagers:
+              - static_configs:
+                  - targets:
+                    - localhost:9093
+
+          scrape_configs:
+            - job_name: 'prometheus'
+              static_configs:
+                - targets: ['localhost:9090']
+
+            - job_name: 'node-exporter'
+              static_configs:
+                - targets: ['localhost:9100']
+
+            - job_name: 'kubernetes-pods'
+              kubernetes_sd_configs:
+                - role: pod
+              relabel_configs:
+                - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+                  action: keep
+                  regex: true
+      notify: restart prometheus
+      when: prometheus_enabled
+
+    - name: 🔧 Configure Grafana
+      copy:
+        dest: /etc/grafana/grafana.ini
+        content: |
+          [server]
+          http_port = 3000
+          domain = {{ domain_name }}
+
+          [security]
+          admin_user = admin
+          admin_password = {{ vault_grafana_password }}
+
+          [database]
+          type = postgresql
+          host = localhost:5432
+          name = grafana
+          user = grafana
+          password = {{ vault_grafana_db_password }}
+
+          [auth.anonymous]
+          enabled = false
+
+          [log]
+          mode = file
+          level = info
+          file = /var/log/grafana/grafana.log
+      notify: restart grafana
+      when: grafana_enabled
+
+    - name: 🔧 Configure Alertmanager
+      copy:
+        dest: /etc/alertmanager/alertmanager.yml
+        content: |
+          global:
+            smtp_smarthost: 'localhost:587'
+            smtp_from: 'alerts@{{ domain_name }}'
+
+          route:
+            group_by: ['alertname']
+            group_wait: 10s
+            group_interval: 10s
+            repeat_interval: 1h
+            receiver: 'web.hook'
+
+          receivers:
+            - name: 'web.hook'
+              email_configs:
+                - to: 'devops-alerts@{{ domain_name }}'
+                  subject: '[ALERT] {{ .GroupLabels.alertname }}'
+                  body: |
+                    {{ range .Alerts }}
+                    Alert: {{ .Annotations.summary }}
+                    Description: {{ .Annotations.description }}
+                    {{ end }}
+      notify: restart alertmanager
+      when: alertmanager_enabled
+
+    - name: 📊 Configure log rotation
+      copy:
+        dest: /etc/logrotate.d/enterprise-logs
+        content: |
+          /var/log/*.log {
+            daily
+            missingok
+            rotate 30
+            compress
+            delaycompress
+            notifempty
+            create 644 root root
+            postrotate
+              systemctl reload rsyslog
+            endscript
+          }
+
+          /var/log/audit/audit.log {
+            daily
+            missingok
+            rotate 90
+            compress
+            delaycompress
+            notifempty
+            create 600 root root
+            postrotate
+              systemctl reload auditd
+            endscript
+          }
+
+    - name: 🔧 Configure system limits
+      copy:
+        dest: /etc/security/limits.d/99-enterprise-limits.conf
+        content: |
+          # Enterprise system limits
+          * soft nofile 65536
+          * hard nofile 65536
+          * soft nproc 32768
+          * hard nproc 32768
+          root soft nofile 65536
+          root hard nofile 65536
+          root soft nproc 32768
+          root hard nproc 32768
+
+    - name: 🔧 Configure kernel parameters
+      copy:
+        dest: /etc/sysctl.d/99-enterprise-sysctl.conf
+        content: |
+          # Enterprise kernel parameters
+          net.ipv4.ip_forward = 1
+          net.ipv4.conf.all.forwarding = 1
+          net.ipv6.conf.all.forwarding = 1
+
+          # Network optimization
+          net.core.rmem_max = 16777216
+          net.core.wmem_max = 16777216
+          net.ipv4.tcp_rmem = 4096 87380 16777216
+          net.ipv4.tcp_wmem = 4096 65536 16777216
+
+          # Security hardening
+          net.ipv4.conf.all.send_redirects = 0
+          net.ipv4.conf.default.send_redirects = 0
+          net.ipv4.conf.all.accept_redirects = 0
+          net.ipv4.conf.default.accept_redirects = 0
+          net.ipv4.conf.all.accept_source_route = 0
+          net.ipv4.conf.default.accept_source_route = 0
+          net.ipv4.conf.all.log_martians = 1
+          net.ipv4.conf.default.log_martians = 1
+          net.ipv4.icmp_echo_ignore_broadcasts = 1
+          net.ipv4.icmp_ignore_bogus_error_responses = 1
+          net.ipv4.conf.all.rp_filter = 1
+          net.ipv4.conf.default.rp_filter = 1
+
+          # Memory management
+          vm.swappiness = 10
+          vm.dirty_ratio = 15
+          vm.dirty_background_ratio = 5
+      notify: reload sysctl
+
+  handlers:
+    - name: restart fail2ban
+      service:
+        name: fail2ban
+        state: restarted
+
+    - name: restart auditd
+      service:
+        name: auditd
+        state: restarted
+
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
+
+    - name: restart prometheus
+      service:
+        name: prometheus
+        state: restarted
+
+    - name: restart grafana
+      service:
+        name: grafana-server
+        state: restarted
+
+    - name: restart alertmanager
+      service:
+        name: alertmanager
+        state: restarted
+
+    - name: reload sysctl
+      command: sysctl -p /etc/sysctl.d/99-enterprise-sysctl.conf
+
+---
+# 🎯 Playbook: Kubernetes Cluster Setup
+- name: Kubernetes Cluster Setup
+  hosts: kubernetes
+  become: yes
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: 📦 Install Kubernetes packages
+      package:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: 🔧 Configure Kubernetes
+      copy:
+        dest: /etc/kubernetes/kubelet.env
+        content: |
+          KUBELET_KUBECONFIG_ARGS="--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
+          KUBELET_CONFIG_ARGS="--config=/var/lib/kubelet/config.yaml"
+          KUBELET_SYSTEM_PODS_ARGS="--pod-manifest-path=/etc/kubernetes/manifests"
+          KUBELET_NETWORK_ARGS="--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
+          KUBELET_DNS_ARGS="--cluster-dns=10.96.0.10 --cluster-domain=cluster.local"
+          KUBELET_AUTHZ_ARGS="--authorization-mode=Webhook --client-ca-file=/etc/kubernetes/pki/ca.crt"
+          KUBELET_CADVISOR_ARGS="--cadvisor-port=0"
+          KUBELET_CGROUP_ARGS="--cgroup-driver=systemd"
+          KUBELET_EXTRA_ARGS="--container-runtime=remote --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock"
+
+    - name: 🔧 Initialize Kubernetes cluster
+      command: |
+        kubeadm init \
+          --pod-network-cidr=10.244.0.0/16 \
+          --service-cidr=10.96.0.0/12 \
+          --kubernetes-version=v1.28.0 \
+          --ignore-preflight-errors=all
+      register: kubeadm_init
+      when: inventory_hostname == groups['kubernetes'][0]
+
+    - name: 📋 Save kubeadm join command
+      copy:
+        dest: /tmp/kubeadm-join
+        content: "{{ kubeadm_init.stdout_lines | select('match', 'kubeadm join') | join('\n') }}"
+      when: inventory_hostname == groups['kubernetes'][0]
+
+    - name: 🔧 Setup kubeconfig
+      command: |
+        mkdir -p $HOME/.kube
+        cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        chown $(id -u):$(id -g) $HOME/.kube/config
+      when: inventory_hostname == groups['kubernetes'][0]
+
+    - name: 📦 Install Calico CNI
+      command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+      when: inventory_hostname == groups['kubernetes'][0]
+
+    - name: 🔧 Join worker nodes
+      shell: "{{ lookup('file', '/tmp/kubeadm-join') }}"
+      when: inventory_hostname != groups['kubernetes'][0]
+
+---
+# 🎯 Playbook: Application Deployment
+- name: Application Deployment
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: 📦 Create Kubernetes namespace
+      kubernetes.core.k8s:
+        name: "{{ k8s_namespace }}"
+        api_version: v1
+        kind: Namespace
+        state: present
+        definition:
+          metadata:
+            labels:
+              name: "{{ k8s_namespace }}"
+              environment: "{{ environment }}"
+              compliance: enterprise
+              security-level: high
+
+    - name: 🔐 Create Kubernetes secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: app-secrets
+            namespace: "{{ k8s_namespace }}"
+          type: Opaque
+          data:
+            DATABASE_URL: "{{ vault_database_url | b64encode }}"
+            REDIS_URL: "{{ vault_redis_url | b64encode }}"
+            JWT_SECRET: "{{ vault_jwt_secret | b64encode }}"
+            API_KEY: "{{ vault_api_key | b64encode }}"
+
+    - name: 📊 Create ConfigMap
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: app-config
+            namespace: "{{ k8s_namespace }}"
+          data:
+            APP_ENV: "{{ environment }}"
+            LOG_LEVEL: "info"
+            METRICS_ENABLED: "true"
+            TRACING_ENABLED: "true"
+            RATE_LIMITING: "true"
+            SECURITY_HEADERS: "true"
+            CORS_ORIGINS: "https://{{ domain_name }}"
+            SESSION_TIMEOUT: "3600"
+            MAX_UPLOAD_SIZE: "10MB"
+
+    - name: 🚀 Deploy frontend application
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: frontend
+            namespace: "{{ k8s_namespace }}"
+            labels:
+              app: "{{ project_name }}"
+              tier: frontend
+              component: web-app
+          spec:
+            replicas: "{{ app_replicas }}"
+            selector:
+              matchLabels:
+                app: "{{ project_name }}"
+                tier: frontend
+                component: web-app
+            template:
+              metadata:
+                labels:
+                  app: "{{ project_name }}"
+                  tier: frontend
+                  component: web-app
+                annotations:
+                  prometheus.io/scrape: "true"
+                  prometheus.io/port: "8080"
+                  prometheus.io/path: "/metrics"
+              spec:
+                securityContext:
+                  runAsNonRoot: true
+                  runAsUser: 1001
+                  runAsGroup: 1001
+                  fsGroup: 1001
+                containers:
+                  - name: frontend
+                    image: "{{ project_name }}/frontend:{{ app_image_tag }}"
+                    imagePullPolicy: Always
+                    ports:
+                      - containerPort: 80
+                        name: http
+                      - containerPort: 8080
+                        name: metrics
+                    resources:
+                      requests:
+                        memory: "{{ app_memory_limit }}"
+                        cpu: "{{ app_cpu_limit }}"
+                      limits:
+                        memory: "{{ app_memory_limit }}"
+                        cpu: "{{ app_cpu_limit }}"
+                    livenessProbe:
+                      httpGet:
+                        path: /health
+                        port: 80
+                      initialDelaySeconds: 30
+                      periodSeconds: 10
+                    readinessProbe:
+                      httpGet:
+                        path: /ready
+                        port: 80
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
+                    securityContext:
+                      allowPrivilegeEscalation: false
+                      readOnlyRootFilesystem: true
+                      capabilities:
+                        drop:
+                          - ALL
+
+    - name: 🌐 Create frontend service
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: frontend-service
+            namespace: "{{ k8s_namespace }}"
+            labels:
+              app: "{{ project_name }}"
+              tier: frontend
+          spec:
+            type: LoadBalancer
+            ports:
+              - port: 443
+                targetPort: 80
+                protocol: TCP
+                name: https
+              - port: 80
+                targetPort: 80
+                protocol: TCP
+                name: http
+            selector:
+              app: "{{ project_name }}"
+              tier: frontend
+              component: web-app
+
+    - name: 📈 Create Horizontal Pod Autoscaler
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: autoscaling/v2
+          kind: HorizontalPodAutoscaler
+          metadata:
+            name: frontend-hpa
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            scaleTargetRef:
+              apiVersion: apps/v1
+              kind: Deployment
+              name: frontend
+            minReplicas: 3
+            maxReplicas: 10
+            metrics:
+              - type: Resource
+                resource:
+                  name: cpu
+                  target:
+                    type: Utilization
+                    averageUtilization: 70
+              - type: Resource
+                resource:
+                  name: memory
+                  target:
+                    type: Utilization
+                    averageUtilization: 80
+
+---
+# 🎯 Playbook: Monitoring Setup
+- name: Monitoring Setup
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: 📊 Install Prometheus Helm chart
+      kubernetes.core.helm:
+        name: prometheus
+        chart_ref: prometheus-community/kube-prometheus-stack
+        release_namespace: monitoring
+        create_namespace: true
+        values:
+          prometheus:
+            prometheusSpec:
+              storageSpec:
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: gp2
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 50Gi
+              resources:
+                requests:
+                  memory: 400Mi
+                  cpu: 100m
+                limits:
+                  memory: 2Gi
+                  cpu: 1000m
+
+          grafana:
+            persistence:
+              enabled: true
+              size: 10Gi
+            adminPassword: "{{ vault_grafana_password }}"
+            resources:
+              requests:
+                memory: 256Mi
+                cpu: 100m
+              limits:
+                memory: 512Mi
+                cpu: 200m
+
+            sidecar:
+              datasources:
+                enabled: true
+              dashboards:
+                enabled: true
+                searchNamespace: ALL
+
+            dashboardProviders:
+              dashboardproviders.yaml:
+                apiVersion: 1
+                providers:
+                  - name: "default"
+                    orgId: 1
+                    folder: ""
+                    type: file
+                    disableDeletion: false
+                    editable: true
+                    options:
+                      path: /var/lib/grafana/dashboards/default
+
+          alertmanager:
+            enabled: true
+            alertmanagerSpec:
+              storage:
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: gp2
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 10Gi
+
+    - name: 🔧 Configure Prometheus rules
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: monitoring.coreos.com/v1
+          kind: PrometheusRule
+          metadata:
+            name: "{{ project_name }}-alerts"
+            namespace: monitoring
+            labels:
+              app: "{{ project_name }}"
+          spec:
+            groups:
+              - name: "{{ project_name }}.rules"
+                rules:
+                  - alert: FrontendHighCPUUsage
+                    expr: rate(container_cpu_usage_seconds_total{pod=~"frontend-.*"}[5m]) > 0.8
+                    for: 5m
+                    labels:
+                      severity: warning
+                      service: frontend
+                    annotations:
+                      summary: "High CPU usage on frontend pods"
+                      description: "Frontend pod {{ $labels.pod }} CPU usage is above 80% for more than 5 minutes"
+
+                  - alert: BackendHighMemoryUsage
+                    expr: container_memory_usage_bytes{pod=~"backend-.*"} / container_spec_memory_limit_bytes > 0.9
+                    for: 5m
+                    labels:
+                      severity: critical
+                      service: backend
+                    annotations:
+                      summary: "High memory usage on backend pods"
+                      description: "Backend pod {{ $labels.pod }} memory usage is above 90% for more than 5 minutes"
+
+                  - alert: ServiceDown
+                    expr: up{job=~"frontend|backend"} == 0
+                    for: 1m
+                    labels:
+                      severity: critical
+                    annotations:
+                      summary: "Service is down"
+                      description: "Service {{ $labels.job }} has been down for more than 1 minute"
+
+---
+# 📋 Inventory File
+# [webservers]
+# web1.example.com
+# web2.example.com
+# web3.example.com
+
+# [database]
+# db1.example.com
+
+# [kubernetes]
+# k8s-master.example.com
+# k8s-worker1.example.com
+# k8s-worker2.example.com
+
+# [monitoring]
+# prometheus.example.com
+# grafana.example.com
+# alertmanager.example.com
+
+# [all:vars]
+# ansible_user=ubuntu
+# ansible_ssh_private_key_file=~/.ssh/devops-command-reference-key

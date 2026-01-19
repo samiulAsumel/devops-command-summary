@@ -7,6 +7,18 @@
       <link rel="icon" type="image/png" href="assets/favicon.png" />
       <link rel="stylesheet" href="assets/styles.css" />
       <script src="assets/scripts.js" defer></script>
+    <style>
+      @keyframes pulse-danger {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.2);
+        }
+      }
+    </style>
     </head>
     <body class="index-page">
       <!-- CONTENT SECTION -->
@@ -17,9 +29,7 @@
             <a href="index.html">🏠 HOME</a>
             <a href="system-admin.html">💻 Part 1: System Administration</a>
             <a href="devops-tools.html">🛠️ Part 2: DevOps Tools</a>
-            <a href="monitoring-security.html" class="active-part"
-            >🔒 Part 3: Monitoring & Security</a
-            >
+            <a href="monitoring-security.html" class="active-part">🔒 Part 3: Monitoring & Security</a>
           </div>
 
           <div class="hero-section">
@@ -76,19 +86,6 @@
           </div>
         </div>
 
-        <style>
-          @keyframes pulse-danger {
-            0%, 100% {
-              transform: scale(1);
-              box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
-            }
-            50% {
-              transform: scale(1.05);
-              box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.2);
-            }
-          }
-        </style>
-
           <h1>📚 Linux/DevOps Command Reference Guide</h1>
 
           <div class="warning">
@@ -113,6 +110,10 @@
 
           <div class="command-block">
             <h4>📊 Understanding Modern Monitoring Stack</h4>
+            <div class="command-category">
+              <span class="category-tag category-common">[COMMON]</span>
+              <span class="category-description">Frequently used in daily operations</span>
+            </div>
             <pre><code>
             # The Monitoring Ecosystem:
             #
@@ -160,6 +161,10 @@
 
         <div class="command-block">
           <h4>⚙️ Prometheus service (systemd) - Enterprise Service Management</h4>
+          <div class="command-category">
+            <span class="category-tag category-production">[PRODUCTION]</span>
+            <span class="category-description">Used in live/production environments</span>
+          </div>
           <pre><code>
           # Prometheus Service Management (Enterprise Standards)
           # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -195,6 +200,10 @@
 
       <div class="command-block">
         <h4>⚙️ Prometheus configuration - Enterprise Config Management</h4>
+        <div class="command-category">
+          <span class="category-tag category-production">[PRODUCTION]</span>
+          <span class="category-description">Used in live/production environments</span>
+        </div>
         <pre><code>
         # Prometheus Configuration (Enterprise Standards)
         # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -228,6 +237,10 @@
     </div>
     <div class="command-block">
       <h4>📝 Basic prometheus.yml configuration - Enterprise Setup</h4>
+      <div class="command-category">
+        <span class="category-tag category-production">[PRODUCTION]</span>
+        <span class="category-description">Used in live/production environments</span>
+      </div>
       <pre><code>
       # Prometheus Configuration (Enterprise Standards)
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -360,6 +373,10 @@
 
   <div class="command-block">
     <h4>🔄 Reload configuration - Enterprise Configuration Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in live/production environments</span>
+    </div>
     <pre><code>
     # Prometheus Configuration Reload (Enterprise Standards)
     # Supported OS: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -402,6 +419,10 @@
 
 <div class="command-block">
   <h4>⚡ Prometheus CLI - Enterprise Command Line Tools</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Prometheus CLI Tools (Enterprise Standards)
   # Supported OS: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -453,6 +474,10 @@
 
 <div class="command-block">
   <h4>📈 PromQL queries (via API or UI)</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # up - Check if targets are up
   # rate(http_requests_total[5m]) - Request rate
@@ -465,6 +490,10 @@
 
 <div class="command-block">
   <h4>⚙️ Alertmanager service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status alertmanager
   systemctl start alertmanager
@@ -475,12 +504,20 @@
 
 <div class="command-block">
   <h4>⚙️ Configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   /etc/alertmanager/alertmanager.yml  # Main configuration file
 </code></pre>
 </div>
 <div class="command-block">
   <h4>🛣️ Alertmanager routing configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   # /etc/alertmanager/alertmanager.yml
   route:
@@ -516,6 +553,10 @@
 
 <div class="command-block">
   <h4>✅ Validate configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   amtool check-config /etc/alertmanager/alertmanager.yml
 </code></pre>
@@ -523,12 +564,20 @@
 
 <div class="command-block">
   <h4>🔄 Reload configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   kill -HUP $(pidof alertmanager)
 </code></pre>
 </div>
 <div class="command-block">
   <h4>⚡ Alertmanager CLI (amtool)</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   amtool alert query                                        # Query active alerts
   amtool alert add alertname instance=host --start=now      # Add test alert
@@ -544,6 +593,10 @@
 
 <div class="command-block">
   <h4>⚙️ Node Exporter service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status node_exporter
   systemctl start node_exporter
@@ -553,6 +606,10 @@
 
 <div class="command-block">
   <h4>📊 Default metrics endpoint</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   curl http://localhost:9100/metrics  # View metrics
 </code></pre>
@@ -562,16 +619,26 @@
 
 <div class="command-block">
   <h4>⚙️ Grafana service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status grafana-server
   systemctl start grafana-server
   systemctl stop grafana-server
   systemctl restart grafana-server
+  systemctl enable grafana-server
+  systemctl disable grafana-server
 </code></pre>
 </div>
 
 <div class="command-block">
   <h4>⚡ Grafana CLI</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   grafana-cli plugins list-remote                     # List available plugins
   grafana-cli plugins install plugin-name             # Install plugin
@@ -582,6 +649,10 @@
 </div>
 <div class="command-block">
   <h4>📥 Import dashboard from Grafana.com</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Grafana Dashboard Import
   # Source: https://grafana.com/grafana/dashboards/
@@ -627,6 +698,10 @@
 
 <div class="command-block">
   <h4>⚙️ Grafana configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   /etc/grafana/grafana.ini  # Main config file
 </code></pre>
@@ -636,6 +711,10 @@
 
 <div class="command-block">
   <h4>⚙️ Elasticsearch service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status elasticsearch
   systemctl start elasticsearch
@@ -646,6 +725,10 @@
 
 <div class="command-block">
   <h4>💚 Cluster health</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   curl -X GET "localhost:9200/_cluster/health?pretty"
   curl -X GET "localhost:9200/_cat/health?v"
@@ -654,6 +737,10 @@
 
 <div class="command-block">
   <h4>🖥️ Nodes</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   curl -X GET "localhost:9200/_cat/nodes?v"
 </code></pre>
@@ -661,6 +748,10 @@
 
 <div class="command-block">
   <h4>📚 Indices</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   curl -X GET "localhost:9200/_cat/indices?v"
   curl -X PUT "localhost:9200/myindex"     # Create index
@@ -670,6 +761,10 @@
 
 <div class="command-block">
   <h4>📄 Documents</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   curl -X POST "localhost:9200/myindex/_doc/1" -H 'Content-Type: application/json' -d '{"field":"value"}'   # Index document
 
@@ -682,6 +777,10 @@
 
 <div class="command-block">
   <h4>🔍 Search</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   curl -X GET "localhost:9200/myindex/_search?pretty" -H 'Content-Type: application/json' -d '{"query":{"match_all":{}}}'
 </code></pre>
@@ -689,12 +788,20 @@
 
 <div class="command-block">
   <h4>📦 Bulk operations</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary "@bulk.json"
 </code></pre>
 </div>
 <div class="command-block">
   <h4>📸 Snapshots (Backup/Restore)</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   curl -X PUT "localhost:9200/_snapshot/backup_repo" -H 'Content-Type: application/json' -d '{"type":"fs","settings":{"location":"/mnt/backups"}}'
   # Create repository
@@ -717,6 +824,10 @@
 
 <div class="command-block">
   <h4>⚙️ Logstash service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status logstash
   systemctl start logstash
@@ -727,6 +838,10 @@
 
 <div class="command-block">
   <h4>🧪 Test configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf --config.test_and_exit
 </code></pre>
@@ -734,6 +849,10 @@
 
 <div class="command-block">
   <h4>🏗️ Understanding ELK/EFK Stack Architecture</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # ELK Stack Components:
   #
@@ -799,6 +918,10 @@
 
 <div class="command-block">
   <h4>🔄 Reload configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl reload logstash
 </code></pre>
@@ -806,6 +929,10 @@
 
 <div class="command-block">
   <h4>🏃 Run Logstash manually</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/logstash.conf
 </code></pre>
@@ -815,6 +942,10 @@
 
 <div class="command-block">
   <h4>⚙️ Kibana service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status kibana
   systemctl start kibana
@@ -825,12 +956,20 @@
 
 <div class="command-block">
   <h4>⚙️ Kibana configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   /etc/kibana/kibana.yml  # Main config file
 </code></pre>
 </div>
 <div class="command-block">
   <h4>🎯 Create Kibana index pattern via API</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # List existing indices in Elasticsearch
   curl -X GET "localhost:9200/_cat/indices?v"
@@ -858,6 +997,10 @@
 
 <div class="command-block">
   <h4>⚙️ Filebeat service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status filebeat
   systemctl start filebeat
@@ -868,6 +1011,10 @@
 
 <div class="command-block">
   <h4>🧪 Test configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   filebeat test config -c /etc/filebeat/filebeat.yml
   filebeat test output -c /etc/filebeat/filebeat.yml
@@ -876,6 +1023,10 @@
 
 <div class="command-block">
   <h4>⚙️ Setup</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   filebeat setup -e                # Setup index template and dashboards
   filebeat modules list            # List available modules
@@ -886,6 +1037,10 @@
 
 <div class="command-block">
   <h4>⚙️ Filebeat configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   /etc/filebeat/filebeat.yml  # Main config file
 </code></pre>
@@ -894,6 +1049,10 @@
 
 <div class="command-block">
   <h4>⚙️ Metricbeat service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   systemctl status metricbeat
   systemctl start metricbeat
@@ -904,6 +1063,10 @@
 
 <div class="command-block">
   <h4>🧪 Test configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   metricbeat test config -c /etc/metricbeat/metricbeat.yml
   metricbeat test output -c /etc/metricbeat/metricbeat.yml
@@ -913,6 +1076,10 @@
 
 <div class="command-block">
   <h4>🔧 Module management</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   metricbeat modules list            # List available modules
   metricbeat modules enable system   # Enable module
@@ -923,6 +1090,10 @@
 
 <div class="command-block">
   <h4>⚙️ Metricbeat configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   /etc/metricbeat/metricbeat.yml  # Main config file
   /etc/metricbeat/modules.d/      # Module configurations
@@ -940,6 +1111,10 @@
 <h3>📝 Centralized Logging</h3>
 <div class="command-block">
   <h4>📤 Forward System Logs</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   rsyslogd -N1                                  # Check rsyslog config
   systemctl restart rsyslog                     # Restart logging service
@@ -951,6 +1126,10 @@
 <h3>🚨 Alerting Rules</h3>
 <div class="command-block">
   <h4>🚨 Create Alerts in Prometheus</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   groups:
   - name: node_alerts
@@ -976,6 +1155,10 @@
 <h3>📊 Metrics, Logs, Traces</h3>
 <div class="command-block">
   <h4>🔧 OpenTelemetry Collector</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   otelcol --config otel-config.yaml  # Start collector with config
   curl http://localhost:4317         # Verify gRPC metrics endpoint
@@ -986,6 +1169,10 @@
 <h3>🔧 Instrument Application</h3>
 <div class="command-block">
   <h4>🐍 Python Example</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   from opentelemetry import metrics, trace
   from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -996,6 +1183,10 @@
 
 <div class="command-block">
   <h4>🔧 Jaeger all-in-one</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   jaeger-all-in-one --collector.zipkin.host-port=:9411
   # Start Jaeger with Zipkin compatibility
@@ -1006,6 +1197,10 @@
 
 <div class="command-block">
   <h4>🔍 Query traces</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   curl "http://localhost:16686/api/services"                           # List services
   curl "http://localhost:16686/api/traces?service=myservice&limit=20"  # Query traces for service
@@ -1028,6 +1223,10 @@
 
 <div class="command-block">
   <h4>⚙️ Audit service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   systemctl status auditd
   systemctl start auditd
@@ -1037,6 +1236,10 @@
 
 <div class="command-block">
   <h4>📋 Audit rules management</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   auditctl -l                                  # List active rules
   auditctl -w /etc/passwd -p wa -k passwd_chg  # Watch passwd changes
@@ -1046,6 +1249,10 @@
 
 <div class="command-block">
   <h4>🔍 Search audit logs</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   ausearch -k passwd_chg
   ausearch -m USER_LOGIN -ts today
@@ -1056,6 +1263,10 @@
 
 <div class="command-block">
   <h4>📦 Install OpenSCAP</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   dnf install openscap-scanner scap-security-guide  # RHEL/CentOS
   apt install libopenscap8 ssg-base ssg-debderived  # Debian/Ubuntu
@@ -1064,6 +1275,10 @@
 
 <div class="command-block">
   <h4>🔍 Scan system compliance</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   # PCI-DSS scan
   oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
@@ -1078,6 +1293,10 @@
 
 <div class="command-block">
   <h4>📋 List available profiles</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   oscap info /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml  # Show available profiles
 </code></pre>
@@ -1092,6 +1311,10 @@
 
 <div class="command-block">
   <h4>🔧 Remediate findings</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   # Auto-remediate (CAUTION)
   oscap xccdf eval --remediate --profile pci-dss /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
@@ -1102,6 +1325,10 @@
 
 <div class="command-block">
   <h4>⚙️ fail2ban service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   systemctl status fail2ban
   systemctl start fail2ban
@@ -1112,6 +1339,10 @@
 
 <div class="command-block">
   <h4>💻 fail2ban-client</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   fail2ban-client status                         # Show status
   fail2ban-client status sshd                    # Show jail status
@@ -1124,6 +1355,10 @@
 
 <div class="command-block">
   <h4>📁 Configuration files</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   /etc/fail2ban/jail.conf   # Main config (don't edit)
   /etc/fail2ban/jail.local  # Local overrides
@@ -1131,6 +1366,10 @@
 </div>
 <div class="command-block">
   <h4>🛠️ Custom fail2ban filter for Nginx</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   # /etc/fail2ban/filter.d/nginx-404.conf
   [Definition]
@@ -1152,6 +1391,10 @@
 </div>
 <div class="command-block">
   <h4>📋 Persistent audit rules</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   /etc/audit/rules.d/audit.rules      # Persistent rules file
   # Add rules to this file, then reload:
@@ -1163,6 +1406,10 @@
 
 <div class="command-block">
   <h4>📋 Common audit rules</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # File integrity monitoring
   auditctl -w /etc/shadow -p wa -k shadow_changes
@@ -1178,6 +1425,10 @@
 
 <div class="command-block">
   <h4>📚 Understanding SELinux (Security-Enhanced Linux)</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # What is SELinux?
   # - Mandatory Access Control (MAC) system
@@ -1256,6 +1507,10 @@
 
 <div class="command-block">
   <h4>⚙️ SELinux Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   getenforce                                                # Check SELinux status
   sestatus                                                  # Detailed SELinux status
@@ -1275,6 +1530,10 @@
 
 <div class="command-block">
   <h4>🏷️ Contexts</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   ls -Z file                                             # Show file context
   ps -Z                                                  # Show process contexts
@@ -1285,6 +1544,10 @@
 
 <div class="command-block">
   <h4>✅ Booleans</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   getsebool -a                               # List all booleans
   getsebool httpd_can_network_connect        # Check boolean
@@ -1294,6 +1557,10 @@
 
 <div class="command-block">
   <h4>🔧 Troubleshooting</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   ausearch -m avc -ts recent            # Recent AVC denials
   audit2why < /var/log/audit/audit.log  # Why was it denied
@@ -1306,6 +1573,10 @@
 <h3>🔐 OpenSSL Commands</h3>
 <div class="command-block">
   <h4>🔐 Understanding SSL/TLS Certificates</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Certificate Components:
   #
@@ -1385,6 +1656,10 @@
 
 <div class="command-block">
   <h4>🔑 Generate private key</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   openssl genrsa -out private.key 2048  # RSA 2048-bit
   openssl genrsa -out private.key 4096  # RSA 4096-bit
@@ -1393,6 +1668,10 @@
 
 <div class="command-block">
   <h4>🔐 Generate public key from private</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   openssl rsa -in private.key -pubout -out public.key
 </code></pre>
@@ -1400,6 +1679,10 @@
 
 <div class="command-block">
   <h4>📋 Generate CSR (Certificate Signing Request)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   openssl req -new -key private.key -out cert.csr
 </code></pre>
@@ -1407,6 +1690,10 @@
 
 <div class="command-block">
   <h4>📜 Generate self-signed certificate</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out cert.crt
 </code></pre>
@@ -1414,6 +1701,10 @@
 
 <div class="command-block">
   <h4>👁️ View certificate</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   openssl x509 -in cert.crt -text -noout
   openssl x509 -in cert.crt -noout -dates    # Show validity dates
@@ -1424,6 +1715,10 @@
 
 <div class="command-block">
   <h4>✅ Verify certificate</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   openssl verify cert.crt
 </code></pre>
@@ -1431,6 +1726,10 @@
 
 <div class="command-block">
   <h4>🔗 Test SSL/TLS connection</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   openssl s_client -connect google.com:443
   openssl s_client -connect google.com:443 -showcerts
@@ -1439,6 +1738,10 @@
 
 <div class="command-block">
   <h4>🔄 Convert certificate formats</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   openssl x509 -in cert.crt -out cert.pem               # CRT to PEM
   openssl x509 -in cert.pem -outform DER -out cert.der  # PEM to DER
@@ -1447,6 +1750,10 @@
 
 <div class="command-block">
   <h4>🔐 Encrypt/Decrypt files</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   openssl enc -aes-256-cbc -salt -in file.txt -out file.txt.enc
   openssl enc -aes-256-cbc -d -in file.txt.enc -out file.txt
@@ -1455,6 +1762,10 @@
 
 <div class="command-block">
   <h4>🎲 Generate random data</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   openssl rand -base64 32  # 32 bytes base64
   openssl rand -hex 16     # 16 bytes hex
@@ -1465,6 +1776,10 @@
 
 <div class="command-block">
   <h4>🔑 Generate key pair</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --gen-key            # Interactive
   gpg --full-generate-key  # Full options
@@ -1473,6 +1788,10 @@
 
 <div class="command-block">
   <h4>🔑 List keys</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   gpg --list-keys         # Public keys
   gpg --list-secret-keys  # Private keys
@@ -1482,6 +1801,10 @@
 
 <div class="command-block">
   <h4>📤 Export keys</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --export -a "User Name" > public.key               # Export public key (ASCII)
   gpg --export-secret-keys -a "User Name" > private.key  # Export private key
@@ -1490,6 +1813,10 @@
 
 <div class="command-block">
   <h4>📥 Import keys</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --import public.key   # Import public key
   gpg --import private.key  # Import private key
@@ -1498,6 +1825,10 @@
 
 <div class="command-block">
   <h4>🔐 Encrypt/Decrypt files</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --encrypt --recipient "User Name" file.txt  # Encrypt
   gpg --output file.txt --decrypt file.txt.gpg    # Decrypt
@@ -1508,6 +1839,10 @@
 
 <div class="command-block">
   <h4>✍️ Sign files</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --sign file.txt         # Sign file
   gpg --clearsign file.txt    # Sign with readable text
@@ -1518,6 +1853,10 @@
 
 <div class="command-block">
   <h4>🔑 Key management</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --edit-key "User Name"            # Edit key (interactive)
   gpg --delete-keys "User Name"         # Delete public key
@@ -1527,6 +1866,10 @@
 
 <div class="command-block">
   <h4>🤝 Trust keys</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --edit-key "User Name"
   # In GPG prompt: trust, then select level (1-5)
@@ -1535,6 +1878,10 @@
 
 <div class="command-block">
   <h4>🌐 Send/receive keys (keyserver)</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   gpg --keyserver keyserver.ubuntu.com --send-keys KEY_ID
   gpg --keyserver keyserver.ubuntu.com --recv-keys KEY_ID
@@ -1546,6 +1893,10 @@
 
 <div class="command-block">
   <h4>📦 Install Lynis</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   dnf install lynis  # RHEL/CentOS
   apt install lynis  # Debian/Ubuntu
@@ -1554,6 +1905,10 @@
 
 <div class="command-block">
   <h4>🔍 Run audit</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   lynis audit system            # Full system audit
   lynis audit system --quick    # Quick scan
@@ -1563,6 +1918,10 @@
 
 <div class="command-block">
   <h4>⚙️ Show options</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   lynis show options   # Display options
   lynis show version   # Show version
@@ -1573,6 +1932,10 @@
 
 <div class="command-block">
   <h4>🔄 Update Lynis</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   lynis update info  # Check for updates
 </code></pre>
@@ -1580,6 +1943,10 @@
 
 <div class="command-block">
   <h4>📊 Reports</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   /var/log/lynis.log         # Audit log
   /var/log/lynis-report.dat  # Report data
@@ -1589,6 +1956,10 @@
 
 <div class="command-block">
   <h4>🗄️ Initialize AIDE database</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   aide --init                                               # Create initial database
   mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz  # Move database to production
@@ -1597,6 +1968,10 @@
 
 <div class="command-block">
   <h4>🔍 Check for changes</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   aide --check                                              # Check for file changes
   aide --check --config=/etc/aide.conf                      # Specify config file
@@ -1607,6 +1982,10 @@
 
 <div class="command-block">
   <h4>⚙️ AIDE configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   /etc/aide.conf  # Main configuration file
   # Example rules:
@@ -1620,6 +1999,10 @@
 
 <div class="command-block">
   <h4>⚙️ ClamAV service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   systemctl status clamd@scan  # Check service
   systemctl start clamd@scan   # Start service
@@ -1629,6 +2012,10 @@
 
 <div class="command-block">
   <h4>🔄 Update virus definitions</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   freshclam    # Update virus database
 </code></pre>
@@ -1636,6 +2023,10 @@
 
 <div class="command-block">
   <h4>🦠 Scan files</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   clamscan file.txt                     # Scan single file
   clamscan -r /home                     # Recursive scan
@@ -1648,6 +2039,10 @@
 
 <div class="command-block">
   <h4>🏃 Background scanning</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   clamd            # Start daemon
   clamdscan /path  # Scan using daemon (faster)
@@ -1658,6 +2053,10 @@
 
 <div class="command-block">
   <h4>📊 AppArmor status</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   apparmor_status  # Show AppArmor status
   aa-status        # Alternative command
@@ -1666,6 +2065,10 @@
 
 <div class="command-block">
   <h4>📁 Profile management</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   aa-enforce /etc/apparmor.d/usr.bin.program   # Set to enforce mode
   aa-complain /etc/apparmor.d/usr.bin.program  # Set to complain mode
@@ -1675,6 +2078,10 @@
 
 <div class="command-block">
   <h4>🔄 Load/unload profiles</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   apparmor_parser -r /etc/apparmor.d/usr.bin.program  # Reload profile
   apparmor_parser -R /etc/apparmor.d/usr.bin.program  # Remove profile
@@ -1683,6 +2090,10 @@
 
 <div class="command-block">
   <h4>🔧 Generate profiles</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   aa-genprof /usr/bin/program  # Generate profile (interactive)
   aa-logprof                   # Update profiles from logs
@@ -1692,6 +2103,10 @@
 
 <div class="command-block">
   <h4>⚙️ Falco service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   systemctl status falco
   systemctl start falco
@@ -1701,6 +2116,10 @@
 
 <div class="command-block">
   <h4>🧪 Test Falco rules</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   falco --validate /etc/falco/falco_rules.yaml
   falco --list
@@ -1709,6 +2128,10 @@
 
 <div class="command-block">
   <h4>🧪 Trigger test event</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   cat /etc/shadow
 </code></pre>
@@ -1725,6 +2148,10 @@
 <h3>💾 iostat (I/O Statistics)</h3>
 <div class="command-block">
   <h4>📊 Understanding Performance Monitoring Tools</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Linux Performance Observability Tools:
   #
@@ -1826,6 +2253,10 @@
 
 <div class="command-block">
   <h4>📊 Basic I/O stats - Enterprise Disk Performance Analysis</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Enterprise I/O Statistics Analysis (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1906,6 +2337,10 @@
 
 <div class="command-block">
   <h4>💾 Virtual memory stats - Enterprise Memory Analysis</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Enterprise Virtual Memory Analysis (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1980,6 +2415,10 @@
 
 <div class="command-block">
   <h4>🔍 strace (system calls) - Enterprise System Call Tracing</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Enterprise System Call Tracing (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2059,6 +2498,10 @@
 
 <div class="command-block">
   <h4>📚 ltrace (library calls) - Enterprise Library Call Tracing</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Enterprise Library Call Tracing (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2143,6 +2586,10 @@
 
 <div class="command-block">
   <h4>⚡ CPU usage</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar          # CPU usage (default)
   sar -u 1 10  # CPU every 1 sec, 10 times
@@ -2153,6 +2600,10 @@
 
 <div class="command-block">
   <h4>💾 Memory usage</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar -r       # Memory utilization
   sar -r 1 10  # Memory every 1 sec
@@ -2163,6 +2614,10 @@
 
 <div class="command-block">
   <h4>💾 I/O and transfer rate</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar -b       # I/O transfer rate
   sar -d       # Block device statistics
@@ -2172,6 +2627,10 @@
 
 <div class="command-block">
   <h4>🌐 Network statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar -n DEV   # Network interface statistics
   sar -n EDEV  # Network errors
@@ -2182,6 +2641,10 @@
 
 <div class="command-block">
   <h4>⚖️ Load average</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar -q       # Queue length and load average
 </code></pre>
@@ -2189,6 +2652,10 @@
 
 <div class="command-block">
   <h4>📅 Historical data</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar -f /var/log/sa/sa01      # Read from specific file
   sar -s 10:00:00 -e 11:00:00  # Time range
@@ -2197,6 +2664,10 @@
 
 <div class="command-block">
   <h4>📊 Generate report</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   sar -A       # All statistics
   sadf -d      # Database format
@@ -2207,6 +2678,10 @@
 
 <div class="command-block">
   <h4>⚡ CPU statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   mpstat              # All CPUs summary
   mpstat -P ALL       # Per-CPU statistics
@@ -2219,6 +2694,10 @@
 
 <div class="command-block">
   <h4>🔄 Process statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   pidstat           # Default statistics
   pidstat 1 10      # Every 1 second, 10 times
@@ -2235,6 +2714,10 @@
 
 <div class="command-block">
   <h4>💾 I/O monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   iotop          # Interactive I/O monitor
   iotop -o       # Only processes doing I/O
@@ -2248,6 +2731,10 @@
 
 <div class="command-block">
   <h4>🌐 Network bandwidth per process</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   nethogs       # Monitor all interfaces
   nethogs eth0  # Specific interface
@@ -2259,6 +2746,10 @@
 
 <div class="command-block">
   <h4>📡 Network interface monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   iftop          # Default interface
   iftop -i eth0  # Specific interface
@@ -2272,6 +2763,10 @@
 
 <div class="command-block">
   <h4>📊 Combined statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   dstat            # Default output
   dstat -c         # CPU stats only
@@ -2289,6 +2784,10 @@
 
 <div class="command-block">
   <h4>📈 Interactive performance monitor</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   nmon         # Start nmon
   # Press keys for different views:
@@ -2304,6 +2803,10 @@
 
 <div class="command-block">
   <h4>🔧 CPU profiling</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   perf top                        # Real-time CPU profiler
   perf top -p PID                 # Profile specific process
@@ -2316,6 +2819,10 @@
 
 <div class="command-block">
   <h4>📊 Event statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   perf stat command                                   # Run command and show stats
   perf stat -p PID sleep 10                           # Stats for running process
@@ -2328,6 +2835,10 @@
 
 <div class="command-block">
   <h4>⚙️ sysctl (Kernel parameters)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   sysctl -a                            # Show all parameters
   sysctl kernel.hostname               # Show specific parameter
@@ -2339,6 +2850,10 @@
 
 <div class="command-block">
   <h4>⚙️ Common tuning parameters</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # /etc/sysctl.conf or /etc/sysctl.d/*.conf
   # net.ipv4.ip_forward = 1
@@ -2350,6 +2865,10 @@
 
 <div class="command-block">
   <h4>📄 Transparent Huge Pages</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   cat /sys/kernel/mm/transparent_hugepage/enabled           # Check status
   echo never > /sys/kernel/mm/transparent_hugepage/enabled  # Disable
@@ -2358,6 +2877,10 @@
 
 <div class="command-block">
   <h4>⚡ CPU governor</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor                 # Check
   echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  # Set
@@ -2366,6 +2889,10 @@
 
 <div class="command-block">
   <h4>💾 I/O scheduler</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   cat /sys/block/sda/queue/scheduler              # Check scheduler
   echo deadline > /sys/block/sda/queue/scheduler  # Set scheduler
@@ -2383,6 +2910,10 @@
 <h3>💿 Backup & Recovery (Security Perspective)</h3>
 <div class="command-block">
   <h4>📚 Understanding Backup Strategies</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # The 3-2-1 Backup Rule:
   # 3 - Keep 3 copies of data
@@ -2505,6 +3036,10 @@
 
 <div class="command-block">
   <h4>📦 Basic Backup Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   tar -cvf backup.tar /path/to/data                   # Create backup archive
   tar -xvf backup.tar                                 # Extract backup archive
@@ -2517,6 +3052,10 @@
 
 <div class="command-block">
   <h4>🔐 Encrypted Backups</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   gpg -c backup.tar                                                              # Encrypt backup with passphrase
   gpg --output backup.tar.gpg --encrypt --recipient user@example.com backup.tar  # Asymmetric encryption
@@ -2527,6 +3066,10 @@
 
 <div class="command-block">
   <h4>✅ Backup Verification</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   tar -tvf backup.tar                         # List archive contents
   sha256sum backup.tar                        # Generate checksum
@@ -2538,6 +3081,10 @@
 
 <div class="command-block">
   <h4>🌐 Offsite / Remote Backups</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   scp backup.tar user@remote:/path/to/backup      # Copy backup to remote server
   rsync -av /local/dir/ user@remote:/backup/      # Sync to remote host
@@ -2549,6 +3096,10 @@
 </div>
 <div class="command-block">
   <h4>📦 Rclone Configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   rclone config                     # Configure cloud remotes
   rclone listremotes                # Show configured remotes
@@ -2562,6 +3113,10 @@
 
 <div class="command-block">
   <h4>📊 Prometheus Monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Node Exporter
   ./node_exporter                          # Start node exporter on target host
@@ -2574,6 +3129,10 @@
 
 <div class="command-block">
   <h4>📊 Grafana Visualization</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   grafana-server                                  # Start Grafana
   # Access Grafana web UI: http://server_ip:3000
@@ -2584,6 +3143,10 @@
 
 <div class="command-block">
   <h4>📚 ELK Stack (Log Monitoring)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Elasticsearch
   systemctl start elasticsearch
@@ -2599,6 +3162,10 @@
 
 <div class="command-block">
   <h4>🛡️ Security Hardening</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Fail2Ban
   systemctl start fail2ban
@@ -2625,6 +3192,10 @@
 
 <div class="command-block">
   <h4>⚡ Performance Monitoring & Tuning</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   iostat -xz 5                                 # CPU, disk I/O statistics
   # -x : extended stats
@@ -2643,6 +3214,10 @@
 </div>
 <div class="command-block">
   <h4>⚙️ Process & File Limits</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   ulimit -a        # View current limits
   ulimit -n 65535  # Increase open files (session)
@@ -2651,6 +3226,10 @@
 
 <div class="command-block">
   <h4>📝 Persistent limits</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   /etc/security/limits.conf
   * soft nofile 65535
@@ -2659,6 +3238,10 @@
 </div>
 <div class="command-block">
   <h4>🏥 System Health One-Liners</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # [INFO]
   uptime               # Shows system running time, load average (1, 5, 15 min) – quick health check
@@ -2685,6 +3268,10 @@
 
 <div class="command-block">
   <h4>📚 Understanding High Availability Concepts</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # High Availability (HA):
   # - System continues operating despite component failures
@@ -2816,6 +3403,10 @@
 <h3>⚖️ HAProxy Load Balancer</h3>
 <div class="command-block">
   <h4>⚙️ Basic Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   systemctl start haproxy
   systemctl enable haproxy
@@ -2827,6 +3418,10 @@
 <h3>🌐 Nginx Load Balancing</h3>
 <div class="command-block">
   <h4>⚙️ Configuration Example</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   upstream backend {
   server web1.example.com;
@@ -2846,6 +3441,10 @@
 <h3>🏗️ Pacemaker / Corosync Clusters</h3>
 <div class="command-block">
   <h4>🔧 Cluster Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
   <pre><code>
   pcs cluster setup --name mycluster node1 node2
   pcs cluster start --all
@@ -2858,6 +3457,10 @@
 
 <div class="command-block">
   <h4>⚙️ Keepalived service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   systemctl start keepalived
   systemctl enable keepalived
@@ -2868,6 +3471,10 @@
 
 <div class="command-block">
   <h4>⚙️ Configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   /etc/keepalived/keepalived.conf                   # Main configuration file
   # Test configuration
@@ -2877,6 +3484,10 @@
 
 <div class="command-block">
   <h4>👁️ Monitor VRRP status</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   ip addr show                 # Check if VIP is assigned
   journalctl -u keepalived -f  # Follow keepalived logs
@@ -2894,6 +3505,10 @@
 
 <div class="command-block">
   <h4>🏭 Production Cluster Setup</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Multi-master cluster setup
   kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint="load-balancer-ip:6443"
@@ -2913,6 +3528,10 @@
 
 <div class="command-block">
   <h4>🌐 Advanced Networking</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Network policies enforcement
   kubectl apply -f network-policy.yaml
@@ -2934,6 +3553,10 @@
 
 <div class="command-block">
   <h4>💾 Storage Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Persistent volume claims
   kubectl get pvc
@@ -2961,6 +3584,10 @@
 
 <div class="command-block">
   <h4>🔐 RBAC Configuration</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Create service account
   kubectl create serviceaccount <sa-name>
@@ -2982,6 +3609,10 @@
 
 <div class="command-block">
   <h4>🛡️ Pod Security Policies</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Security contexts
   kubectl get podsecuritypolicies
@@ -2999,6 +3630,10 @@
 
 <div class="command-block">
   <h4>🔍 Security Scanning</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Image scanning with Trivy
   trivy image <image-name>
@@ -3024,6 +3659,10 @@
 
 <div class="command-block">
   <h4>📊 Prometheus Stack</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Install Prometheus Operator
   kubectl create namespace monitoring
@@ -3043,6 +3682,10 @@
 
 <div class="command-block">
   <h4>🔗 Distributed Tracing</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Jaeger installation
   kubectl create namespace observability
@@ -3062,6 +3705,10 @@
 
 <div class="command-block">
   <h4>📝 Logging and Analysis</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Fluent Bit/Fluentd
   helm repo add fluent https://fluent.github.io/helm-charts
@@ -3088,6 +3735,10 @@
 
 <div class="command-block">
   <h4>🏗️ Jenkins Enterprise Setup</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Jenkins master-slave configuration
   docker run -d -p 8080:8080 -p 50000:50000 --name jenkins-master jenkins/jenkins:lts
@@ -3132,6 +3783,10 @@
 
 <div class="command-block">
   <h4>🚀 GitOps with ArgoCD</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Install ArgoCD
   kubectl create namespace argocd
@@ -3151,6 +3806,10 @@
 
 <div class="command-block">
   <h4>⚡ Advanced Pipeline Features</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Multi-branch pipelines
   # Jenkinsfile with branch-specific logic
@@ -3191,6 +3850,10 @@
 
 <div class="command-block">
   <h4>🌀 Flux CD GitOps</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Install Flux
   flux bootstrap github --owner=<username> --repository=<repo> --branch=main --path=./clusters/my-cluster
@@ -3210,6 +3873,10 @@
 
 <div class="command-block">
   <h4>🏗️ Infrastructure as Code</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Crossplane for cloud resources
   kubectl apply -f https://github.com/crossplane/crossplane/releases/latest/download/crossplane.yaml
@@ -3239,6 +3906,10 @@
 
 <div class="command-block">
   <h4>📋 Policy as Code</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Open Policy Agent (OPA)
   kubectl apply -f https://github.com/open-policy-agent/gatekeeper/releases/latest/download/gatekeeper.yaml
@@ -3279,6 +3950,10 @@
 
 <div class="command-block">
   <h4>☁️ Multi-Cloud Strategy</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # AWS CLI advanced operations
   aws ec2 describe-instances --filters Name=tag:Environment,Values=Production
@@ -3286,11 +3961,7 @@
   aws cloudformation deploy --template-file template.yaml --stack-name my-stack --capabilities CAPABILITY_IAM
 
   # CLOUD CONTEXT NOTE
-  <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 10px; margin: 15px 0;">
-    <p style="color: #17a2b8; margin: 0; font-size: 0.9em;">
-      <strong>Cloud Context:</strong> In cloud environments, these commands are often used alongside provider-native monitoring services such as AWS CloudWatch.
-    </p>
-  </div>
+  # Cloud Context: In cloud environments, these commands are often used alongside provider-native monitoring services such as AWS CloudWatch.
 
   # Azure CLI
   az vm list --resource-group my-rg
@@ -3306,6 +3977,10 @@
 
 <div class="command-block">
   <h4>⚡ Serverless Architecture</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # AWS Lambda
   aws lambda create-function --function-name my-function --runtime python3.9 --handler lambda_function.lambda_handler --zip-file fileb://function.zip
@@ -3321,6 +3996,10 @@
 
 <div class="command-block">
   <h4>🐳 Container Orchestration in Cloud</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # EKS (Amazon EKS)
   aws eks create-cluster --name my-cluster --role-arn arn:aws:iam::account:role/EKSServiceRole --resources-vpc-config subnetIds=subnet-123,subnet-456
@@ -3347,6 +4026,10 @@
 
 <div class="command-block">
   <h4>⚡ Resource Optimization</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # AWS Cost Explorer
   aws ce get-cost-and-usage --time-period Start=2023-01-01,End=2023-01-31 --granularity MONTHLY --metrics BlendedCost
@@ -3364,6 +4047,10 @@
 
 <div class="command-block">
   <h4>📈 Auto-scaling Optimization</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Kubernetes HPA
   kubectl autoscale deployment myapp --cpu-percent=50 --min=1 --max=10
@@ -3380,6 +4067,10 @@
 
 <div class="command-block">
   <h4>💾 Storage Optimization</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # AWS S3 lifecycle policies
   aws s3api put-bucket-lifecycle-configuration --bucket my-bucket --lifecycle-configuration file://lifecycle.json
@@ -3403,6 +4094,10 @@
 
 <div class="command-block">
   <h4>🔍 Security Scanning in CI/CD</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # SAST (Static Application Security Testing)
   sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=src/
@@ -3421,6 +4116,10 @@
 
 <div class="command-block">
   <h4>🔐 Secrets Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # HashiCorp Vault
   vault server -dev
@@ -3441,6 +4140,10 @@
 
 <div class="command-block">
   <h4>📋 Compliance Automation</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # OpenSCAP
   oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-server-upstream --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
@@ -3464,6 +4167,10 @@
 
 <div class="command-block">
   <h4>🤖 Automated Security Testing</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # OWASP ZAP automation
   docker run -t owasp/zap2docker-stable zap-baseline.py -t http://myapp.example.com -J report.json
@@ -3485,6 +4192,10 @@
 
 <div class="command-block">
   <h4>📊 Compliance Monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # AWS Config rules
   aws configservice put-config-rule --config-rule file://rule.json
@@ -3501,6 +4212,10 @@
 
 <div class="command-block">
   <h4>🚨 Incident Response Automation</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # AWS GuardDuty
   aws guardduty create-detector --enable
@@ -3524,6 +4239,10 @@
 
 <div class="command-block">
   <h4>🏗️ Common System Design Questions</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Design a URL Shortener
   # Components: Load Balancer, Web Servers, Cache, Database
@@ -3545,6 +4264,10 @@
 
 <div class="command-block">
   <h4>🎯 Technical Interview Questions</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Linux/DevOps Questions
   Q: How do you troubleshoot a high CPU usage issue?
@@ -3578,6 +4301,10 @@
 
 <div class="command-block">
   <h4>🔧 Practical Scenarios</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Troubleshooting Scenarios
   # 1. Website is down
@@ -3613,6 +4340,10 @@
 
 <div class="command-block">
   <h4>🏆 Industry Certifications</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Red Hat Certifications
   - RHCSA (Red Hat Certified System Administrator)
@@ -3638,6 +4369,10 @@
 
 <div class="command-block">
   <h4>📈 Career Progression Path</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Junior Level (0-2 years)
   - System Administrator
@@ -3666,6 +4401,10 @@
 
 <div class="command-block">
   <h4>🛠️ Skills Development Roadmap</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Technical Skills Priority
   1. Container Orchestration (Kubernetes)
@@ -3702,6 +4441,10 @@
 
 <div class="command-block">
   <h4>⚡ System Performance Tuning</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # CPU optimization
   echo 'performance' > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
@@ -3723,6 +4466,10 @@
 
 <div class="command-block">
   <h4>🌐 Network Performance</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # TCP tuning
   sysctl -w net.core.rmem_max=16777216
@@ -3744,6 +4491,10 @@
 
 <div class="command-block">
   <h4>🚀 Application Performance</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # JVM tuning
   export JAVA_OPTS="-Xms4g -Xmx8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
@@ -3772,6 +4523,10 @@
 
 <div class="command-block">
   <h4>🔧 System Troubleshooting Framework</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # 1. Information gathering
   dmesg | tail -50
@@ -3804,6 +4559,10 @@
 
 <div class="command-block">
   <h4>🐛 Application Troubleshooting</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Web server issues
   curl -I http://localhost
@@ -3826,6 +4585,10 @@
 
 <div class="command-block">
   <h4>📊 Performance Bottleneck Analysis</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # CPU bottleneck analysis
   perf top -p <PID>
@@ -3854,6 +4617,10 @@
 
 <div class="command-block">
   <h4>🛒 E-commerce Platform Infrastructure</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Project: Scalable E-commerce Platform
   # Technologies: Kubernetes, AWS, Redis, PostgreSQL, React
@@ -3888,6 +4655,10 @@
 
 <div class="command-block">
   <h4>🔄 Microservices CI/CD Pipeline</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Project: Microservices with Automated Deployment
   # Technologies: Jenkins, Docker, Kubernetes, Helm
@@ -3932,6 +4703,10 @@
 
 <div class="command-block">
   <h4>📊 Log Analytics Platform</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Project: Centralized Log Analysis
   # Technologies: ELK Stack, Filebeat, Logstash, Kibana
@@ -3975,6 +4750,10 @@
 
 <div class="command-block">
   <h4>☸️ Kubernetes Application Template</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Standard K8s app structure
   mkdir -p myapp/{k8s,scripts,docker,helm}
@@ -4040,6 +4819,10 @@
 
 <div class="command-block">
   <h4>🏗️ Terraform Module Template</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # Terraform module structure
   mkdir -p terraform/modules/{vpc,ec2,rds}
@@ -4091,6 +4874,10 @@
 
 <div class="command-block">
   <h4>🚀 CI/CD Pipeline Template</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
   <pre><code>
   # GitHub Actions workflow
   mkdir -p .github/workflows
@@ -4158,6 +4945,10 @@
 
 <div class="command-block">
   <h4>🎓 RHCSA Exam Preparation</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # RHCSA (EX200) Key Topics
   # 1. Filesystems and Storage
@@ -4214,6 +5005,10 @@
 
 <div class="command-block">
   <h4>🏆 RHCE Exam Preparation</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # RHCE (EX294) Key Topics
   # 1. Advanced Networking
@@ -4267,6 +5062,10 @@ podman generate systemd --name webserver --files
 
 <div class="command-block">
   <h4>☸️ CKA (Certified Kubernetes Administrator)</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # CKA Exam Practice
   # 1. Cluster Architecture
@@ -4321,6 +5120,10 @@ podman generate systemd --name webserver --files
 
 <div class="command-block">
   <h4>📚 Exam Preparation Strategies</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Study Plan Template
   # Week 1-2: Foundation
@@ -4363,6 +5166,10 @@ podman generate systemd --name webserver --files
 
 <div class="command-block">
   <h4>📈 Career Development Path</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Skill Assessment Matrix
   # Technical Skills (Weight: 70%)
@@ -4408,6 +5215,10 @@ podman generate systemd --name webserver --files
 
 <div class="command-block">
   <h4>✅ Interview Preparation Checklist</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Technical Questions to Master
   1. System Design
@@ -4459,6 +5270,10 @@ podman generate systemd --name webserver --files
 
 <div class="command-block">
   <h4>📚 Essential DevOps Resources</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Official Documentation
   # Kubernetes: https://kubernetes.io/docs/
@@ -4701,14 +5516,9 @@ project context or theoretical explanations.
   <p>
   This is Part 3 of 3. For the complete Linux/DevOps command reference:
 </p>
-<a href="system-admin.html" class="download-btn"
->Part 1: System Administration</a
->
-<a href="devops-tools.html" class="download-btn"
->Part 2: DevOps Tools</a
->
-<a href="monitoring-security.html" class="download-btn btn-current"
->Part 3: Monitoring & Security</a>
+<a href="system-admin.html" class="download-btn">Part 1: System Administration</a>
+<a href="devops-tools.html" class="download-btn">Part 2: DevOps Tools</a>
+<a href="monitoring-security.html" class="download-btn btn-current">Part 3: Monitoring & Security</a>
 
 </div>
 

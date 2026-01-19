@@ -112,6 +112,10 @@
 
             <div class="command-block">
               <h4>📚 AWS Fundamentals Reference</h4>
+              <div class="command-category">
+                <span class="category-tag category-beginner">[BEGINNER]</span>
+                <span class="category-description">For newcomers to DevOps and cloud technologies</span>
+              </div>
               <pre><code>
               # What is AWS?
               # AWS = Amazon Web Services
@@ -144,6 +148,10 @@
 
           <div class="command-block">
             <h4>🚀 AWS CLI Installation and Setup Reference</h4>
+            <div class="command-category">
+              <span class="category-tag category-beginner">[BEGINNER]</span>
+              <span class="category-description">For newcomers to DevOps and cloud technologies</span>
+            </div>
             <pre><code>
             # Step 1: Install AWS CLI
             # On Linux/Mac:
@@ -194,6 +202,10 @@
 
         <div class="command-block">
           <h4>🖥️ Chapter 3: EC2 (Virtual Servers)</h4>
+          <div class="command-category">
+            <span class="category-tag category-common">[COMMON]</span>
+            <span class="category-description">Frequently used in daily operations</span>
+          </div>
           <pre><code>
           # EC2 = Elastic Compute Cloud
           # Virtual servers in the cloud
@@ -207,22 +219,22 @@
           --image-id ami-0abcdef12345678 \
           --instance-type t2.micro \
           --key-name my-key-pair \
-          --security-group-ids sg-903004f8example \
-          --subnet-id subnet-6e7f829example \
+          --security-group-ids sg-xxxxxxxxxx \
+          --subnet-id subnet-xxxxxxxx \
           --user-data file://user-data.sh \
           --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=MyInstance},{Key=Environment,Value=Dev}]'
 
           # 3. Stop Instance
-          aws ec2 stop-instances --instance-ids i-1234567890abcdef0
+          aws ec2 stop-instances --instance-ids i-xxxxxxxxxxxxxxxxx
 
           # 4. Start Instance
-          aws ec2 start-instances --instance-ids i-1234567890abcdef0
+          aws ec2 start-instances --instance-ids i-xxxxxxxxxxxxxxxxx
 
           # 5. Reboot Instance
-          aws ec2 reboot-instances --instance-ids i-1234567890abcdef0
+          aws ec2 reboot-instances --instance-ids i-xxxxxxxxxxxxxxxxx
 
           # 6. Terminate Instance
-          aws ec2 terminate-instances --instance-ids i-1234567890abcdef0
+          aws ec2 terminate-instances --instance-ids i-xxxxxxxxxxxxxxxxx
 
           # 7. Create Key Pair
           aws ec2 create-key-pair \
@@ -258,6 +270,10 @@
 
       <div class="command-block">
         <h4>📦 Chapter 4: S3 (Object Storage)</h4>
+        <div class="command-category">
+          <span class="category-tag category-common">[COMMON]</span>
+          <span class="category-description">Frequently used in daily operations</span>
+        </div>
         <pre><code>
         # S3 = Simple Storage Service
         # Object storage for files and data
@@ -349,6 +365,10 @@
 
       <div class="command-block">
         <h4>📚 Docker Fundamentals Reference</h4>
+      <div class="command-category">
+        <span class="category-tag category-beginner">[BEGINNER]</span>
+        <span class="category-description">For newcomers to DevOps and cloud technologies</span>
+      </div>
         <pre><code>
         # What is Docker?
         # Docker = Containerization platform
@@ -380,6 +400,10 @@
 
     <div class="command-block">
       <h4>🚀 Docker Installation and Setup Reference</h4>
+      <div class="command-category">
+        <span class="category-tag category-beginner">[BEGINNER]</span>
+        <span class="category-description">For newcomers to DevOps and cloud technologies</span>
+      </div>
       <pre><code>
       # Step 1: Install Docker
       # On Ubuntu/Debian:
@@ -434,6 +458,10 @@
 
   <div class="command-block">
     <h4>🏗️ Chapter 3: Docker Images and Containers</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Docker Images = Templates for containers
     # Docker Containers = Running instances of images
@@ -511,6 +539,10 @@
 
 <div class="command-block">
   <h4>📝 Chapter 4: Dockerfile (Build Custom Images)</h4>
+  <div class="command-category">
+    <span class="category-tag category-intermediate">[INTERMEDIATE]</span>
+    <span class="category-description">For building practical DevOps skills and workflows</span>
+  </div>
   <pre><code>
   # Dockerfile = Text file with instructions to build image
   # Automates image creation process
@@ -618,6 +650,10 @@
 
   <div class="command-block">
     <h4>📚 Terraform Fundamentals Reference</h4>
+    <div class="command-category">
+      <span class="category-tag category-beginner">[BEGINNER]</span>
+      <span class="category-description">For newcomers to DevOps and cloud technologies</span>
+    </div>
     <pre><code>
     # What is Terraform?
     # Terraform = Infrastructure as Code tool
@@ -649,6 +685,10 @@
 
 <div class="command-block">
   <h4>🚀 Terraform Installation and Setup Reference</h4>
+  <div class="command-category">
+    <span class="category-tag category-beginner">[BEGINNER]</span>
+    <span class="category-description">For newcomers to DevOps and cloud technologies</span>
+  </div>
   <pre><code>
   # Step 1: Install Terraform
   # On Linux:
@@ -724,6 +764,10 @@
 
 <div class="command-block">
   <h4>📝 Chapter 3: Terraform Configuration Language (HCL)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   # HCL = HashiCorp Configuration Language
   # Human-readable configuration language
@@ -866,6 +910,10 @@
 
   <div class="command-block">
     <h4>📚 Python Fundamentals Reference</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # What is Python?
     # Python = High-level programming language
@@ -899,6 +947,10 @@
 
 <div class="command-block">
   <h4>🚀 Chapter 2: Your First Python Program (Step-by-Step)</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Step 1: Create your first Python file
   # Open terminal and type:
@@ -936,6 +988,10 @@
 
 <div class="command-block">
   <h4>📦 Chapter 3: Variables and Data Types</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Variables store data for later use
   # Python has dynamic typing (no need to declare types)
@@ -992,6 +1048,10 @@
 
 <div class="command-block">
   <h4>🔤 Chapter 4: User Input and Interactive Programs</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Making Python programs interactive
 
@@ -1053,6 +1113,10 @@
 
 <div class="command-block">
   <h4>🔀 Chapter 5: Control Flow (Making Decisions)</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Control flow helps programs make decisions
 
@@ -1130,6 +1194,10 @@
 
 <div class="command-block">
   <h4>🔄 Chapter 6: Loops (Repeating Actions)</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Loops help repeat actions efficiently
 
@@ -1202,6 +1270,10 @@
 
 <div class="command-block">
   <h4>📋 Chapter 7: Functions (Reusable Code)</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Functions are reusable blocks of code
   # Define once, use many times
@@ -1318,6 +1390,10 @@
 
 <div class="command-block">
   <h4>🗂️ Chapter 8: File Operations (Reading & Writing)</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # File operations are essential for DevOps automation
 
@@ -1421,6 +1497,10 @@
 
 <div class="command-block">
   <h4>🌐 Chapter 9: Modules and Libraries (Importing Code)</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Modules extend Python's functionality
   # Import statements make external code available
@@ -1567,6 +1647,10 @@
 
 <div class="command-block">
   <h4>🐍 Chapter 10: Error Handling and Debugging</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Error handling makes programs robust
   # Debugging helps find and fix issues
@@ -1702,6 +1786,10 @@
 
 <div class="command-block">
   <h4>▶️ Run Python</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Python Execution (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1715,6 +1803,10 @@
 
 <div class="command-block">
   <h4>🔧 Shebang for Python scripts</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Python Shebang (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1727,6 +1819,10 @@
 
 <div class="command-block">
   <h4>📦 pip operations - Enterprise Package Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Python Package Management Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1757,6 +1853,10 @@
 
 <div class="command-block">
   <h4>🎭 Poetry commands - Enterprise Dependency Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Poetry: Modern Python Dependency Management (Enterprise Standard)
   # Supports: Red Hat, Debian, Ubuntu, openSUSE, Arch Linux
@@ -1809,6 +1909,10 @@
 
 <div class="command-block">
   <h4>🌍 pipenv commands - Enterprise Alternative</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Pipenv: Python Virtual Environment Management (Enterprise Alternative)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1849,6 +1953,10 @@
 <h3>🌳 Virtual Environments</h3>
 <div class="command-block">
   <h4>❓ Why use virtual environments?</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Virtual Environments (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1864,6 +1972,10 @@
 
 <div class="command-block">
   <h4>🏠 venv (built-in) - Enterprise Virtual Environment</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Python Virtual Environment (Enterprise Standard)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1891,6 +2003,10 @@
 
 <div class="command-block">
   <h4>✅ Check if in virtual environment - Enterprise Verification</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
   <pre><code>
   # Virtual Environment Verification (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1910,6 +2026,10 @@
 
 <div class="command-block">
   <h4>🔄 virtualenv (alternative) - Enterprise Enhanced</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Virtualenv: Enhanced Virtual Environment (Enterprise Alternative)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -1942,6 +2062,10 @@
 
 <div class="command-block">
   <h4>🐍 Python REPL - Enterprise Interactive Environment</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Python Interactive Shell (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2026,6 +2150,10 @@
 
 <div class="command-block">
   <h4>⚡ IPython (enhanced REPL) - Enterprise Interactive Python</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # IPython: Enhanced Interactive Python (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2079,6 +2207,10 @@
 
 <div class="command-block">
   <h4>🎬 Run Python script from REPL - Enterprise Script Execution</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Python Script Execution from REPL (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2144,6 +2276,10 @@
 
   <div class="command-block">
     <h4>👤 User configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git User Configuration (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2157,6 +2293,10 @@
 
   <div class="command-block">
     <h4>👁️ View configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Configuration Viewing (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2170,6 +2310,10 @@
 
   <div class="command-block">
     <h4>📊 Configuration levels</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Configuration Levels (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2182,6 +2326,10 @@
 
   <div class="command-block">
     <h4>📁 Configuration file locations</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Git Configuration Files (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2195,6 +2343,10 @@
 
   <div class="command-block">
     <h4>🏗️ Create repository</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Repository Initialization (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2212,6 +2364,10 @@
 
   <div class="command-block">
     <h4>👁️ Check status</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Status Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2224,6 +2380,10 @@
 
   <div class="command-block">
     <h4>➕ Add files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Add Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2239,6 +2399,10 @@
 
   <div class="command-block">
     <h4>💾 Commit</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Commit Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2253,6 +2417,10 @@
 
   <div class="command-block">
     <h4>👀 View changes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Diff Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2268,6 +2436,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Remove Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2280,6 +2452,10 @@
 
   <div class="command-block">
     <h4>🔄 Move/rename</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Move/Rename Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2292,6 +2468,10 @@
 
   <div class="command-block">
     <h4>📋 Log</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Log Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2313,6 +2493,10 @@
 
   <div class="command-block">
     <h4>👁️ Show commit</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Show Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2326,6 +2510,10 @@
 
   <div class="command-block">
     <h4>👤 Blame</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Blame Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2339,6 +2527,10 @@
 
   <div class="command-block">
     <h4>📋 List branches</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Branch Listing (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2352,6 +2544,10 @@
 
   <div class="command-block">
     <h4>🌱 Create branch</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Branch Creation (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2364,6 +2560,10 @@
 
   <div class="command-block">
     <h4>🔄 Switch branches</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Branch Switching (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2376,6 +2576,10 @@
 
   <div class="command-block">
     <h4>🗑️ Delete branch</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Branch Deletion (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2388,6 +2592,10 @@
 
   <div class="command-block">
     <h4>✏️ Rename branch</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Branch Renaming (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2401,6 +2609,10 @@
 
   <div class="command-block">
     <h4>🔀 Merge branches</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Merge Operations (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2413,6 +2625,10 @@
 
   <div class="command-block">
     <h4>❌ Abort merge</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Git Merge Abort (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2423,6 +2639,10 @@
 
   <div class="command-block">
     <h4>🔧 Merge tools</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2434,6 +2654,10 @@
 
   <div class="command-block">
     <h4>👁️ View remotes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2445,6 +2669,10 @@
 
   <div class="command-block">
     <h4>➕ Add remote</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2455,6 +2683,10 @@
 
   <div class="command-block">
     <h4>🔄 Remove/rename remote</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2465,6 +2697,10 @@
 
   <div class="command-block">
     <h4>⬇️ Fetch and pull</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2479,6 +2715,10 @@
 
   <div class="command-block">
     <h4>⬆️ Push</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -2495,6 +2735,10 @@
   <h3>📦 Stashing</h3>
   <div class="command-block">
     <h4>💡 When to use git stash</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code># Common use cases:
     # 1. Save work-in-progress when switching branches
     # 2. Temporarily save uncommitted changes
@@ -2515,7 +2759,11 @@
 
 <div class="command-block">
   <h4>📋 List stashes</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2541,7 +2789,11 @@
 
 <div class="command-block">
   <h4>✅ Apply stash</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2553,7 +2805,11 @@
 
 <div class="command-block">
   <h4>⚙️ Manage stashes</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2568,7 +2824,11 @@
 
 <div class="command-block">
   <h4>🗑️ Discard changes</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2580,7 +2840,11 @@
 
 <div class="command-block">
   <h4>🔄 Reset commits</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2592,7 +2856,11 @@
 
 <div class="command-block">
   <h4>⏪ Revert (create new commit that undoes)</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2603,7 +2871,11 @@
 
 <div class="command-block">
   <h4>🧹 Clean untracked files</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2618,7 +2890,11 @@
 
 <div class="command-block">
   <h4>📋 List tags</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2628,7 +2904,11 @@
 
 <div class="command-block">
   <h4>🏷️ Create tags</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2639,7 +2919,11 @@
 
 <div class="command-block">
   <h4>👁️ Show tag</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2648,7 +2932,11 @@
 
 <div class="command-block">
   <h4>⬆️ Push tags</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2659,7 +2947,11 @@
 
 <div class="command-block">
   <h4>🗑️ Delete tags</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2671,7 +2963,11 @@
 
 <div class="command-block">
   <h4>🔄 Rebase</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2686,7 +2982,11 @@
 
 <div class="command-block">
   <h4>📦 Submodules</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2699,7 +2999,11 @@
 
 <div class="command-block">
   <h4>🍒 Cherry-pick</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2710,7 +3014,11 @@
 
 <div class="command-block">
   <h4>🔍 Bisect (find bad commit)</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2722,7 +3030,11 @@
 
 <div class="command-block">
   <h4>📜 Reflog (recover lost commits)</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2733,7 +3045,11 @@
 
 <div class="command-block">
   <h4>📦 Archive</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -2744,7 +3060,11 @@
 
 <div class="command-block">
   <h4>🧠 Understanding Advanced Git Concepts</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Git Internal Architecture:
   # Working Directory → Staging Area (Index) → Local Repository → Remote Repository
   # Local Repository = Working Directory + Index
@@ -2768,7 +3088,11 @@
 
 <div class="command-block">
   <h4>🔄 Rebase vs Merge - Critical Differences</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # MERGE - Preserves history, creates merge commit
   git checkout main
   git merge feature-branch
@@ -2821,7 +3145,11 @@
 
 <div class="command-block">
   <h4>🔄 Reset vs Revert - Understanding Undo Operations</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # RESET - Moves branch pointer backward (rewrites history)
   # --mixed: Moves HEAD, unstages changes
   # --soft: Moves HEAD, keeps changes staged
@@ -2866,7 +3194,11 @@
 
 <div class="command-block">
   <h4>⚔️ Advanced Conflict Resolution</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Understanding Conflict Markers:
   # <<<<<<< HEAD
   # Your changes (current branch)
@@ -2929,7 +3261,11 @@
 
 <div class="command-block">
   <h4>🌊 GitFlow Workflow - Professional Branching Model</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # GitFlow Branch Structure:
   #
   # main (production)          ← Production-ready code
@@ -3028,7 +3364,11 @@
 
 <div class="command-block">
   <h4>⚡ Advanced Git Techniques</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Cherry-Pick - Apply specific commits from another branch
   git cherry-pick abc1234                                                # Apply single commit
   git cherry-pick abc1234 def5678                                     # Multiple commits
@@ -3090,7 +3430,11 @@
 
 <div class="command-block">
   <h4>⚡ Git Performance Optimization</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Garbage Collection
   git gc                                                         # Cleanup unnecessary files
   git gc --aggressive                                            # Aggressive cleanup
@@ -3128,7 +3472,11 @@
 
 <div class="command-block">
   <h4>🪝 Git Hooks - Automation & Enforcement</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Git Hooks Location
   # Path: .git/hooks/
 
@@ -3187,7 +3535,11 @@
 
 <div class="command-block">
   <h4>✅ Git Best Practices - Professional Standards</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Commit Message Standards (Conventional Commits):
   #
   # Format: <type>(<scope>): <subject>
@@ -3259,7 +3611,11 @@
 
 <div class="command-block">
   <h4>⚡ Git Aliases - Productivity Boosters</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Add to ~/.gitconfig or use git config --global
 
   [alias]
@@ -3311,7 +3667,11 @@
 
 <div class="command-block">
   <h4>🎓 Interview Questions - Advanced Git</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Q1: What's the difference between git reset and git revert?
   # A: reset rewrites history (moves HEAD), revert creates new commit.
   #    Use reset for local changes, revert for public branches.
@@ -3368,6 +3728,10 @@
 
   <div class="command-block">
     <h4>🔍 Docker version and info - Enterprise System Verification</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Docker System Information (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3396,6 +3760,10 @@
 
   <div class="command-block">
     <h4>🐳 Docker service (systemd) - Enterprise Service Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Docker Service Management (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3427,6 +3795,10 @@
 
   <div class="command-block">
     <h4>📋 List images - Enterprise Image Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Docker Image Listing (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3456,6 +3828,10 @@
   </div>
   <div class="command-block">
     <h4>🏗️ Multi-stage builds (Production optimization)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Dockerfile example - Multi-stage build
     FROM node:18 AS builder
@@ -3480,6 +3856,10 @@
 
   <div class="command-block">
     <h4>⬇️ Pull images</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3501,6 +3881,10 @@
 
   <div class="command-block">
     <h4>🔍 Search images</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3511,6 +3895,10 @@
 
   <div class="command-block">
     <h4>🔨 Build images</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3538,6 +3926,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove images</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3551,6 +3943,10 @@
 
   <div class="command-block">
     <h4>👁️ Image details</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3561,6 +3957,10 @@
 
   <div class="command-block">
     <h4>🏷️ Tag images</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3571,6 +3971,10 @@
 
   <div class="command-block">
     <h4>💾 Save/load images</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3583,6 +3987,10 @@
 
   <div class="command-block">
     <h4>📤 Export/import images</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3595,6 +4003,10 @@
 
   <div class="command-block">
     <h4>🏃 Run containers</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3617,6 +4029,10 @@
 
   <div class="command-block">
     <h4>📋 List containers</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3630,6 +4046,10 @@
 
   <div class="command-block">
     <h4>⚙️ Container management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3646,6 +4066,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove containers</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3658,6 +4082,10 @@
 
   <div class="command-block">
     <h4>👁️ Container details</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3675,6 +4103,10 @@
 
   <div class="command-block">
     <h4>⚡ Execute commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3686,6 +4118,10 @@
 
   <div class="command-block">
     <h4>📁 Copy files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3696,6 +4132,10 @@
 
   <div class="command-block">
     <h4>🔌 Attach to container</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3706,6 +4146,10 @@
   <h3>💾 Docker Volumes</h3>
   <div class="command-block">
     <h4>📚 Volume Types Explained</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Named Volume (Docker-managed, recommended for production)
     docker run -v myvolume:/data image                             # Mount volume
@@ -3727,6 +4171,10 @@
 
   <div class="command-block">
     <h4>📋 List volumes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3738,6 +4186,10 @@
 
   <div class="command-block">
     <h4>➕ Create volume</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3748,6 +4200,10 @@
 
   <div class="command-block">
     <h4>👁️ Inspect volume</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3757,6 +4213,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove volumes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3767,6 +4227,10 @@
 
   <div class="command-block">
     <h4>💾 Use volumes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3780,6 +4244,10 @@
 
   <div class="command-block">
     <h4>📋 List networks</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3790,6 +4258,10 @@
 
   <div class="command-block">
     <h4>➕ Create network</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3801,6 +4273,10 @@
 
   <div class="command-block">
     <h4>👁️ Inspect network</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3810,6 +4286,10 @@
 
   <div class="command-block">
     <h4>🔌 Connect/disconnect</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3820,6 +4300,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove networks</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3832,6 +4316,10 @@
 
   <div class="command-block">
     <h4>🚀 Docker Compose commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3857,6 +4345,10 @@
   </div>
   <div class="command-block">
     <h4>🆙 Docker Compose v2 (Modern syntax)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3928,6 +4420,10 @@
 
   <div class="command-block">
     <h4>ℹ️ System info</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3940,6 +4436,10 @@
 
   <div class="command-block">
     <h4>🧹 Cleanup</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3954,6 +4454,10 @@
 
   <div class="command-block">
     <h4>🔐 Login/logout</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3965,6 +4469,10 @@
 
   <div class="command-block">
     <h4>⬆️ Push images</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3980,6 +4488,10 @@
 
   <div class="command-block">
     <h4>🏷️ Tag for registry</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -3990,6 +4502,10 @@
 
   <div class="command-block">
     <h4>🏗️ Docker Multi-Stage Builds - Image Optimization</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Why Multi-Stage Builds?
     # 70–90% smaller images
@@ -4087,7 +4603,11 @@
 
 <div class="command-block">
   <h4>💾 Docker Volumes - Production Data Management</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
   # Volume Types & Use Cases:
 
   # 1. Named Volume (Production Databases)
@@ -4164,7 +4684,11 @@
 
 <div class="command-block">
   <h4>🌐 Docker Networks - Microservices Architecture</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
   # Network Types:
 
   # Bridge (Default) - Isolated network
@@ -4257,7 +4781,11 @@
 
 <div class="command-block">
   <h4>⚖️ Resource Limits - Production Stability</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
   # Why Resource Limits?
   # - Prevent resource exhaustion
   # - Ensure fair resource distribution
@@ -4334,7 +4862,11 @@
 
 <div class="command-block">
   <h4>🐛 Container Debugging - Production Troubleshooting</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
   # Container Won't Start - Debugging Steps:
 
   # 1. Check Logs (First Step Always)
@@ -4459,6 +4991,10 @@
 
   <div class="command-block">
     <h4>📊 Cluster info - Enterprise Cluster Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Kubernetes Cluster Information (Enterprise Standards)
     # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
@@ -4491,6 +5027,10 @@
   </div>
   <div class="command-block">
     <h4>🔍 Context management (Multi-cluster) - Enterprise Multi-Environment</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Kubernetes Context Management (Enterprise Standards)
     # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
@@ -4531,6 +5071,10 @@
 
   <div class="command-block">
     <h4>⚙️ Configuration - Enterprise Config Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Kubernetes Configuration Management (Enterprise Standards)
     # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
@@ -4576,7 +5120,11 @@
 
     <div class="command-block">
       <h4>📋 List pods - Enterprise Pod Management</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Kubernetes Pod Listing (Enterprise Standards)
       # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
 
@@ -4588,7 +5136,11 @@
 
     <div class="command-block">
       <h4>👁️ Describe pod</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4597,7 +5149,11 @@
 
     <div class="command-block">
       <h4>➕ Create/delete pods</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4619,7 +5175,11 @@
 
     <div class="command-block">
       <h4>📋 Pod logs</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4633,6 +5193,10 @@
 
     <div class="command-block">
       <h4>⚡ Execute commands</h4>
+      <div class="command-category">
+        <span class="category-tag category-common">[COMMON]</span>
+        <span class="category-description">Frequently used in daily operations</span>
+      </div>
       <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -4644,7 +5208,11 @@
 
     <div class="command-block">
       <h4>🔌 Port forwarding</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4653,7 +5221,11 @@
 
     <div class="command-block">
       <h4>📁 Copy files</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4665,7 +5237,11 @@
 
     <div class="command-block">
       <h4>📋 List deployments</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4676,7 +5252,11 @@
 
     <div class="command-block">
       <h4>➕ Create deployment</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4686,7 +5266,11 @@
 
     <div class="command-block">
       <h4>👁️ Describe deployment</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4695,7 +5279,11 @@
 
     <div class="command-block">
       <h4>⚖️ Scale deployment</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4704,7 +5292,11 @@
 
     <div class="command-block">
       <h4>🔄 Update deployment</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4714,7 +5306,11 @@
 
     <div class="command-block">
       <h4>🚀 Deployment rollout</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4726,7 +5322,11 @@
 
     <div class="command-block">
       <h4>🗑️ Delete deployment</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4736,7 +5336,11 @@
 
     <div class="command-block">
       <h4>⚙️ HPA management</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4756,7 +5360,11 @@
 
     <div class="command-block">
       <h4>📋 List services</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4767,7 +5375,11 @@
 
     <div class="command-block">
       <h4>👁️ Describe service</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4776,7 +5388,11 @@
 
     <div class="command-block">
       <h4>➕ Create service</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4786,7 +5402,11 @@
 
     <div class="command-block">
       <h4>🗑️ Delete service</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4797,7 +5417,11 @@
 
     <div class="command-block">
       <h4>🔄 Switch namespace</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4807,7 +5431,11 @@
 
     <div class="command-block">
       <h4>👁️ Describe namespace</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4816,7 +5444,11 @@
 
     <div class="command-block">
       <h4>📝 Create namespace</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4825,7 +5457,11 @@
 
     <div class="command-block">
       <h4>🗑️ Delete namespace</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4834,7 +5470,11 @@
 
     <div class="command-block">
       <h4>⚙️ Set default namespace</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4845,7 +5485,11 @@
 
     <div class="command-block">
       <h4>🗺️ ConfigMaps</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4864,7 +5508,11 @@
 
     <div class="command-block">
       <h4>🔐 Secrets</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4884,7 +5532,11 @@
 
     <div class="command-block">
       <h4>📄 Apply configuration</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4905,7 +5557,11 @@
 
     <div class="command-block">
       <h4>📄 Create from file</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4914,7 +5570,11 @@
 
     <div class="command-block">
       <h4>🗑️ Delete from file</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4923,7 +5583,11 @@
 
     <div class="command-block">
       <h4>🔄 Replace</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4932,7 +5596,11 @@
 
     <div class="command-block">
       <h4>✏️ Edit resource</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4941,7 +5609,11 @@
 
     <div class="command-block">
       <h4>🔧 Patch resource</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4952,7 +5624,11 @@
 
     <div class="command-block">
       <h4>📋 List nodes</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4962,7 +5638,11 @@
 
     <div class="command-block">
       <h4>👁️ Describe node</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4971,7 +5651,11 @@
 
     <div class="command-block">
       <h4>🚧 Cordon/uncordon (maintenance)</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4985,7 +5669,11 @@
 
     <div class="command-block">
       <h4>🏷️ Labels</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -4996,7 +5684,11 @@
 
     <div class="command-block">
       <h4>📝 Annotations</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5008,7 +5700,11 @@
 
     <div class="command-block">
       <h4>📈 Resource usage</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5020,7 +5716,11 @@
 
     <div class="command-block">
       <h4>🐛 Debugging</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5031,7 +5731,11 @@
 
     <div class="command-block">
       <h4>🔧 Troubleshooting</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5042,7 +5746,11 @@
 
     <div class="command-block">
       <h4>🐛 Debug with ephemeral container</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5051,7 +5759,11 @@
 
     <div class="command-block">
       <h4>📋 Copy resources</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5061,7 +5773,11 @@
     <h3>🔐 RBAC (Role-Based Access Control)</h3>
     <div class="command-block">
       <h4>🧠 Understanding RBAC Components</h4>
-      <pre><code># Role vs ClusterRole:
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code># Role vs ClusterRole:
       #
       # Role: Namespace-scoped permissions
       kubectl create role pod-reader --verb=get,list --resource=pods -n dev
@@ -5084,7 +5800,11 @@
 
     <div class="command-block">
       <h4>👤 Service accounts</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5095,7 +5815,11 @@
 
     <div class="command-block">
       <h4>🔐 Roles and RoleBindings</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5107,7 +5831,11 @@
 
     <div class="command-block">
       <h4>➕ Create role</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5116,7 +5844,11 @@
 
     <div class="command-block">
       <h4>🔗 Create role binding</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5127,7 +5859,11 @@
 
     <div class="command-block">
       <h4>💼 Jobs</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5144,7 +5880,11 @@
 
     <div class="command-block">
       <h4>⏰ CronJobs</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5164,7 +5904,11 @@
 
     <div class="command-block">
       <h4>🌐 Ingress</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5183,7 +5927,11 @@
 
     <div class="command-block">
       <h4>💾 Persistent Volumes</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5193,7 +5941,11 @@
 
     <div class="command-block">
       <h4>📋 Persistent Volume Claims</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5211,7 +5963,11 @@
 
     <div class="command-block">
       <h4>🔄 StatefulSets</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5236,7 +5992,11 @@
 
     <div class="command-block">
       <h4>👻 DaemonSets</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -5265,7 +6025,11 @@
 
     <div class="command-block">
       <h4>📚 Ansible Fundamentals Reference</h4>
-      <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
       # What is Ansible?
       # Ansible = Open-source automation tool
       # Created by Michael DeHaan (2012)
@@ -5298,6 +6062,10 @@
 
   <div class="command-block">
     <h4>🚀 Ansible Installation and Setup Reference</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Step 1: Install Ansible on Control Node
     # On Red Hat/CentOS/Fedora:
@@ -5348,6 +6116,10 @@
 
 <div class="command-block">
   <h4>📝 Chapter 3: Ansible Ad-Hoc Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Ad-hoc commands are one-time commands
   # Perfect for quick tasks and testing
@@ -5429,7 +6201,11 @@
 
 <div class="command-block">
   <h4>📋 Chapter 4: Ansible Playbooks (YAML Automation)</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Playbooks are YAML files for automation
   # They define tasks, roles, and configurations
 
@@ -5579,7 +6355,11 @@
 
 <div class="command-block">
   <h4>🔄 Chapter 5: Variables and Templates</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Variables make playbooks flexible and reusable
 
   # 1. Playbook Variables
@@ -5699,7 +6479,11 @@
 
 <div class="command-block">
   <h4>🎭 Chapter 6: Conditionals and Loops</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Conditionals and loops control task execution
 
   # 1. When Conditions (Basic)
@@ -5854,7 +6638,11 @@
 
 <div class="command-block">
   <h4>🎭 Chapter 7: Roles and Best Practices</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Roles organize playbooks into reusable components
 
   # 1. Role Structure
@@ -6044,6 +6832,10 @@
 
   <div class="command-block">
     <h4>📝 Basic ad-hoc syntax</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6053,6 +6845,10 @@
 
   <div class="command-block">
     <h4>🏓 Ping hosts</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6064,6 +6860,10 @@
 
   <div class="command-block">
     <h4>⚡ Command module (default)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6076,6 +6876,10 @@
 
   <div class="command-block">
     <h4>🐚 Shell module (supports shell features)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6086,6 +6890,10 @@
 
   <div class="command-block">
     <h4>📁 Copy files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6096,6 +6904,10 @@
 
   <div class="command-block">
     <h4>📁 File operations</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6108,6 +6920,10 @@
 
   <div class="command-block">
     <h4>📦 Package management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6119,6 +6935,10 @@
 
   <div class="command-block">
     <h4>⚙️ Service management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6131,6 +6951,10 @@
 
   <div class="command-block">
     <h4>👤 User management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6141,6 +6965,10 @@
 
   <div class="command-block">
     <h4>📊 Gather facts</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6151,6 +6979,10 @@
 
   <div class="command-block">
     <h4>🔐 Execute with sudo</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6161,6 +6993,10 @@
 
   <div class="command-block">
     <h4>👤 Specify user</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6171,6 +7007,10 @@
 
   <div class="command-block">
     <h4>🎯 Limit hosts</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6181,6 +7021,10 @@
 
   <div class="command-block">
     <h4>🔍 Check mode (dry run)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6193,6 +7037,10 @@
 
   <div class="command-block">
     <h4>▶️ Run playbook</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6202,6 +7050,10 @@
 
   <div class="command-block">
     <h4>✅ Check syntax</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6211,6 +7063,10 @@
 
   <div class="command-block">
     <h4>🔍 Dry run</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6226,6 +7082,10 @@
 
   <div class="command-block">
     <h4>🔄 Diff mode</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6241,6 +7101,10 @@
 
   <div class="command-block">
     <h4>🎯 Limit execution</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6256,6 +7120,10 @@
 
   <div class="command-block">
     <h4>🏷️ Tags</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6277,6 +7145,10 @@
 
   <div class="command-block">
     <h4>⏭️ Start at task</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6286,6 +7158,10 @@
 
   <div class="command-block">
     <h4>👣 Step through</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6295,6 +7171,10 @@
 
   <div class="command-block">
     <h4>📢 Verbose output</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6322,6 +7202,10 @@
 
   <div class="command-block">
     <h4>📝 Extra variables</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6343,6 +7227,10 @@
 
   <div class="command-block">
     <h4>📋 Inventory</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6358,6 +7246,10 @@
 
   <div class="command-block">
     <h4>🔐 Ask for passwords</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6379,6 +7271,10 @@
 
   <div class="command-block">
     <h4>📝 List tasks</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6388,6 +7284,10 @@
 
   <div class="command-block">
     <h4>🏠 List hosts</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6399,6 +7299,10 @@
 
   <div class="command-block">
     <h4>📋 List inventory</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6410,6 +7314,10 @@
 
   <div class="command-block">
     <h4>📁 Inventory file locations</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6421,6 +7329,10 @@
 
   <div class="command-block">
     <h4>🔒 Create encrypted file</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6430,6 +7342,10 @@
 
   <div class="command-block">
     <h4>✏️ Edit encrypted file</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6439,6 +7355,10 @@
 
   <div class="command-block">
     <h4>🔐 Encrypt existing file</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6454,6 +7374,10 @@
 
   <div class="command-block">
     <h4>🔓 Decrypt file</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6463,6 +7387,10 @@
 
   <div class="command-block">
     <h4>👁️ View encrypted file</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6472,6 +7400,10 @@
 
   <div class="command-block">
     <h4>🔑 Change password</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6481,6 +7413,10 @@
 
   <div class="command-block">
     <h4>🔐 Use vault in playbook</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6504,6 +7440,10 @@
 
   <div class="command-block">
     <h4>📦 Install role</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6514,6 +7454,10 @@
 
   <div class="command-block">
     <h4>📋 List installed roles</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6523,6 +7467,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove role</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6532,6 +7480,10 @@
 
   <div class="command-block">
     <h4>🆕 Initialize new role</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6541,6 +7493,10 @@
 
   <div class="command-block">
     <h4>🔍 Search for roles</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6550,6 +7506,10 @@
 
   <div class="command-block">
     <h4>📋 Role information</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -6560,6 +7520,10 @@
 
   <div class="command-block">
     <h4>🏗️ Ansible Architecture & Job Market Value</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Why Ansible is THE Bridge from SysAdmin to DevOps:
     #
@@ -6600,6 +7564,10 @@
 
   <div class="command-block">
     <h4>📦 Ansible Inventory - Advanced Patterns</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Static Inventory (INI Format)
     # Path: /etc/ansible/hosts
@@ -6709,7 +7677,11 @@
 
 <div class="command-block">
   <h4>🎭 Ansible Playbooks - Production Patterns</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Basic Playbook Structure
   ---
   - name: Configure web servers
@@ -6831,7 +7803,11 @@
 
 <div class="command-block">
   <h4>🎪 Ansible Roles - Reusable Automation</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Role Directory Structure
 
   # Ansible Roles Structure (Enterprise Standards)
@@ -6955,7 +7931,11 @@
 
 <div class="command-block">
   <h4>📝 Ansible Variables & Templates - Dynamic Configuration</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
   # Variable Precedence (lowest to highest):
   # 1. role defaults
   # 2. inventory file/script group vars
@@ -7081,7 +8061,11 @@
 
 <div class="command-block">
   <h4>🔐 Ansible Vault - Secrets Management</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Create Encrypted File
 
   # Ansible Vault Operations (Enterprise Standards)
@@ -7194,7 +8178,11 @@
 
 <div class="command-block">
   <h4>🌍 Real-World Ansible Scenarios - Job Interview Ready</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Scenario 1: Zero-Downtime Deployment
   ---
   - name: Rolling deployment
@@ -7385,7 +8373,11 @@
 
 <div class="command-block">
   <h4>✅ Ansible Best Practices - Production Standards</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
   # Directory Structure (Standard Layout)
   ansible-project/
   ├── ansible.cfg              # Ansible configuration
@@ -7563,7 +8555,11 @@
 
 <div class="command-block">
   <h4>👁️ View configuration</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -7574,7 +8570,11 @@
 
 <div class="command-block">
   <h4>📁 Configuration file locations</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -7586,7 +8586,11 @@
 
 <div class="command-block">
   <h4>🚀 Speed up playbook execution</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # ansible.cfg optimizations
   [defaults]
   forks = 50                                                      # Parallel execution (default: 5)
@@ -7610,7 +8614,11 @@
 
 <div class="command-block">
   <h4>⚡ Mitogen plugin (5-10x faster)</h4>
-  <pre><code>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
   # Enterprise Standards
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
@@ -7635,6 +8643,10 @@
 
   <div class="command-block">
     <h4>🚀 Initialize working directory</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7664,6 +8676,10 @@
 
   <div class="command-block">
     <h4>📝 Create execution plan</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7711,6 +8727,10 @@
 
   <div class="command-block">
     <h4>✅ Apply changes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7752,6 +8772,10 @@
 
   <div class="command-block">
     <h4>💥 Destroy infrastructure</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7764,6 +8788,10 @@
   <h3>🗄️ Terraform State</h3>
   <div class="command-block">
     <h4>🔒 State Management - Critical Safety Guidelines</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # NEVER manually edit state files directly
     # State file corruption can destroy infrastructure
@@ -7793,6 +8821,10 @@
   </div>
   <div class="command-block">
     <h4>☁️ Remote state backend (S3 example)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # backend.tf
     terraform {
@@ -7830,6 +8862,10 @@
 
   <div class="command-block">
     <h4>🗄️ State management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7845,6 +8881,10 @@
 
   <div class="command-block">
     <h4>💾 State backup</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7856,6 +8896,10 @@
 
   <div class="command-block">
     <h4>🏢 Workspace management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7868,6 +8912,10 @@
   </div>
   <div class="command-block">
     <h4>🏢 Workspace use cases</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code># Workspaces for environment separation (development, staging, production)
     terraform workspace new dev
     terraform workspace new staging
@@ -7901,6 +8949,10 @@
 
   <div class="command-block">
     <h4>👁️ View outputs</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7915,6 +8967,10 @@
 
   <div class="command-block">
     <h4>✅ Validate configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7930,6 +8986,10 @@
 
   <div class="command-block">
     <h4>💻 Interactive console</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7944,6 +9004,10 @@
 
   <div class="command-block">
     <h4>📥 Import existing resources</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7956,6 +9020,10 @@
 
   <div class="command-block">
     <h4>📊 Generate dependency graph</h4>
+    <div class="command-category">
+      <span class="category-tag category-intermediate">[INTERMEDIATE]</span>
+      <span class="category-description">For building practical DevOps skills and workflows</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7968,6 +9036,10 @@
 
   <div class="command-block">
     <h4>🔌 Provider management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -7982,6 +9054,10 @@
 
   <div class="command-block">
     <h4>🐛 Enable debug logging</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8000,6 +9076,10 @@
 
   <div class="command-block">
     <h4>🔴 Mark resources for recreation</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8030,6 +9110,10 @@
 
   <div class="command-block">
     <h4>📁 Understanding AWS Configuration Files</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # ~/.aws/credentials - Stores access keys (NEVER commit to git)
     [default]
@@ -8059,6 +9143,10 @@
 
   <div class="command-block">
     <h4>⚙️ Configure AWS CLI</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8071,6 +9159,10 @@
 
   <div class="command-block">
     <h4>👤 Named profiles</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8082,6 +9174,10 @@
 
   <div class="command-block">
     <h4>📁 Configuration files</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8094,6 +9190,10 @@
 
   <div class="command-block">
     <h4>📋 List instances</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8106,6 +9206,10 @@
 
   <div class="command-block">
     <h4>⚡ Start/stop instances</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8118,6 +9222,10 @@
 
   <div class="command-block">
     <h4>➕ Create instance</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8127,6 +9235,10 @@
 
   <div class="command-block">
     <h4>🖼️ Describe images (AMIs)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8137,6 +9249,10 @@
 
   <div class="command-block">
     <h4>🔒 Security groups</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8148,6 +9264,10 @@
 
   <div class="command-block">
     <h4>🔑 Key pairs</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8158,6 +9278,10 @@
 
   <div class="command-block">
     <h4>💾 EBS volumes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8170,6 +9294,10 @@
 
   <div class="command-block">
     <h4>📸 Snapshots</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8183,6 +9311,10 @@
 
   <div class="command-block">
     <h4>🪣 List buckets</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8194,6 +9326,10 @@
 
   <div class="command-block">
     <h4>📁 Copy files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8206,6 +9342,10 @@
 
   <div class="command-block">
     <h4>🔄 Sync</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8217,6 +9357,10 @@
 
   <div class="command-block">
     <h4>📦 Move files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8227,6 +9371,10 @@
 
   <div class="command-block">
     <h4>🗑️ Remove files</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8238,6 +9386,10 @@
 
   <div class="command-block">
     <h4>🔌 S3 API commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8250,6 +9402,10 @@
 
   <div class="command-block">
     <h4>📋 Bucket policies</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8260,6 +9416,10 @@
 
   <div class="command-block">
     <h4>🔄 Bucket versioning</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8272,6 +9432,10 @@
 
   <div class="command-block">
     <h4>👤 Users</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8284,6 +9448,10 @@
 
   <div class="command-block">
     <h4>🔑 Access keys</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8295,6 +9463,10 @@
 
   <div class="command-block">
     <h4>👥 Groups</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8307,6 +9479,10 @@
 
   <div class="command-block">
     <h4>📋 Policies</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8319,6 +9495,10 @@
 
   <div class="command-block">
     <h4>🎭 Roles</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8332,6 +9512,10 @@
 
   <div class="command-block">
     <h4>🗄️ DB instances</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8345,6 +9529,10 @@
 
   <div class="command-block">
     <h4>📸 Snapshots</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8358,6 +9546,10 @@
 
   <div class="command-block">
     <h4>📋 List functions</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8367,6 +9559,10 @@
 
   <div class="command-block">
     <h4>📖 Get function</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8376,6 +9572,10 @@
 
   <div class="command-block">
     <h4>➕ Create function</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8385,6 +9585,10 @@
 
   <div class="command-block">
     <h4>🔄 Update function code</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8394,6 +9598,10 @@
 
   <div class="command-block">
     <h4>⚡ Invoke function</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8404,6 +9612,10 @@
 
   <div class="command-block">
     <h4>🗑️ Delete function</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8415,6 +9627,10 @@
 
   <div class="command-block">
     <h4>📋 Logs</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8427,6 +9643,10 @@
 
   <div class="command-block">
     <h4>📊 Metrics</h4>
+    <div class="command-category">
+      <span class="category-tag category-intermediate">[INTERMEDIATE]</span>
+      <span class="category-description">For building practical DevOps skills and workflows</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8437,6 +9657,10 @@
 
   <div class="command-block">
     <h4>🚨 Alarms</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8450,6 +9674,10 @@
 
   <div class="command-block">
     <h4>🌐 VPCs</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8461,6 +9689,10 @@
 
   <div class="command-block">
     <h4>🔌 Subnets</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8472,6 +9704,10 @@
 
   <div class="command-block">
     <h4>🌉 Internet Gateways</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8484,6 +9720,10 @@
 
   <div class="command-block">
     <h4>🛣️ Route tables</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8495,6 +9735,10 @@
 
   <div class="command-block">
     <h4>📚 Stack management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8509,6 +9753,10 @@
 
   <div class="command-block">
     <h4>✅ Stack validation</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8518,6 +9766,10 @@
 
   <div class="command-block">
     <h4>🔄 Change sets (preview changes)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8531,6 +9783,10 @@
 
   <div class="command-block">
     <h4>🏗️ Cluster management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8543,6 +9799,10 @@
 
   <div class="command-block">
     <h4>📋 Task definitions</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8555,6 +9815,10 @@
 
   <div class="command-block">
     <h4>🛠️ Services</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8568,6 +9832,10 @@
 
   <div class="command-block">
     <h4>📝 Tasks</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8582,6 +9850,10 @@
 
   <div class="command-block">
     <h4>📤 Output formats</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8594,6 +9866,10 @@
 
   <div class="command-block">
     <h4>🔍 Query with JMESPath</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -8605,6 +9881,10 @@
 
   <div class="command-block">
     <h4>💡 Why AWS Mastery = Remote Job Entry</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code># AWS Market Demand (Bangladesh):
     # Linux SysAdmin: (1-2 years)
     # Linux + AWS Basics: (1-2 years)
@@ -8640,6 +9920,10 @@
 
   <div class="command-block">
     <h4>🖥️ AWS EC2 - Production Server Management (CRITICAL SKILL)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Launch EC2 Instance (Production Pattern)
     aws ec2 run-instances \
@@ -8766,6 +10050,10 @@
 
   <div class="command-block">
     <h4>🌐 AWS VPC - Network Architecture (HIGH DEMAND SKILL)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # VPC Architecture for Production:
     #
@@ -8920,6 +10208,10 @@
 
   <div class="command-block">
     <h4>🔐 AWS IAM - Security & Access Control (SECURITY = JOB SECURITY)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # IAM Best Practices (Follow This = Get Hired):
     # 1. Never use root account for daily tasks
@@ -9089,6 +10381,10 @@
 
   <div class="command-block">
     <h4>💾 AWS Storage - S3 & EBS (DATA = BUSINESS)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # S3 (Simple Storage Service) - Object Storage
 
@@ -9276,6 +10572,10 @@
 
   <div class="command-block">
     <h4>🌍 AWS Real-World Production Patterns (THIS GETS YOU HIRED)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Scenario 1: High-Availability Web Application
     #
@@ -9663,6 +10963,10 @@
 
   <div class="command-block">
     <h4>🗄️ AWS Database - RDS & DynamoDB (DATA MANAGEMENT SKILLS)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # RDS (Relational Database Service)
 
@@ -9857,6 +11161,10 @@
 
   <div class="command-block">
     <h4>🤖 AWS Automation & DevOps (REMOTE JOB READY)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # CloudFormation (Infrastructure as Code)
 
@@ -10209,6 +11517,10 @@
   <h3>🖼️ Image Scanning</h3>
   <div class="command-block">
     <h4>🔍 Scan Docker Images</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10220,6 +11532,10 @@
   <h3>🛡️ Pod Security Policies & RBAC</h3>
   <div class="command-block">
     <h4>🔐 Create Role and RoleBinding in Kubernetes</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10243,6 +11559,10 @@
   <h3>🔧 Jenkins CLI</h3>
   <div class="command-block">
     <h4>⚙️ Basic Jenkins Commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10255,6 +11575,10 @@
 
   <div class="command-block">
     <h4>📄 Jenkinsfile (Declarative pipeline)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10307,6 +11631,10 @@
 
   <div class="command-block">
     <h4>📁 .github/workflows/ci.yml</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10363,6 +11691,10 @@
 
   <div class="command-block">
     <h4>📄 .gitlab-ci.yml</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10411,6 +11743,10 @@
   <h3>🐙 GitHub Actions</h3>
   <div class="command-block">
     <h4>⚡ Workflow Commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10423,6 +11759,10 @@
   <h3>🦊 GitLab CI</h3>
   <div class="command-block">
     <h4>🚀 Pipeline Commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10445,6 +11785,10 @@
   <h3>🏗️ Terraform Commands</h3>
   <div class="command-block">
     <h4>🏗️ Manage Infrastructure</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10471,6 +11815,10 @@
   <h3>☁️ AWS Services via CLI</h3>
   <div class="command-block">
     <h4>🖥️ EC2, S3, RDS, IAM</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10486,6 +11834,10 @@
   <h3>🌍 Multi-Cloud / Advanced Terraform</h3>
   <div class="command-block">
     <h4>📦 Modules and Workspaces</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -10511,6 +11863,10 @@
 <div>
   <div class="command-block">
     <h4>🐳 Multi-Stage Docker Builds</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
     <pre><code>
     # Multi-stage Dockerfile example
     FROM node:16-alpine AS builder
@@ -10547,6 +11903,10 @@
 
   <div class="command-block">
     <h4>☸️ Kubernetes Advanced Deployments</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code>
     # Rolling update with zero downtime
     kubectl set image deployment/myapp myapp=myapp:v2.0
@@ -10554,7 +11914,7 @@
     kubectl rollout history deployment/myapp
     kubectl rollout undo deployment/myapp --to-revision=1
 
-    # Canary deployment
+    # Canary deploymenut
 
     # Kubernetes Apply Operations (Enterprise Standards)
     # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
@@ -10604,6 +11964,10 @@
 
   <div class="command-block">
     <h4>📋 Infrastructure as Code Patterns</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code># Terraform modules structure
     terraform/
     ├── modules/
@@ -10647,6 +12011,10 @@
 
   <div class="command-block">
     <h4>🎭 Ansible Advanced Patterns</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code># Ansible roles structure
 
     # Ansible Roles Structure (Enterprise Standards)
@@ -10746,6 +12114,10 @@
 <div>
   <div class="command-block">
     <h4>📊 Prometheus Advanced Configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code># Prometheus configuration with multiple targets
     global:
     scrape_interval: 15s
@@ -10791,6 +12163,10 @@
 
   <div class="command-block">
     <h4>📈 Grafana Dashboard Automation</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code># Grafana API automation
     export GRAFANA_URL="http://grafana:3000"
     export GRAFANA_TOKEN="eyJrIjoi..."
@@ -10822,6 +12198,10 @@
 
   <div class="command-block">
     <h4>📚 ELK Stack Advanced Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code># Elasticsearch cluster configuration
     cluster.name: "production-cluster"
     node.name: "es-node-1"
@@ -10880,6 +12260,10 @@
 
   <div class="command-block">
     <h4>🔍 Distributed Tracing with Jaeger</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
     <pre><code># Jaeger deployment with Kubernetes
     apiVersion: apps/v1
     kind: Deployment
@@ -10945,6 +12329,10 @@
 <div>
   <div class="command-block">
     <h4>🔍 Container Security Scanning</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
     <pre><code># Trivy integration in CI/CD
     #!/bin/bash
     IMAGE_NAME="myapp:${BUILD_NUMBER}"
@@ -10969,6 +12357,10 @@
 
   <div class="command-block">
     <h4>🛡️ Kubernetes Security Policies</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
     <pre><code>
     # Pod Security Standards
     apiVersion: v1
@@ -11036,6 +12428,10 @@
 
   <div class="command-block">
     <h4>✅ Compliance Automation</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
     <pre><code>
     # CIS Benchmarks automation
     #!/bin/bash
@@ -11072,6 +12468,10 @@
 
   <div class="command-block">
     <h4>🔐 Secrets Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
     <pre><code>
     # HashiCorp Vault integration
     vault auth enable kubernetes
@@ -11121,6 +12521,10 @@
 <div>
   <div class="command-block">
     <h4>🐍 Python & Pip - Enterprise Python Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
     <pre><code>
     # Enterprise Python and Pip Management (Enterprise Standards)
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11179,6 +12583,10 @@
 
 <div class="command-block">
   <h4>📚 Git Version Control - Enterprise Repository Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Git Version Control (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11279,6 +12687,10 @@
 
 <div class="command-block">
   <h4>🐳 Docker - Enterprise Container Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Docker Container Management (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11332,6 +12744,10 @@
 </code></pre>
 <div class="command-block">
   <h4>☸️ Kubernetes (kubectl) - Enterprise Cluster Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Kubernetes Management (Enterprise Standards)
   # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
@@ -11435,6 +12851,10 @@
 
 <div class="command-block">
   <h4>🤖 Ansible - Enterprise Automation and Configuration Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Ansible Automation (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11533,6 +12953,10 @@
 
 <div class="command-block">
   <h4>🏗️ Terraform - Enterprise Infrastructure as Code</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Terraform IaC Management (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11633,6 +13057,10 @@
 
 <div class="command-block">
   <h4>☁️ AWS CLI - Enterprise Cloud Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise AWS CLI Management (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11728,6 +13156,10 @@
 
 <div class="command-block">
   <h4>🐚 Shell Automation - Enterprise Scripting and Scheduling</h4>
+  <div class="command-category">
+    <span class="category-tag category-common">[COMMON]</span>
+    <span class="category-description">Frequently used in daily operations</span>
+  </div>
   <pre><code>
   # Enterprise Shell Automation (Enterprise Standards)
   # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
@@ -11776,6 +13208,10 @@
 
 <div class="command-block">
   <h4>⚙️ Process Management</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in live/production environments</span>
+  </div>
   <pre><code>
   # Enterprise Process Management (Enterprise)
   pgrep -f process_name                                            # Find process ID
