@@ -13358,13 +13358,767 @@ history | grep keyword        # Quickly find commands relevant to tasks
   history | grep command    # Search command history
         </code></pre>
       </div>
-    </div>
 
-    <div class="navigation" style="margin-top: 40px; text-align: center">
-      <strong>End of Part 1 - System Administration</strong><br />
-      <a href="devops-tools.html">🛠️ Go to Part 2</a>
-      <a href="monitoring-security.html">🔒 Go to Part 3</a>
+      <h3>💾 AMANDA (Advanced Maryland Automatic Network Disk Archiver)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ AMANDA backup service</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
     </div>
+    <pre><code>
+  # AMANDA Service Management
+  systemctl status amanda          # Check AMANDA service status
+  systemctl start amanda           # Start AMANDA service
+  systemctl stop amanda            # Stop AMANDA service
+  systemctl enable amanda          # Enable at boot
+  systemctl disable amanda         # Disable at boot
+
+  # AMANDA Configuration Files
+  /etc/amanda/amanda.conf         # Main configuration
+  /etc/amanda/disklist            # List of disks to backup
+  /etc/amanda/tapelist            # List of tapes
+  /etc/amanda/amanda-client.conf # Client configuration
+
+  # AMANDA Commands
+  amcheck DailySet1               # Check backup configuration
+  amdump DailySet1                # Run backup job
+  amrecover                       # Interactive recovery
+  amlabel DailySet1 DailySet1-01  # Label tape
+  amflush DailySet1               # Flush holding disk
+  amadmin DailySet1 disk          # Show disk information
+        </code></pre>
+      </div>
+
+      <h3>🔍 5-WHYS (Root Cause Analysis Method)</h3>
+
+      <div class="command-block">
+        <h4>🧠 Problem-solving methodology</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # 5-Whys Root Cause Analysis Framework
+  # 
+  # Problem: Server is down
+  # 
+  # Why 1: Why is the server down?
+  # Answer: The application process crashed
+  #
+  # Why 2: Why did the application process crash?
+  # Answer: It ran out of memory
+  #
+  # Why 3: Why did it run out of memory?
+  # Answer: There was a memory leak in the code
+  #
+  # Why 4: Why was there a memory leak?
+  # Answer: The application wasn't properly handling object cleanup
+  #
+  # Why 5: Why wasn't object cleanup handled?
+  # Answer: The development team missed this during code review
+
+  # Implementation in Troubleshooting:
+  # 1. Define the problem clearly
+  # 2. Ask "Why?" repeatedly (5 times)
+  # 3. Document each answer
+  # 4. Identify root cause
+  # 5. Implement preventive measures
+
+  # Example Script Template:
+  #!/bin/bash
+  # 5-whys analysis template
+  PROBLEM="$1"
+  echo "Problem: $PROBLEM"
+  echo "Why 1: $(read -p 'Why 1: ' answer; echo $answer)"
+  echo "Why 2: $(read -p 'Why 2: ' answer; echo $answer)"
+  echo "Why 3: $(read -p 'Why 3: ' answer; echo $answer)"
+  echo "Why 4: $(read -p 'Why 4: ' answer; echo $answer)"
+  echo "Why 5: $(read -p 'Why 5: ' answer; echo $answer)"
+        </code></pre>
+      </div>
+
+      <h3>🔍 AUTOPSY (Digital Forensics Tool)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Autopsy Installation and Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Autopsy Installation (Ubuntu/Debian)
+  sudo apt update
+  sudo apt install autopsy
+  # or download latest from sleuthkit.org
+  
+  # Autopsy Installation (CentOS/RHEL)
+  sudo yum install epel-release
+  sudo yum install autopsy
+  # or use Sleuth Kit repository
+  
+  # Start Autopsy Web Interface
+  sudo autopsy    # Starts web interface on port 9999
+  # Access at: http://localhost:9999/autopsy
+  
+  # Command Line Usage
+  autopsy -d /path/to/evidence    # Analyze specific directory
+  autopsy -f case_file         # Load case file
+  autopsy -c config_file       # Use custom config
+  
+  # Evidence Processing
+  # Autopsy automatically processes:
+  # - File system analysis
+  # - Deleted file recovery
+  # - Timeline analysis
+  # - Keyword search
+  # - Registry analysis (Windows)
+  # - Web artifacts
+  # - Email extraction
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Autopsy Features and Analysis</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Autopsy Modules
+  # File Types Module
+  # - File type identification
+  # - Hash calculation
+  # - Metadata extraction
+  
+  # Timeline Module
+  # - Activity timeline
+  # - File access patterns
+  # - User activity tracking
+  
+  # Keyword Search Module
+  # - Regular expression search
+  # - Index-based searching
+  # - Email address extraction
+  # - URL extraction
+  
+  # Registry Analysis Module (Windows)
+  # - Registry key analysis
+  # - USB device history
+  # - User activity tracking
+  
+  # Web Artifacts Module
+  # - Browser history
+  # - Download history
+  # - Cookie analysis
+  # - Bookmark analysis
+  
+  # Data Sources Module
+  # - Disk images (.dd, .E01, .001)
+  # - Local directories
+  # - Network shares
+  # - Mobile device backups
+  
+  # Reporting Features
+  # Generate comprehensive reports
+  # Export findings to multiple formats
+  # Create timeline visualizations
+  # Include hash verification
+        </code></pre>
+      </div>
+
+      <h3>🔥 BORG (Deduplicating Backup Tool)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Borg Installation and Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Borg Installation
+  # Ubuntu/Debian
+  sudo apt install borgbackup
+  
+  # CentOS/RHEL
+  sudo yum install borgbackup
+  
+  # From source
+  pip install borgbackup
+  
+  # Initialize Repository
+  borg init --encryption=repokey /backup/location
+  borg init --encryption=keyfile /backup/location
+  borg init --encryption=none /backup/location
+  
+  # Create Backup
+  borg create --stats --progress --compression lz4 \
+    /backup/location::backup-$(date +%Y-%m-%d-%H-%M) \
+    /home/user/documents \
+    /home/user/projects \
+    --exclude '/home/user/.cache' \
+    --exclude '/home/user/tmp'
+  
+  # List Backups
+  borg list /backup/location
+  borg list --short /backup/location
+  
+  # Extract Backup
+  borg extract /backup/location::backup-2023-12-01-10-30
+  borg extract --dry-run /backup/location::backup-2023-12-01-10-30
+  borg extract --path /restore/location /backup/location::backup-name
+  
+  # Delete Backup
+  borg delete /backup/location::backup-2023-12-01-10-30
+  borg delete --stats /backup/location::backup-2023-12-01-10-30
+  
+  # Prune Old Backups
+  borg prune --keep-daily=7 --keep-weekly=4 --keep-monthly=6 /backup/location
+  borg prune --dry-run --keep-daily=7 /backup/location
+  
+  # Repository Information
+  borg info /backup/location
+  borg info --json /backup/location
+  
+  # Check Repository Integrity
+  borg check --verify-data /backup/location
+  borg check --repair /backup/location
+  
+  # Change Passphrase
+  borg key change-passphrase /backup/location
+  
+  # Export/Import Keys
+  borg key export --paper /backup/location
+  borg key import /path/to/paperkey
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Borg Advanced Features</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Compression Algorithms
+  --compression none      # No compression
+  --compression lz4       # Fast compression
+  --compression zlib       # Standard compression
+  --compression lzma       # Best compression
+  --compression zstd      # Modern compression
+  
+  # Exclusion Patterns
+  --exclude '*/.git'     # Exclude git directories
+  --exclude '*.tmp'      # Exclude tmp files
+  --exclude-from /path/to/excludes.txt  # File with patterns
+  
+  # Remote Repositories
+  borg init user@server:/path/to/repo
+  borg create user@server:/path/to/repo::backup-name /source
+  
+  # SSH Configuration
+  export BORG_RSH='ssh -p 2222 -i /path/to/key'
+  export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
+  
+  # Environment Variables
+  export BORG_REPO=/backup/location
+  export BORG_PASSPHRASE='your-passphrase'
+  export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
+  
+  # Mount Backup as Filesystem
+  borg mount /backup/location::backup-name /mount/point
+  borg umount /mount/point
+  
+  # Export Repository
+  borg export-tar /backup/location::backup-name - | tar tvf -
+  
+  # Rename Repository
+  borg repo-move /old/location /new/location
+  
+  # Repository Size Limits
+  borg create --quota 100G /backup/location::backup-name /source
+  
+  # Progress and Stats
+  borg create --progress --stats --list --json-lines /backup/location::backup-name /source
+  
+  # Deduplication Statistics
+  borg info --json /backup/location | jq '.cache.stats'
+        </code></pre>
+      </div>
+
+      <h3>⚙️ GETOPTS (Command Line Options Parser)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Getopts Basic Usage</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Basic Getopts Usage
+  #!/bin/bash
+  
+  # Define usage function
+  usage() {
+    echo "Usage: $0 [-h] [-v] [-f filename] [-d directory]"
+    echo "  -h  Show this help message"
+    echo "  -v  Enable verbose mode"
+    echo "  -f  Specify input file"
+    echo "  -d  Specify directory"
+    exit 1
+  }
+  
+  # Initialize variables
+  VERBOSE=0
+  FILENAME=""
+  DIRECTORY=""
+  
+  # Parse options
+  while getopts ":hvf:d:" opt; do
+    case $opt in
+      h) usage ;;
+      v) VERBOSE=1 ;;
+      f) FILENAME="$OPTARG" ;;
+      d) DIRECTORY="$OPTARG" ;;
+      \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
+      :) echo "Option -$OPTARG requires an argument." >&2; usage ;;
+    esac
+  done
+  
+  # Display parsed options
+  echo "Verbose mode: $VERBOSE"
+  echo "Filename: $FILENAME"
+  echo "Directory: $DIRECTORY"
+  
+  # Example with multiple flags
+  # ./script.sh -v -f input.txt -d /tmp
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Advanced Getopts Patterns</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Advanced Getopts with Multiple Options
+  #!/bin/bash
+  
+  # Configuration
+  SCRIPT_NAME=$(basename "$0")
+  LOG_FILE=""
+  OUTPUT_DIR=""
+  RECURSIVE=0
+  DRY_RUN=0
+  FORCE=0
+  
+  # Help function
+  show_help() {
+    cat << EOF
+  $SCRIPT_NAME - Advanced File Processor
+  
+  Usage: $SCRIPT_NAME [OPTIONS] [FILES...]
+  
+  Options:
+    -h, --help          Show this help message
+    -v, --verbose       Enable verbose output
+    -l, --log FILE      Log to specified file
+    -o, --output DIR     Output directory
+    -r, --recursive     Process directories recursively
+    -n, --dry-run       Show what would be done without executing
+    -f, --force         Force overwrite existing files
+    
+  Examples:
+    $SCRIPT_NAME -v -l process.log -o /tmp file1.txt file2.txt
+    $SCRIPT_NAME -r -n -f /path/to/directory
+    $SCRIPT_NAME --verbose --output ./results --recursive .
+  EOF
+  }
+  
+  # Parse long options
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h|--help) show_help; exit 0 ;;
+      -v|--verbose) VERBOSE=1; shift ;;
+      -l|--log) LOG_FILE="$2"; shift 2 ;;
+      -o|--output) OUTPUT_DIR="$2"; shift 2 ;;
+      -r|--recursive) RECURSIVE=1; shift ;;
+      -n|--dry-run) DRY_RUN=1; shift ;;
+      -f|--force) FORCE=1; shift ;;
+      -*) echo "Unknown option: $1" >&2; exit 1 ;;
+      *) break ;;
+    esac
+  done
+  
+  # Validate required options
+  if [[ -z "$OUTPUT_DIR" ]]; then
+    echo "Error: Output directory is required" >&2
+    exit 1
+  fi
+  
+  # Process remaining arguments
+  for file in "$@"; do
+    echo "Processing: $file"
+    # Add file processing logic here
+  done
+  
+  # Getopts with colon for error handling
+  while getopts ":a:b:c" opt; do
+    case $opt in
+      a) echo "Option -a with argument: $OPTARG" ;;
+      b) echo "Option -b with argument: $OPTARG" ;;
+      c) echo "Option -c (no argument)" ;;
+      :) echo "Option -$OPTARG requires an argument" >&2 ;;
+      \?) echo "Invalid option -$OPTARG" >&2 ;;
+    esac
+  done
+        </code></pre>
+      </div>
+
+      <h3>🔌 MKFIFO (Named Pipe Creation)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Named Pipe Basics</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Create Named Pipe (FIFO)
+  mkfifo my_pipe                    # Create named pipe
+  mkfifo -m 644 my_pipe           # Create with specific permissions
+  
+  # Check if file is a named pipe
+  [ -p my_pipe ] && echo "This is a named pipe"
+  test -p my_pipe && echo "FIFO exists"
+  
+  # Basic Producer-Consumer Example
+  # Terminal 1 (Producer)
+  echo "Hello World" > my_pipe     # This will block until reader connects
+  
+  # Terminal 2 (Consumer)
+  cat < my_pipe                    # Read from pipe
+  
+  # Remove named pipe
+  rm my_pipe
+  
+  # Create multiple pipes
+  mkfifo pipe_in pipe_out pipe_error
+  
+  # List named pipes
+  find . -type p                  # Find all named pipes
+  ls -l | grep '^p'              # List pipes with details
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Advanced Named Pipe Usage</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Process Communication with Named Pipes
+  #!/bin/bash
+  
+  # Create pipes for communication
+  mkfifo /tmp/cmd_pipe
+  mkfifo /tmp/result_pipe
+  
+  # Background process to handle commands
+  {
+    while true; do
+      if read -r cmd < /tmp/cmd_pipe; then
+        # Execute command and send result
+        result=$(eval "$cmd" 2>&1)
+        echo "$result" > /tmp/result_pipe
+      fi
+    done
+  } &
+  
+  COMMAND_HANDLER_PID=$!
+  
+  # Function to send command and get result
+  send_command() {
+    local cmd="$1"
+    echo "$cmd" > /tmp/cmd_pipe
+    read -r result < /tmp/result_pipe
+    echo "$result"
+  }
+  
+  # Usage examples
+  send_command "ls -la"
+  send_command "date"
+  send_command "whoami"
+  
+  # Cleanup
+  kill $COMMAND_HANDLER_PID
+  rm -f /tmp/cmd_pipe /tmp/result_pipe
+  
+  # Log Processing with Named Pipes
+  # Create pipe for log processing
+  mkfifo /tmp/log_pipe
+  
+  # Log processor (background)
+  {
+    while true; do
+      if read -r log_line < /tmp/log_pipe; then
+        # Process log line
+        echo "$(date): $log_line" >> processed.log
+        # Send alert if error
+        if [[ "$log_line" == *"ERROR"* ]]; then
+          echo "ALERT: $log_line" | mail -s "Log Error" admin@example.com
+        fi
+      fi
+    done
+  } &
+  
+  LOG_PROCESSOR_PID=$!
+  
+  # Send logs to pipe
+  tail -f /var/log/app.log > /tmp/log_pipe &
+  
+  # Cleanup function
+  cleanup() {
+    kill $LOG_PROCESSOR_PID
+    rm -f /tmp/log_pipe
+  }
+  
+  trap cleanup EXIT
+  
+  # Multi-Process Data Pipeline
+  mkfifo stage1 stage2 stage3
+  
+  # Stage 1: Data collection
+  {
+    while true; do
+      collect_data > stage1
+      sleep 1
+    done
+  } &
+  
+  # Stage 2: Data processing
+  {
+    while true; do
+      read -r data < stage1
+      process_data "$data" > stage2
+    done
+  } &
+  
+  # Stage 3: Data output
+  {
+    while true; do
+      read -r processed < stage2
+      output_data "$processed"
+    done
+  } &
+  
+  # Wait for processes
+  wait
+  
+  # Named Pipe with Timeout
+  read_with_timeout() {
+    local pipe="$1"
+    local timeout="$2"
+    local result=""
+    
+    if read -t "$timeout" -r result < "$pipe"; then
+      echo "$result"
+      return 0
+    else
+      echo "TIMEOUT"
+      return 1
+    fi
+  }
+  
+  # Non-blocking read attempt
+  if read -t 0 -r data < my_pipe; then
+    echo "Data available: $data"
+  else
+    echo "No data available"
+  fi
+        </code></pre>
+      </div>
+
+      <h3>🖥️ TPUT & STTY (Terminal Control)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ TPUT (Terminal Capabilities)</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Terminal Information
+  tput longname                    # Get terminal name
+  tput cols                       # Get number of columns
+  tput lines                      # Get number of rows
+  tput colors                     # Get number of colors supported
+  
+  # Cursor Control
+  tput cup 10 20                 # Move cursor to row 10, column 20
+  tput civis                      # Hide cursor
+  tput cnorm                      # Show cursor (normal)
+  tput clear                      # Clear screen and home cursor
+  tput el                         # Clear to end of line
+  tput el1                        # Clear to beginning of line
+  tput ed                         # Clear to end of screen
+  
+  # Text Formatting
+  tput bold                       # Start bold text
+  tput smso                       # Start standout mode
+  tput rmso                       # End standout mode
+  tput rev                        # Start reverse video
+  tput sgr0                       # Reset all attributes
+  
+  # Colors
+  tput setaf 1                    # Set foreground color (red)
+  tput setab 4                    # Set background color (blue)
+  tput setaf 2; tput setab 0     # Green text on black background
+  
+  # Color Codes
+  # 0: Black    1: Red      2: Green    3: Yellow
+  # 4: Blue     5: Magenta  6: Cyan     7: White
+  
+  # Example: Colored Output
+  echo "$(tput setaf 2)Success:$(tput sgr0) Operation completed"
+  echo "$(tput bold)$(tput setaf 1)Error:$(tput sgr0) Failed to connect"
+  
+  # Progress Bar Example
+  progress_bar() {
+    local width=50
+    local percent=$1
+    local filled=$((width * percent / 100))
+    local empty=$((width - filled))
+    
+    printf "\r["
+    printf "%*s" $filled | tr ' ' '='
+    printf "%*s" $empty | tr ' ' '-'
+    printf "] %d%%" $percent
+  }
+  
+  # Animated Loading
+  for i in {1..100}; do
+    progress_bar $i
+    sleep 0.05
+  done
+  echo
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 STTY (Terminal Settings)</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Terminal Settings Information
+  stty -a                         # Show all terminal settings
+  stty size                        # Show terminal size (rows columns)
+  stty                             # Show basic settings
+  
+  # Input Control
+  stty -echo                       # Turn off echo (password input)
+  stty echo                        # Turn on echo
+  stty -icanon                     # Disable canonical mode (get single chars)
+  stty icanon                      # Enable canonical mode
+  stty -icrnl                      # Don't translate CR to NL
+  stty icrnl                       # Translate CR to NL
+  
+  # Special Character Control
+  stty intr ^C                     # Set interrupt character
+  stty erase ^?                    # Set erase character
+  stty kill ^U                     # Set kill character
+  stty eof ^D                      # Set end-of-file character
+  
+  # Output Control
+  stty -opost                      # Disable output processing
+  stty opost                       # Enable output processing
+  stty -onlcr                      # Don't map NL to CR-NL
+  stty onlcr                       # Map NL to CR-NL
+  
+  # Flow Control
+  stty -ixon                       # Disable XON/XOFF flow control
+  stty ixon                        # Enable XON/XOFF flow control
+  stty -ixoff                      # Disable input flow control
+  stty ixoff                       # Enable input flow control
+  
+  # Save and Restore Settings
+  OLD_SETTINGS=$(stty -g)          # Save current settings
+  stty $OLD_SETTINGS               # Restore saved settings
+  
+  # Password Input Example
+  read_password() {
+    local password
+    echo -n "Enter password: "
+    stty -echo                      # Turn off echo
+    read password
+    stty echo                       # Turn echo back on
+    echo
+    echo "$password"
+  }
+  
+  # Single Character Input
+  read_char() {
+    local char
+    stty -icanon -echo              # Disable canonical mode and echo
+    dd bs=1 count=1 2>/dev/null     # Read single character
+    stty icanon echo               # Restore settings
+  }
+  
+  # Terminal Size Detection
+  get_terminal_size() {
+    local size=$(stty size)
+    local rows=${size% *}
+    local cols=${size#* }
+    echo "Rows: $rows, Columns: $cols"
+  }
+  
+  # Safe Terminal Reset
+  reset_terminal() {
+    stty sane                       # Reset terminal to sane state
+    tput sgr0                       # Reset all attributes
+    tput clear                       # Clear screen
+    tput cup 0 0                    # Move cursor to top-left
+  }
+  
+  # Interactive Menu with Terminal Control
+  show_menu() {
+    local cols=$(tput cols)
+    local title="Interactive Menu"
+    local padding=$(((cols - ${#title}) / 2))
+    
+    tput clear
+    tput cup 2 $padding
+    echo "$(tput bold)$(tput setaf 2)$title$(tput sgr0)"
+    
+    tput cup 5 10
+    echo "1. System Information"
+    tput cup 6 10
+    echo "2. Process Monitor"
+    tput cup 7 10
+    echo "3. Network Status"
+    tput cup 8 10
+    echo "4. Exit"
+    
+    tput cup 10 10
+    echo -n "Select option: "
+  }
+  
+  # Cleanup on Exit
+  cleanup() {
+    stty $OLD_SETTINGS 2>/dev/null
+    tput sgr0
+    tput clear
+    echo "Terminal settings restored"
+  }
+  
+  trap cleanup EXIT
+        </code></pre>
+      </div>
 
     <script>
   // Auto-generate TOC based on <h2> headings

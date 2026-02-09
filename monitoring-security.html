@@ -5412,6 +5412,275 @@ podman generate systemd --name webserver --files
 </code></pre>
 </div>
 
+      <h3>📊 APPDYNAMICS (Application Performance Monitoring)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ AppDynamics Controller and Agent Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # AppDynamics Controller Access
+  # Web UI: https://controller.example.com:8090
+  # Default credentials: admin@customer1 / appdynamics
+  
+  # Machine Agent Installation
+  wget https://download.appdynamics.com/download/machineagent/latest/64-bit_linux/machineagent.zip
+  unzip machineagent.zip
+  ./machineagent -jar machineagent.jar \
+    -Dappdynamics.controller.host=controller.example.com \
+    -Dappdynamics.controller.port=8090 \
+    -Dappdynamics.controller.ssl.enabled=false \
+    -Dappdynamics.agent.accountName=customer1 \
+    -Dappdynamics.agent.accountAccessKey=access-key \
+    -Dappdynamics.sim.enabled=true \
+    -Dappdynamics.machine.agent.displayName=server-name
+
+  # Java Agent Installation
+  java -javaagent:/path/to/javaagent.jar \
+    -Dappdynamics.controller.host=controller.example.com \
+    -Dappdynamics.controller.port=8090 \
+    -Dappdynamics.controller.ssl.enabled=false \
+    -Dappdynamics.agent.accountName=customer1 \
+    -Dappdynamics.agent.accountAccessKey=access-key \
+    -Dappdynamics.application.name=MyApplication \
+    -Dappdynamics.tier.name=MyTier \
+    -Dappdynamics.nodeName=node1 \
+    -jar my-application.jar
+
+  # Database Agent Configuration
+  # Edit /conf/db-agent/db-agent-config.xml
+  # Set controller connection details
+  # Configure database monitoring
+  ./db-agent start
+  ./db-agent stop
+  ./db-agent status
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📈 AppDynamics CLI and API</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # AppDynamics REST API
+  # Get Application List
+  curl -u "admin@customer1:password" \
+    "https://controller.example.com:8090/controller/rest/applications"
+
+  # Get Application Health Rules
+  curl -u "admin@customer1:password" \
+    "https://controller.example.com:8090/controller/rest/applications/1/health-rules"
+
+  # Get Metric Data
+  curl -u "admin@customer1:password" \
+    "https://controller.example.com:8090/controller/metric-data" \
+    -X POST -H "Content-Type: application/json" \
+    -d '{
+      "metric-path": "Business Metrics|Overall Application Health",
+      "time-range-type": "BEFORE_NOW",
+      "duration-in-mins": 15
+    }'
+
+  # Create Health Rule
+  curl -u "admin@customer1:password" \
+    "https://controller.example.com:8090/controller/rest/applications/1/health-rules" \
+    -X POST -H "Content-Type: application/json" \
+    -d @health-rule.json
+
+  # Trigger Event
+  curl -u "admin@customer1:password" \
+    "https://controller.example.com:8090/controller/rest/events" \
+    -X POST -H "Content-Type: application/json" \
+    -d '{
+      "event-type": "APPLICATION_DEPLOYMENT",
+      "application-name": "MyApplication",
+      "summary": "Deployment completed",
+      "details": "Version 1.2.3 deployed"
+    }'
+        </code></pre>
+      </div>
+
+      <h3>🎭 BACKSTAGE (Developer Portal)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Backstage Installation and Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Create Backstage App
+  npx @backstage/create-app@latest my-backstage-app
+  cd my-backstage-app
+
+  # Start Development Server
+  yarn dev
+  # Access at http://localhost:3000
+
+  # Build for Production
+  yarn build
+  yarn start
+
+  # Docker Build and Run
+  docker build . -t backstage
+  docker run -p 7007:7007 backstage
+
+  # Kubernetes Deployment
+  kubectl apply -f examples/kubernetes/backstage.yaml
+
+  # Environment Configuration
+  # .env file
+  APP_CONFIG_backend_baseUrl=http://localhost:7007
+  APP_CONFIG_organization_name=MyCompany
+  AUTH_GOOGLE_CLIENT_ID=your-google-client-id
+  AUTH_GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+  # Plugin Installation
+  yarn add @backstage/plugin-techdocs
+  yarn add @backstage/plugin-catalog-react
+  yarn add @backstage/plugin-scaffolder-backend
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Backstage Configuration and Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Backstage Configuration (app-config.yaml)
+  # app-config.yaml
+  app:
+    title: My Company Developer Portal
+    baseUrl: http://localhost:3000
+
+  organization:
+    name: My Company
+
+  backend:
+    baseUrl: http://localhost:7007
+    listen:
+      port: 7007
+    csp:
+      connect-src: ["'self'", 'http:', 'https:']
+
+  # Catalog Configuration
+  catalog:
+    providers:
+      github:
+        providerId:
+          organization: my-org
+          catalogPath: '/catalog-info.yaml'
+
+  # TechDocs Configuration
+  techdocs:
+    builder: 'local'
+    generator:
+      runIn: 'local'
+    publisher:
+      type: 'local'
+
+  # Scaffolder Configuration
+  scaffolder:
+    github:
+      token: ${GITHUB_TOKEN}
+      visibility: public
+
+  # Authentication Configuration
+  auth:
+    providers:
+      github:
+        development:
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_CLIENT_SECRET}
+
+  # Database Migration
+  yarn backstage-cli migrate
+
+  # CLI Commands
+  yarn backstage-cli info
+  yarn backstage-cli config:print
+  yarn backstage-cli start
+  yarn backstage-cli build
+  yarn backstage-cli test
+  yarn backstage-cli lint
+  yarn backstage-cli clean
+
+  # Plugin Management
+  yarn backstage-cli add plugin
+  yarn backstage-cli remove plugin
+  yarn backstage-cli list plugins
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📚 Backstage API and Integration</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Catalog API
+  # Get All Entities
+  curl http://localhost:7007/api/catalog/entities
+
+  # Get Entity by Kind
+  curl http://localhost:7007/api/catalog/entities/by-kind/component
+
+  # Get Specific Entity
+  curl http://localhost:7007/api/catalog/entities/by-name/component/default/my-component
+
+  # Create Entity
+  curl -X POST http://localhost:7007/api/catalog/entities \
+    -H "Content-Type: application/json" \
+    -d '{
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "Component",
+      "metadata": {
+        "name": "my-component",
+        "description": "My new component"
+      },
+      "spec": {
+        "type": "service",
+        "lifecycle": "production",
+        "owner": "team-a"
+      }
+    }'
+
+  # Scaffolder API
+  # Get Templates
+  curl http://localhost:7007/api/scaffolder/v2/templates
+
+  # Create Template Instance
+  curl -X POST http://localhost:7007/api/scaffolder/v2/tasks \
+    -H "Content-Type: application/json" \
+    -d '{
+      "templateRef": {
+        "name": "react-template",
+        "kind": "Template"
+      },
+      "values": {
+        "name": "my-new-app",
+        "owner": "team-a"
+      }
+    }'
+
+  # Get Task Status
+  curl http://localhost:7007/api/scaffolder/v2/tasks/{taskId}
+
+  # Health Check
+  curl http://localhost:7007/api/health
+
+  # Search API
+  curl "http://localhost:7007/api/search/query?term=component"
+        </code></pre>
+      </div>
+
 <h2 id="summary">📋 67. SUMMARY</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->

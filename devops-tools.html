@@ -13273,6 +13273,402 @@
   # - Document all automation procedures and dependencies
 </code></pre>
 </div>
+
+      <h3>🌪️ APACHE AIRFLOW (Workflow Automation)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Airflow service management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Airflow Service Management
+  airflow version                     # Check Airflow version
+  airflow info                        # Show Airflow configuration
+  airflow db init                     # Initialize database
+  airflow db upgrade                  # Upgrade database schema
+  airflow db reset                    # Reset database (dangerous!)
+
+  # Airflow Web Server
+  airflow webserver -p 8080 -D        # Start web server on port 8080
+  airflow webserver -D                # Start web server as daemon
+  airflow webserver -w 4              # Start with 4 workers
+
+  # Airflow Scheduler
+  airflow scheduler -D                # Start scheduler as daemon
+  airflow scheduler -n 2              # Start with 2 scheduler instances
+
+  # Airflow Worker (for CeleryExecutor)
+  airflow worker -q default           # Start worker for default queue
+  airflow worker -q critical,default  # Start worker for multiple queues
+  airflow worker -c 4                # Start with 4 concurrency
+
+  # Airflow Configuration
+  airflow config list                 # List all configuration
+  airflow config get-value core executor  # Get specific config value
+  airflow config set-value core executor LocalExecutor  # Set config value
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📋 DAG (Directed Acyclic Graph) Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # DAG Operations
+  airflow dags list                  # List all DAGs
+  airflow dags report                # Generate DAG report
+  airflow dags show example_dag      # Show DAG details
+  airflow dags pause example_dag     # Pause a DAG
+  airflow dags unpause example_dag   # Unpause a DAG
+  airflow dags trigger example_dag   # Trigger DAG run
+  airflow dags delete example_dag    # Delete DAG (metadata only)
+
+  # DAG Runs
+  airflow dags list-runs example_dag     # List DAG runs
+  airflow dags backfill example_dag -s 2023-01-01 -e 2023-01-31  # Backfill
+  airflow dags clear example_dag -s 2023-01-01 -e 2023-01-31     # Clear runs
+
+  # Task Instance Management
+  airflow tasks list example_dag      # List tasks in DAG
+  airflow tasks state example_dag task_id 2023-01-01  # Get task state
+  airflow tasks run example_dag task_id 2023-01-01    # Run specific task
+  airflow tasks clear example_dag task_id 2023-01-01   # Clear task instance
+
+  # Connections Management
+  airflow connections list           # List all connections
+  airflow connections add conn_id --conn-uri mysql://user:pass@host:port/db
+  airflow connections delete conn_id  # Delete connection
+  airflow connections get conn_id     # Get connection details
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Airflow Variables and Pools</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Variables Management
+  airflow variables list             # List all variables
+  airflow variables get var_name     # Get variable value
+  airflow variables set var_name "value"  # Set variable
+  airflow variables delete var_name   # Delete variable
+  airflow variables import /path/to/variables.json  # Import variables
+  airflow variables export /path/to/variables.json  # Export variables
+
+  # Pools Management
+  airflow pools list                 # List all pools
+  airflow pools get pool_name        # Get pool details
+  airflow pools set pool_name 5       # Set pool slots
+  airflow pools delete pool_name      # Delete pool
+
+  # XComs (Cross-communication)
+  airflow xcoms list                 # List XComs
+  airflow xcoms get dag_id task_id run_id  # Get XCom value
+  airflow xcoms delete dag_id task_id run_id  # Delete XCom
+
+  # Kerberos Management
+  airflow kerberos start             # Start Kerberos ticket
+  airflow kerberos status            # Check Kerberos status
+  airflow kerberos renew             # Renew Kerberos ticket
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🐳 Docker and Kubernetes Integration</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Docker Commands
+  docker-compose -f docker-compose-CeleryExecutor.yml up -d
+  docker-compose -f docker-compose-LocalExecutor.yml up -d
+  docker-compose down                # Stop all containers
+  docker-compose ps                  # List running containers
+  docker-compose logs webserver      # View webserver logs
+  docker-compose exec webserver bash  # Execute bash in webserver
+
+  # Kubernetes Commands (using Helm)
+  helm repo add apache-airflow https://airflow.apache.org
+  helm install airflow apache-airflow/airflow
+  helm upgrade airflow apache-airflow/airflow
+  helm uninstall airflow
+
+  # Kubernetes Pod Management
+  kubectl get pods -n airflow      # List Airflow pods
+  kubectl logs -f deployment/airflow-webserver -n airflow  # View logs
+  kubectl exec -it deployment/airflow-scheduler -n airflow -- bash  # Execute shell
+  kubectl port-forward svc/airflow-webserver 8080:8080 -n airflow  # Port forward
+
+  # Airflow on Kubernetes Configuration
+  # Values for Kubernetes deployment
+  # executor: KubernetesExecutor
+  # workers:
+  #   resources:
+  #     requests:
+  #       cpu: "250m"
+  #       memory: "512Mi"
+  #     limits:
+  #       cpu: "500m"
+  #       memory: "1Gi"
+        </code></pre>
+      </div>
+
+      <h3>⏰ APSCHEDULER (Advanced Python Scheduler)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ APScheduler Installation and Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # APScheduler Installation
+  pip install apscheduler
+  pip install apscheduler[redis]    # With Redis support
+  pip install apscheduler[mongodb]  # With MongoDB support
+  pip install apscheduler[sqlalchemy] # With SQLAlchemy support
+
+  # Basic Usage Example
+  from apscheduler.schedulers.background import BackgroundScheduler
+  from apscheduler.triggers.interval import IntervalTrigger
+  from apscheduler.triggers.cron import CronTrigger
+  
+  # Create scheduler
+  scheduler = BackgroundScheduler()
+  
+  # Add interval job
+  scheduler.add_job(
+      my_function,
+      trigger=IntervalTrigger(seconds=30),
+      id='interval_job'
+  )
+  
+  # Add cron job
+  scheduler.add_job(
+      my_function,
+      trigger=CronTrigger(hour=14, minute=30),
+      id='cron_job'
+  )
+  
+  # Start scheduler
+  scheduler.start()
+
+  # Job Management
+  scheduler.get_jobs()              # List all jobs
+  scheduler.pause_job('job_id')       # Pause job
+  scheduler.resume_job('job_id')      # Resume job
+  scheduler.remove_job('job_id')       # Remove job
+  scheduler.shutdown()                 # Stop scheduler
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 APScheduler Configuration and Job Types</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Scheduler Types
+  from apscheduler.schedulers.background import BackgroundScheduler
+  from apscheduler.schedulers.blocking import BlockingScheduler
+  from apscheduler.schedulers.asyncio import AsyncIOScheduler
+  from apscheduler.schedulers.gevent import GeventScheduler
+  from apscheduler.schedulers.tornado import TornadoScheduler
+  from apscheduler.schedulers.twisted import TwistedScheduler
+  from apscheduler.schedulers.qt import QtScheduler
+
+  # Trigger Types
+  from apscheduler.triggers.date import DateTrigger      # Run once at specific date
+  from apscheduler.triggers.interval import IntervalTrigger  # Run at intervals
+  from apscheduler.triggers.cron import CronTrigger        # Run with cron expression
+  from apscheduler.triggers.combining import OrTrigger   # Combine triggers
+
+  # Job Stores
+  from apscheduler.jobstores.memory import MemoryJobStore
+  from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+  from apscheduler.jobstores.redis import RedisJobStore
+  from apscheduler.jobstores.mongodb import MongoDBJobStore
+
+  # Executors
+  from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+  from apscheduler.executors.asyncio import AsyncIOExecutor
+  from apscheduler.executors.gevent import GeventExecutor
+  from apscheduler.executors.twisted import TwistedExecutor
+
+  # Configuration Example
+  from apscheduler.schedulers.background import BackgroundScheduler
+  from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+  from apscheduler.executors.pool import ThreadPoolExecutor
+
+  jobstores = {
+      'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
+  }
+  executors = {
+      'default': ThreadPoolExecutor(20),
+  }
+  job_defaults = {
+      'coalesce': False,
+      'max_instances': 3
+  }
+
+  scheduler = BackgroundScheduler(
+      jobstores=jobstores,
+      executors=executors,
+      job_defaults=job_defaults
+  )
+
+  # Cron Expressions
+  # * * * * * * *
+  # | | | | | | |
+  # | | | | | +----- day of week (0-6) (Sunday=0)
+  # | | | | +------- month (1-12)
+  # | | | +--------- day of month (1-31)
+  # | | +----------- hour (0-23)
+  # +--------------- minute (0-59)
+  
+  scheduler.add_job(
+      my_function,
+      trigger=CronTrigger(
+          day_of_week='mon-fri',
+          hour='9-17',
+          minute='*/15'
+      )
+  )
+        </code></pre>
+      </div>
+
+      <h3>🏝️ ATLANTIS (Terraform Pull Request Automation)</h3>
+
+      <div class="command-block">
+        <h4>⚙️ Atlantis Installation and Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Atlantis Installation
+  # Download latest release
+  wget https://github.com/runatlantis/atlantis/releases/latest/download/atlantis_linux_amd64.zip
+  unzip atlantis_linux_amd64.zip
+  sudo mv atlantis /usr/local/bin/
+  sudo chmod +x /usr/local/bin/atlantis
+
+  # Docker Installation
+  docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v $HOME/.ssh:/root/.ssh \
+    -e ATLANTIS_GH_USER=your-github-username \
+    -e ATLANTIS_GH_TOKEN=your-github-token \
+    -e ATLANTIS_REPO_WHITELIST=github.com/your-org/* \
+    ghcr.io/runatlantis/atlantis:latest
+
+  # Kubernetes Deployment
+  kubectl apply -f https://raw.githubusercontent.com/runatlantis/atlantis/main/examples/kubernetes/atlantis.yaml
+
+  # Basic Configuration
+  # atlantis.yaml
+  version: 3
+  repos:
+  - id: /.*/
+    apply_requirements:
+    - version: 0.12
+    - source: .terraform/requirements.yaml
+    workflow: custom
+    allowed_overrides: []
+    workflow: terragrunt
+    allowed_overrides: [apply_requirements]
+
+  # Server Configuration
+  atlantis server \
+    --atlantis-url=http://localhost:4141 \
+    --gh-user=your-github-username \
+    --gh-token=your-github-token \
+    --repo-whitelist=github.com/your-org/* \
+    --data-dir=/var/lib/atlantis
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 Atlantis Workflows and Configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Custom Workflow (workflow.yaml)
+  name: custom
+  plan:
+    steps:
+    - run: terraform init -input=false
+    - run: terraform plan -input=false -out=$PLANFILE
+  apply:
+    steps:
+    - run: terraform apply -input=false -auto-approve $PLANFILE
+
+  # Terragrunt Workflow
+  name: terragrunt
+  plan:
+    steps:
+    - run: terragrunt run-all --no-auto-approve --terragrit-non-interactive
+  apply:
+    steps:
+    - run: terragrunt run-all --auto-approve --terragrit-non-interactive
+
+  # GitHub Integration
+  # .atlantis/config.yaml
+  version: 3
+  automerge: true
+  delete_source_branch_on_merge: true
+  parallel_plan: true
+  parallel_apply: true
+
+  # Environment Variables
+  ATLANTIS_GH_USER=your-github-username
+  ATLANTIS_GH_TOKEN=your-github-token
+  ATLANTIS_GH_WEBHOOK_SECRET=your-webhook-secret
+  ATLANTIS_REPO_WHITELIST=github.com/your-org/*
+  ATLANTIS_ALLOW_DRAFT_PRS=true
+  ATLANTIS_DEFAULT_TERRAFORM_VERSION=1.5.7
+
+  # AWS Credentials
+  AWS_ACCESS_KEY_ID=your-access-key
+  AWS_SECRET_ACCESS_KEY=your-secret-key
+  AWS_DEFAULT_REGION=us-east-1
+
+  # Terraform Cloud Integration
+  ATLAS_TOKEN=your-terraform-cloud-token
+  TF_WORKSPACE=production
+
+  # Slack Integration
+  ATLANTIS_SLACK_TOKEN=your-slack-token
+  ATLANTIS_SLACK_CHANNEL=#devops-alerts
+  ATLANTIS_SLACK_USERNAME=atlantis-bot
+
+  # Usage with GitHub
+  # 1. Create PR with changes
+  # 2. Add atlantis plan commands in PR description
+  # 3. Atlantis will run terraform plan automatically
+  # 4. Review plan output
+  # 5. Add "atlantis apply" comment to apply changes
+
+  # Atlantis Commands in PR
+  atlantis plan          # Run terraform plan
+  atlantis plan -d dir   # Plan specific directory
+  atlantis apply         # Run terraform apply
+  atlantis apply -d dir  # Apply specific directory
+  atlantis unlock        # Unlock state if locked
+  atlantis help          # Show available commands
+        </code></pre>
+      </div>
+
 </div>
 
 <div class="navigation" style="margin-top: 40px; text-align: center">
