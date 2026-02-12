@@ -11565,6 +11565,35 @@ Test in non-production systems whenever possible.
     </div>
     <pre><code>
   mysqldump -u root -p database_name | gzip > backup.sql.gz
+  mysqldump -u root -p database_name | bzip2 > backup.sql.bz2
+  mysqldump -u root -p --single-transaction database_name | gzip > backup.sql.gz
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>📅 Scheduled MySQL backups</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Backup script example:
+  #!/bin/bash
+  DB_USER="backup_user"
+  DB_PASS="password"
+  DB_NAME="mydb"
+  BACKUP_DIR="/backup/mysql"
+  DATE=$(date +%Y%m%d_%H%M%S)
+  
+  mkdir -p $BACKUP_DIR
+  mysqldump -u $DB_USER -p$DB_PASS $DB_NAME > $BACKUP_DIR/${DB_NAME}_${DATE}.sql
+  gzip $BACKUP_DIR/${DB_NAME}_${DATE}.sql
+  
+  # Remove backups older than 7 days
+  find $BACKUP_DIR -name "*.sql.gz" -mtime +7 -delete
+  
+  # Crontab entry: Daily at 1 AM
+  # 0 1 * * * /home/user/scripts/mysql_backup.sh
           </code></pre>
         </div>
 
@@ -11638,6 +11667,106 @@ Test in non-production systems whenever possible.
     </div>
     <pre><code>
   pg_dump database_name | gzip > backup.sql.gz
+  pg_dump -U username database_name | gzip > backup.sql.gz
+  pg_dump -h hostname -U username database_name | gzip > backup.sql.gz
+  
+  # Scheduled PostgreSQL backup script:
+  #!/bin/bash
+  DB_USER="postgres"
+  DB_NAME="mydb"
+  BACKUP_DIR="/backup/postgresql"
+  DATE=$(date +%Y%m%d_%H%M%S)
+  
+  mkdir -p $BACKUP_DIR
+  pg_dump -U $DB_USER $DB_NAME > $BACKUP_DIR/${DB_NAME}_${DATE}.sql
+  gzip $BACKUP_DIR/${DB_NAME}_${DATE}.sql
+  
+  # Remove backups older than 7 days
+  find $BACKUP_DIR -name "*.sql.gz" -mtime +7 -delete
+  
+  # Crontab entry: Every 6 hours
+  # 0 */6 * * * /home/user/scripts/pg_backup.sh
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔄 Restore database</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  psql database_name < backup.sql
+  psql -U username database_name < backup.sql
+  gunzip < backup.sql.gz | psql database_name
+  psql -f backup.sql database_name
+  
+  # Restore all databases
+  psql -d postgres -f all_backup.sql
+          </code></pre>
+        </div>
+
+        <h3>📁 File System Backups</h3>
+
+        <div class="command-block">
+          <h4>🗜️ tar backup commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Full backup script example:
+  #!/bin/bash
+  BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
+  BACKUP_DIR="/backup"
+  SOURCE_DIR="/home/user/data"
+  
+  tar -czf $BACKUP_DIR/backup_$BACKUP_DATE.tar.gz $SOURCE_DIR
+  
+  # Crontab entry: Daily at 2 AM
+  # 0 2 * * * /home/user/scripts/backup.sh
+  
+  # Common tar backup patterns:
+  tar -czf backup.tar.gz /path/to/directory          # Compressed backup
+  tar -cjf backup.tar.bz2 /path/to/directory         # Bzip2 compression
+  tar -cJf backup.tar.xz /path/to/directory          # XZ compression
+  tar -czf backup.tar.gz --exclude='*.tmp' /path    # Exclude files
+  tar -czf backup.tar.gz --exclude-vcs /path         # Exclude version control
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔄 rsync backup commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Incremental backup with rsync:
+  #!/bin/bash
+  SOURCE="/home/user/data"
+  DEST="/backup/current/"
+  ARCHIVE="/backup/archive/"
+  
+  # Rotate old backup
+  if [ -d "$DEST" ]; then
+    mv "$DEST" "$ARCHIVE/backup_$(date +%Y%m%d_%H%M%S)"
+  fi
+  
+  # Create new backup
+  rsync -av --delete "$SOURCE" "$DEST"
+  
+  # Crontab entry: Every 4 hours
+  # 0 */4 * * * /home/user/scripts/rsync_backup.sh
+  
+  # Rsync backup patterns:
+  rsync -av /source/ /destination/                    # Archive mode
+  rsync -av --delete /source/ /destination/          # Mirror with deletion
+  rsync -av --exclude='*.tmp' /source/ /dest/        # Exclude files
+  rsync -av --backup --backup-dir=/backup/old /src/ /dst/  # Backup changed files
+  rsync -avz --progress user@server:/remote/ /local/  # Remote backup with compression
+          </code></pre>
+        </div>
   pg_dump -Fc database_name > backup.dump  # Custom format (compressed)
           </code></pre>
         </div>
@@ -11893,6 +12022,66 @@ Test in non-production systems whenever possible.
     <pre><code>
   tail -f /var/log/cron      # Follow cron logs
   grep CRON /var/log/syslog  # Check cron execution (Ubuntu/Debian)
+  journalctl -u crond        # Systemd cron logs (RHEL/CentOS)
+  systemctl status crond     # Check cron service status
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>📁 Crontab file locations</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # User crontabs:
+  /var/spool/cron/crontabs/username    # Debian/Ubuntu
+  /var/spool/cron/username             # RHEL/CentOS
+  
+  # System crontabs:
+  /etc/crontab                         # Main system crontab
+  /etc/cron.d/                         # Additional system crontabs
+  /etc/cron.hourly/                    # Hourly scripts
+  /etc/cron.daily/                     # Daily scripts
+  /etc/cron.weekly/                    # Weekly scripts
+  /etc/cron.monthly/                   # Monthly scripts
+  
+  # Install crontab from file:
+  crontab filename                     # Install from file
+  crontab -l > backup.txt              # Backup current crontab
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔧 Crontab environment and troubleshooting</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Environment variables in crontab:
+  SHELL=/bin/bash                      # Shell to use
+  PATH=/usr/local/bin:/usr/bin:/bin   # Command search path
+  MAILTO=admin@example.com            # Email output destination
+  HOME=/home/user                      # Home directory
+  LOGNAME=user                         # Username
+  
+  # Common issues and solutions:
+  # Problem: Command not found
+  # Solution: Use full paths or set PATH
+  0 2 * * * /usr/local/bin/script.sh   # Use full path
+  
+  # Problem: Script can't find files
+  # Solution: Change directory first
+  0 2 * * * cd /app && ./backup.sh    # Change directory
+  
+  # Problem: No output/errors visible
+  # Solution: Redirect output to log
+  0 2 * * * /path/to/script.sh >> /var/log/backup.log 2>&1
+  
+  # Test cron entries safely:
+  */2 * * * * /path/to/test.sh         # Test every 2 minutes
+  flock -n /tmp/script.lock /path/script.sh  # Prevent overlaps
           </code></pre>
         </div>
 
@@ -14030,6 +14219,927 @@ history | grep keyword        # Quickly find commands relevant to tasks
   
   # Special Character Control
   stty intr ^C                     # Set interrupt character
+  stty eof ^D                      # Set end-of-file character
+  stty erase ^?                    # Set backspace character
+  
+  # Terminal Size and Display
+  stty rows 24 cols 80             # Set terminal size
+  stty -echo; read -s password; stty echo  # Secure password input
+  
+  # Flow Control
+  stty -ixon                       # Disable XON/XOFF flow control
+  stty ixon                        # Enable XON/XOFF flow control
+          </code></pre>
+        </div>
+
+        <h3>🔍 Advanced System Monitoring</h3>
+
+        <div class="command-block">
+          <h4>📊 htop - Interactive Process Viewer</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Advanced process monitoring with htop
+  htop                              # Interactive process viewer
+  htop -t                           # Tree view
+  htop -u username                   # Show only user's processes
+  htop -p PID1,PID2                 # Monitor specific PIDs
+  
+  # htop features:
+  # F1 - Help screen
+  # F2 - Setup (configure columns)
+  # F3 - Search by process name
+  # F4 - Filter by process name
+  # F5 - Tree view toggle
+  # F6 - Sort by column
+  # F7/F8 - Nice value adjustment
+  # F9 - Kill process
+  # F10 - Quit
+  
+  # Color coding:
+  # Blue - Low priority threads
+  # Green - Normal priority threads
+  # Red - Kernel threads
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>📈 iotop - I/O Monitoring</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Monitor disk I/O by process
+  iotop                              # Show I/O usage per process
+  iotop -o                           # Show only processes with I/O
+  iotop -a                           # Accumulated I/O instead of rate
+  iotop -p PID                        # Monitor specific process
+  
+  # Output columns:
+  # TID - Thread ID
+  # PRIO - I/O priority
+  # USER - Username
+  # DISK READ - Disk read rate
+  # DISK WRITE - Disk write rate
+  # SWAPIN - Swap percentage
+  # IO - I/O percentage
+  # COMMAND - Process command
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🌐 iftop - Network Bandwidth Monitoring</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Monitor network bandwidth by connection
+  iftop                              # Show network connections and bandwidth
+  iftop -i eth0                     # Monitor specific interface
+  iftop -n                            # Don't resolve hostnames
+  iftop -t                            # Use text interface without curses
+  iftop -B                            # Show bytes instead of bits
+  
+  # Display options (press while running):
+  # n - Toggle DNS resolution
+  # s - Toggle source address display
+  # d - Toggle destination address display
+  # t - Toggle text interface
+  # p - Pause display
+  # b - Toggle bar graph display
+  # 1/2/3 - Sort by different columns
+  
+  # Examples:
+  iftop -i eth0 -n -B               # Monitor eth0 without DNS, show bytes
+  iftop -t -s 10                    # Text mode, 10 second intervals
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔍 lsof - List Open Files</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # List open files and processes using them
+  lsof                               # List all open files
+  lsof -i                            # List all network connections
+  lsof -i :80                        # List processes using port 80
+  lsof -i :22                        # List processes using SSH
+  lsof -u username                   # List files opened by user
+  lsof -p PID                        # List files opened by process
+  lsof +D /directory                  # List all files in directory tree
+  lsof /path/to/file                 # List processes using specific file
+  
+  # Common use cases:
+  lsof -i :8080                      # Find what's using port 8080
+  lsof -c nginx                      # List files opened by nginx processes
+  lsof -t -i :3306 | xargs kill -9   # Kill all processes using MySQL port
+  lsof | grep deleted                  # Find deleted files still held open
+  
+  # Output columns:
+  # COMMAND - Process name
+  # PID - Process ID
+  # USER - Username
+  # FD - File descriptor
+  # TYPE - File type
+  # DEVICE - Device number
+  # SIZE/OFF - File size
+  # NODE - Inode number
+  # NAME - File name
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>📊 atop - Advanced System Monitor</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Advanced system and process monitoring
+  atop                                # Start interactive monitoring
+  atop -a                             # Show active processes only
+  atop -r /var/log/atop.log           # Read from log file
+  atop -w /var/log/atop.log           # Write to log file
+  atop 1 10                           # Sample every 1 second, 10 times
+  
+  # Key features:
+  # - Resource consumption per process
+  # - System-level resource usage
+  # - Historical data logging
+  # - Critical resource detection
+  
+  # Interactive keys:
+  # a - Sort by active resources
+  # m - Sort by memory usage
+  # d - Sort by disk activity
+  # n - Sort by network activity
+  # c - Sort by CPU usage
+  # v - Verbose mode
+  # z - Pause/resume
+  # q - Quit
+  
+  # System resources monitored:
+  # PRC - Process and thread level
+  # CPU - CPU utilization
+  # CPL - CPU load levels
+  # MEM - Memory usage
+  # SWP - Swap usage
+  # PAG - Paging frequency
+  # DSK - Disk activity
+  # NET - Network activity
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔧 strace - System Call Tracing</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Trace system calls and signals
+  strace ls                          # Trace ls command
+  strace -p PID                       # Attach to running process
+  strace -f command                   # Trace forked processes too
+  strace -o output.txt command         # Save trace to file
+  strace -e trace=open,read command    # Trace specific syscalls
+  strace -c command                   # Count system calls
+  
+  # Common debugging scenarios:
+  strace -p 1234                     # Debug what process 1234 is doing
+  strace -e trace=network curl google.com  # Trace network operations
+  strace -ff -o trace.log ./myapp    # Multi-process application
+  strace -e trace=file ls -la          # File operations only
+  
+  # Output interpretation:
+  # open() - Open file
+  # read() - Read from file descriptor
+  # write() - Write to file descriptor
+  # close() - Close file descriptor
+  # stat() - Get file status
+  # fork() - Create new process
+  # execve() - Execute program
+  
+  # Advanced options:
+  strace -s 1000 -e trace=network curl api.example.com
+  # -s 1000: Max string size
+  # -e trace=network: Network calls only
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>📡 tcpdump - Network Packet Analysis</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Capture and analyze network packets
+  sudo tcpdump                        # Capture all packets (requires root)
+  sudo tcpdump -i eth0               # Capture on specific interface
+  sudo tcpdump -i eth0 port 80        # Capture HTTP traffic
+  sudo tcpdump -i eth0 host 192.168.1.1  # Capture traffic to/from host
+  sudo tcpdump -i eth0 -n             # Don't resolve names
+  sudo tcpdump -i eth0 -c 100          # Capture 100 packets then stop
+  sudo tcpdump -i eth0 -w capture.pcap # Save to file
+  
+  # Filter expressions:
+  sudo tcpdump -i eth0 'tcp port 80'  # TCP port 80 only
+  sudo tcpdump -i eth0 'host 10.0.0.1 and port 22'  # SSH to specific host
+  sudo tcpdump -i eth0 'icmp'         # ICMP packets only
+  sudo tcpdump -i eth0 'not port 22'  # Exclude SSH traffic
+  
+  # Analysis options:
+  sudo tcpdump -r capture.pcap         # Read from saved file
+  sudo tcpdump -r capture.pcap -A      # Show packet payload
+  sudo tcpdump -r capture.pcap -X      # Show payload in hex and ASCII
+  sudo tcpdump -r capture.pcap -v       # Verbose output
+  
+  # Common troubleshooting:
+  sudo tcpdump -i any port 53          # DNS queries
+  sudo tcpdump -i eth0 'tcp[tcpflags] & tcp-syn != 0'  # SYN packets
+  sudo tcpdump -i eth0 'icmp[icmptype] == icmp-echo'  # Ping requests
+  
+  # Advanced filtering:
+  sudo tcpdump -i eth0 'tcp and (((src host 10.0.0.1) and (dst port 80)) or ((src host 10.0.0.2) and (dst port 443)))'
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔍 jq - JSON Processing</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Process and manipulate JSON data
+  jq '.' file.json                    # Pretty-print JSON
+  jq '.key' file.json                # Extract specific key
+  jq '.array[0]' file.json           # Get first array element
+  jq '.key1.key2' file.json          # Nested key access
+  jq '.[] | .name' file.json         # Extract name from all objects
+  
+  # API response processing:
+  curl -s api.example.com/data | jq '.results[].name'
+  curl -s api.example.com/users | jq '.users[] | select(.age > 25)'
+  
+  # Data transformation:
+  jq '.items[] | {name: .name, value: .value * 2}' file.json
+  jq '.data | keys' file.json          # Get all keys
+  jq '.data | length' file.json        # Count array elements
+  
+  # Conditional filtering:
+  jq '.users[] | select(.status == "active")' file.json
+  jq '.logs[] | select(.timestamp > "2024-01-01")' file.json
+  
+  # Advanced operations:
+  jq -r '.users[].email' file.json    # Raw output (no quotes)
+  jq '.data | map(.value)' file.json   # Transform array
+  jq '.items | group_by(.category)' file.json  # Group by category
+  
+  # Real-world examples:
+  # Parse Kubernetes pod info:
+  kubectl get pods -o json | jq '.items[].status.podIP'
+  
+  # Process AWS CLI output:
+  aws ec2 describe-instances | jq '.Reservations[].Instances[].InstanceId'
+  
+  # Filter log entries:
+  cat app.log | jq '.logs[] | select(.level == "ERROR")'
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔧 tmux - Terminal Multiplexer</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Terminal multiplexer for multiple sessions
+  tmux                               # Start new session
+  tmux new -s session_name           # Start named session
+  tmux attach -t session_name          # Attach to named session
+  tmux ls                            # List sessions
+  tmux kill-session -t session_name    # Kill session
+  
+  # Session management:
+  Ctrl+b d                           # Detach from session
+  Ctrl+b s                           # List sessions
+  Ctrl+b $                           # Rename session
+  
+  # Window management:
+  Ctrl+b c                           # Create new window
+  Ctrl+b &                           # Kill current window
+  Ctrl+b 0-9                        # Switch to window 0-9
+  Ctrl+b n                           # Next window
+  Ctrl+b p                           # Previous window
+  Ctrl+b w                           # List windows
+  
+  # Pane management:
+  Ctrl+b %                           # Split vertical
+  Ctrl+b "                           # Split horizontal
+  Ctrl+b arrow keys                   # Navigate panes
+  Ctrl+b x                           # Kill pane
+  Ctrl+b { or }                      # Swap panes
+  
+  # Advanced features:
+  tmux new -s dev -n editor 'vim file.txt'  # Start with window
+  tmux send-keys -t session:window 'command' C-m  # Send keys
+  tmux capture-pane -t session:window -p         # Capture output
+  
+  # Configuration (~/.tmux.conf):
+  set -g mouse on                   # Enable mouse support
+  set -g default-terminal "screen-256color"  # Colors
+  bind-key C-b last-window           # Easy window switching
+  
+  # Useful session workflows:
+  # Development session:
+  tmux new -s dev \; \
+  send-keys 'vim main.py' C-m \; \
+  new-window \; \
+  send-keys 'python -m http.server 8000' C-m \; \
+  new-window \; \
+  send-keys 'htop' C-m
+          </code></pre>
+        </div>
+
+        <h3>🔒 Enterprise Security Hardening</h3>
+
+        <div class="command-block">
+          <h4>🛡️ System Security Assessment</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Enterprise Security Inventory and Assessment
+  # Take comprehensive inventory of all systems
+  
+  # Hardware and Software Inventory
+  lshw -short                              # Hardware summary
+  lscpu                                    # CPU information
+  lsblk                                    # Block devices
+  lsusb                                     # USB devices
+  lspci                                     # PCI devices
+  
+  # Software Inventory
+  dpkg -l                                   # Installed packages (Debian/Ubuntu)
+  rpm -qa                                   # Installed packages (RHEL/CentOS)
+  snap list                                  # Snap packages
+  
+  # Vulnerability Assessment
+  apt list --upgradable                     # Available updates (Debian)
+  yum check-update                         # Available updates (RHEL)
+  dnf updateinfo                          # Update information (Fedora/RHEL8+)
+  
+  # Security Audit Tools
+  lynis audit                              # System security audit
+  chkrootkit                               # Rootkit detection
+  rkhunter --check --sk                     # Rootkit hunter
+  unhide -m                                # Hidden processes
+  
+  # File System Security
+  find / -type f -perm /4000           # SUID files
+  find / -type f -perm /2000           # SGID files
+  find / -type f -perm /777             # World-writable files
+  find / -nouser -ls                     # Files with no owner
+  
+  # Network Security Assessment
+  nmap -sS -sV -O target             # Comprehensive port scan
+  netstat -tulnp                          # Listening ports
+  ss -tulnp                                # Modern netstat equivalent
+  arp -a                                  # ARP table
+  ip neigh show                             # Neighbor table
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔐 Authentication & Access Control</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Enterprise Password Policy Management
+  # Enforce strong password policies
+  
+  # PAM Configuration for Password Complexity
+  # Edit /etc/pam.d/common-password:
+  password requisite pam_pwquality.so retry=3 minlen=12 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1
+  # Enforces: 12 chars min, 1 digit, 1 upper, 1 lower, 1 special
+  
+  # Password Aging and Expiration
+  chage -M 90 username                    # 90-day max password age
+  chage -W 14 username                    # 14-day warning before expiry
+  chage -I 30 username                    # 30-day inactive account lock
+  chage -l username                      # Password aging info
+  
+  # Prevent Password Reuse
+  # Add to /etc/pam.d/common-password:
+  password sufficient pam_unix.so remember=5 use_authtok try_first_pass=5
+  
+  # SSH Security Hardening
+  # Edit /etc/ssh/sshd_config:
+  Protocol 2                              # Use SSH protocol 2 only
+  PermitRootLogin no                     # Disable root login
+  PasswordAuthentication no               # Disable password auth
+  PubkeyAuthentication yes              # Enable key-based auth
+  MaxAuthTries 3                       # Limit auth attempts
+  LoginGraceTime 60                      # Grace period for auth
+  ClientAliveInterval 300                 # Keep-alive packets
+  ClientAliveCountMax 2                  # Max keep-alive failures
+  
+  # SSH Key Management
+  ssh-keygen -t ed25519 -C "user@hostname"    # Generate secure key
+  ssh-copy-id -i ~/.ssh/id_ed25519.pub user@host  # Copy public key
+  ssh-keygen -lf -f ~/.ssh/id_ed25519            # Fingerprint for verification
+  
+  # Fail2ban Configuration
+  # Edit /etc/fail2ban/jail.local:
+  [sshd]
+  enabled = true
+  port = ssh
+  filter = sshd
+  logpath = /var/log/auth.log
+  maxretry = 3
+  bantime = 3600
+  findtime = 600
+  
+  # Multi-Factor Authentication (MFA)
+  # Google Authenticator setup:
+  google-authenticator                    # Interactive setup
+  google-authenticator -t                   # Generate QR code
+  google-authenticator -d                    # Time-based codes
+  
+  # Service Account Management
+  useradd -r -s /sbin/nologin service-user  # Create service account
+  usermod -L service-user                  # Lock account
+  usermod -U service-user                  # Unlock account
+  chage -E 0 service-user                # Expire immediately
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔥 Firewall & Network Security</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Enterprise Firewall Configuration
+  # Using firewalld (RHEL/CentOS/Fedora)
+  
+  # Basic Firewall Management
+  firewall-cmd --state                    # Check firewall status
+  firewall-cmd --get-active-zones          # Active zones
+  firewall-cmd --list-all-zones            # All zones info
+  firewall-cmd --get-default-zone          # Default zone
+  
+  # Service Management
+  firewall-cmd --add-service=http --permanent    # Allow HTTP
+  firewall-cmd --add-service=https --permanent   # Allow HTTPS
+  firewall-cmd --add-service=ssh --permanent     # Allow SSH
+  firewall-cmd --remove-service=telnet --permanent  # Remove Telnet
+  
+  # Port Management
+  firewall-cmd --add-port=8080/tcp --permanent  # Open custom port
+  firewall-cmd --add-port=9000-9010/udp --permanent  # Port range
+  firewall-cmd --remove-port=23/tcp --permanent   # Close Telnet port
+  
+  # Rich Rules (Advanced)
+  firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" service name="ssh" accept' --permanent
+  firewall-cmd --add-rich-rule='rule family="ipv4" source address="10.0.0.0/8" port protocol="tcp" port="3306" accept' --permanent
+  
+  # Zone Management
+  firewall-cmd --zone=dmz --add-interface=eth1  # Interface to zone
+  firewall-cmd --zone=internal --add-source=192.168.1.0/24  # Source to zone
+  firewall-cmd --change-zone=public --interface=eth0  # Change interface zone
+  
+  # Apply Changes
+  firewall-cmd --reload                    # Apply all changes
+  firewall-cmd --complete-reload             # Complete reload (drops connections)
+  
+  # Using UFW (Ubuntu/Debian)
+  ufw enable                              # Enable firewall
+  ufw status verbose                       # Detailed status
+  ufw allow 22/tcp                        # Allow SSH
+  ufw allow 80/tcp                        # Allow HTTP
+  ufw allow from 192.168.1.0/24 to any port 3306  # Restrictive access
+  ufw deny 23/tcp                        # Block Telnet
+  ufw delete allow 23/tcp                 # Remove rule
+  
+  # Using iptables (Legacy/Advanced)
+  iptables -L -n -v                      # List rules with details
+  iptables -F                              # Flush all rules
+  iptables -P INPUT DROP                    # Default deny policy
+  iptables -A INPUT -p tcp --dport 22 -j ACCEPT  # Allow SSH
+  iptables -A INPUT -p tcp --dport 80 -j ACCEPT  # Allow HTTP
+  iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT  # Allow established
+  
+  # Save iptables rules
+  iptables-save > /etc/iptables/rules.v4          # Save IPv4 rules
+  ip6tables-save > /etc/iptables/rules.v6         # Save IPv6 rules
+  
+  # Network Security Tools
+  tcpdump -i eth0 -n 'port 80'             # Capture HTTP traffic
+  tcpdump -i eth0 -n 'host 192.168.1.100'  # Capture specific host
+  tcpdump -i any -n 'icmp'                  # Capture ping traffic
+  tcpdump -i eth0 -w capture.pcap            # Save to file
+  
+  # Port Scanning and Detection
+  nmap -sS -sV -O target.com             # Comprehensive scan
+  nmap -p 1-65535 target.com               # Full port range
+  nmap -sU target.com                        # UDP scan
+  nmap -A -T4 target.com                    # Aggressive scan with scripts
+  
+  # Connection Monitoring
+  ss -tulnp                                 # All listening sockets
+  ss -tulnp | grep LISTEN                  # Filter listening
+  ss -state established '( dport = :http or sport = :http )'  # HTTP connections
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔍 System Auditing & Monitoring</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Enterprise System Auditing
+  # Configure auditd for comprehensive logging
+  
+  # Audit Configuration
+  # Edit /etc/audit/auditd.conf:
+  max_log_file = 8
+  num_logs = 5
+  max_log_file_action = ROTATE
+  space_left_action = SYSLOG
+  admin_space_left_action = SUSPEND
+  disk_full_action = SUSPEND
+  
+  # Audit Rules
+  # Edit /etc/audit/rules.d/audit.rules:
+  -w /etc/passwd -p wa -k identity
+  -w /etc/shadow -p wa -k identity
+  -w /etc/sudoers -p wa -k sudoers
+  -w /var/log/audit/ -p wa -k audit_logs
+  -w /etc/ssh/sshd_config -p wa -k sshd_config
+  -a always,exit -F arch=b64 -S execve -k process_creation
+  -w /etc/cron.* -p wa -k cron_changes
+  
+  # Audit Management
+  auditctl -e                               # Enable auditing
+  auditctl -s                               # Get status
+  auditctl -l                               # List rules
+  auditctl -D                               # Delete all rules
+  auditctl -R                               # Reload rules
+  
+  # Log Analysis
+  ausearch -k identity -ts recent              # Search identity access
+  ausearch -k sudoers -ts recent              # Search sudo changes
+  ausearch -k process_creation -ts recent       # Search process creation
+  ausearch -m recent -i                  # Recent failed events
+  aureport -m                              # Summary report
+  aureport -k                               # Key report
+  
+  # File Integrity Monitoring
+  aide --init                               # Initialize database
+  aide --check                              # Check integrity
+  aide --update                             # Update database
+  aide --config=/etc/aide.conf --check        # Custom config
+  
+  # Configuration: /etc/aide.conf
+  /bin/pwd F+p+u+g+s+n+md5+sha1
+  /etc/passwd p+u+g+s+n+md5+sha1
+  /etc/shadow p+u+g+s+n+md5+sha1
+  /var/log p+u+g+s+n+md5+sha1
+  
+  # Intrusion Detection
+  # OSSEC Configuration
+  # Edit /var/ossec/etc/ossec.conf:
+  <global>
+    <email_notification>yes</email_notification>
+    <email_to>admin@company.com</email_to>
+    <smtp_server>smtp.company.com</smtp_server>
+    <email_from>ossec@company.com</email_from>
+  </global>
+  
+  # OSSEC Management
+  /var/ossec/bin/ossec-control restart        # Restart OSSEC
+  /var/ossec/bin/ossec-control status         # Check status
+  /var/ossec/bin/ossec-control info           # Get info
+  /var/ossec/bin/ossec-logtest           # Test configuration
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🔧 SELinux & AppArmor Security</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Enterprise Mandatory Access Control
+  # SELinux (RHEL/CentOS/Fedora)
+  
+  # SELinux Status and Management
+  sestatus                                   # Current status
+  getenforce                                 # Current mode
+  setenforce 1                              # Enforcing mode
+  setenforce 0                              # Permissive mode
+  
+  # SELinux Context Management
+  ls -Z                                      # Show file contexts
+  ps -Z                                      # Show process contexts
+  id -Z                                       # Show user context
+  
+  # Context Operations
+  chcon -t httpd_sys_content_t /var/www/html/file.html
+  chcon -R -t samba_share_t /shared/directory
+  restorecon -R -v /etc/myapp                 # Restore default context
+  semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+  semanage fcontext -a -t samba_share_t "/shared(/.*)?"
+  
+  # SELinux Policy Management
+  semanage boolean -l | grep httpd            # List HTTP booleans
+  semanage boolean -m --on httpd_can_network_connect  # Enable boolean
+  semanage boolean -m --off ftpd_anon_write    # Disable boolean
+  semanage port -a -t http_port_t 8080/tcp  # Add port type
+  semanage port -d -t http_port_t 8080/tcp  # Delete port type
+  
+  # SELinux Troubleshooting
+  audit2allow -w /var/log/audit/audit.log          # Generate allow rules
+  sealert -a /var/log/audit/audit.log            # Analyze alerts
+  seinfo                                      # Policy information
+  sesearch                                     # Search policy
+  
+  # AppArmor (Ubuntu/Debian/SUSE)
+  
+  # AppArmor Status and Management
+  aa-status                                   # Overall status
+  aa-enforce /etc/apparmor.d/usr.bin.firefox  # Enforce profile
+  aa-complain /etc/apparmor.d/usr.bin.firefox  # Complain mode
+  aa-disable /etc/apparmor.d/usr.bin.firefox   # Disable profile
+  
+  # Profile Management
+  apparmor_parser -r /etc/apparmor.d/profile.name  # Reload profile
+  apparmor_status /etc/apparmor.d/profile.name   # Profile status
+  
+  # AppArmor Utilities
+  aa-logprof                                  # Generate profiles from logs
+  aa-genprof /path/to/application               # Generate profile
+  aa-decode                                   # Decode AppArmor logs
+  
+  # Profile Configuration Example
+  # /etc/apparmor.d/usr.bin.nginx:
+  #include <tunables/global>
+  /usr/bin/nginx {
+    #include <abstractions/base>
+    #include <abstractions/nginx>
+    
+    capability net_bind_service,
+    capability dac_override,
+    
+    /var/log/nginx/** w,
+    /var/lib/nginx/** rw,
+    /etc/nginx/** r,
+    /usr/share/nginx/** r,
+  }
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>📊 Enterprise Monitoring Stack</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Prometheus Monitoring Setup
+  # Enterprise-grade monitoring configuration
+  
+  # Prometheus Installation (Enterprise)
+  # Create dedicated user
+  useradd --no-create-home --shell /bin/false prometheus
+  mkdir -p /etc/prometheus /var/lib/prometheus
+  chown prometheus:prometheus /etc/prometheus /var/lib/prometheus
+  
+  # Download and install
+  curl -LO https://github.com/prometheus/prometheus/releases/download/v2.53.0/prometheus-2.53.0.linux-amd64.tar.gz
+  tar -xvf prometheus-2.53.0.linux-amd64.tar.gz
+  cp prometheus-2.53.0/prometheus /usr/local/bin/
+  cp prometheus-2.53.0/promtool /usr/local/bin/
+  
+  # Prometheus Configuration
+  # /etc/prometheus/prometheus.yml:
+  global:
+    scrape_interval: 15s
+    evaluation_interval: 15s
+    external_labels:
+      cluster: 'production'
+      datacenter: 'us-east-1'
+  
+  scrape_configs:
+    - job_name: 'prometheus'
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['localhost:9090']
+    
+    - job_name: 'node-exporter'
+      scrape_interval: 10s
+      static_configs:
+        - targets: 
+          - '192.168.1.10:9100'
+          - '192.168.1.11:9100'
+          - '192.168.1.12:9100'
+    
+    - job_name: 'blackbox-exporter'
+      metrics_path: /probe
+      static_configs:
+        - targets:
+          - 'https://api.company.com/health'
+          - 'https://web.company.com'
+  
+  # Prometheus Service
+  # /etc/systemd/system/prometheus.service:
+  [Unit]
+  Description=Prometheus Monitoring
+  Wants=network-online.target
+  After=network-online.target
+  
+  [Service]
+  User=prometheus
+  Group=prometheus
+  Type=simple
+  ExecStart=/usr/local/bin/prometheus \\
+    --config.file=/etc/prometheus/prometheus.yml \\
+    --storage.tsdb.path=/var/lib/prometheus/ \\
+    --web.console.templates=/etc/prometheus/consoles \\
+    --web.console.libraries=/etc/prometheus/console_libraries \\
+    --web.enable-lifecycle
+  
+  [Install]
+  WantedBy=multi-user.target
+  
+  # Node Exporter Setup
+  # System metrics collection
+  curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+  tar -xvf node_exporter-1.8.2.linux-amd64.tar.gz
+  cp node_exporter-1.8.2/node_exporter /usr/local/bin/
+  
+  # Node Exporter Service
+  # /etc/systemd/system/node-exporter.service:
+  [Unit]
+  Description=Node Exporter
+  Wants=network-online.target
+  After=network-online.target
+  
+  [Service]
+  User=node_exporter
+  Type=simple
+  ExecStart=/usr/local/bin/node_exporter \\
+    --collector.cpu \\
+    --collector.diskstats \\
+    --collector.filesystem \\
+    --collector.meminfo \\
+    --collector.netdev \\
+    --collector.netstat \\
+    --collector.stat \\
+    --collector.time \\
+    --collector.vmstat \\
+    --collector.systemd \\
+    --collector.processes
+  
+  [Install]
+  WantedBy=multi-user.target
+  
+  # Grafana Configuration
+  # Data Sources and Dashboards
+  
+  # Grafana Provisioning
+  # /etc/grafana/provisioning/datasources/prometheus.yml:
+  apiVersion: 1
+  datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://localhost:9090
+      isDefault: true
+      jsonData:
+        timeInterval: "15s"
+  
+  # Grafana Dashboard Provisioning
+  # /etc/grafana/provisioning/dashboards/dashboard.yml:
+  apiVersion: 1
+  providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      updateIntervalSeconds: 10
+      options:
+        path: /var/lib/grafana/dashboards
+  
+  # Service Management
+  systemctl daemon-reload
+  systemctl enable prometheus
+  systemctl start prometheus
+  systemctl enable node-exporter
+  systemctl start node-exporter
+  systemctl enable grafana-server
+  systemctl start grafana-server
+  
+  # Firewall Configuration
+  firewall-cmd --add-port=9090/tcp --permanent  # Prometheus
+  firewall-cmd --add-port=9100/tcp --permanent  # Node Exporter
+  firewall-cmd --add-port=3000/tcp --permanent  # Grafana
+  firewall-cmd --reload
+  
+  # Monitoring Verification
+  curl http://localhost:9090/metrics          # Prometheus metrics
+  curl http://localhost:9100/metrics         # Node Exporter metrics
+  curl http://localhost:3000/api/health        # Grafana health
+  
+  # Alerting Rules
+  # /etc/prometheus/alert_rules.yml:
+  groups:
+    - name: system_alerts
+      rules:
+        - alert: HighCPUUsage
+          expr: 100 * (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage detected"
+        
+        - alert: DiskSpaceLow
+          expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 10
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Low disk space on {{ $labels.instance }}"
+        
+        - alert: MemoryHigh
+          expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 < 10
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Low memory available"
+  
+  # Alertmanager Configuration
+  # /etc/alertmanager/alertmanager.yml:
+  global:
+    smtp_smarthost: smtp.company.com
+    smtp_from: alerts@company.com
+    smtp_auth_username: alerts@company.com
+    smtp_auth_password: ${SMTP_PASSWORD}
+  
+  route:
+    group_by: ['alertname']
+    group_wait: 10s
+    group_interval: 10s
+    repeat_interval: 1h
+    receiver: 'web.hook'
+  
+  receivers:
+    - name: 'web.hook'
+      email_configs:
+        - to: 'admin@company.com'
+          subject: '[Alert] {{ .GroupLabels.alertname }}'
+          body: |
+            {{ range .Alerts }}
+            Alert: {{ .Annotations.summary }}
+            Description: {{ .Annotations.description }}
+            Labels: {{ range .Labels.SortedPairs }}{{ .Name }}={{ .Value }} {{ end }}
+            {{ end }}
+          </code></pre>
+        </div>
+
+        <div class="command-block">
+          <h4>🎛️ Terminal Control & STTY Commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Terminal settings and control
+  stty rows 24 cols 80             # Set terminal size
+  stty -echo; read -s password; stty echo  # Secure password input
+  
+  # Character Control
   stty erase ^?                    # Set erase character
   stty kill ^U                     # Set kill character
   stty eof ^D                      # Set end-of-file character

@@ -300,6 +300,36 @@
 
         # 6. List Bucket Contents
         aws s3 ls s3://my-bucket
+        aws s3 ls s3://my-bucket/directory/
+        aws s3api list-objects-v2 --bucket my-bucket
+
+        # 7. Delete Files/Buckets
+        aws s3 rm s3://my-bucket/myfile.txt
+        aws s3 rb s3://my-bucket --force  # Remove bucket with all contents
+
+        # 8. S3 Backup Integration
+        #!/bin/bash
+        LOCAL_BACKUP="/backup/data_$(date +%Y%m%d_%H%M%S).tar.gz"
+        S3_BUCKET="s3://my-backup-bucket/"
+        
+        # Create local backup
+        tar -czf $LOCAL_BACKUP /home/user/data/
+        
+        # Upload to S3
+        aws s3 cp $LOCAL_BACKUP $S3_BUCKET
+        
+        # Remove old S3 backups (older than 30 days)
+        aws s3 ls $S3_BUCKET | while read -r line; do
+            createDate=$(echo $line | awk '{print $1" "$2}')
+            createDate=$(date -d "$createDate" +%s)
+            olderThan=$(date -d "30 days ago" +%s)
+            if [[ $createDate -lt $olderThan ]]; then
+                fileName=$(echo $line | awk '{print $4}')
+                if [[ $fileName != "" ]]; then
+                    aws s3 rm "$S3_BUCKET$fileName"
+                fi
+            fi
+        done
         aws s3 ls s3://my-bucket --recursive
         aws s3 ls s3://my-bucket --human-readable --summarize
 
@@ -4022,6 +4052,110 @@
     docker run -e VAR=value image                                   # Set environment variable
     docker run --env-file .env image                                # Load env from file
     docker run --network mynet image                                # Connect to network
+    
+    # Docker Utility Functions (Enterprise)
+    #!/bin/bash
+    set -euo pipefail
+    
+    # Configuration
+    DOCKER_REGISTRY="your-registry.com"
+    DOCKER_USERNAME="${DOCKER_USERNAME:-}"
+    DOCKER_PASSWORD="${DOCKER_PASSWORD:-}"
+    
+    # Docker utility functions
+    docker_login() {
+        if [[ -n "${DOCKER_PASSWORD:-}" ]]; then
+            echo "${DOCKER_PASSWORD}" | docker login "${DOCKER_REGISTRY}" --username "${DOCKER_USERNAME}" --password-stdin
+        else
+            docker login "${DOCKER_REGISTRY}" --username "${DOCKER_USERNAME}"
+        fi
+    }
+    
+    docker_pull() {
+        local image="${1}"
+        local tag="${2:-latest}"
+        local full_image="${DOCKER_REGISTRY}/${image}:${tag}"
+        
+        if ! docker pull "${full_image}"; then
+            echo "Failed to pull ${full_image}"
+            return 1
+        fi
+    }
+    
+    docker_run_production() {
+        local image="${1}"
+        local container_name="${2}"
+        local port="${3:-8080}"
+        local env_file="${4:-}"
+        
+        # Stop existing container if running
+        if docker ps -q -f "name=${container_name}" | grep -q .; then
+            echo "Stopping existing container: ${container_name}"
+            docker stop "${container_name}"
+        fi
+        
+        # Remove existing container
+        if docker ps -aq -f "name=${container_name}" | grep -q .; then
+            echo "Removing existing container: ${container_name}"
+            docker rm "${container_name}"
+        fi
+        
+        # Build docker run command
+        local docker_cmd="docker run -d --name ${container_name}"
+        
+        # Add port mapping
+        docker_cmd+=" -p ${port}:80"
+        
+        # Add environment file if provided
+        if [[ -n "${env_file}" && -f "${env_file}" ]]; then
+            docker_cmd+=" --env-file ${env_file}"
+        fi
+        
+        # Add restart policy
+        docker_cmd+=" --restart unless-stopped"
+        
+        # Add health check
+        docker_cmd+=" --health-cmd='curl -f http://localhost:80/health || exit 1'"
+        docker_cmd+=" --health-interval=30s"
+        docker_cmd+=" --health-timeout=10s"
+        docker_cmd+=" --health-retries=3"
+        
+        # Add image
+        docker_cmd+=" ${DOCKER_REGISTRY}/${image}"
+        
+        # Execute command
+        if ! eval "${docker_cmd}"; then
+            echo "Failed to start container: ${container_name}"
+            return 1
+        fi
+        
+        echo "Container started successfully: ${container_name}"
+        
+        # Wait for container to be healthy
+        local max_attempts=30
+        local attempt=0
+        while [[ $attempt -lt $max_attempts ]]; do
+            local health=$(docker inspect --format='{{.State.Health.Status}}' "${container_name}" 2>/dev/null || echo "unknown")
+            if [[ "${health}" == "healthy" ]]; then
+                echo "Container is healthy: ${container_name}"
+                return 0
+            fi
+            sleep 2
+            ((attempt++))
+        done
+        
+        echo "Container failed to become healthy: ${container_name}"
+        return 1
+    }
+    
+    # Docker cleanup function
+    docker_cleanup() {
+        echo "Cleaning up unused Docker resources..."
+        docker container prune -f
+        docker image prune -f
+        docker network prune -f
+        docker volume prune -f
+    }
     docker run --restart always image                               # Restart policy
     docker run --memory 512m image                                  # Memory limit
     docker run --cpus 2 image                                       # CPU limit</code></pre>
@@ -5498,12 +5632,243 @@
       kubectl describe configmap cm-name
       kubectl create configmap myconfig --from-literal=key=value
       kubectl create configmap myconfig --from-file=file.txt
+      kubectl create configmap myconfig --from-env-file=env.txt
+      
+      # Edit ConfigMaps
+      kubectl edit configmap myconfig
+      kubectl patch configmap myconfig --patch '{"data":{"key":"new_value"}}'
+      
+      # Delete ConfigMaps
+      kubectl delete configmap myconfig
+      kubectl delete configmap -l app=webapp  # Delete by label
+      
+      # Use ConfigMaps in Pods
+      # envFrom:
+      #   - configMapRef:
+      #       name: myconfig
+      # volumeMounts:
+      #   - name: config-volume
+      #     mountPath: /etc/config
+      # volumes:
+      #   - name: config-volume
+      #     configMap:
+      #       name: myconfig
 
       # Kubernetes Delete Operations (Enterprise Standards)
       # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
 
       # Delete Resources
-      kubectl delete configmap cm-name</code></pre>
+      kubectl delete configmap cm-name
+      
+      # Storage Management (Enterprise)
+      kubectl get pv                                                    # List PersistentVolumes
+      kubectl get pvc                                                   # List PersistentVolumeClaims
+      kubectl get storageclass                                          # List StorageClasses
+      kubectl describe pv pv-name                                    # PV details
+      kubectl describe pvc pvc-name                                 # PVC details
+      kubectl get pv -o wide                                        # PV with additional info
+      kubectl get pvc -o wide                                       # PVC with additional info
+      
+      # Storage Troubleshooting
+      kubectl get events --field-selector involvedObject.kind=PersistentVolume
+      kubectl get events --field-selector involvedObject.kind=PersistentVolumeClaim
+      kubectl describe pvc | grep -E "(Status|Volume|Capacity)"
+      
+      # Storage Operations
+      kubectl patch pvc pvc-name -p '{"spec":{"resources":{"requests":{"storage":"10Gi"}}}'
+      kubectl delete pvc pvc-name --force --grace-period=0</code></pre>
+    </div>
+
+    <div class="command-block">
+      <h4>🔍 Advanced Troubleshooting & Debugging</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+      # Enterprise Troubleshooting Workflow
+      # Systematic approach: get → describe → logs → debug
+      
+      # Pod Status Investigation
+      kubectl get pods -o wide                                    # Pod status with node info
+      kubectl get pods --field-selector status.phase=Failed       # Failed pods only
+      kubectl get pods --field-selector status.phase=Pending     # Pending pods only
+      kubectl get pods --sort-by=.metadata.creationTimestamp  # Newest pods first
+      
+      # Advanced Pod Debugging
+      kubectl describe pod pod-name                           # Full pod details
+      kubectl get pod pod-name -o yaml                        # Full pod specification
+      kubectl get pod pod-name -o json                        # JSON format for scripting
+      
+      # Container State Analysis
+      kubectl get pod pod-name -o jsonpath='{.status.containerStatuses[*].state}'
+      kubectl get pod pod-name -o jsonpath='{.status.conditions[*].status}'
+      
+      # Log Analysis (Enterprise)
+      kubectl logs pod-name --tail=100                        # Last 100 lines
+      kubectl logs pod-name --since=10m                         # Last 10 minutes
+      kubectl logs pod-name --previous                            # Previous container logs
+      kubectl logs pod-name -c container-name                    # Specific container logs
+      kubectl logs deployment/app-name --tail=50                 # Deployment logs
+      
+      # Real-time Log Monitoring
+      kubectl logs -f pod-name                                  # Follow logs
+      kubectl logs -f deployment/app-name                        # Follow deployment logs
+      kubectl logs -l app=webapp --tail=20                    # Logs by label
+      
+      # Resource Usage Analysis
+      kubectl top pods                                            # Real-time resource usage
+      kubectl top pods --sort-by=memory                         # Sort by memory
+      kubectl top pods --sort-by=cpu                            # Sort by CPU
+      kubectl top nodes                                           # Node resource usage
+      
+      # Network Debugging
+      kubectl exec -it pod-name -- /bin/bash                  # Interactive shell
+      kubectl exec -it pod-name -- curl localhost:8080          # Test internal connectivity
+      kubectl exec -it pod-name -- nslookup service-name         # DNS resolution test
+      kubectl exec -it pod-name -- ping 10.0.0.1              # Network connectivity
+      
+      # Port Forwarding for Debugging
+      kubectl port-forward pod-name 8080:80                  # Forward local to pod
+      kubectl port-forward service/service-name 9000:80           # Forward to service
+      
+      # Event Analysis
+      kubectl get events --sort-by=.metadata.creationTimestamp     # Recent events first
+      kubectl get events --field-selector type=Warning          # Warning events only
+      kubectl get events --field-selector involvedObject.kind=Pod  # Pod-related events
+      kubectl get events -n kube-system                        # System events
+      
+      # Common Pod Issues & Solutions
+      # ImagePullBackOff:
+      kubectl describe pod pod-name | grep -A 10 "Events:"
+      kubectl get events --field-selector reason=FailedScheduling
+      
+      # CrashLoopBackOff:
+      kubectl logs pod-name --previous
+      kubectl describe pod pod-name | grep -A 5 "Last State:"
+      
+      # Pending Pods:
+      kubectl describe pod pod-name | grep -A 10 "Events:"
+      kubectl get events --field-selector involvedObject.name=pod-name
+      
+      # Resource Issues:
+      kubectl describe pod pod-name | grep -A 5 "Limits:"
+      kubectl top pod pod-name
+      kubectl describe node node-name | grep -A 10 "Allocated resources:"
+      
+      # Advanced Debugging Tools
+      kubectl debug pod/pod-name --image=busybox --share-processes
+      kubectl debug node/node-name --image=busybox --chroot=/host
+      kubectl cp pod-name:/var/log/app.log ./app.log          # Copy logs locally
+      
+      # YAML/JSON Processing
+      kubectl get pod pod-name -o yaml | yq '.spec.containers[0].image'
+      kubectl get pods -o json | jq '.items[] | select(.status.phase=="Running")'
+      
+      # Batch Operations
+      kubectl get pods -o name | xargs -I {} kubectl describe pod {}
+      kubectl get pods -l app=webapp -o name | xargs kubectl delete pod
+    </div>
+
+    <div class="command-block">
+      <h4>🚀 Advanced Deployment & Scaling</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+      # Rollout Management (Enterprise)
+      kubectl rollout status deployment/app-name               # Check rollout status
+      kubectl rollout history deployment/app-name               # View rollout history
+      kubectl rollout undo deployment/app-name                   # Rollback to previous
+      kubectl rollout undo deployment/app-name --to-revision=2  # Rollback to specific revision
+      
+      # Advanced Rollout Strategies
+      kubectl set image deployment/app-name app=nginx:1.20.1     # Update image
+      kubectl set env deployment/app-name ENV_VAR=value           # Update environment
+      kubectl edit deployment/app-name                           # Interactive edit
+      
+      # Scaling Operations
+      kubectl scale deployment app-name --replicas=5            # Manual scaling
+      kubectl autoscale deployment app-name --min=2 --max=10 --cpu-percent=70  # Auto-scaling
+      kubectl get hpa                                              # View HPA status
+      kubectl describe hpa app-name                                # HPA details
+      
+      # Blue-Green Deployments
+      kubectl apply -f green-deployment.yaml
+      kubectl apply -f service-green.yaml
+      # Test green deployment
+      kubectl patch service app-service -p '{"spec":{"selector":{"version":"green"}}}'
+      # Switch traffic to green
+      
+      # Canary Deployments
+      kubectl patch deployment app-name -p '{"spec":{"template":{"spec":{"containers":[{"name":"app","image":"app:v2-canary"}]}}}'
+      kubectl scale deployment app-name --replicas=10  # 90% traffic
+      kubectl scale deployment app-name-canary --replicas=2  # 10% traffic
+      
+      # Zero-Downtime Updates
+      kubectl rollout pause deployment/app-name              # Pause rollout
+      kubectl set image deployment/app-name app=v2.0.0    # Update image
+      kubectl rollout resume deployment/app-name             # Resume rollout
+      
+      # Health Checks
+      kubectl get pods -o jsonpath='{.items[*].status.conditions[?(@.type=="Ready")].status}'
+      kubectl get deployment app-name -o jsonpath='{.status.conditions[?(@.type=="Progressing")].reason}'
+      
+      # Rollback Strategies
+      kubectl rollout undo deployment/app-name --to-revision=3  # Rollback to revision 3
+      kubectl rollout history deployment/app-name --revision=3     # Check specific revision
+      kubectl rollout undo deployment/app-name --dry-run=client   # Test rollback
+    </div>
+
+    <div class="command-block">
+      <h4>🔐 Security & RBAC</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+      # RBAC Management (Enterprise)
+      kubectl get roles                                              # List roles
+      kubectl get clusterroles                                       # List cluster roles
+      kubectl get rolebindings                                        # List role bindings
+      kubectl get clusterrolebindings                                 # List cluster role bindings
+      
+      # Permission Analysis
+      kubectl auth can-i create pods --namespace=dev                # Check pod creation permission
+      kubectl auth can-i get pods --namespace=production           # Check pod get permission
+      kubectl auth can-i delete deployments --namespace=default    # Check deployment deletion
+      kubectl auth can-i create clusterroles                        # Check cluster role creation
+      
+      # Role Management
+      kubectl create role pod-reader --verb=get,list --resource=pods -n dev
+      kubectl create clusterrole node-viewer --verb=get,list --resource=nodes
+      kubectl create rolebinding dev-admin --role=pod-reader --user=dev-user -n dev
+      kubectl create clusterrolebinding cluster-admin --clusterrole=cluster-admin --user=admin
+      
+      # Service Accounts
+      kubectl get serviceaccounts                                     # List service accounts
+      kubectl create serviceaccount app-serviceaccount -n production
+      kubectl describe serviceaccount app-serviceaccount -n production
+      
+      # Security Context
+      kubectl get pod pod-name -o jsonpath='{.spec.securityContext}'
+      kubectl get pod pod-name -o jsonpath='{.spec.containers[*].securityContext}'
+      
+      # Network Policies
+      kubectl get networkpolicies                                   # List network policies
+      kubectl create -f network-policy.yaml                        # Create network policy
+      kubectl describe networkpolicy allow-frontend                   # Describe network policy
+      
+      # Pod Security Policies (PSP)
+      kubectl get podsecuritypolicies                               # List PSPs (if enabled)
+      kubectl describe podsecuritypolicy restricted                   # Describe PSP
+      
+      # Security Auditing
+      kubectl get pods -o jsonpath='{.items[*].spec.serviceAccountName}'
+      kubectl get pods -o jsonpath='{.items[*].spec.containers[*].securityContext}'
+      kubectl get events --field-selector reason=FailedScheduling
+    </div></code></pre>
     </div>
 
     <div class="command-block">
