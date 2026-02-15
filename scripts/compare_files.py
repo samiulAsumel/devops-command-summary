@@ -6,12 +6,40 @@ Compare command_summary.txt (base file) with HTML files to ensure all content is
 import re
 from pathlib import Path
 
-base_file = r"d:\02. Personal\Command Summary\command_summary.txt"
-html_files = [
-    r"d:\02. Personal\Command Summary\system-admin.html",
-    r"d:\02. Personal\Command Summary\devops-tools.html",
-    r"d:\02. Personal\Command Summary\monitoring-security.html"
+import os
+from pathlib import Path
+
+# Detect base file location
+possible_base_paths = [
+    "command_summary.txt",
+    "../command_summary.txt", 
+    "../../command_summary.txt",
+    os.path.expanduser("~/command_summary.txt"),
+    "/tmp/command_summary.txt"
 ]
+
+base_file = None
+for path in possible_base_paths:
+    if os.path.exists(path):
+        base_file = path
+        break
+
+if not base_file:
+    print("Error: command_summary.txt not found in expected locations")
+    exit(1)
+
+# Detect HTML files in current directory and parent directories
+html_files = []
+html_search_paths = ["", "../", "../../"]
+for search_path in html_search_paths:
+    for html_file in ["system-admin.html", "devops-tools.html", "monitoring-security.html"]:
+        full_path = os.path.join(search_path, html_file)
+        if os.path.exists(full_path):
+            html_files.append(full_path)
+
+if not html_files:
+    print("Error: No HTML files found in expected locations")
+    exit(1)
 
 # Read base file
 with open(base_file, 'r', encoding='utf-8') as f:

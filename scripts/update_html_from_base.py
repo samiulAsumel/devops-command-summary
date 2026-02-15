@@ -1,13 +1,41 @@
 #!/usr/bin/env python3
 import re
+import os
 from pathlib import Path
 
-base_path = Path(r"d:\02. Personal\Command Summary\command_summary.txt")
-html_map = {
-    range(1,11): Path(r"d:\02. Personal\Command Summary\system-admin.html"),
-    range(11,24): Path(r"d:\02. Personal\Command Summary\devops-tools.html"),
-    range(24,30): Path(r"d:\02. Personal\Command Summary\monitoring-security.html"),
-}
+# Detect base file location
+possible_base_paths = [
+    "command_summary.txt",
+    "../command_summary.txt", 
+    "../../command_summary.txt",
+    os.path.expanduser("~/command_summary.txt"),
+    "/tmp/command_summary.txt"
+]
+
+base_path = None
+for path in possible_base_paths:
+    if os.path.exists(path):
+        base_path = Path(path)
+        break
+
+if not base_path:
+    print("Error: command_summary.txt not found in expected locations")
+    exit(1)
+
+# Detect HTML files in current directory and parent directories
+html_files = {}
+html_search_paths = ["", "../", "../../"]
+for search_path in html_search_paths:
+    if os.path.exists(os.path.join(search_path, "system-admin.html")):
+        html_files[range(1,11)] = Path(os.path.join(search_path, "system-admin.html"))
+    if os.path.exists(os.path.join(search_path, "devops-tools.html")):
+        html_files[range(11,24)] = Path(os.path.join(search_path, "devops-tools.html"))
+    if os.path.exists(os.path.join(search_path, "monitoring-security.html")):
+        html_files[range(24,30)] = Path(os.path.join(search_path, "monitoring-security.html"))
+
+if not html_files:
+    print("Error: No HTML files found in expected locations")
+    exit(1)
 
 # Parse base file into sections keyed by section number
 base_text = base_path.read_text(encoding='utf-8')
@@ -60,7 +88,7 @@ for secnum, cmdlines in sections.items():
     section_blocks[secnum] = block
 
 # Function to update an HTML file for a set of section numbers
-for rng, html_path in html_map.items():
+for rng, html_path in html_files.items():
     html = html_path.read_text(encoding='utf-8')
     orig_html = html
     for secnum in rng:

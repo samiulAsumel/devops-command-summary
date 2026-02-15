@@ -8,7 +8,30 @@ import re
 from pathlib import Path
 from collections import defaultdict
 
-base_file = r"d:\02. Personal\Command Summary\command_summary.txt"
+import os
+from pathlib import Path
+
+# Detect base file location - look for command_summary.txt in common locations
+possible_base_paths = [
+    "command_summary.txt",
+    "../command_summary.txt", 
+    "../../command_summary.txt",
+    os.path.expanduser("~/command_summary.txt"),
+    "/tmp/command_summary.txt"
+]
+
+base_file = None
+for path in possible_base_paths:
+    if os.path.exists(path):
+        base_file = path
+        break
+
+if not base_file:
+    print("Error: command_summary.txt not found in expected locations")
+    print("Please place the file in one of these locations:")
+    for path in possible_base_paths:
+        print(f"  - {path}")
+    exit(1)
 
 # Read base file
 with open(base_file, 'r', encoding='utf-8') as f:
