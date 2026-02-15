@@ -14379,6 +14379,2761 @@ resultsContainer.innerHTML = "";
         </div>
       </div>
         </div>
+
+            <!-- RHCE ANSIBLE EXAM-SPECIFIC COMMANDS SECTION -->
+            <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+              <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 20px;">🎓 RHCE Ansible Exam Commands</h3>
+              <p style="color: #c9d1d9; text-align: center; margin-bottom: 25px;">Essential Ansible automation commands for RHCE (EX294) exam preparation</p>
+            </div>
+
+            <h2 id="rhce-ansible-commands">🎓 RHCE ANSIBLE EXAM ESSENTIAL COMMANDS</h2>
+
+            <div class="command-block">
+              <h4>🤖 Ansible Installation & Configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Ansible Installation & Configuration (RHCE Exam Essential)
+  # Enterprise-grade setup with security best practices
+  
+  # =============================================================================
+  # ANSIBLE INSTALLATION METHODS
+  # =============================================================================
+  
+  # Method 1: System Package Installation (Recommended for Production)
+  # Install from official repositories with dependency management
+  sudo dnf install -y ansible                   # RHEL 8+/Fedora
+  sudo yum install -y ansible                   # RHEL 7/CentOS 7
+  sudo apt install -y ansible                   # Ubuntu/Debian
+  
+  # Method 2: Python Package Installation (For specific versions)
+  # Use virtual environments for isolation
+  python3 -m venv ansible-env                  # Create virtual environment
+  source ansible-env/bin/activate               # Activate environment
+  pip install ansible==2.15.0                  # Install specific version
+  pip install ansible-core ansible-lint         # Core + linting tools
+  
+  # Method 3: Installation via pipx (Isolated Python applications)
+  pipx install ansible                         # Install in isolated environment
+  pipx ensurepath                             # Add to PATH if needed
+  
+  # =============================================================================
+  # INSTALLATION VERIFICATION
+  # =============================================================================
+  
+  # Verify Ansible installation and dependencies
+  ansible --version                           # Check Ansible version and Python path
+  ansible-config --version                    # Check configuration version
+  ansible-config --list                       # List all configuration settings
+  python3 -c "import ansible; print(ansible.__version__)"  # Python verification
+  
+  # Check Ansible components and modules
+  ansible-doc --list                          # List all available modules
+  ansible-galaxy collection list               # List installed collections
+  ansible-galaxy role list                     # List installed roles
+  
+  # =============================================================================
+  # ENTERPRISE CONFIGURATION FILES
+  # =============================================================================
+  
+  # Configuration File Priority (Enterprise Order)
+  # 1. ANSIBLE_CONFIG environment variable
+  # 2. ansible.cfg in current working directory
+  # 3. ~/.ansible.cfg (user home directory)
+  # 4. /etc/ansible/ansible.cfg (system-wide)
+  
+  # Enterprise-grade ansible.cfg template
+  # Place in project root for environment-specific configuration
+  [defaults]
+  
+  # Inventory and Connection Settings
+  inventory = ./inventory/inventory.yml       # YAML inventory (preferred)
+  host_key_checking = False                    # Disable for automation (security review required)
+  retry_files_enabled = False                  # Disable .retry files (security)
+  timeout = 30                                # Connection timeout in seconds
+  
+  # Paths and Directories
+  roles_path = ./roles:./collections/ansible_roles
+  collections_paths = ./collections:/usr/share/ansible/collections
+  filter_plugins = ./filter_plugins
+  lookup_plugins = ./lookup_plugins
+  
+  # Execution and Performance
+  forks = 25                                   # Parallel execution count
+  gathering = smart                            # Facts gathering strategy
+  fact_caching_connection = memory             # Facts caching backend
+  fact_caching_timeout = 86400                 # Cache timeout (24 hours)
+  
+  # Output and Logging
+  stdout_callback = yaml                       # Human-readable output
+  log_path = ./logs/ansible.log               # Centralized logging
+  no_log = False                              # Enable logging (review for sensitive data)
+  
+  # Security and Privilege Escalation
+  allow_world_readable_tmpfiles = False        # Security: restrict tmpfile permissions
+  private_key_file = ~/.ssh/ansible_rsa       # SSH private key path
+  
+  [privilege_escalation]
+  become = True                                # Enable privilege escalation
+  become_method = sudo                         # Escalation method
+  become_user = root                           # Target user
+  become_ask_pass = False                      # Don't prompt for password
+  become_flags = -H -S                         # Preserve environment and read password from stdin
+  
+  [ssh_connection]
+  ssh_args = -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no
+  pipelining = True                           # Enable SSH pipelining for performance
+  scp_if_ssh = True                            # Use SCP for improved reliability
+  
+  =============================================================================
+  # ENVIRONMENT VARIABLES (Enterprise Configuration)
+  # =============================================================================
+  
+  # Core Ansible Environment Variables
+  export ANSIBLE_HOST_KEY_CHECKING=False       # Disable host key checking
+  export ANSIBLE_INVENTORY=./inventory/inventory.yml  # Inventory file path
+  export ANSIBLE_CONFIG=./ansible.cfg         # Configuration file path
+  export ANSIBLE_ROLES_PATH=./roles:~/.ansible/roles  # Role search paths
+  export ANSIBLE_COLLECTIONS_PATH=./collections:/usr/share/ansible/collections
+  
+  # Performance and Scaling Variables
+  export ANSIBLE_FORKS=25                      # Parallel processes
+  export ANSIBLE_TIMEOUT=30                    # Connection timeout
+  export ANSIBLE_GATHERING=smart                # Facts gathering strategy
+  export ANSIBLE_GATHER_TIMEOUT=30             # Facts gathering timeout
+  
+  # Security Variables
+  export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/ansible_rsa  # SSH private key
+  export ANSIBLE_REMOTE_USER=ansible            # Default remote user
+  export ANSIBLE_BECOME_USER=root               # Default become user
+  
+  # Development and Debugging Variables
+  export ANSIBLE_DEBUG=1                       # Enable debug output (development only)
+  export ANSIBLE_VERBOSITY=2                    # Verbosity level (0-4)
+  export ANSIBLE_CALLBACK_WHITELIST=profile_tasks  # Enable performance profiling
+  
+  =============================================================================
+  # SECURITY HARDENING
+  # =============================================================================
+  
+  # SSH Key Management (Enterprise Security)
+  # Generate dedicated Ansible SSH key
+  ssh-keygen -t ed25519 -f ~/.ssh/ansible_rsa -C "ansible@$(hostname)" -N ""
+  chmod 600 ~/.ssh/ansible_rsa                 # Secure private key
+  chmod 644 ~/.ssh/ansible_rsa.pub             # Public key permissions
+  
+  # Configure SSH agent for key management
+  eval "$(ssh-agent -s)"                       # Start SSH agent
+  ssh-add ~/.ssh/ansible_rsa                   # Add key to agent
+  
+  # Ansible Vault Password Management
+  # Use environment variables for CI/CD integration
+  export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/vault_pass
+  chmod 600 ~/.ansible/vault_pass               # Secure vault password file
+  
+  =============================================================================
+  # VALIDATION AND TESTING
+  # =============================================================================
+  
+  # Test Ansible connectivity and configuration
+  ansible all -m ping --ask-pass              # Test connectivity with password
+  ansible all -m setup                         # Test facts gathering
+  ansible all -m command -a "echo 'Hello World'"  # Test command execution
+  
+  # Validate configuration
+  ansible-config dump --only-changed          # Show non-default settings
+  ansible-config list --help                   # Configuration help
+  
+  # Check module availability and documentation
+  ansible-doc yum                             # Module documentation
+  ansible-doc --list-files yum                # Module examples and snippets
+  ansible-doc -s yum                          # Module synopsis
+  
+  =============================================================================
+  # ENTERPRISE BEST PRACTICES
+  # =============================================================================
+  
+  # 1. Use version control for all configuration files
+  # 2. Implement proper SSH key management with rotation
+  # 3. Use Ansible Vault for sensitive data
+  # 4. Implement proper logging and monitoring
+  # 5. Use virtual environments for dependency isolation
+  # 6. Regular security updates and patch management
+  # 7. Implement proper backup and recovery procedures
+  # 8. Use configuration management for consistency
+  # 9. Implement proper access controls and audit trails
+  # 10. Use infrastructure as code principles
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>📋 Ansible Inventory Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Ansible Inventory Management (RHCE Critical)
+  # Enterprise-grade inventory with security best practices
+  
+  # =============================================================================
+  # STATIC INVENTORY FILES (Enterprise Format)
+  # =============================================================================
+  
+  # INI Format Inventory (Legacy but still supported)
+  # inventory/inventory.ini:
+  [webservers]
+  web01.example.com ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  web02.example.com ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  web03.example.com ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  
+  [databases]
+  db01.example.com ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  db02.example.com ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  
+  [loadbalancers]
+  lb01.example.com ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  
+  [production:children]
+  webservers
+  databases
+  loadbalancers
+  
+  [production:vars]
+  environment=production
+  backup_enabled=true
+  monitoring_enabled=true
+  security_level=high
+  
+  [staging:children]
+  webservers_staging
+  databases_staging
+  
+  [staging:vars]
+  environment=staging
+  backup_enabled=true
+  monitoring_enabled=true
+  security_level=medium
+  
+  # =============================================================================
+  # YAML INVENTORY FORMAT (Enterprise Recommended)
+  # =============================================================================
+  
+  # inventory/inventory.yml:
+  all:
+    children:
+      production:
+        children:
+          webservers:
+            hosts:
+              web01.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_port: 22
+                ansible_host: 10.0.1.10
+                web_server_type: nginx
+                ssl_enabled: true
+              web02.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_port: 22
+                ansible_host: 10.0.1.11
+                web_server_type: nginx
+                ssl_enabled: true
+              web03.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_port: 22
+                ansible_host: 10.0.1.12
+                web_server_type: apache
+                ssl_enabled: true
+          databases:
+            hosts:
+              db01.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_host: 10.0.2.10
+                database_type: postgresql
+                replication_role: master
+                backup_retention_days: 30
+              db02.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_host: 10.0.2.11
+                database_type: postgresql
+                replication_role: replica
+                backup_retention_days: 7
+          loadbalancers:
+            hosts:
+              lb01.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_host: 10.0.3.10
+                load_balancer_type: haproxy
+                ssl_termination: true
+        vars:
+          environment: production
+          backup_enabled: true
+          monitoring_enabled: true
+          security_level: high
+          log_level: warning
+          firewall_enabled: true
+          selinux_enforcing: true
+  
+      staging:
+        children:
+          webservers_staging:
+            hosts:
+              web-staging01.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_host: 10.1.1.10
+                web_server_type: nginx
+                ssl_enabled: false
+          databases_staging:
+            hosts:
+              db-staging01.example.com:
+                ansible_user: ansible
+                ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+                ansible_host: 10.1.2.10
+                database_type: postgresql
+                replication_role: standalone
+        vars:
+          environment: staging
+          backup_enabled: true
+          monitoring_enabled: true
+          security_level: medium
+          log_level: info
+          firewall_enabled: true
+          selinux_enforcing: false
+  
+  # =============================================================================
+  # DYNAMIC INVENTORY (Enterprise Cloud Integration)
+  # =============================================================================
+  
+  # AWS EC2 Dynamic Inventory Script
+  # inventory/aws_ec2.yml:
+  plugin: aws_ec2
+  regions:
+    - us-east-1
+    - us-west-2
+  keyed_groups:
+    - key: tags.Environment
+      prefix: env_
+    - key: tags.Role
+      prefix: role_
+    - key: tags.Application
+      prefix: app_
+  hostnames:
+    - tag:Name
+    - private-ip-address
+  compose:
+    ansible_host: private_ip_address
+    ansible_user: ansible
+    ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+  
+  # Kubernetes Dynamic Inventory
+  # inventory/k8s.yml:
+  plugin: k8s
+  connections:
+    clusters:
+      - name: production
+        kubeconfig: ~/.kube/config-prod
+      - name: staging
+        kubeconfig: ~/.kube/config-staging
+  hostnames:
+    - spec.nodeName
+  compose:
+    ansible_host: status.hostIP
+    ansible_user: ansible
+  
+  # Custom Dynamic Inventory Script
+  # inventory/custom_inventory.sh (make executable):
+  #!/bin/bash
+  set -euo pipefail
+  
+  # Security: Validate input and prevent injection
+  validate_input() {
+      local input="$1"
+      if [[ ! "$input" =~ ^[a-zA-Z0-9_.-]+$ ]]; then
+          echo "ERROR: Invalid characters in input" >&2
+          exit 1
+      fi
+  }
+  
+  # Get environment from parameter or default
+  ENVIRONMENT="${1:-production}"
+  validate_input "$ENVIRONMENT"
+  
+  # Query CMDB or API for host information
+  case "$ENVIRONMENT" in
+      "production")
+          cat << EOF
+  {
+      "webservers": {
+          "hosts": ["web01", "web02", "web03"],
+          "vars": {
+              "environment": "production",
+              "security_level": "high"
+          }
+      },
+      "databases": {
+          "hosts": ["db01", "db02"],
+          "vars": {
+              "environment": "production",
+              "backup_retention": 30
+          }
+      }
+  }
+  EOF
+          ;;
+      "staging")
+          cat << EOF
+  {
+      "webservers": {
+          "hosts": ["web-staging01"],
+          "vars": {
+              "environment": "staging",
+              "security_level": "medium"
+          }
+      }
+  }
+  EOF
+          ;;
+      *)
+          echo "ERROR: Unknown environment: $ENVIRONMENT" >&2
+          exit 1
+          ;;
+  esac
+  
+  # =============================================================================
+  # INVENTORY VALIDATION AND TESTING
+  # =============================================================================
+  
+  # Test Inventory Configuration
+  ansible-inventory -i inventory/inventory.yml --list      # List all hosts
+  ansible-inventory -i inventory/inventory.yml --graph    # Graph format
+  ansible-inventory -i inventory/inventory.yml --yaml     # YAML format
+  ansible-inventory -i inventory/inventory.yml --host web01.example.com  # Host variables
+  
+  # Validate Inventory Syntax
+  ansible-inventory -i inventory/inventory.yml --list --output=json | jq .  # JSON validation
+  
+  # Test Host Connectivity
+  ansible all -i inventory/inventory.yml -m ping           # Test connectivity
+  ansible all -i inventory/inventory.yml -m setup        # Test facts gathering
+  
+  # =============================================================================
+  # VARIABLE MANAGEMENT (Enterprise Patterns)
+  # =============================================================================
+  
+  # Group Variables (Security-focused)
+  # group_vars/all.yml (Global variables):
+  ansible_user: ansible
+  ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+  ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+  ansible_python_interpreter: /usr/bin/python3
+  
+  # Security defaults
+  default_firewall_state: enabled
+  default_selinux_state: enforcing
+  default_log_level: warning
+  
+  # Monitoring defaults
+  monitoring_enabled: true
+  backup_enabled: true
+  log_rotation_enabled: true
+  
+  # Environment-specific variables
+  # group_vars/production.yml:
+  environment: production
+  security_level: high
+  backup_retention_days: 30
+  log_retention_days: 90
+  monitoring_interval: 60
+  alert_threshold_cpu: 80
+  alert_threshold_memory: 85
+  alert_threshold_disk: 90
+  
+  # Production security settings
+  firewall_enabled: true
+  selinux_enforcing: true
+  fail2ban_enabled: true
+  intrusion_detection: true
+  audit_logging: true
+  
+  # group_vars/staging.yml:
+  environment: staging
+  security_level: medium
+  backup_retention_days: 7
+  log_retention_days: 30
+  monitoring_interval: 300
+  alert_threshold_cpu: 90
+  alert_threshold_memory: 90
+  alert_threshold_disk: 95
+  
+  # Staging security settings
+  firewall_enabled: true
+  selinux_enforcing: false
+  fail2ban_enabled: true
+  intrusion_detection: false
+  audit_logging: true
+  
+  # Host-specific variables
+  # host_vars/web01.example.com.yml:
+  host_specific_config: true
+  custom_app_port: 8080
+  ssl_certificate_path: /etc/ssl/certs/web01.crt
+  ssl_key_path: /etc/ssl/private/web01.key
+  backup_schedule: "0 2 * * *"
+  maintenance_window: "Sunday 02:00-04:00"
+  
+  # =============================================================================
+  # ADVANCED INVENTORY FEATURES
+  # =============================================================================
+  
+  # Range Notation (for sequential hostnames)
+  [webservers]
+  web[01:05].example.com
+  
+  # Alphabetical ranges
+  [servers]
+  server[a:c].example.com
+  
+  # Multiple Group Inheritance
+  [base]
+  ansible_user=ansible
+  ansible_ssh_private_key_file=~/.ssh/ansible_rsa
+  
+  [webservers:children]
+  base
+  web_servers
+  
+  [databases:children]
+  base
+  db_servers
+  
+  # Complex Group Variables
+  [production:vars]
+  environment=production
+  security_level=high
+  backup_enabled=true
+  monitoring_enabled=true
+  
+  [production:vars:children]
+  webservers
+  databases
+  
+  # =============================================================================
+  # PATTERN MATCHING AND HOST SELECTION
+  # =============================================================================
+  
+  # Basic Patterns
+  ansible webservers --list-hosts              # List hosts in webservers group
+  ansible all --list-hosts                     # List all hosts
+  ansible ungrouped --list-hosts               # List ungrouped hosts
+  
+  # Set Operations
+  ansible 'webservers:&databases' --list-hosts # Intersection (hosts in both groups)
+  ansible 'webservers:!databases' --list-hosts # Exclusion (hosts in webservers but not databases)
+  ansible 'webservers:databases' --list-hosts  # Union (hosts in either group)
+  
+  # Regular Expression Patterns
+  ansible '~web.*' --list-hosts                 # Hosts matching regex
+  ansible '~^db\d+\.example\.com$' --list-hosts # Complex regex pattern
+  
+  # Subgroup and Variable Patterns
+  ansible 'production:&webservers' --list-hosts  # Production webservers
+  ansible 'environment=production' --list-hosts  # Hosts with specific variable
+  ansible 'ansible_host=10\.0\.1\.*' --list-hosts  # Hosts matching IP pattern
+  
+  # =============================================================================
+  # INVENTORY SECURITY BEST PRACTICES
+  # =============================================================================
+  
+  # 1. Use SSH keys instead of passwords
+  # 2. Implement proper key management and rotation
+  # 3. Use vault encryption for sensitive variables
+  # 4. Restrict inventory file permissions (600 or 640)
+  # 5. Use separate inventories for different environments
+  # 6. Implement inventory validation in CI/CD pipelines
+  # 7. Use dynamic inventory for cloud environments
+  # 8. Regularly audit and update inventory files
+  # 9. Use version control for inventory changes
+  # 10. Implement proper backup and recovery procedures
+  
+  # =============================================================================
+  # ENTERPRISE INVENTORY AUTOMATION
+  # =============================================================================
+  
+  # Inventory Validation Script
+  # scripts/validate_inventory.sh:
+  #!/bin/bash
+  set -euo pipefail
+  
+  INVENTORY_FILE="${1:-inventory/inventory.yml}"
+  
+  if [[ ! -f "$INVENTORY_FILE" ]]; then
+      echo "ERROR: Inventory file not found: $INVENTORY_FILE" >&2
+      exit 1
+  fi
+  
+  # Validate YAML syntax
+  if command -v yamllint &>/dev/null; then
+      yamllint "$INVENTORY_FILE" || {
+          echo "ERROR: YAML syntax validation failed" >&2
+          exit 1
+      }
+  fi
+  
+  # Validate Ansible inventory
+  ansible-inventory -i "$INVENTORY_FILE" --list >/dev/null || {
+      echo "ERROR: Ansible inventory validation failed" >&2
+      exit 1
+  }
+  
+  # Test connectivity to all hosts
+  echo "Testing connectivity to all hosts..."
+  ansible all -i "$INVENTORY_FILE" -m ping || {
+      echo "WARNING: Some hosts are not reachable" >&2
+  }
+  
+  echo "Inventory validation completed successfully"
+  
+  # Make script executable
+  # chmod +x scripts/validate_inventory.sh
+  
+  # Automated Inventory Updates
+  # scripts/update_inventory.sh:
+  #!/bin/bash
+  set -euo pipefail
+  
+  # Update dynamic inventory from cloud provider
+  ansible-inventory -i inventory/aws_ec2.yml --list --refresh > /dev/null
+  
+  # Validate updated inventory
+  ./scripts/validate_inventory.sh inventory/aws_ec2.yml
+  
+  # Commit changes to version control
+  if [[ -n "$(git status --porcelain inventory/)" ]]; then
+      git add inventory/
+      git commit -m "Auto-update inventory from cloud provider"
+  fi
+  
+  echo "Inventory update completed"
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🎭 Ansible Ad-Hoc Commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Ansible Ad-Hoc Commands (RHCE Exam Essential)
+  # Enterprise-grade ad-hoc commands with security and error handling
+  
+  # =============================================================================
+  # COMMAND STRUCTURE AND BASIC OPERATIONS
+  # =============================================================================
+  
+  # Basic Command Syntax (Enterprise Pattern)
+  ansible <pattern> -m <module> -a "<arguments>" [options]
+  
+  # Command Execution with Error Handling
+  ansible all -m command -a "uptime" --check        # Dry run first
+  ansible all -m command -a "uptime"                # Execute on all hosts
+  ansible webservers -m shell -a "ps aux | grep httpd | grep -v grep"  # Filter output
+  ansible all -m raw -a "yum install -y htop" --become # Raw command with privilege escalation
+  
+  # =============================================================================
+  # FILE OPERATIONS (Enterprise Security)
+  # =============================================================================
+  
+  # Secure File Operations with Backup and Validation
+  ansible all -m copy -a "src=/etc/hosts dest=/tmp/hosts backup=yes mode=0644 owner=root group=root"
+  ansible all -m copy -a "content='Ansible managed file' dest=/tmp/managed.txt mode=0644"
+  ansible all -m fetch -a "src=/var/log/messages dest=./logs/ flat=yes"  # Copy from remote to local
+  
+  # File Management with Permissions and Validation
+  ansible all -m file -a "path=/tmp/testfile state=touch mode=0644 owner=ansible group=ansible"
+  ansible all -m file -a "path=/tmp/testdir state=directory mode=0755 owner=ansible group=ansible"
+  ansible all -m file -a "path=/tmp/testlink state=link src=/tmp/testfile"
+  ansible all -m file -a "path=/tmp/testfile state=absent"  # Remove file
+  ansible all -m file -a "path=/tmp/testdir state=absent"  # Remove directory
+  
+  # =============================================================================
+  # PACKAGE MANAGEMENT (Enterprise Package Control)
+  # =============================================================================
+  
+  # Package Installation with Version Control
+  ansible all -m yum -a "name=httpd state=present" --check  # Dry run
+  ansible all -m yum -a "name=httpd-2.4.37 state=present"  # Specific version
+  ansible all -m yum -a "name=httpd state=latest"          # Update to latest
+  ansible all -m yum -a "name=httpd state=absent"         # Remove package
+  
+  # Multiple Package Management
+  ansible all -m yum -a "name={{ item }} state=present" --with-items "httpd,nginx,php"
+  ansible all -m yum -a "name=httpd,nginx,php state=present"  # Alternative syntax
+  
+  # Repository Management
+  ansible all -m yum_repository -a "name=epel description='EPEL Repository' baseurl=https://download.fedoraproject.org/pub/epel/$releasever/$basearch/ enabled=yes gpgcheck=yes"
+  ansible all -m yum -a "name=* state=latest update_cache=yes"  # Update all packages
+  
+  # Modern Package Managers
+  ansible all -m dnf -a "name=httpd state=present"     # DNF (RHEL 8+/Fedora)
+  ansible all -m apt -a "name=apache2 state=present" update_cache=yes  # Ubuntu/Debian
+  ansible all -m pacman -a "name=apache state=present" # Arch Linux
+  
+  # =============================================================================
+  # SERVICE MANAGEMENT (Production Control)
+  # =============================================================================
+  
+  # Service Lifecycle Management
+  ansible all -m service -a "name=httpd state=started enabled=yes" --become
+  ansible all -m service -a "name=httpd state=stopped" --become
+  ansible all -m service -a "name=httpd state=restarted" --become
+  ansible all -m service -a "name=httpd state=reloaded" --become
+  
+  # Service Status and Information
+  ansible all -m service_facts -a "" --become         # Gather all service facts
+  ansible all -m service -a "name=httpd state=started" --become && \
+  ansible all -m shell -a "systemctl status httpd" --become  # Verify status
+  
+  # =============================================================================
+  # USER AND GROUP MANAGEMENT (Security-Focused)
+  # =============================================================================
+  
+  # User Management with Security Best Practices
+  ansible all -m user -a "name=appuser state=present shell=/bin/bash home=/home/appuser groups=wheel append=yes" --become
+  ansible all -m user -a "name=appuser state=absent remove=yes" --become  # Remove with home directory
+  ansible all -m user -a "name=appuser password={{ 'SecurePass123!' | password_hash('sha512') }} update_password=on_create" --become
+  
+  # SSH Key Management
+  ansible all -m user -a "name=appuser generate_ssh_key=yes ssh_key_bits=4096 ssh_key_file=.ssh/id_rsa" --become
+  ansible all -m authorized_key -a "user=appuser key='ssh-rsa AAAAB3NzaC1yc2E... user@hostname' state=present" --become
+  
+  # Group Management
+  ansible all -m group -a "name=appgroup state=present gid=2000" --become
+  ansible all -m group -a "name=appgroup state=absent" --become
+  
+  # =============================================================================
+  # SYSTEM INFORMATION AND MONITORING
+  # =============================================================================
+  
+  # Facts Gathering with Filtering
+  ansible all -m setup --check                      # Check facts gathering
+  ansible all -m setup -a "filter=ansible_all_ipv4_addresses"
+  ansible all -m setup -a "filter=ansible_distribution*"
+  ansible all -m setup -a "filter=ansible_memory_mb"
+  ansible all -m setup -a "filter=ansible_mounts"
+  
+  # Custom Facts and Information
+  ansible all -m shell -a "df -h" | grep -E "(Filesystem|/dev/)"  # Disk usage
+  ansible all -m shell -a "free -h"                    # Memory usage
+  ansible all -m shell -a "uptime"                    # System uptime
+  
+  # =============================================================================
+  # CRON JOB MANAGEMENT (Enterprise Scheduling)
+  # =============================================================================
+  
+  # Cron Job Creation with Validation
+  ansible all -m cron -a "name='daily backup' job='/usr/local/bin/backup.sh' minute=0 hour=2 user=root" --become
+  ansible all -m cron -a "name='log rotation' job='/usr/sbin/logrotate -f /etc/logrotate.conf' minute=0 hour=3 user=root" --become
+  ansible all -m cron -a "name='system health check' job='/usr/local/bin/health_check.sh' minute='*/15' user=ansible" --become
+  
+  # Cron Job Management
+  ansible all -m cron -a "name='daily backup' state=absent" --become
+  ansible all -m cron -a "name='daily backup' disabled=yes" --become
+  
+  # =============================================================================
+  # NETWORK OPERATIONS AND CONNECTIVITY
+  # =============================================================================
+  
+  # Network Testing and Validation
+  ansible all -m ping                               # Basic connectivity test
+  ansible all -m ping -a "data=custom_payload"       # Ping with custom data
+  
+  # HTTP Operations
+  ansible all -m uri -a "url=http://example.com method=GET status_code=200"  # HTTP GET with validation
+  ansible all -m uri -a "url=http://api.example.com/health method=GET status_code=200 timeout=30"
+  ansible all -m uri -a "url=http://example.com method=POST body='data=test' headers='Content-Type=application/json'"
+  
+  # File Downloads and Uploads
+  ansible all -m get_url -a "url=https://example.com/file.tar.gz dest=/tmp/file.tar.gz mode=0644 timeout=300"
+  ansible all -m uri -a "url=http://example.com/upload method=POST src=/tmp/localfile.txt"
+  
+  # =============================================================================
+  # ARCHIVE AND COMPRESSION OPERATIONS
+  # =============================================================================
+  
+  # Archive Creation and Extraction
+  ansible all -m archive -a "path=/tmp/data dest=/tmp/data.tar.gz format=gz remove=yes"
+  ansible all -m archive -a "path=/tmp/logs dest=/tmp/logs.tar.bz2 format=bz2"
+  ansible all -m unarchive -a "src=/tmp/data.tar.gz dest=/tmp/ remote_src=yes"
+  ansible all -m unarchive -a "src=/tmp/data.tar.gz dest=/tmp/ copy=no"
+  
+  # =============================================================================
+  # CONFIGURATION FILE MANAGEMENT
+  # =============================================================================
+  
+  # Line and Block Operations
+  ansible all -m lineinfile -a "path=/etc/hosts line='192.168.1.100 server1.example.com' create=yes"
+  ansible all -m lineinfile -a "path=/etc/hosts regexp='server1.example.com' line='192.168.1.100 server1.example.com'"
+  ansible all -m lineinfile -a "path=/etc/ssh/sshd_config regexp='^PermitRootLogin' line='PermitRootLogin no'" --become
+  
+  # Block File Operations
+  ansible all -m blockinfile -a "path=/etc/hosts block='192.168.1.100 server1\n192.168.1.101 server2' marker='# {mark} ANSIBLE MANAGED BLOCK'"
+  
+  # =============================================================================
+  # ADVANCED OPTIONS AND ENTERPRISE FEATURES
+  # =============================================================================
+  
+  # Safety and Validation Options
+  ansible webservers -m yum -a "name=httpd state=present" --check  # Dry run mode
+  ansible webservers -m yum -a "name=httpd state=present" --diff   # Show changes
+  ansible webservers -m yum -a "name=httpd state=present" --step   # Step-by-step execution
+  
+  # Performance and Scaling
+  ansible webservers -m yum -a "name=httpd state=present" -f 50   # Increase forks to 50
+  ansible webservers -m yum -a "name=httpd state=present" --timeout=60  # Set timeout
+  
+  # Privilege Escalation Management
+  ansible all -m service -a "name=httpd state=restarted" --become --ask-become-pass
+  ansible all -m service -a "name=httpd state=restarted" -b --ask-become-pass  # Short form
+  ansible all -m service -a "name=httpd state=restarted" --become-user=root --become-method=sudo
+  
+  # =============================================================================
+  # ERROR HANDLING AND LOGGING
+  # =============================================================================
+  
+  # Error Handling Strategies
+  ansible webservers -m yum -a "name=httpd state=present" --check || echo "Dry run failed"
+  ansible all -m shell -a "command_that_might_fail" || true  # Ignore failures
+  ansible all -m shell -a "command_that_might_fail" ignore_errors=yes  # Module-level ignore
+  
+  # Logging and Output Control
+  ansible all -m ping -v                           # Verbose output
+  ansible all -m ping -vvv                         # Very verbose output
+  ansible all -m ping --diff                       # Show changes
+  ansible all -m ping --syntax-check               # Syntax validation only
+  
+  # =============================================================================
+  # SECURITY AND COMPLIANCE OPERATIONS
+  # =============================================================================
+  
+  # Security Hardening Commands
+  ansible all -m selinux -a "policy=targeted state=enforced" --become
+  ansible all -m firewalld -a "service=http state=enabled permanent=yes" --become
+  ansible all -m authorized_key -a "user=root key='ssh-rsa AAAAB3NzaC1yc2E...' state=present exclusive=yes" --become
+  
+  # Compliance Checking
+  ansible all -m shell -a "grep '^PermitRootLogin' /etc/ssh/sshd_config" --become
+  ansible all -m shell -a "sestatus" --become
+  ansible all -m shell -a "firewall-cmd --list-all" --become
+  
+  # =============================================================================
+  # ENTERPRISE AD-HOC COMMAND PATTERNS
+  # =============================================================================
+  
+  # Multi-step Operations with Chaining
+  ansible all -m yum -a "name=nginx state=present" --become && \
+  ansible all -m service -a "name=nginx state=started enabled=yes" --become && \
+  ansible all -m firewalld -a "service=http state=enabled permanent=yes" --become
+  
+  # Conditional Operations
+  ansible all -m shell -a "test -f /etc/httpd/conf/httpd.conf && echo 'Config exists' || echo 'Config missing'"
+  
+  # Loop-based Operations
+  ansible all -m shell -a "echo 'Processing {{ item }}'" --with-items "server1,server2,server3"
+  
+  # Variable Substitution
+  ansible all -m shell -a "echo 'Hello from {{ ansible_hostname }}'"
+  
+  # =============================================================================
+  # PRODUCTION AD-HOC COMMANDS BEST PRACTICES
+  # =============================================================================
+  
+  # 1. Always use --check for destructive operations first
+  # 2. Use --diff to see what changes will be made
+  # 3. Implement proper privilege escalation with --become
+  # 4. Use specific host patterns instead of 'all' when possible
+  # 5. Validate results with follow-up commands
+  # 6. Use appropriate timeout values for network operations
+  # 7. Implement proper error handling and logging
+  # 8. Use version control for complex command sequences
+  # 9. Test in staging environments before production
+  # 10. Document critical ad-hoc commands for repeatability
+  
+  # =============================================================================
+  # TROUBLESHOOTING AND DEBUGGING COMMANDS
+  # =============================================================================
+  
+  # Connectivity Testing
+  ansible all -m ping -vvv                        # Verbose ping for debugging
+  ansible all -m setup -a "filter=ansible_*"      # Gather all facts for inspection
+  
+  # Module Testing
+  ansible all -m yum -a "name=httpd state=present" --check --diff  # Test package installation
+  ansible all -m service -a "name=httpd state=started" --check  # Test service start
+  
+  # Configuration Validation
+  ansible all -m shell -a "ansible --version"      # Check Ansible version
+  ansible all -m shell -a "python3 --version"     # Check Python version
+  ansible all -m shell -a "which sudo"             # Check sudo availability
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>📜 Ansible Playbook Essentials</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Ansible Playbook Structure (RHCE Critical)
+  # Enterprise-grade playbooks with error handling and best practices
+  
+  # =============================================================================
+  # BASIC PLAYBOOK STRUCTURE (Enterprise Template)
+  # =============================================================================
+  
+  # Enterprise Playbook Template
+  # playbooks/deploy_webserver.yml:
+  ---
+  - name: Deploy Enterprise Web Server
+    hosts: webservers
+    become: yes
+    gather_facts: yes
+    vars:
+      http_port: 80
+      https_port: 443
+      max_clients: 200
+      server_admin: "admin@example.com"
+      web_root: "/var/www/html"
+      ssl_enabled: true
+      backup_enabled: true
+    
+    pre_tasks:
+      - name: Validate system requirements
+        assert:
+          that:
+            - ansible_distribution_version is version('8', '>=')
+            - ansible_memtotal_mb >= 2048
+            - ansible_mounts[0].size_available >= 1048576  # 1GB free space
+          fail_msg: "System does not meet minimum requirements"
+          success_msg: "System requirements validation passed"
+      
+      - name: Create backup directory
+        file:
+          path: "/backup/webserver"
+          state: directory
+          mode: '0755'
+        when: backup_enabled
+    
+    tasks:
+      - name: Install web server packages
+        package:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - httpd
+          - mod_ssl
+        register: package_install
+        failed_when: package_install.failed
+        changed_when: package_install.changed
+      
+      - name: Create web directory structure
+        file:
+          path: "{{ item }}"
+          state: directory
+          mode: '0755'
+          owner: apache
+          group: apache
+        loop:
+          - "{{ web_root }}"
+          - "{{ web_root }}/conf"
+          - "{{ web_root }}/logs"
+          - "{{ web_root }}/ssl"
+      
+      - name: Deploy configuration template
+        template:
+          src: httpd.conf.j2
+          dest: /etc/httpd/conf/httpd.conf
+          backup: yes
+          mode: '0644'
+          owner: root
+          group: root
+        notify: restart apache
+        register: config_deploy
+        failed_when: config_deploy.failed
+      
+      - name: Configure firewall rules
+        firewalld:
+          port: "{{ item }}/tcp"
+          state: enabled
+          permanent: yes
+          immediate: yes
+        loop:
+          - "{{ http_port }}"
+          - "{{ https_port }}"
+        register: firewall_config
+        failed_when: firewall_config.failed
+    
+    post_tasks:
+      - name: Verify web server is running
+        uri:
+          url: "http://localhost:{{ http_port }}"
+          method: GET
+          status_code: 200
+          timeout: 30
+        register: web_check
+        retries: 3
+        delay: 10
+        until: web_check.status == 200
+        failed_when: web_check.failed
+      
+      - name: Create deployment marker
+        copy:
+          content: |
+            Deployment completed: {{ ansible_date_time.iso8601 }}
+            Playbook: {{ ansible_playbook_python }}
+            User: {{ ansible_user_id }}
+          dest: "{{ web_root }}/deployment_info.txt"
+          mode: '0644'
+    
+    handlers:
+      - name: restart apache
+        service:
+          name: httpd
+          state: restarted
+          enabled: yes
+        listen: restart apache
+        register: apache_restart
+        failed_when: apache_restart.failed
+      
+      - name: reload apache
+        service:
+          name: httpd
+          state: reloaded
+        listen: reload apache
+  
+  # =============================================================================
+  # ENTERPRISE PLAYBOOK EXECUTION COMMANDS
+  # =============================================================================
+  
+  # Safe Execution with Validation
+  ansible-playbook playbooks/deploy_webserver.yml --syntax-check  # Syntax validation
+  ansible-playbook playbooks/deploy_webserver.yml --check          # Dry run mode
+  ansible-playbook playbooks/deploy_webserver.yml --diff           # Show changes
+  ansible-playbook playbooks/deploy_webserver.yml --step           # Step-by-step execution
+  
+  # Production Execution with Monitoring
+  ansible-playbook playbooks/deploy_webserver.yml --verbose        # Verbose output
+  ansible-playbook playbooks/deploy_webserver.yml --start-at-task="Install web server packages"
+  ansible-playbook playbooks/deploy_webserver.yml --tags "package,config"
+  
+  # Advanced Execution Options
+  ansible-playbook playbooks/deploy_webserver.yml \
+    --inventory inventory/production.yml \
+    --limit webservers \
+    --forks 10 \
+    --timeout 300 \
+    --ask-become-pass
+  
+  # =============================================================================
+  # ADVANCED VARIABLE MANAGEMENT (Enterprise Patterns)
+  # =============================================================================
+  
+  # Complex Variable Structure
+  # vars/main.yml:
+  ---
+  # Application Configuration
+  app_config:
+    name: enterprise_webapp
+    version: 2.1.0
+    environment: "{{ ansible_env.ANSIBLE_ENVIRONMENT | default('production') }}"
+    debug: "{{ ansible_env.DEBUG | default(false) }}"
+  
+  # Server Configuration
+  server_config:
+    http_port: 80
+    https_port: 443
+    max_clients: 200
+    timeout: 300
+    keep_alive: true
+  
+  # Security Configuration
+  security_config:
+    ssl_enabled: true
+    ssl_protocol: TLSv1.2
+    ssl_cipher_suite: HIGH:!aNULL:!MD5
+    hsts_enabled: true
+    csrf_protection: true
+  
+  # Database Configuration
+  database_config:
+    host: "{{ vault_db_host }}"
+    port: 5432
+    name: "{{ vault_db_name }}"
+    user: "{{ vault_db_user }}"
+    password: "{{ vault_db_password }}"
+    pool_size: 20
+    timeout: 30
+  
+  # Monitoring Configuration
+  monitoring_config:
+    enabled: true
+    metrics_port: 9090
+    health_check_interval: 30
+    alert_threshold_cpu: 80
+    alert_threshold_memory: 85
+  
+  # =============================================================================
+  # CONDITIONAL LOGIC WITH ERROR HANDLING
+  # =============================================================================
+  
+  # Advanced Conditional Tasks
+  # playbooks/configure_server.yml:
+  ---
+  - name: Configure Enterprise Server
+    hosts: all
+    become: yes
+    vars:
+      server_role: "{{ ansible_host.split('-')[0] | default('web') }}"
+      environment: "{{ ansible_env.ENVIRONMENT | default('production') }}"
+    
+    tasks:
+      - name: Install packages based on OS distribution
+        package:
+          name: "{{ item }}"
+          state: present
+        loop: "{{ os_packages[ansible_distribution] | default([]) }}"
+        vars:
+          os_packages:
+            RedHat: ["httpd", "mod_ssl", "firewalld"]
+            Ubuntu: ["apache2", "ssl-cert", "ufw"]
+            CentOS: ["httpd", "mod_ssl", "firewalld"]
+        when: ansible_distribution in os_packages
+        register: package_install
+        failed_when: package_install.failed
+        rescue:
+          - name: Handle package installation failure
+            debug:
+              msg: "Package installation failed for {{ ansible_distribution }}"
+            fail:
+              msg: "Unsupported operating system: {{ ansible_distribution }}"
+      
+      - name: Configure based on server role
+        include_tasks: "tasks/{{ server_role }}.yml"
+        when: server_role in supported_roles
+        vars:
+          supported_roles: ["web", "database", "cache", "loadbalancer"]
+        register: role_config
+        failed_when: role_config.failed
+        rescue:
+          - name: Handle unsupported role
+            debug:
+              msg: "Unsupported server role: {{ server_role }}"
+            fail:
+              msg: "Server role '{{ server_role }}' is not supported"
+      
+      - name: Apply environment-specific configuration
+        include_tasks: "tasks/environment_{{ environment }}.yml"
+        when: environment in supported_environments
+        vars:
+          supported_environments: ["production", "staging", "development"]
+        register: env_config
+        failed_when: env_config.failed
+        rescue:
+          - name: Handle unsupported environment
+            debug:
+              msg: "Unsupported environment: {{ environment }}"
+            fail:
+              msg: "Environment '{{ environment }}' is not supported"
+      
+      - name: Validate configuration
+        assert:
+          that:
+            - server_config.http_port is defined
+            - security_config.ssl_enabled is defined
+            - monitoring_config.enabled is defined
+          fail_msg: "Configuration validation failed"
+          success_msg: "Configuration validation passed"
+        register: config_validation
+        failed_when: config_validation.failed
+  
+  # =============================================================================
+  # ADVANCED LOOPING PATTERNS
+  # =============================================================================
+  
+  # Enterprise Loop Patterns
+  # playbooks/setup_infrastructure.yml:
+  ---
+  - name: Setup Enterprise Infrastructure
+    hosts: all
+    become: yes
+    vars:
+      users:
+        - name: appuser
+          groups: ["appgroup", "wheel"]
+          shell: "/bin/bash"
+          home: "/home/appuser"
+          ssh_key: "{{ vault_appuser_ssh_key }}"
+        - name: dbuser
+          groups: ["dbgroup"]
+          shell: "/bin/bash"
+          home: "/home/dbuser"
+          ssh_key: "{{ vault_dbuser_ssh_key }}"
+      
+      services:
+        - name: nginx
+          enabled: true
+          state: started
+          config_file: "nginx.conf.j2"
+        - name: postgresql
+          enabled: true
+          state: started
+          config_file: "postgresql.conf.j2"
+        - name: redis
+          enabled: true
+          state: started
+          config_file: "redis.conf.j2"
+      
+      firewall_rules:
+        - port: 80
+          protocol: tcp
+          service: http
+          zone: public
+        - port: 443
+          protocol: tcp
+          service: https
+          zone: public
+        - port: 5432
+          protocol: tcp
+          service: postgresql
+          zone: internal
+    
+    tasks:
+      - name: Create users with SSH keys
+        user:
+          name: "{{ item.name }}"
+          groups: "{{ item.groups }}"
+          shell: "{{ item.shell }}"
+          home: "{{ item.home }}"
+          state: present
+        loop: "{{ users }}"
+        register: user_creation
+        failed_when: user_creation.failed
+        notify: setup user ssh keys
+      
+      - name: Configure services
+        include_tasks: tasks/configure_service.yml
+        loop: "{{ services }}"
+        vars:
+          service_name: "{{ item.name }}"
+          service_enabled: "{{ item.enabled }}"
+          service_state: "{{ item.state }}"
+          config_template: "{{ item.config_file }}"
+        register: service_config
+        failed_when: service_config.failed
+      
+      - name: Setup firewall rules
+        firewalld:
+          port: "{{ item.port }}/{{ item.protocol }}"
+          state: enabled
+          permanent: yes
+          immediate: yes
+          zone: "{{ item.zone }}"
+        loop: "{{ firewall_rules }}"
+        register: firewall_setup
+        failed_when: firewall_setup.failed
+        rescue:
+          - name: Handle firewall configuration failure
+            debug:
+              msg: "Failed to configure firewall rule for port {{ item.port }}"
+            when: firewall_setup.failed
+    
+    handlers:
+      - name: setup user ssh keys
+        authorized_key:
+          user: "{{ item.name }}"
+          key: "{{ item.ssh_key }}"
+          state: present
+        loop: "{{ users }}"
+        when: user_creation.changed
+  
+  # =============================================================================
+  # ERROR HANDLING AND RECOVERY PATTERNS
+  # =============================================================================
+  
+  # Enterprise Error Handling
+  # playbooks/deploy_application.yml:
+  ---
+  - name: Deploy Enterprise Application
+    hosts: app_servers
+    become: yes
+    vars:
+      app_name: enterprise_app
+      app_version: "{{ lookup('env', 'APP_VERSION') | default('latest') }}"
+      rollback_enabled: true
+      max_retries: 3
+      retry_delay: 10
+    
+    tasks:
+      - name: Backup current application
+        archive:
+          path: "/opt/{{ app_name }}"
+          dest: "/backup/{{ app_name }}_backup_{{ ansible_date_time.epoch }}.tar.gz"
+          format: gz
+        when: rollback_enabled
+        register: app_backup
+        failed_when: app_backup.failed
+        rescue:
+          - name: Handle backup failure
+            debug:
+              msg: "Backup failed, proceeding with deployment"
+          - name: Set backup failure flag
+            set_fact:
+              backup_failed: true
+      
+      - name: Stop application service
+        service:
+          name: "{{ app_name }}"
+          state: stopped
+        register: service_stop
+        failed_when: false  # Don't fail if service doesn't exist
+        ignore_errors: yes
+      
+      - name: Deploy application with retry logic
+        package:
+          name: "{{ app_name }}-{{ app_version }}"
+          state: present
+        register: app_deploy
+        retries: "{{ max_retries }}"
+        delay: "{{ retry_delay }}"
+        until: app_deploy is succeeded
+        failed_when: app_deploy.failed
+        rescue:
+          - name: Handle deployment failure
+            debug:
+              msg: "Application deployment failed after {{ max_retries }} attempts"
+            fail:
+              msg: "Application deployment failed"
+          - name: Rollback if enabled and backup exists
+            include_tasks: tasks/rollback.yml
+            when: rollback_enabled and backup_failed is not defined
+            vars:
+              backup_file: "{{ app_backup.dest }}"
+  
+      - name: Verify application deployment
+        uri:
+          url: "http://localhost:8080/health"
+          method: GET
+          status_code: 200
+          timeout: 30
+        register: health_check
+        retries: 5
+        delay: 10
+        until: health_check.status == 200
+        failed_when: health_check.failed
+        rescue:
+          - name: Handle health check failure
+            debug:
+              msg: "Health check failed, application may not be running properly"
+            fail:
+              msg: "Application health check failed"
+  
+  # =============================================================================
+  # ENTERPRISE HANDLERS AND NOTIFICATIONS
+  # =============================================================================
+  
+  # Advanced Handler Patterns
+  # handlers/main.yml:
+  ---
+  - name: restart web server
+    service:
+      name: httpd
+      state: restarted
+      enabled: yes
+    listen: restart web server
+    register: web_restart
+    failed_when: web_restart.failed
+    retries: 3
+    delay: 5
+    until: web_restart is succeeded
+    rescue:
+      - name: Handle web server restart failure
+        debug:
+          msg: "Failed to restart web server"
+        fail:
+          msg: "Web server restart failed"
+  
+  - name: reload web server
+    service:
+      name: httpd
+      state: reloaded
+    listen: reload web server
+    register: web_reload
+    failed_when: web_reload.failed
+    rescue:
+      - name: Handle web server reload failure
+        debug:
+          msg: "Failed to reload web server, attempting restart"
+        service:
+          name: httpd
+          state: restarted
+  
+  - name: update configuration
+    template:
+      src: "{{ config_template }}"
+      dest: "{{ config_dest }}"
+      backup: yes
+      mode: '0644'
+    listen: update configuration
+    register: config_update
+    failed_when: config_update.failed
+    notify: restart web server
+  
+  - name: send deployment notification
+    uri:
+      url: "{{ notification_webhook }}"
+      method: POST
+      body_format: json
+      body:
+        message: "Deployment completed successfully"
+        server: "{{ ansible_hostname }}"
+        timestamp: "{{ ansible_date_time.iso8601 }}"
+        status: "success"
+    listen: deployment completed
+    when: notification_webhook is defined
+    failed_when: false
+    ignore_errors: yes
+  
+  - name: send failure notification
+    uri:
+      url: "{{ notification_webhook }}"
+      method: POST
+      body_format: json
+      body:
+        message: "Deployment failed"
+        server: "{{ ansible_hostname }}"
+        timestamp: "{{ ansible_date_time.iso8601 }}"
+        status: "failed"
+        error: "{{ deployment_error | default('Unknown error') }}"
+    listen: deployment failed
+    when: notification_webhook is defined
+    failed_when: false
+    ignore_errors: yes
+  
+  # =============================================================================
+  # ENTERPRISE PLAYBOOK BEST PRACTICES
+  # =============================================================================
+  
+  # 1. Always use become: yes for system-level changes
+  # 2. Implement comprehensive error handling with rescue blocks
+  # 3. Use assert for validation and pre-flight checks
+  # 4. Implement proper logging and notification systems
+  # 5. Use variables and templates for configuration management
+  # 6. Implement rollback mechanisms for critical deployments
+  # 7. Use tags for selective task execution
+  # 8. Implement proper backup and recovery procedures
+  # 9. Use conditional logic for environment-specific configurations
+  # 10. Test playbooks thoroughly before production deployment
+  # 11. Use proper privilege escalation and security practices
+  # 12. Implement monitoring and health checks
+  # 13. Use version control for all playbook changes
+  # 14. Document playbooks with comprehensive comments
+  # 15. Implement proper resource cleanup and management
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🔧 Ansible Roles & Collections</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Ansible Roles & Collections (RHCE Exam Essential)
+  # Enterprise-grade role development and collection management
+  
+  # =============================================================================
+  # ENTERPRISE ROLE STRUCTURE (Complete Architecture)
+  # =============================================================================
+  
+  # Full Enterprise Role Structure
+  # roles/enterprise_webserver/
+  # ├── README.md                          # Role documentation
+  ├── defaults/                           # Default variables (lowest priority)
+  # │   └── main.yml
+  ├── files/                             # Static files (no templating)
+  # │   ├── ssl/
+  # │   │   ├── server.crt
+  # │   │   └── server.key
+  # │   └── conf/
+  # │       └── extra.conf
+  ├── handlers/                          # Event handlers
+  # │   └── main.yml
+  ├── meta/                              # Role metadata and dependencies
+  # │   ├── main.yml
+  # │   ├── argument_specs.yml
+  # │   └── runtime.yml
+  ├── tasks/                              # Task definitions
+  # │   ├── main.yml                     # Main task file
+  # │   ├── install.yml                  # Installation tasks
+  # │   ├── configure.yml                # Configuration tasks
+  # │   ├── security.yml                 # Security hardening
+  # │   └── cleanup.yml                  # Cleanup tasks
+  ├── templates/                          # Jinja2 templates
+  # │   ├── httpd.conf.j2
+  # │   ├── ssl.conf.j2
+  # │   └── vhost.conf.j2
+  ├── tests/                             # Test infrastructure
+  # │   ├── inventory
+  # │   ├── test.yml
+  # │   └── molecule/
+  # │       ├── default/
+  # │       └── converge.yml
+  ├── vars/                              # Role variables (higher priority)
+  # │   ├── main.yml
+  # │   ├── RedHat.yml
+  # │   └── Ubuntu.yml
+  └── vault/                             # Encrypted variables
+      └── main.yml
+  
+  # =============================================================================
+  # ENTERPRISE ROLE CREATION AND MANAGEMENT
+  # =============================================================================
+  
+  # Create Role with Enterprise Structure
+  ansible-galaxy init enterprise_webserver          # Basic role structure
+  ansible-galaxy init --init-path=roles enterprise_webserver  # Specific directory
+  
+  # Create Role with Custom Structure
+  mkdir -p roles/enterprise_webserver/{tasks,templates,handlers,vars,defaults,files,meta,tests,vault}
+  
+  # =============================================================================
+  # ENTERPRISE ROLE TASKS (Modular and Reusable)
+  # =============================================================================
+  
+  # Main Task File (tasks/main.yml)
+  ---
+  # Enterprise Web Server Role - Main Tasks
+  # This role provides a complete, production-ready web server setup
+  
+  - name: Include OS-specific tasks
+    include_tasks: "{{ ansible_os_family }}.yml"
+    tags:
+      - install
+      - configure
+  
+  - name: Include installation tasks
+    include_tasks: install.yml
+    tags:
+      - install
+  
+  - name: Include configuration tasks
+    include_tasks: configure.yml
+    tags:
+      - configure
+  
+  - name: Include security hardening
+    include_tasks: security.yml
+    when: webserver_security_hardening | default(true)
+    tags:
+      - security
+  
+  - name: Validate web server installation
+    include_tasks: validate.yml
+    tags:
+      - validate
+      - test
+  
+  # Installation Tasks (tasks/install.yml)
+  ---
+  - name: Install web server packages
+    package:
+      name: "{{ webserver_packages[ansible_os_family] }}"
+      state: present
+      update_cache: yes
+    register: package_install
+    failed_when: package_install.failed
+    changed_when: package_install.changed
+    notify: restart webserver
+  
+  - name: Create web server user
+    user:
+      name: "{{ webserver_user }}"
+      group: "{{ webserver_group }}"
+      system: yes
+      shell: /sbin/nologin
+      home: "{{ webserver_home }}"
+      create_home: no
+    when: webserver_create_user | default(true)
+    register: user_creation
+    failed_when: user_creation.failed
+  
+  - name: Create web directory structure
+    file:
+      path: "{{ item }}"
+      state: directory
+      mode: '0755'
+      owner: "{{ webserver_user }}"
+      group: "{{ webserver_group }}"
+      recurse: yes
+    loop:
+      - "{{ webserver_root }}"
+      - "{{ webserver_root }}/conf"
+      - "{{ webserver_root }}/logs"
+      - "{{ webserver_root }}/ssl"
+      - "{{ webserver_root }}/tmp"
+    register: directory_creation
+    failed_when: directory_creation.failed
+  
+  # Configuration Tasks (tasks/configure.yml)
+  ---
+  - name: Deploy main configuration file
+    template:
+      src: "{{ webserver_config_template }}"
+      dest: "{{ webserver_config_file }}"
+      backup: yes
+      mode: '0644'
+      owner: root
+      group: root
+      validate: "{{ webserver_config_validate_command }}"
+    notify: restart webserver
+    register: config_deploy
+    failed_when: config_deploy.failed
+    tags:
+      - config
+  
+  - name: Deploy SSL configuration
+    template:
+      src: ssl.conf.j2
+      dest: "{{ webserver_ssl_config_file }}"
+      backup: yes
+      mode: '0644'
+      owner: root
+      group: root
+    when: webserver_ssl_enabled | default(false)
+    notify: restart webserver
+    register: ssl_config_deploy
+    failed_when: ssl_config_deploy.failed
+    tags:
+      - ssl
+      - config
+  
+  - name: Deploy virtual host configurations
+    template:
+      src: vhost.conf.j2
+      dest: "{{ webserver_vhost_dir }}/{{ item.server_name }}.conf"
+      backup: yes
+      mode: '0644'
+      owner: root
+      group: root
+    loop: "{{ webserver_virtual_hosts }}"
+    when: webserver_virtual_hosts is defined
+    notify: restart webserver
+    register: vhost_deploy
+    failed_when: vhost_deploy.failed
+    tags:
+      - vhost
+      - config
+  
+  # Security Hardening (tasks/security.yml)
+  ---
+  - name: Configure security headers
+    lineinfile:
+      path: "{{ webserver_config_file }}"
+      line: "{{ item }}"
+      insertafter: "{{ webserver_security_insert_point }}"
+    loop: "{{ webserver_security_headers }}"
+    when: webserver_security_headers is defined
+    notify: reload webserver
+    register: security_config
+    failed_when: security_config.failed
+    tags:
+      - security
+  
+  - name: Set secure file permissions
+    file:
+      path: "{{ item.path }}"
+      mode: "{{ item.mode }}"
+      owner: "{{ item.owner | default('root') }}"
+      group: "{{ item.group | default('root') }}"
+      recurse: "{{ item.recurse | default(false) }}"
+    loop: "{{ webserver_secure_permissions }}"
+    when: webserver_secure_permissions is defined
+    register: permission_set
+    failed_when: permission_set.failed
+    tags:
+      - security
+  
+  - name: Configure firewall rules
+    firewalld:
+      port: "{{ item.port }}/{{ item.protocol }}"
+      state: enabled
+      permanent: yes
+      immediate: yes
+      zone: "{{ item.zone | default('public') }}"
+    loop: "{{ webserver_firewall_rules }}"
+    when: webserver_firewall_rules is defined
+    register: firewall_config
+    failed_when: firewall_config.failed
+    tags:
+      - security
+      - firewall
+  
+  # =============================================================================
+  # ENTERPRISE ROLE VARIABLES (Hierarchical Configuration)
+  # =============================================================================
+  
+  # Default Variables (defaults/main.yml)
+  ---
+  # Web Server Configuration Defaults
+  webserver_user: apache
+  webserver_group: apache
+  webserver_home: /usr/share/httpd
+  webserver_root: /var/www/html
+  webserver_config_file: /etc/httpd/conf/httpd.conf
+  webserver_ssl_config_file: /etc/httpd/conf.d/ssl.conf
+  webserver_vhost_dir: /etc/httpd/conf.d
+  
+  # Package Configuration
+  webserver_packages:
+    RedHat:
+      - httpd
+      - mod_ssl
+      - mod_security
+    Ubuntu:
+      - apache2
+      - libapache2-mod-security2
+      - libapache2-mod-ssl
+  
+  # Security Configuration
+  webserver_security_hardening: true
+  webserver_ssl_enabled: false
+  webserver_security_headers:
+    - "Header always set X-Content-Type-Options nosniff"
+    - "Header always set X-Frame-Options DENY"
+    - "Header always set X-XSS-Protection \"1; mode=block\""
+    - "Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains\""
+  
+  # Performance Configuration
+  webserver_max_clients: 200
+  webserver_timeout: 300
+  webserver_keep_alive: true
+  
+  # OS-Specific Variables (vars/RedHat.yml)
+  ---
+  webserver_service_name: httpd
+  webserver_config_template: httpd.conf.j2
+  webserver_config_validate_command: "apachectl configtest"
+  webserver_log_dir: /var/log/httpd
+  webserver_pid_file: /var/run/httpd/httpd.pid
+  
+  # OS-Specific Variables (vars/Ubuntu.yml)
+  ---
+  webserver_service_name: apache2
+  webserver_config_template: apache2.conf.j2
+  webserver_config_validate_command: "apache2ctl configtest"
+  webserver_log_dir: /var/log/apache2
+  webserver_pid_file: /var/run/apache2/apache2.pid
+  
+  # =============================================================================
+  # ENTERPRISE ROLE HANDLERS (Robust Event Handling)
+  # =============================================================================
+  
+  # Handlers (handlers/main.yml)
+  ---
+  - name: restart webserver
+    service:
+      name: "{{ webserver_service_name }}"
+      state: restarted
+      enabled: yes
+    listen: restart webserver
+    register: webserver_restart
+    failed_when: webserver_restart.failed
+    retries: 3
+    delay: 5
+    until: webserver_restart is succeeded
+    rescue:
+      - name: Handle restart failure
+        debug:
+          msg: "Failed to restart web server after 3 attempts"
+        fail:
+          msg: "Web server restart failed"
+  
+  - name: reload webserver
+    service:
+      name: "{{ webserver_service_name }}"
+      state: reloaded
+    listen: reload webserver
+    register: webserver_reload
+    failed_when: webserver_reload.failed
+    rescue:
+      - name: Handle reload failure
+        debug:
+          msg: "Failed to reload web server, attempting restart"
+        service:
+          name: "{{ webserver_service_name }}"
+          state: restarted
+  
+  - name: validate webserver config
+    command: "{{ webserver_config_validate_command }}"
+    register: config_validation
+    failed_when: config_validation.failed
+    changed_when: false
+    listen: validate config
+  
+  # =============================================================================
+  # ENTERPRISE ROLE METADATA (Dependencies and Requirements)
+  # =============================================================================
+  
+  # Role Metadata (meta/main.yml)
+  ---
+  galaxy_info:
+    author: Enterprise DevOps Team
+    description: Enterprise-grade web server role with security hardening
+    company: Enterprise Corporation
+    license: MIT
+    min_ansible_version: 2.9
+    platforms:
+      - name: EL
+        versions:
+          - 8
+          - 9
+      - name: Ubuntu
+        versions:
+          - focal
+          - jammy
+    galaxy_tags:
+      - web
+      - apache
+      - httpd
+      - security
+      - enterprise
+  
+  dependencies:
+    - role: enterprise.firewall
+      vars:
+        firewall_state: enabled
+      when: webserver_configure_firewall | default(true)
+    - role: enterprise.ssl
+      vars:
+        ssl_enabled: "{{ webserver_ssl_enabled }}"
+      when: webserver_ssl_enabled | default(false)
+  
+  # Argument Specifications (meta/argument_specs.yml)
+  ---
+  argument_specs:
+    main:
+      short_description: Deploy enterprise web server
+      description: |
+        This role deploys a production-ready web server with comprehensive
+        security hardening, SSL configuration, and performance optimization.
+      author: Enterprise DevOps Team
+      options:
+        webserver_ssl_enabled:
+          description: Enable SSL/TLS configuration
+          type: bool
+          default: false
+        webserver_security_hardening:
+          description: Enable security hardening features
+          type: bool
+          default: true
+        webserver_max_clients:
+          description: Maximum number of concurrent clients
+          type: int
+          default: 200
+  
+  # =============================================================================
+  # ENTERPRISE ANSIBLE COLLECTIONS
+  # =============================================================================
+  
+  # Collection Installation and Management
+  # Install Collections with Version Control
+  ansible-galaxy collection install community.general:4.0.0
+  ansible-galaxy collection install ansible.posix:1.4.0
+  ansible-galaxy collection install redhat.rhel_idm:1.3.0
+  ansible-galaxy collection install community.docker:3.0.0
+  ansible-galaxy collection install community.postgresql:2.1.0
+  
+  # Install from Requirements File
+  ansible-galaxy collection install -r requirements.yml
+  
+  # Collection Requirements File (requirements.yml)
+  ---
+  collections:
+    - name: community.general
+      version: ">=4.0.0"
+      source: https://galaxy.ansible.com
+    - name: ansible.posix
+      version: ">=1.4.0"
+    - name: redhat.rhel_idm
+      version: ">=1.3.0"
+    - name: community.docker
+      version: ">=3.0.0"
+    - name: community.postgresql
+      version: ">=2.1.0"
+    - name: community.crypto
+      version: ">=2.0.0"
+    - name: community.mysql
+      version: ">=3.0.0"
+  
+  # =============================================================================
+  # ENTERPRISE COLLECTION STRUCTURE
+  # =============================================================================
+  
+  # Custom Collection Structure
+  # collections/
+  # └── enterprise/
+  #     └── devops/
+  #         ├── plugins/
+  #         │   ├── modules/
+  #         │   │   ├── custom_module.py
+  #         │   │   └── another_module.py
+  #         │   ├── filter/
+  #         │   │   ├── custom_filters.py
+  #         │   │   └── data_filters.py
+  #         │   ├── lookup/
+  #         │   │   ├── custom_lookup.py
+  #         │   │   └── secret_lookup.py
+  #         │   └── connection/
+  #         │       └── custom_connection.py
+  #         ├── roles/
+  #         │   ├── webserver/
+  #         │   ├── database/
+  #         │   └── security/
+  #         ├── playbooks/
+  #         │   ├── deploy/
+  #         │   ├── configure/
+  #         │   └── maintain/
+  #         └── module_utils/
+  #             └── custom_utils.py
+  
+  # =============================================================================
+  # ENTERPRISE COLLECTION USAGE
+  # =============================================================================
+  
+  # Using Collections in Playbooks
+  ---
+  - name: Enterprise Infrastructure Deployment
+    hosts: all
+    become: yes
+    collections:
+      - community.general
+      - community.docker
+      - community.postgresql
+      - enterprise.devops
+    
+    vars:
+      app_name: enterprise_app
+      db_name: "{{ app_name }}_db"
+      container_image: "{{ app_name }}:latest"
+    
+    tasks:
+      - name: Deploy PostgreSQL database
+        community.postgresql.postgresql_db:
+          name: "{{ db_name }}"
+          state: present
+          login_host: "{{ db_host }}"
+          login_user: "{{ db_user }}"
+          login_password: "{{ vault_db_password }}"
+        register: db_creation
+        failed_when: db_creation.failed
+      
+      - name: Deploy Docker container
+        community.docker.docker_container:
+          name: "{{ app_name }}"
+          image: "{{ container_image }}"
+          state: started
+          ports:
+            - "8080:8080"
+          env:
+            DATABASE_URL: "postgresql://{{ db_user }}:{{ vault_db_password }}@{{ db_host }}:5432/{{ db_name }}"
+          restart_policy: unless-stopped
+        register: container_deploy
+        failed_when: container_deploy.failed
+      
+      - name: Use custom enterprise module
+        enterprise.devops.custom_module:
+          operation: configure
+          target: "{{ app_name }}"
+          parameters:
+            performance: high
+            security: strict
+        register: custom_operation
+        failed_when: custom_operation.failed
+  
+  # =============================================================================
+  # FULLY QUALIFIED COLLECTION NAMES (FQCN)
+  # =============================================================================
+  
+  # FQCN Usage Examples
+  ---
+  - name: FQCN Module Usage
+    hosts: all
+    tasks:
+      - name: Install package using FQCN
+        community.general.yum:
+          name: httpd
+          state: present
+        register: package_install
+      
+      - name: Manage Docker container
+        community.docker.docker_container:
+          name: webapp
+          image: nginx:latest
+          state: started
+        register: container_management
+      
+      - name: Manage PostgreSQL database
+        community.postgresql.postgresql_db:
+          name: appdb
+          state: present
+        register: database_management
+      
+      - name: Generate SSL certificate
+        community.crypto.x509_certificate:
+          path: /etc/ssl/certs/app.crt
+          privatekey_path: /etc/ssl/private/app.key
+          provider: selfsigned
+          common_name: "{{ ansible_fqdn }}"
+        register: ssl_generation
+  
+  # =============================================================================
+  # ENTERPRISE ROLE TESTING WITH MOLECULE
+  # =============================================================================
+  
+  # Molecule Configuration (molecule/default/molecule.yml)
+  ---
+  dependency:
+    name: galaxy
+  driver:
+    name: docker
+  platforms:
+      - name: centos8
+        image: centos:8
+        pre_build_image: true
+      - name: ubuntu20
+        image: ubuntu:20.04
+        pre_build_image: true
+  provisioner:
+    name: ansible
+    verifier:
+      name: testinfra
+  
+  # Test Playbook (molecule/default/converge.yml)
+  ---
+  - name: Converge
+    hosts: all
+    become: yes
+    roles:
+      - role: enterprise_webserver
+        vars:
+          webserver_ssl_enabled: true
+          webserver_security_hardening: true
+  
+  # Test Verification (molecule/default/verify.yml)
+  ---
+  - name: Verify
+    hosts: all
+    tasks:
+      - name: Check if web server is installed
+        package_facts:
+          manager: auto
+      - name: Verify Apache package
+        assert:
+          that:
+            - "'httpd' in ansible_facts.packages or 'apache2' in ansible_facts.packages"
+      - name: Check web server service
+        service_facts:
+      - name: Verify service is running
+        assert:
+          that:
+            - ansible_facts.services['httpd'] is defined or ansible_facts.services['apache2'] is defined
+  
+  # =============================================================================
+  # ENTERPRISE BEST PRACTICES FOR ROLES AND COLLECTIONS
+  # =============================================================================
+  
+  # 1. Use hierarchical variable precedence (defaults < vars < host_vars < group_vars)
+  # 2. Implement comprehensive error handling and validation
+  # 3. Use modular task organization with include_tasks
+  # 4. Implement proper testing with Molecule
+  # 5. Use FQCN for collection modules to avoid conflicts
+  # 6. Implement proper metadata and dependencies
+  # 7. Use version control for collection dependencies
+  # 8. Implement proper documentation with README files
+  # 9. Use argument specs for parameter validation
+  # 10. Implement proper security hardening
+  # 11. Use OS-specific configurations
+  # 12. Implement proper logging and monitoring
+  # 13. Use proper backup and recovery procedures
+  # 14. Implement proper resource cleanup
+  # 15. Use proper privilege escalation and security practices
+  
+  # Ansible Galaxy
+  ansible-galaxy search webserver               # Search roles
+  ansible-galaxy info geerlingguy.apache       # Get role info
+  ansible-galaxy install geerlingguy.apache     # Install role
+  ansible-galaxy list                           # List installed roles
+  ansible-galaxy remove geerlingguy.apache      # Remove role
+  
+  # Requirements File (requirements.yml)
+  ---
+  collections:
+    - name: community.general
+      version: 4.0.0
+    - name: ansible.posix
+      source: https://galaxy.ansible.com
+  
+  roles:
+    - name: geerlingguy.apache
+      version: 3.1.0
+    - name: geerlingguy.mysql
+      src: https://github.com/geerlingguy/ansible-role-mysql.git
+  
+  # Install from requirements
+  ansible-galaxy install -r requirements.yml
+  
+  # Role Dependencies (meta/main.yml)
+  ---
+  dependencies:
+    - role: common
+    - role: firewall
+      vars:
+        firewall_rules:
+          - port: 80
+            proto: tcp
+    - role: geerlingguy.apache
+      when: webserver_enabled | default(true)
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🔐 Ansible Vault & Security</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Ansible Vault & Security (RHCE Security Essential)
+  # Enterprise-grade encryption and secrets management
+  
+  # =============================================================================
+  # VAULT ENCRYPTION AND MANAGEMENT
+  # =============================================================================
+  
+  # Create Encrypted Files with Enterprise Security
+  ansible-vault create secrets.yml                    # Create new encrypted file
+  ansible-vault create --vault-id @prompt secrets.yml  # Prompt for password
+  ansible-vault create --vault-id prod@prompt secrets.yml  # Production vault ID
+  
+  # Encrypt Existing Files with Multiple Methods
+  ansible-vault encrypt secrets.yml                    # Encrypt existing file
+  ansible-vault encrypt secrets.yml --output=secrets.yml.enc  # Encrypt to different file
+  ansible-vault encrypt --vault-id prod@prompt secrets.yml  # Encrypt with specific vault ID
+  
+  # Batch Encryption Operations
+  ansible-vault encrypt *.yml                          # Encrypt all YAML files
+  ansible-vault encrypt --vault-id prod@prompt secrets/  # Encrypt directory
+  
+  # Decrypt Files (Enterprise Caution)
+  ansible-vault decrypt secrets.yml                    # Decrypt file
+  ansible-vault decrypt secrets.yml --output=secrets.txt  # Decrypt to different file
+  ansible-vault decrypt --vault-id prod@prompt secrets.yml  # Decrypt with specific vault ID
+  
+  # View and Edit Encrypted Files
+  ansible-vault view secrets.yml                       # View without decrypting
+  ansible-vault edit secrets.yml                       # Edit encrypted file
+  ansible-vault view --vault-id prod@prompt secrets.yml  # View with specific vault ID
+  
+  # =============================================================================
+  # ADVANCED VAULT PASSWORD MANAGEMENT
+  # =============================================================================
+  
+  # Change Vault Password with Security Validation
+  ansible-vault rekey secrets.yml                      # Change password
+  ansible-vault rekey --new-vault-id @prompt secrets.yml  # New password prompt
+  ansible-vault rekey --vault-id prod@prompt --new-vault-id prod@new secrets.yml  # Production rekey
+  
+  # Multiple Vault IDs for Environment Separation
+  ansible-vault create --vault-id dev@prompt dev_secrets.yml
+  ansible-vault create --vault-id staging@prompt staging_secrets.yml
+  ansible-vault create --vault-id prod@prompt prod_secrets.yml
+  ansible-vault create --vault-id shared@prompt shared_secrets.yml
+  
+  # Vault Password File Management (Enterprise Security)
+  # Create secure password files with proper permissions
+  echo "secure_password_123" > vault_pass.txt
+  chmod 600 vault_pass.txt
+  
+  # Environment-specific password files
+  echo "dev_password" > vault_dev.txt
+  echo "staging_password" > vault_staging.txt
+  echo "prod_password" > vault_prod.txt
+  chmod 600 vault_*.txt
+  
+  # =============================================================================
+  # ENTERPRISE VAULT CONTENT STRUCTURE
+  # =============================================================================
+  
+  # Production Secrets Structure (secrets/prod.yml)
+  ---
+  # Database Configuration
+  database_config:
+    host: "prod-db.example.com"
+    port: 5432
+    name: "production_app"
+    user: "app_user"
+    password: "{{ vault_prod_db_password }}"
+    ssl_mode: "require"
+    pool_size: 20
+    timeout: 30
+  
+  # API Keys and Tokens
+  api_keys:
+    payment_gateway: "{{ vault_payment_api_key }}"
+    analytics_service: "{{ vault_analytics_api_key }}"
+    monitoring_service: "{{ vault_monitoring_api_key }}"
+    backup_service: "{{ vault_backup_api_key }}"
+  
+  # SSL Certificates
+  ssl_certificates:
+    private_key: "{{ vault_ssl_private_key }}"
+    certificate: "{{ vault_ssl_certificate }}"
+    ca_bundle: "{{ vault_ca_bundle }}"
+    intermediate_cert: "{{ vault_intermediate_cert }}"
+  
+  # SSH Keys for Infrastructure
+  ssh_keys:
+    bastion_host: "{{ vault_bastion_ssh_key }}"
+    deployment_user: "{{ vault_deployment_ssh_key }}"
+    monitoring_user: "{{ vault_monitoring_ssh_key }}"
+  
+  # Application Secrets
+  app_secrets:
+    jwt_secret: "{{ vault_jwt_secret }}"
+    encryption_key: "{{ vault_encryption_key }}"
+    session_secret: "{{ vault_session_secret }}"
+    api_secret: "{{ vault_api_secret }}"
+  
+  # Third-party Service Credentials
+  third_party:
+    smtp:
+      username: "noreply@example.com"
+      password: "{{ vault_smtp_password }}"
+      server: "smtp.example.com"
+      port: 587
+    ldap:
+      bind_dn: "cn=admin,dc=example,dc=com"
+      bind_password: "{{ vault_ldap_password }}"
+      server: "ldap.example.com"
+      base_dn: "dc=example,dc=com"
+  
+  # =============================================================================
+  # VAULT INTEGRATION WITH PLAYBOOKS
+  # =============================================================================
+  
+  # Enterprise Playbook with Vault Integration
+  ---
+  - name: Deploy Enterprise Application with Secrets
+    hosts: app_servers
+    become: yes
+    vars_files:
+      - secrets/prod.yml
+      - vars/app_config.yml
+    
+    vars:
+      app_name: enterprise_app
+      app_user: appuser
+      app_home: "/opt/{{ app_name }}"
+    
+    pre_tasks:
+      - name: Validate vault secrets are available
+        assert:
+          that:
+            - vault_prod_db_password is defined
+            - vault_payment_api_key is defined
+            - vault_ssl_private_key is defined
+          fail_msg: "Required vault secrets are missing"
+          success_msg: "Vault secrets validation passed"
+      
+      - name: Create secure directories
+        file:
+          path: "{{ item }}"
+          state: directory
+          mode: '0700'
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+        loop:
+          - "{{ app_home }}/ssl"
+          - "{{ app_home }}/keys"
+          - "{{ app_home }}/config"
+    
+    tasks:
+      - name: Deploy SSL certificates
+        copy:
+          content: "{{ ssl_certificates.private_key }}"
+          dest: "{{ app_home }}/ssl/server.key"
+          mode: '0600'
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+          backup: yes
+        no_log: true  # Don't log sensitive data
+        register: ssl_key_deploy
+        failed_when: ssl_key_deploy.failed
+      
+      - name: Deploy SSL certificate
+        copy:
+          content: "{{ ssl_certificates.certificate }}"
+          dest: "{{ app_home }}/ssl/server.crt"
+          mode: '0644'
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+          backup: yes
+        register: ssl_cert_deploy
+        failed_when: ssl_cert_deploy.failed
+      
+      - name: Configure database connection
+        template:
+          src: database.conf.j2
+          dest: "{{ app_home }}/config/database.conf"
+          mode: '0600'
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+          backup: yes
+        no_log: true  # Don't log sensitive configuration
+        register: db_config_deploy
+        failed_when: db_config_deploy.failed
+        notify: restart application
+      
+      - name: Deploy SSH keys for application
+        copy:
+          content: "{{ ssh_keys.deployment_user }}"
+          dest: "/home/{{ app_user }}/.ssh/id_rsa"
+          mode: '0600'
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+          backup: yes
+        no_log: true
+        register: ssh_key_deploy
+        failed_when: ssh_key_deploy.failed
+      
+      - name: Configure application secrets
+        template:
+          src: app_secrets.j2
+          dest: "{{ app_home }}/config/secrets.conf"
+          mode: '0600'
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+          backup: yes
+        no_log: true
+        register: app_secrets_deploy
+        failed_when: app_secrets_deploy.failed
+        notify: restart application
+    
+    handlers:
+      - name: restart application
+        service:
+          name: "{{ app_name }}"
+          state: restarted
+          enabled: yes
+        register: app_restart
+        failed_when: app_restart.failed
+  
+  # =============================================================================
+  # ENTERPRISE VAULT EXECUTION COMMANDS
+  # =============================================================================
+  
+  # Production Execution with Vault Security
+  ansible-playbook deploy_app.yml --ask-vault-pass                    # Prompt for password
+  ansible-playbook deploy_app.yml --vault-password-file=vault_prod.txt  # Use password file
+  ansible-playbook deploy_app.yml --vault-id prod@vault_prod.txt      # Specific vault ID
+  ansible-playbook deploy_app.yml --vault-id prod@prompt                # Prompt for production vault
+  
+  # Multi-Environment Execution
+  ansible-playbook deploy_app.yml --vault-id dev@vault_dev.txt --inventory dev_inventory
+  ansible-playbook deploy_app.yml --vault-id staging@vault_staging.txt --inventory staging_inventory
+  ansible-playbook deploy_app.yml --vault-id prod@vault_prod.txt --inventory prod_inventory
+  
+  # Advanced Vault Options
+  ansible-playbook deploy_app.yml --vault-id prod@vault_prod.txt --check  # Dry run with vault
+  ansible-playbook deploy_app.yml --vault-id prod@vault_prod.txt --diff   # Show changes with vault
+  ansible-playbook deploy_app.yml --vault-id prod@vault_prod.txt --verbose  # Verbose output with vault
+  
+  # =============================================================================
+  # VAULT ENCRYPTION VARIABLES IN PLAYBOOKS
+  # =============================================================================
+  
+  # Using Encrypted Variables Directly
+  ---
+  - name: Configure Services with Encrypted Variables
+    hosts: all
+    become: yes
+    vars:
+      # Encrypted variables using !vault
+      db_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66386439653462336464626235343330383464653964626135383465653961336261373538393964
+          6133626462383066343334306437366465346233613766393066356137300a643634613830363934
+          61346664663436653264353630326364343336623661336462333066653438383031373461386632
+          3834356462373631650a6437346166646134373639386430396462366165313539326135303639
+          61343264623932653962353064623661373264306362303238353462353164653961383261373532
+          61386536393465303230
+      
+      api_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66386439653462336464626235343330383464653964626135383465653961336261373538393964
+          6133626462383066343334306437366465346233613766393066356137300a643634613830363934
+          61346664663436653264353630326364343336623661336462333066653438383031373461386632
+          3834356462373631650a6437346166646134373639386430396462366165313539326135303639
+          61343264623932653962353064623661373264306362303238353462353164653961383261373532
+          61386536393465303230
+    
+    tasks:
+      - name: Configure database with encrypted password
+        template:
+          src: db.conf.j2
+          dest: /etc/db.conf
+          mode: '0600'
+        no_log: true
+        register: db_config
+        failed_when: db_config.failed
+      
+      - name: Configure API with encrypted key
+        template:
+          src: api.conf.j2
+          dest: /etc/api.conf
+          mode: '0600'
+        no_log: true
+        register: api_config
+        failed_when: api_config.failed
+  
+  # =============================================================================
+  # VAULT SECURITY BEST PRACTICES
+  # =============================================================================
+  
+  # Secure Vault Password Management Script
+  # scripts/manage_vault_passwords.sh:
+  #!/bin/bash
+  set -euo pipefail
+  
+  # Vault password management with security
+  VAULT_DIR="${VAULT_DIR:-/etc/ansible/vault}"
+  VAULT_PASSWORD_FILE="${VAULT_DIR}/.vault_pass"
+  
+  # Create vault directory with secure permissions
+  mkdir -p "$VAULT_DIR"
+  chmod 700 "$VAULT_DIR"
+  
+  # Generate secure vault password
+  generate_vault_password() {
+      local length="${1:-32}"
+      openssl rand -base64 "$length" | tr -d "=+/" | cut -c1-"$length"
+  }
+  
+  # Set vault password for environment
+  set_vault_password() {
+      local env="$1"
+      local password="$2"
+      local vault_file="${VAULT_DIR}/vault_${env}.pass"
+      
+      echo "$password" > "$vault_file"
+      chmod 600 "$vault_file"
+      echo "Vault password set for environment: $env"
+  }
+  
+  # Rotate vault password
+  rotate_vault_password() {
+      local env="$1"
+      local new_password
+      new_password=$(generate_vault_password 32)
+      
+      # Backup old password
+      local vault_file="${VAULT_DIR}/vault_${env}.pass"
+      if [[ -f "$vault_file" ]]; then
+          cp "$vault_file" "${vault_file}.backup.$(date +%Y%m%d_%H%M%S)"
+      fi
+      
+      # Set new password
+      set_vault_password "$env" "$new_password"
+      
+      echo "Vault password rotated for environment: $env"
+  }
+  
+  # Validate vault password strength
+  validate_vault_password() {
+      local password="$1"
+      local min_length="${2:-16}"
+      
+      if [[ ${#password} -lt $min_length ]]; then
+          echo "ERROR: Password must be at least $min_length characters"
+          return 1
+      fi
+      
+      if [[ ! "$password" =~ [A-Z] ]]; then
+          echo "ERROR: Password must contain at least one uppercase letter"
+          return 1
+      fi
+      
+      if [[ ! "$password" =~ [a-z] ]]; then
+          echo "ERROR: Password must contain at least one lowercase letter"
+          return 1
+      fi
+      
+      if [[ ! "$password" =~ [0-9] ]]; then
+          echo "ERROR: Password must contain at least one number"
+          return 1
+      fi
+      
+      if [[ ! "$password" =~ [!@#$%^&*] ]]; then
+          echo "ERROR: Password must contain at least one special character"
+          return 1
+      fi
+      
+      echo "Password validation passed"
+      return 0
+  }
+  
+  # =============================================================================
+  # ENTERPRISE VAULT AUTOMATION
+  # =============================================================================
+  
+  # Automated Vault Operations
+  # scripts/vault_operations.sh:
+  #!/bin/bash
+  set -euo pipefail
+  
+  # Automated vault operations for enterprise environments
+  VAULT_ENVIRONMENTS=("dev" "staging" "prod")
+  VAULT_FILES=("secrets.yml" "api_keys.yml" "ssl_certs.yml")
+  
+  # Encrypt all vault files for environment
+  encrypt_vault_files() {
+      local env="$1"
+      local vault_dir="vault/${env}"
+      
+      echo "Encrypting vault files for environment: $env"
+      
+      for file in "${VAULT_FILES[@]}"; do
+          if [[ -f "$vault_dir/$file" ]]; then
+              echo "Encrypting $file..."
+              ansible-vault encrypt --vault-id "${env}@prompt" "$vault_dir/$file"
+          else
+              echo "Warning: $file not found in $vault_dir"
+          fi
+      done
+  }
+  
+  # Decrypt vault files for maintenance
+  decrypt_vault_files() {
+      local env="$1"
+      local vault_dir="vault/${env}"
+      
+      echo "Decrypting vault files for environment: $env"
+      
+      for file in "${VAULT_FILES[@]}"; do
+          if [[ -f "$vault_dir/$file" ]]; then
+              echo "Decrypting $file..."
+              ansible-vault decrypt --vault-id "${env}@prompt" "$vault_dir/$file"
+          fi
+      done
+  }
+  
+  # Rekey vault for environment
+  rekey_vault() {
+      local env="$1"
+      local vault_dir="vault/${env}"
+      
+      echo "Rekeying vault for environment: $env"
+      
+      for file in "${VAULT_FILES[@]}"; do
+          if [[ -f "$vault_dir/$file" ]]; then
+              echo "Rekeying $file..."
+              ansible-vault rekey --new-vault-id "${env}@prompt" "$vault_dir/$file"
+          fi
+      done
+  }
+  
+  # Validate vault integrity
+  validate_vault_integrity() {
+      local env="$1"
+      local vault_dir="vault/${env}"
+      
+      echo "Validating vault integrity for environment: $env"
+      
+      for file in "${VAULT_FILES[@]}"; do
+          if [[ -f "$vault_dir/$file" ]]; then
+              echo "Validating $file..."
+              ansible-vault view --vault-id "${env}@prompt" "$vault_dir/$file" > /dev/null
+              if [[ $? -eq 0 ]]; then
+                  echo "✓ $file is valid"
+              else
+                  echo "✗ $file validation failed"
+                  return 1
+              fi
+          fi
+      done
+      
+      echo "Vault integrity validation completed"
+  }
+  
+  # =============================================================================
+  # ENTERPRISE VAULT INTEGRATION WITH CI/CD
+  # =============================================================================
+  
+  # CI/CD Pipeline Integration
+  # .github/workflows/deploy.yml:
+  name: Deploy Application
+  on:
+    push:
+      branches: [main]
+  
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      environment: production
+      
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        
+        - name: Setup Ansible
+          run: |
+            pip install ansible ansible-lint
+        
+        - name: Run Ansible Playbook
+          run: |
+            ansible-playbook deploy.yml \
+              --vault-id prod@${{ secrets.VAULT_PASSWORD }} \
+              --inventory production.yml
+          env:
+            VAULT_PASSWORD: ${{ secrets.VAULT_PASSWORD }}
+  
+  # =============================================================================
+  # ENTERPRISE VAULT MONITORING AND AUDITING
+  # =============================================================================
+  
+  # Vault Access Monitoring
+  # scripts/vault_monitoring.sh:
+  #!/bin/bash
+  set -euo pipefail
+  
+  # Monitor vault access and changes
+  VAULT_LOG_FILE="/var/log/ansible-vault.log"
+  
+  log_vault_operation() {
+      local operation="$1"
+      local environment="$2"
+      local user="$3"
+      local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+      
+      echo "[$timestamp] $operation - Environment: $environment - User: $user" >> "$VAULT_LOG_FILE"
+  }
+  
+  # Monitor vault file changes
+  monitor_vault_changes() {
+      local vault_dir="vault"
+      
+      find "$vault_dir" -name "*.yml" -exec stat -c "%Y %n" {} \; | \
+      while read timestamp file; do
+          local file_age=$(( $(date +%s) - timestamp ))
+          if [[ $file_age -lt 3600 ]]; then  # Changes in last hour
+              echo "Recent change detected: $file ($(date -d @$timestamp))"
+              log_vault_operation "FILE_CHANGE" "$(basename $(dirname $file))" "$(whoami)"
+          fi
+      done
+  }
+  
+  # =============================================================================
+  # ENTERPRISE VAULT BEST PRACTICES
+  # =============================================================================
+  
+  # 1. Use separate vault passwords for different environments
+  # 2. Store vault password files with 600 permissions only
+  # 3. Use vault IDs to separate secrets by environment
+  # 4. Implement regular vault password rotation
+  # 5. Use no_log: true for tasks handling sensitive data
+  # 6. Validate vault integrity regularly
+  # 7. Monitor vault access and changes
+  # 8. Use strong vault passwords with complexity requirements
+  # 9. Implement proper backup procedures for vault files
+  # 10. Use environment variables for vault passwords in CI/CD
+  # 11. Never commit vault passwords to version control
+  # 12. Use vault encryption for all sensitive configuration data
+  # 13. Implement proper access controls for vault files
+  # 14. Use vault for API keys, certificates, and credentials
+  # 15. Regularly audit vault usage and access patterns
+  chmod 600 vault_pass.txt
+  
+  # Encrypted Variables in Playbooks
+  ---
+  - name: Use Encrypted Variables
+    hosts: all
+    vars:
+      db_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66386439653462336464626235343330383464653964626135383465653961336261373538393964
+          6133626462383066343334306437366465346233613766393066356137300a643634613830363934
+          61346664663436653264353630326364343336623661336462333066653438383031373461386632
+          3834356462373631650a6437346166646134373639386430396462366165313539326135303639
+          61343264623932653962353064623661373264306362303238353462353164653961383261373532
+          61386536393465303230
+  
+    tasks:
+      - name: Use encrypted password
+        debug:
+          msg: "Database password is {{ db_password }}"
+  
+  # Vault Best Practices
+  # 1. Use different vault passwords for different environments
+  # 2. Store vault password files securely (600 permissions)
+  # 3. Use vault-id for multiple encrypted files
+  # 4. Never commit vault passwords to version control
+  # 5. Use environment variables for vault passwords in CI/CD
+  
+  # Security Considerations
+  # Encrypt sensitive data only
+  # Keep vault passwords secure
+  # Use different passwords per environment
+  # Regularly rotate vault passwords
+  # Audit access to encrypted files
+  
+  # Integration with External Secret Management
+  # Using Ansible Lookup for HashiCorp Vault
+  ---
+  - name: Get secrets from HashiCorp Vault
+    hosts: all
+    tasks:
+      - name: Retrieve database password
+        set_fact:
+          db_password: "{{ lookup('hashi_vault', 'secret=database/password:url=http://vault:8200:token=token') }}"
+      
+      - name: Use retrieved secret
+        debug:
+          msg: "Database password: {{ db_password }}"
+            </code></pre>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
+              <h4 style="color: #00d9ff; margin-top: 0;">🏆 Ready for Next Level?</h4>
+              <p style="color: #c9d1d9; font-size: 1em; margin-bottom: 15px;">
+              Master this section and advance your DevOps career
+            </p>
+            <div style="margin-top: 15px;">
+              <a href="index.html" style="display: inline-block; background: #00d9ff; color: #0d1117; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🏠 Back to Home</a>
+              <a href="system-admin.html" style="display: inline-block; background: #ff6b9d; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">💻 System Admin</a>
+              <a href="monitoring-security.html" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🔒 Security</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     </div>

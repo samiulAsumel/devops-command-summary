@@ -15306,6 +15306,851 @@ history | grep keyword        # Quickly find commands relevant to tasks
               </ul>
             </div>
 
+            <!-- RHCSA EXAM-SPECIFIC COMMANDS SECTION -->
+            <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+              <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 20px;">🎓 RHCSA Exam-Specific Commands</h3>
+              <p style="color: #c9d1d9; text-align: center; margin-bottom: 25px;">Essential commands for RHCSA (EX200) exam preparation and practical application</p>
+            </div>
+
+            <h2 id="rhcsa-exam-commands">🎓 RHCSA EXAM ESSENTIAL COMMANDS</h2>
+
+            <div class="command-block">
+              <h4>🔧 RHEL System Registration & Subscription Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Red Hat Subscription Management (RHCSA Exam Essential)
+  
+  # System Registration
+  subscription-manager register --username <user> --password <pass>
+  subscription-manager register --auto-attach
+  
+  # List Available Subscriptions
+  subscription-manager list --available
+  subscription-manager list --available --all
+  
+  # Attach Specific Subscription Pool
+  subscription-manager attach --pool=<pool_id>
+  subscription-manager attach --auto
+  
+  # List Subscribed Repositories
+  subscription-manager repos --list-enabled
+  subscription-manager repos --list-available
+  
+  # Enable/Disable Repositories
+  subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms
+  subscription-manager repos --disable=rhel-8-for-x86_64-appstream-rpms
+  
+  # System Status Information
+  subscription-manager status
+  subscription-manager identity
+  
+  # Remove Registration
+  subscription-manager unregister
+  subscription-manager clean
+  
+  # Alternative: Using Red Hat Insights
+  insights-client --register
+  insights-client --status
+  insights-client --check-results
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>📦 Advanced DNF/RPM Package Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Advanced Package Management (RHCSA Exam Focus)
+  
+  # DNF Repository Management
+  dnf repolist                              # List enabled repos
+  dnf repolist all                          # List all repos
+  dnf config-manager --add-repo <url>       # Add new repo
+  dnf config-manager --disable-repo <repo> # Disable repo
+  
+  # Package Information and History
+  dnf info <package>                        # Detailed package info
+  dnf provides <file>                       # Find package providing file
+  dnf whatprovides <command>                # Find package for command
+  dnf history list                          # Transaction history
+  dnf history info <transaction_id>         # Transaction details
+  dnf history undo <transaction_id>         # Undo transaction
+  dnf history rollback <transaction_id>     # Rollback transaction
+  
+  # Advanced Package Operations
+  dnf updateinfo                            # Available update info
+  dnf updateinfo security                   # Security updates only
+  dnf updateinfo bugfix                     # Bugfix updates only
+  dnf updateinfo enhancement                # Enhancement updates
+  
+  # Group Package Management
+  dnf group list                            # Available package groups
+  dnf group install <group>                 # Install package group
+  dnf group remove <group>                  # Remove package group
+  dnf group info <group>                    # Group information
+  
+  # RPM Advanced Operations
+  rpm -qp <package.rpm>                     # Query package file
+  rpm -qpi <package.rpm>                    # Package info + description
+  rpm -qpl <package.rpm>                    # List files in package
+  rpm -qpc <package.rpm>                    # List config files
+  rpm -qpd <package.rpm>                    # List documentation files
+  rpm -qp --scripts <package.rpm>           # Show install scripts
+  
+  # RPM Database Verification
+  rpm -Va                                   # Verify all installed packages
+  rpm -Vf <file>                            # Verify package owning file
+  rpm --rebuilddb                           # Rebuild RPM database
+  
+  # Package Downgrades (Important for exam)
+  dnf downgrade <package>                   # Downgrade to previous version
+  dnf history undo last                     # Undo last transaction
+  
+  # Local Package Installation
+  dnf localinstall <package.rpm>            # Install local RPM
+  dnf install <package.rpm>                 # Alternative method
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🔐 Advanced SELinux Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # SELinux Management (RHCSA Critical Topic)
+  
+  # SELinux Status and Modes
+  getenforce                                # Current mode (Enforcing/Permissive/Disabled)
+  sestatus                                  # Detailed SELinux status
+  sestatus -v                               # Verbose status with contexts
+  
+  # Change SELinux Mode
+  setenforce 0                              # Set to permissive
+  setenforce 1                              # Set to enforcing
+  
+  # Permanent SELinux Configuration
+  # Edit /etc/selinux/config:
+  # SELINUX=enforcing
+  # SELINUX=permissive
+  # SELINUX=disabled
+  
+  # SELinux Context Management
+  ls -Z                                     # List with SELinux contexts
+  ls -lZ                                    # Long format with contexts
+  ps -Z                                     # Processes with contexts
+  id -Z                                     # Current user context
+  netstat -Z                                # Network connections with contexts
+  
+  # Change File Contexts
+  chcon -t <context> <file>                 # Change file context
+  chcon -R -t <context> <directory>         # Recursive context change
+  chcon -u <user> -r <role> -t <type> <file> # Full context specification
+  
+  # Restore Default Contexts
+  restorecon -v <file>                      # Restore default context
+  restorecon -R -v <directory>              # Recursive restore
+  restorecon -R -v /var/www                  # Web directory restore
+  
+  # SELinux Boolean Management
+  getsebool -a                              # List all booleans
+  getsebool <boolean>                       # Check specific boolean
+  setsebool <boolean> on                    # Enable boolean (temporary)
+  setsebool <boolean> off                   # Disable boolean (temporary)
+  setsebool -P <boolean> on                 # Enable boolean (persistent)
+  setsebool -P <boolean> off                # Disable boolean (persistent)
+  
+  # Common SELinux Booleans
+  setsebool -P httpd_can_network_connect on   # Allow web server network access
+  setsebool -P ftpd_full_access on            # Full FTP access
+  setsebool -P samba_enable_home_dirs on      # Samba home directory access
+  setsebool -P sshd_permit_root_login on      # SSH root login
+  
+  # SELinux Policy Management
+  semanage fcontext -l                      # List all file contexts
+  semanage fcontext -a -t <type> "<pattern>" # Add new file context
+  semanage fcontext -d "<pattern>"           # Delete file context
+  semanage port -l                           # List port contexts
+  semanage port -a -t <type> -p tcp <port>   # Add port context
+  
+  # SELinux Troubleshooting
+  audit2allow -w -a                         # Generate policy from denial messages
+  sealert -a /var/log/audit/audit.log       # Analyze audit log
+  grep AVC /var/log/audit/audit.log          # Find SELinux denials
+  ausearch -m avc -ts recent                 # Search recent denials
+  
+  # Context Types for Common Services
+  # Web content: httpd_sys_content_t
+  # Web scripts: httpd_sys_script_exec_t
+  # FTP files: public_content_t
+  # Samba shares: samba_share_t
+  # NFS mounts: nfs_t
+  # User home dirs: user_home_t
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>💾 Advanced LVM & Storage Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-danger">[DANGEROUS]</span>
+      <span class="category-description">⚠️ Can cause data loss if misused</span>
+    </div>
+    <pre><code>
+  # Advanced LVM Management (RHCSA Exam Essential)
+  
+  # Physical Volume Management
+  pvcreate /dev/sdb1                        # Initialize physical volume
+  pvdisplay                                 # Display PV details
+  pvs                                       # Quick PV overview
+  pvscan                                    # Scan for PVs
+  pvremove /dev/sdb1                        # Remove PV
+  
+  # Volume Group Management
+  vgcreate vg_name /dev/sdb1                # Create volume group
+  vgdisplay                                 # Display VG details
+  vgs                                       # Quick VG overview
+  vgscan                                    # Scan for VGs
+  vgextend vg_name /dev/sdb2                # Extend VG with new PV
+  vgreduce vg_name /dev/sdb1                # Remove PV from VG
+  vgremove vg_name                          # Remove VG
+  
+  # Logical Volume Management
+  lvcreate -L 10G vg_name -n lv_name        # Create 10GB LV
+  lvcreate -l 100%FREE vg_name -n lv_name   # Use all free space
+  lvcreate -n lv_name vg_name               # Create LV with default size
+  lvdisplay                                 # Display LV details
+  lvs                                       # Quick LV overview
+  lvscan                                    # Scan for LVs
+  
+  # Extending Logical Volumes
+  lvextend -L +5G /dev/vg_name/lv_name      # Extend LV by 5GB
+  lvextend -L 15G /dev/vg_name/lv_name      # Extend LV to 15GB
+  lvextend -l +100%FREE /dev/vg_name/lv_name # Extend to use all free space
+  
+  # Reducing Logical Volumes
+  lvreduce -L -5G /dev/vg_name/lv_name      # Reduce LV by 5GB
+  lvreduce -L 10G /dev/vg_name/lv_name      # Reduce LV to 10GB
+  
+  # File System Resizing
+  resize2fs /dev/vg_name/lv_name            # Resize ext2/3/4 filesystem
+  xfs_growfs /dev/vg_name/lv_name           # Grow XFS filesystem
+  # Note: XFS cannot be reduced, only extended
+  
+  # LVM Snapshots
+  lvcreate -L 1G -s -n snapshot_name /dev/vg_name/lv_name
+  lvremove /dev/vg_name/snapshot_name       # Remove snapshot
+  lvconvert --merge /dev/vg_name/snapshot_name # Merge snapshot
+  
+  # Moving Physical Volumes
+  pvmove /dev/sdb1                          # Move data off PV
+  pvmove /dev/sdb1 /dev/sdb2                # Move data to specific PV
+  
+  # LVM Information and Troubleshooting
+  vgdisplay -v vg_name                       # Verbose VG information
+  lvdisplay -m /dev/vg_name/lv_name         # Show LV mapping
+  pvs --segments                            # Show PV segment allocation
+  vgs --options +devices                    # Show VG with devices
+  
+  # LVM Configuration Backup
+  vgcfgbackup vg_name                       # Backup VG configuration
+  vgcfgrestore -f /etc/lvm/backup/vg_name /dev/sdb1 # Restore VG config
+  
+  # Thin Provisioning (Advanced)
+  lvcreate -T vg_name/thin_pool -V 10G      # Create thin pool
+  lvcreate -T vg_name/thin_pool -V 5G -n thin_lv # Create thin LV
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🚀 Advanced Systemd & Service Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Advanced Systemd Management (RHCSA Critical)
+  
+  # Service Management Commands
+  systemctl start <service>                # Start service
+  systemctl stop <service>                 # Stop service
+  systemctl restart <service>               # Restart service
+  systemctl reload <service>                # Reload configuration
+  systemctl status <service>                # Service status
+  systemctl enable <service>                # Enable at boot
+  systemctl disable <service>               # Disable at boot
+  systemctl is-enabled <service>            # Check if enabled
+  systemctl is-active <service>             # Check if running
+  
+  # System Target Management
+  systemctl get-default                     # Current default target
+  systemctl set-default <target>           # Set default target
+  systemctl isolate <target>                # Switch to target immediately
+  
+  # Common Targets
+  # graphical.target - Multi-user with GUI
+  # multi-user.target - Multi-user without GUI
+  # rescue.target - Single-user mode
+  # emergency.target - Emergency shell
+  # reboot.target - System reboot
+  # poweroff.target - System shutdown
+  
+  # Service Dependency and Ordering
+  systemctl list-dependencies <service>     # Show dependencies
+  systemctl list-dependencies --reverse <service> # Reverse dependencies
+  systemctl list-dependencies --all <service> # All dependencies
+  
+  # Service Configuration
+  systemctl edit <service>                  # Create override config
+  systemctl edit --full <service>           # Edit full service file
+  systemctl daemon-reload                   # Reload systemd daemon
+  
+  # System Resource Management
+  systemctl show <service>                  # Show service properties
+  systemctl show -p CPUQuota <service>      # Show specific property
+  systemctl set-property <service> CPUQuota=50% # Set CPU limit
+  
+  # Journal and Log Management
+  journalctl -u <service>                  # Service logs
+  journalctl -u <service> -f               # Follow service logs
+  journalctl -u <service> --since "1 hour ago" # Recent logs
+  journalctl -u <service> --priority err   # Error logs only
+  
+  # Boot Performance Analysis
+  systemd-analyze                           # Boot time analysis
+  systemd-analyze blame                    # Service boot times
+  systemd-analyze critical-chain           # Critical path analysis
+  systemd-analyze plot > boot_plot.svg    # Generate boot chart
+  
+  # Service Templates
+  systemctl start <service>@<instance>      # Start template instance
+  systemctl list-unit-files --type=service # List all service files
+  systemctl list-units --type=service      # List running services
+  
+  # Masking Services
+  systemctl mask <service>                  # Prevent service start
+  systemctl unmask <service>                # Unmask service
+  
+  # System State Management
+  systemctl poweroff                        # Shutdown system
+  systemctl reboot                          # Reboot system
+  systemctl suspend                         # Suspend system
+  systemctl hibernate                       # Hibernate system
+  
+  # Rescue and Emergency Operations
+  systemctl rescue                          # Enter rescue mode
+  systemctl emergency                      # Enter emergency mode
+  
+  # Service Resource Limits
+  # Edit service file to add:
+  # [Service]
+  # MemoryLimit=512M
+  # CPUQuota=50%
+  # TasksMax=100
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🚀 Enterprise Bash Scripting Patterns</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Enterprise Bash Scripting Template (Production Ready)
+  
+  #!/bin/bash
+  # =============================================================================
+  # SCRIPT_NAME - Enterprise Script Template
+  # =============================================================================
+  # 
+  # Purpose: Brief description of what this script does
+  # Author: Your Name
+  # Version: 1.0
+  # Date: $(date +%Y-%m-%d)
+  # 
+  # Usage: ./script_name.sh [options] [arguments]
+  # 
+  # Features:
+  #   - Enterprise-grade error handling
+  #   - Comprehensive logging
+  #   - Input validation
+  #   - Signal handling
+  #   - Resource cleanup
+  # =============================================================================
+  
+  # Enable strict error handling for production deployment
+  # -e: Exit immediately if any command fails
+  # -u: Treat unset variables as an error
+  # -o pipefail: Exit if any command in a pipeline fails
+  set -euo pipefail
+  
+  # Enable extended globbing for advanced pattern matching
+  shopt -s extglob
+  
+  # =============================================================================
+  # GLOBAL CONSTANTS SECTION
+  # =============================================================================
+  
+  # Script identification and metadata
+  readonly SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+  readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  readonly SCRIPT_PID="$$"
+  readonly SCRIPT_START_TIME="$(date +%s)"
+  
+  # Enterprise configuration
+  readonly LOG_DIR="${LOG_DIR:-/var/log/enterprise}"
+  readonly LOG_FILE="${LOG_DIR}/${SCRIPT_NAME%.*}.log"
+  readonly CONFIG_DIR="${CONFIG_DIR:-/etc/enterprise}"
+  readonly LOCK_DIR="${LOCK_DIR:-/var/lock/enterprise}"
+  readonly LOCK_FILE="${LOCK_DIR}/${SCRIPT_NAME%.*}.lock"
+  readonly TEMP_DIR="${TEMP_DIR:-/tmp/enterprise}"
+  
+  # Enterprise color scheme for professional output
+  readonly RED='\033[0;31m'
+  readonly GREEN='\033[0;32m'
+  readonly YELLOW='\033[1;33m'
+  readonly BLUE='\033[0;34m'
+  readonly NC='\033[0m' # No Color
+  
+  # Default thresholds and timeouts
+  readonly TIMEOUT="${TIMEOUT:-300}"
+  readonly MAX_RETRIES="${MAX_RETRIES:-3}"
+  readonly RETRY_DELAY="${RETRY_DELAY:-5}"
+  
+  # Exit codes for enterprise error handling
+  readonly EXIT_SUCCESS=0
+  readonly EXIT_GENERAL_ERROR=1
+  readonly EXIT_INVALID_ARGS=2
+  readonly EXIT_PERMISSION_DENIED=3
+  readonly EXIT_FILE_NOT_FOUND=4
+  readonly EXIT_TIMEOUT=5
+  readonly EXIT_LOCKED=6
+  
+  # =============================================================================
+  # LOGGING AND OUTPUT FUNCTIONS
+  # =============================================================================
+  
+  # Professional logging function with timestamp and structured output
+  # Parameters:
+  #   $1 (level): Log level - ERROR, WARN, INFO, or DEBUG
+  #   $2 (message): The log message to display
+  # Returns: None (outputs to stderr for errors, stdout for others)
+  log_message() {
+      local level="$1"
+      local message="$2"
+      local timestamp
+      
+      # Generate ISO 8601 compliant timestamp for professional logging
+      timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+      
+      # Route messages to appropriate output streams with color coding
+      case "$level" in
+          "ERROR") 
+              # Errors go to stderr and are displayed in red for immediate attention
+              echo -e "${RED}[ERROR]${NC} [$timestamp] $message" >&2 
+              # Also log to file
+              echo "[$timestamp] [ERROR] $message" >> "$LOG_FILE" 2>/dev/null || true
+              ;;
+          "WARN")  
+              # Warnings go to stdout in yellow to indicate attention needed
+              echo -e "${YELLOW}[WARN]${NC} [$timestamp] $message"
+              echo "[$timestamp] [WARN] $message" >> "$LOG_FILE" 2>/dev/null || true
+              ;;
+          "INFO")  
+              # Informational messages in green for positive confirmation
+              echo -e "${GREEN}[INFO]${NC} [$timestamp] $message"
+              echo "[$timestamp] [INFO] $message" >> "$LOG_FILE" 2>/dev/null || true
+              ;;
+          "DEBUG") 
+              # Debug messages in blue for diagnostic purposes
+              echo -e "${BLUE}[DEBUG]${NC} [$timestamp] $message"
+              echo "[$timestamp] [DEBUG] $message" >> "$LOG_FILE" 2>/dev/null || true
+              ;;
+          *) 
+              # Default case for unknown log levels - treat as info
+              echo -e "${GREEN}[INFO]${NC} [$timestamp] $message"
+              echo "[$timestamp] [INFO] $message" >> "$LOG_FILE" 2>/dev/null || true
+              ;;
+      esac
+  }
+  
+  # =============================================================================
+  # INPUT VALIDATION FUNCTIONS
+  # =============================================================================
+  
+  # Comprehensive input validation with security checks
+  # Parameters:
+  #   $1 (input): The input string to validate
+  #   $2 (pattern): Optional regex pattern to match against
+  # Returns: 0 if valid, 1 if invalid
+  validate_input() {
+      local input="$1"
+      local pattern="${2:-}"
+      
+      # Security check: Ensure input is provided
+      if [[ -z "$input" ]]; then
+          log_message "ERROR" "Input cannot be empty"
+          return 1
+      fi
+      
+      # Security check: Prevent command injection
+      if [[ "$input" =~ [;&|`$()] ]]; then
+          log_message "ERROR" "Input contains potentially dangerous characters"
+          return 1
+      fi
+      
+      # Pattern matching if provided
+      if [[ -n "$pattern" && ! "$input" =~ $pattern ]]; then
+          log_message "ERROR" "Input does not match required pattern"
+          return 1
+      fi
+      
+      log_message "DEBUG" "Input validation passed"
+      return 0
+  }
+  
+  # =============================================================================
+  # LOCK MANAGEMENT FUNCTIONS
+  # =============================================================================
+  
+  # Create and manage lock files for preventing concurrent execution
+  # Parameters: None
+  # Returns: 0 if lock acquired, 1 if already locked
+  acquire_lock() {
+      # Create lock directory if it doesn't exist
+      mkdir -p "$LOCK_DIR" 2>/dev/null || {
+          log_message "ERROR" "Cannot create lock directory: $LOCK_DIR"
+          return 1
+      }
+      
+      # Try to create lock file atomically
+      if (set -C; echo "$SCRIPT_PID" > "$LOCK_FILE") 2>/dev/null; then
+          log_message "DEBUG" "Lock acquired successfully"
+          return 0
+      else
+          local existing_pid
+          existing_pid=$(cat "$LOCK_FILE" 2>/dev/null || echo "")
+          
+          # Check if the process is still running
+          if [[ -n "$existing_pid" ]] && kill -0 "$existing_pid" 2>/dev/null; then
+              log_message "ERROR" "Script is already running (PID: $existing_pid)"
+              return 1
+          else
+              # Stale lock file, remove and retry
+              log_message "WARN" "Removing stale lock file"
+              rm -f "$LOCK_FILE"
+              if (set -C; echo "$SCRIPT_PID" > "$LOCK_FILE") 2>/dev/null; then
+                  log_message "DEBUG" "Lock acquired after removing stale lock"
+                  return 0
+              else
+                  log_message "ERROR" "Failed to acquire lock after cleanup"
+                  return 1
+              fi
+          fi
+      fi
+  }
+  
+  # Release the lock file
+  # Parameters: None
+  # Returns: 0 if successful, 1 if failed
+  release_lock() {
+      if [[ -f "$LOCK_FILE" ]]; then
+          local lock_pid
+          lock_pid=$(cat "$LOCK_FILE" 2>/dev/null || echo "")
+          
+          # Only remove if we own the lock
+          if [[ "$lock_pid" == "$SCRIPT_PID" ]]; then
+              rm -f "$LOCK_FILE" && {
+                  log_message "DEBUG" "Lock released successfully"
+                  return 0
+              } || {
+                  log_message "ERROR" "Failed to remove lock file"
+                  return 1
+              }
+          else
+              log_message "WARN" "Attempted to release lock owned by another process"
+              return 1
+          fi
+      else
+          log_message "DEBUG" "No lock file to release"
+          return 0
+      fi
+  }
+  
+  # =============================================================================
+  # SIGNAL HANDLING AND CLEANUP
+  # =============================================================================
+  
+  # Cleanup function for graceful shutdown
+  # Parameters: None
+  # Returns: None
+  cleanup() {
+      local exit_code=$?
+      
+      log_message "INFO" "Starting cleanup process (exit code: $exit_code)"
+      
+      # Release lock
+      release_lock
+      
+      # Clean up temporary files
+      if [[ -n "${TEMP_FILES:-}" ]]; then
+          for temp_file in $TEMP_FILES; do
+              if [[ -f "$temp_file" ]]; then
+                  rm -f "$temp_file" && log_message "DEBUG" "Removed temporary file: $temp_file"
+              fi
+          done
+      fi
+      
+      # Calculate execution time
+      local end_time
+      end_time=$(date +%s)
+      local execution_time=$((end_time - SCRIPT_START_TIME))
+      
+      log_message "INFO" "Script completed in ${execution_time} seconds"
+      log_message "INFO" "Cleanup completed"
+  }
+  
+  # Signal handler for graceful interruption
+  # Parameters: None
+  # Returns: None (exits with appropriate code)
+  signal_handler() {
+      local signal=$1
+      
+      log_message "WARN" "Script interrupted by signal: $signal"
+      cleanup
+      exit 130
+  }
+  
+  # =============================================================================
+  # ERROR HANDLING FUNCTIONS
+  # =============================================================================
+  
+  # Error handler for the 'set -e' option
+  # Parameters: None
+  # Returns: None (exits with error)
+  error_handler() {
+      local exit_code=$?
+      local line_number=$1
+      
+      log_message "ERROR" "Script failed at line $line_number (exit code: $exit_code)"
+      
+      # Call cleanup
+      cleanup
+      
+      exit $exit_code
+  }
+  
+  # =============================================================================
+  # UTILITY FUNCTIONS
+  # =============================================================================
+  
+  # Check if running with required privileges
+  # Parameters: None
+  # Returns: 0 if privileged, 1 if not
+  check_privileges() {
+      if [[ $EUID -eq 0 ]]; then
+          log_message "DEBUG" "Running with root privileges"
+          return 0
+      else
+          log_message "DEBUG" "Running without root privileges"
+          return 1
+      fi
+  }
+  
+  # Check system requirements
+  # Parameters: None
+  # Returns: 0 if requirements met, 1 if not
+  check_requirements() {
+      local requirements_met=true
+      
+      # Check if required commands are available
+      local required_commands=("date" "mkdir" "rm" "kill")
+      for cmd in "${required_commands[@]}"; do
+          if ! command -v "$cmd" &>/dev/null; then
+              log_message "ERROR" "Required command not found: $cmd"
+              requirements_met=false
+          fi
+      done
+      
+      # Check if log directory is writable
+      if ! mkdir -p "$LOG_DIR" 2>/dev/null; then
+          log_message "ERROR" "Cannot create log directory: $LOG_DIR"
+          requirements_met=false
+      fi
+      
+      if [[ "$requirements_met" == "true" ]]; then
+          log_message "DEBUG" "System requirements check passed"
+          return 0
+      else
+          log_message "ERROR" "System requirements not met"
+          return 1
+      fi
+  }
+  
+  # =============================================================================
+  # MAIN EXECUTION FUNCTION
+  # =============================================================================
+  
+  # Main function - Entry point for the script
+  # This function orchestrates the entire script execution
+  # Parameters: Command line arguments
+  # Returns: Exit code 0 for success, 1 for error
+  main() {
+      log_message "INFO" "Starting $SCRIPT_NAME (PID: $SCRIPT_PID)"
+      
+      # Set up comprehensive error handling
+      trap 'error_handler $LINENO' ERR
+      trap 'signal_handler SIGINT' INT
+      trap 'signal_handler SIGTERM' TERM
+      trap 'cleanup' EXIT
+      
+      # Check system requirements
+      if ! check_requirements; then
+          log_message "ERROR" "System requirements check failed"
+          return $EXIT_GENERAL_ERROR
+      fi
+      
+      # Acquire lock to prevent concurrent execution
+      if ! acquire_lock; then
+          return $EXIT_LOCKED
+      fi
+      
+      # Your main script logic goes here
+      log_message "INFO" "Script execution completed successfully"
+      
+      return $EXIT_SUCCESS
+  }
+  
+  # =============================================================================
+  # SCRIPT EXECUTION ENTRY POINT
+  # =============================================================================
+  
+  # Execute main function with all command-line arguments
+  # This is the script entry point that passes all arguments to main()
+  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+      main "$@"
+  fi
+  
+  # =============================================================================
+  # END OF SCRIPT
+  # =============================================================================
+            </code></pre>
+            </div>
+
+            <div class="command-block">
+              <h4>🔍 Production Environment Validation</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Production Environment Validation Commands
+  
+  # System Health Check Commands
+  # Disk space monitoring
+  df -h                                    # Human-readable disk usage
+  df -i                                    # Inode usage
+  du -sh /var/log                          # Log directory size
+  du -sh /tmp                              # Temporary directory size
+  
+  # Memory monitoring
+  free -h                                  # Human-readable memory
+  free -m                                  # Memory in MB
+  vmstat 1 5                               # Virtual memory statistics
+  cat /proc/meminfo | grep -E "(MemTotal|MemFree|MemAvailable)"
+  
+  # CPU monitoring
+  top -b -n 1 | head -5                    # CPU usage snapshot
+  uptime                                    # System uptime and load
+  ps aux --sort=-%cpu | head -10           # Top CPU processes
+  ps aux --sort=-%mem | head -10           # Top memory processes
+  
+  # Service status checks
+  systemctl status nginx                    # Check specific service
+  systemctl is-active nginx                # Check if active
+  systemctl is-enabled nginx               # Check if enabled at boot
+  systemctl list-units --type=service --state=running  # All running services
+  
+  # Network connectivity
+  ping -c 3 8.8.8.8                       # Test internet connectivity
+  netstat -tulnp                           # Listening ports
+  ss -tulnp                                # Modern netstat equivalent
+  curl -I https://google.com              # Test HTTP connectivity
+  
+  # Log monitoring
+  tail -f /var/log/nginx/error.log         # Follow log file
+  journalctl -u nginx -f                  # Follow service logs
+  journalctl --since "1 hour ago" -p err   # Recent error logs
+  
+  # Security validation
+  selinuxenabled                           # Check SELinux status
+  getenforce                               # Current SELinux mode
+  sestatus                                 # Detailed SELinux status
+  
+  # Firewall status
+  firewall-cmd --state                     # Check firewalld status
+  firewall-cmd --list-all                  # Current firewall rules
+  iptables -L -n                          # iptables rules
+  
+  # User authentication
+  who                                      # Current users
+  last                                     # Recent logins
+  faillog -a                               # Failed login attempts
+  
+  # Process monitoring
+  ps aux                                   # All processes
+  pstree                                   # Process tree
+  kill -0 <PID>                            # Check if process exists
+  
+  # File system checks
+  mount                                    # Mounted filesystems
+  findmnt                                  # Mount information
+  lsblk                                    # Block devices
+  fdisk -l                                 # Disk partitions
+  
+  # System information
+  uname -a                                 # System information
+  cat /etc/os-release                     # OS release info
+  lscpu                                    # CPU information
+  lsmem                                    # Memory information
+  
+  # Performance monitoring
+  iostat 1 5                              # I/O statistics
+  sar -u 1 5                               # CPU utilization
+  sar -r 1 5                               # Memory utilization
+  sar -W 1 5                               # Swapping activity
+  
+  # Application-specific checks
+  # Web server
+  curl -I http://localhost                 # Local web server response
+  wget -q -O - http://localhost | head -10 # Web server content
+  
+  # Database
+  mysql -e "SELECT 1"                       # Database connectivity
+  pg_isready                               # PostgreSQL readiness
+  
+  # Message queue
+  rabbitmqctl status                       # RabbitMQ status
+  redis-cli ping                          # Redis connectivity
+  
+  # Container checks
+  docker ps                                # Running containers
+  docker stats                             # Container resource usage
+  kubectl get pods                         # Kubernetes pod status
+  
+  # Backup validation
+  ls -la /backup                           # Backup directory
+  find /backup -mtime -1                   # Recent backups
+  tar -tzf backup.tar.gz | head -10       # Backup content check
+            </code></pre>
+            </div>
+
             <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
               <h4 style="color: #00d9ff; margin-top: 0;">🏆 Ready for Next Level?</h4>
               <p style="color: #c9d1d9; font-size: 1em; margin-bottom: 15px;">
