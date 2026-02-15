@@ -15197,25 +15197,36 @@ history | grep keyword        # Quickly find commands relevant to tasks
   
   # Interactive Menu with Terminal Control
   show_menu() {
-    local cols=$(tput cols)
+    local cols=$(tput cols 2>/dev/null || echo 80)
     local title="Interactive Menu"
     local padding=$(((cols - ${#title}) / 2))
     
-    tput clear
-    tput cup 2 $padding
-    echo "$(tput bold)$(tput setaf 2)$title$(tput sgr0)"
+    # Use explicit ANSI codes for better compatibility
+    local GREEN='\033[0;32m'
+    local BOLD='\033[1m'
+    local RESET='\033[0m'
     
-    tput cup 5 10
-    echo "1. System Information"
-    tput cup 6 10
-    echo "2. Process Monitor"
-    tput cup 7 10
-    echo "3. Network Status"
-    tput cup 8 10
-    echo "4. Exit"
-    
-    tput cup 10 10
-    echo -n "Select option: "
+    # Check if terminal supports colors
+    if [ -t 1 ] && [ "$(tput colors 2>/dev/null || echo 0)" -gt 0 ]; then
+      clear 2>/dev/null || tput clear 2>/dev/null
+      printf "${BOLD}${GREEN}%*s${RESET}\n" $((padding + ${#title}/2)) "$title"
+      
+      printf "\033[5;10H1. System Information"
+      printf "\033[6;10H2. Process Monitor"
+      printf "\033[7;10H3. Network Status"
+      printf "\033[8;10H4. Exit"
+      
+      printf "\033[10;10HSelect option: "
+    else
+      # Fallback for terminals without color support
+      clear 2>/dev/null || echo ""
+      printf "%*s\n" $((padding + ${#title}/2)) "$title"
+      echo "1. System Information"
+      echo "2. Process Monitor"
+      echo "3. Network Status"
+      echo "4. Exit"
+      echo -n "Select option: "
+    fi
   }
   
   # Cleanup on Exit
