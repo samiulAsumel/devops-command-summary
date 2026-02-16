@@ -2,139 +2,106 @@
 
 ## 🎯 **OVERVIEW**
 
-This is the **most comprehensive Linux/DevOps command reference** available, designed for **top 5% industry candidates**. With **62 sections and 3000+ commands**, this resource covers everything from basic system administration to advanced enterprise DevOps practices.
+This is the **most comprehensive Linux/DevOps command reference** available, designed for **top 5% industry candidates**. With **67 sections and 1171 code blocks**, this resource covers everything from basic system administration to advanced enterprise DevOps practices.
 
-## 🌟 **WHAT'S NEW - UPDATED FOR BEST VIEW**
+## ️ **COMMAND CLASSIFICATION SYSTEM**
 
-### **✨ Enhanced User Experience**
+### **Understanding Command Tags**
 
-- **🎨 Professional Design**: Modern, clean interface with improved navigation
-- **📱 Responsive Layout**: Perfect viewing on desktop, tablet, and mobile
-- **🔍 Enhanced Search**: Better findability with organized sections
-- **📊 Visual Statistics**: Clear display of coverage metrics
-- **🎯 Career-Focused Content**: Advanced sections for senior-level positions
+This reference uses a comprehensive classification system to help you understand command usage context and safety levels:
 
-### **🚀 Improved Navigation**
+- **[COMMON]** - Frequently used in daily operations and routine tasks
+- **[PRODUCTION]** - Used in live/production environments with caution required
+- **[DEBUG]** - Used for troubleshooting, investigation, and system analysis
+- **[RARE]** - Used in specific or uncommon scenarios, specialized situations
+- **[DANGEROUS]** - ⚠️ Can cause data loss or system outage if misused
 
-- **🗂 Organized Structure**: Logical folder structure for easy maintenance
-- **📋 Clear Path Selection**: Three distinct learning paths with descriptions
-- **⚡ Quick Start Guide**: Step-by-step instructions for beginners
-- **🏆 Achievement Badges**: Visual indicators of top 5% readiness
+### **Safety First**
+
+- **Always test** commands in safe environments before production use
+- **Understand impact** of [DANGEROUS] commands before execution
+- **Use proper privileges** - many commands require root/sudo access
+- **Backup critical data** before running destructive operations
 
 ## 📊 **COVERAGE BREAKDOWN**
 
-### **🖥️ System Administration (23 sections)**
+### **🖥️ System Administration (24 sections)**
 
-- System Information & Navigation
-- File Operations & Text Editors
-- Permissions & User Management
-- Process Management & Systemd
-- Package Management (DNF/YUM/RPM)
-- System Logging & Disk Management
-- Networking & Firewall Management
-- SSH Security & Text Processing
-- Bash Scripting & Backup/Recovery
-- Automation & Scheduling
-- **Advanced System Administration** ⭐
-- **Enterprise Automation & Scripting** ⭐
-- **Advanced Troubleshooting Techniques** ⭐
-- **Useful One-Liner Commands** ⭐
+- System Information & Navigation (01)
+- File Operations (02)
+- Text Editors (03)
+- File Permissions & Ownership (04)
+- User & Group Management (05)
+- Process Management (06)
+- Systemd Service Management (07)
+- Package Management (Dnf/Yum) (08)
+- Rpm Package Management (09)
+- System Logging (10)
+- Disk Management (11)
+- Networking Basics (12)
+- Firewall Management (13)
+- SSH (Secure Shell) (14)
+- Text Processing (15)
+- YAML Fundamentals - From Scratch To Hero (16)
+- Bash Scripting Essentials (17)
+- Backup And Recovery (18)
+- Automation And Scheduling (19)
+- Miscellaneous Useful Commands (20)
+- Advanced System Administration ⭐ (21)
+- Enterprise Automation & Scripting ⭐ (22)
+- Advanced Troubleshooting Techniques ⭐ (23)
+- Useful One-Liner Commands ⭐ (24)
 
-### **🚀 DevOps Tools (14 sections)**
+### **🚀 DevOps Tools (17 sections)**
 
-- Python for DevOps
-- Git Version Control
-- Docker Containerization
-- Kubernetes Orchestration
-- Ansible Configuration Management
-- Terraform Infrastructure as Code
-- AWS CLI Cloud Management
-- Container Security & RBAC
-- CI/CD Tools (Jenkins, GitHub Actions)
-- Advanced Cloud Architecture
-- **Advanced DevOps Workflows** ⭐
-- **Monitoring & Observability Stack** ⭐
-- **Security & Compliance Automation** ⭐
-- **Automation One-Liner Commands** ⭐
+- Amazon Web Services (AWS) - From Scratch (25)
+- Docker Containerization - From Scratch (26)
+- Terraform IaC - From Scratch (27)
+- Python For DevOps - Basics (28)
+- Git Version Control (29)
+- Docker Commands (30)
+- Kubernetes (Kubectl) Commands (31)
+- Ansible Commands (32)
+- Terraform Commands (33)
+- AWS CLI Commands (34)
+- Container Security (Image Scanning, Pod Security Policies, K8s, RBAC) (35)
+- CI/CD Tools (Jenkins, GitHub Actions, GitLab CI Pipelines) (36)
+- Advanced Cloud (Terraform Modules, AWS Services: S3, EC2, RDS, IAM, Multi-Cloud) (37)
+- Advanced DevOps Workflows ⭐ (38)
+- Monitoring & Observability Stack ⭐ (39)
+- Security & Compliance Automation ⭐ (40)
+- Automation One-Liners Commands ⭐ (41)
 
-### **🔒 Monitoring & Security (25 sections)**
+### **🔒 Monitoring & Security (26 sections)**
 
-- Monitoring Commands (Prometheus, Grafana)
-- Logging & Auditing (ELK/EFK Stack)
-- Observability (OpenTelemetry, Jaeger)
-- Security Hardening (SELinux, OpenSSL)
-- Performance Monitoring & Tuning
-- Backup, Recovery & High Availability
-- **Advanced Kubernetes Production Patterns** ⭐
-- **Kubernetes Security & RBAC** ⭐
-- **Kubernetes Monitoring & Observability** ⭐
-- **Enterprise CI/CD Pipelines** ⭐
-- **Advanced GitOps & Automation** ⭐
-- **Cloud Architecture Patterns** ⭐
-- **Cost Optimization Strategies** ⭐
-- **DevSecOps Practices** ⭐
-- **Security Automation & Compliance** ⭐
-- **Interview Preparation - System Design** ⭐
-- **Career Advancement & Certifications** ⭐
-- **Performance Optimization & Tuning** ⭐
-- **Advanced Troubleshooting Methodologies** ⭐
-- **Real-World Project Examples** ⭐
-- **Project Templates & Starters** ⭐
-- **Certification Preparation Guides** ⭐
-- **Exam Strategies & Career Development** ⭐
+- Monitoring Commands (42)
+- Logging & Auditing (Advanced ELK/EFK Stack, Centralized Logging, Alerting Rules) (43)
+- Observability (Metrics + Logs + Traces, OpenTelemetry) (44)
+- Security And Hardening (45)
+- Performance Monitoring & Tuning (46)
+- Backup, Recovery, Monitoring & Security (47)
+- High Availability & Load Balancing (HAProxy, Nginx LB, Pacemaker/Corosync Clusters) (48)
+- Advanced Kubernetes Production Patterns ⭐ (49)
+- Kubernetes Security & RBAC ⭐ (50)
+- Kubernetes Monitoring & Observability ⭐ (51)
+- Enterprise CI/CD Pipelines ⭐ (52)
+- Advanced GitOps & Automation ⭐ (53)
+- Cloud Architecture Patterns ⭐ (54)
+- Cost Optimization Strategies ⭐ (55)
+- DevSecOps Practices ⭐ (56)
+- Security Automation & Compliance ⭐ (57)
+- Interview Preparation - System Design ⭐ (58)
+- Career Advancement & Certifications ⭐ (59)
+- Performance Optimization & Tuning ⭐ (60)
+- Advanced Troubleshooting Methodologies ⭐ (61)
+- Real-World Project Examples ⭐ (62)
+- Project Templates & Starters ⭐ (63)
+- Certification Preparation Guides ⭐ (64)
+- Exam Strategies & Career Development ⭐ (65)
+- Final Resources & Reference ⭐ (66)
+- Summary ⭐ (67)
 
-## 🏆 **TOP 5% FEATURES**
-
-### **⭐ Advanced Enterprise Content**
-
-- **Production-ready commands** for real-world scenarios
-- **Multi-distribution compatibility** (Red Hat, Debian, Ubuntu, openSUSE, Arch)
-- **Security best practices** and compliance automation
-- **Performance optimization** and troubleshooting methodologies
-
-### **🎯 Career-Focused**
-
-- **Interview preparation** with system design questions
-- **Certification guides** (RHCSA, RHCE, CKA, AWS, etc.)
-- **Career advancement** strategies and skill matrix
-- **Real-world project** examples and templates
-
-### **🔧 Technical Excellence**
-
-- **Enterprise-grade patterns** for senior-level positions
-- **Advanced troubleshooting** and performance tuning
-- **DevSecOps integration** throughout
-- **Cloud architecture** and cost optimization
-
-## 📁 **FOLDER STRUCTURE**
-
-```
-devops-command-summary/
-├── 📄 index.html                 # Main landing page
-├── 📄 system-admin.html          # System Administration (23 sections)
-├── 📄 devops-tools.html          # DevOps Tools (14 sections)
-├── 📄 monitoring-security.html    # Monitoring & Security (25 sections)
-├── 📁 assets/                   # Static assets
-│   ├── 🎨 styles.css            # Styling
-│   ├── 📜 scripts.js            # JavaScript functionality
-│   └── 🖼️ favicon.png           # Site icon
-├── 📁 docs/                     # Documentation
-│   ├── 📖 README.md              # This file
-│   ├── 📋 PROJECT_OVERVIEW.md   # Project overview
-│   ├── ⚙️ CONFIG.md              # Configuration guide
-│   ├── 🚀 QUICKSTART.md         # Quick start guide
-│   └── 📝 TASKS.md              # Task list and progress
-├── 📁 scripts/                  # Utility scripts
-│   ├── 🐍 analyze_base.py       # Analysis tools
-│   ├── 📊 compare_files.py      # File comparison
-│   ├── 🌐 app.py               # Web application
-│   └── 🔄 update_html_from_base.py # Update utilities
-└── 📁 backup/                   # Backup files
-    ├── 📋 command_summary.txt    # Command summary
-    └── ✅ FIXES_COMPLETED.txt   # Completed fixes
-```
-
-## 🚀 **QUICK START**
+## **QUICK START**
 
 ### **1. Open the Reference**
 
@@ -159,98 +126,15 @@ google-chrome index.html
 - **Table of Contents**: Quick navigation
 - **Section Links**: Direct access to topics
 
-## 🎯 **TARGET AUDIENCE**
-
-### **🏆 Top 5% Candidates**
-
-- **Senior DevOps Engineers**
-- **Principal SREs**
-- **DevOps Architects**
-- **Platform Engineers**
-- **Cloud Solutions Architects**
-
-### **📚 Certification Seekers**
-
-- **RHCSA/RHCE** (Red Hat)
-- **CKA/CKAD** (Kubernetes)
-- **AWS Certified** (Solutions Architect, DevOps)
-- **Azure Certified** (DevOps Engineer)
-
-### **🔧 Industry Professionals**
-
-- **System Administrators** advancing to DevOps
-- **Developers** learning operations
-- **Security Engineers** integrating DevSecOps
-- **Cloud Engineers** managing infrastructure
-
-## 💡 **KEY FEATURES**
-
-### **🎯 Enterprise-Ready**
-
-- ✅ **Production commands** for real environments
-- ✅ **Multi-platform compatibility**
-- ✅ **Security-focused** throughout
-- ✅ **Performance optimized** examples
-
-### **📈 Career Acceleration**
-
-- ✅ **Interview preparation** materials
-- ✅ **Certification guides** included
-- ✅ **Real-world projects** templates
-- ✅ **Career advancement** strategies
-
-### **🔍 Easy Navigation**
-
-- ✅ **Comprehensive table of contents**
-- ✅ **Section-by-section organization**
-- ✅ **Search-friendly** structure
-- ✅ **Cross-referenced** topics
-
-## 🏅 **ACHIEVEMENTS UNLOCKED**
-
-### **📊 Coverage Metrics**
-
-- **62 comprehensive sections** (vs typical 20-30)
-- **3000+ commands** (vs typical 500-1000)
-- **Enterprise-grade content** (vs basic tutorials)
-- **Career-focused resources** (vs technical-only)
-
-### **🎯 Industry Positioning**
-
-- **Top 5% candidate readiness** ✅
-- **Senior-level technical depth** ✅
-- **Enterprise architecture knowledge** ✅
-- **Career advancement tools** ✅
-
-## 🤝 **CONTRIBUTING**
-
-This is a **comprehensive reference** designed for **industry excellence**. The content is structured for **maximum learning efficiency** and **career advancement**.
-
-### **📝 Documentation Standards**
-
-- **Enterprise-grade examples**
-- **Multi-platform compatibility**
-- **Security best practices**
-- **Performance optimization**
-
-## 📞 **SUPPORT**
-
-For the best experience:
-
-1. **Use modern browser** (Chrome, Firefox, Safari)
-2. **Enable JavaScript** for interactive features
-3. **Use search functionality** for quick access
-4. **Follow section progression** for systematic learning
-
 ---
 
 ## 🎉 **CONCLUSION**
 
-**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **62 sections, 3000+ commands, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
+**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **67 sections, 1171 code blocks, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
 
 **🚀 Ready to excel in the top tier of the industry!**
 
 ---
 
-_Last Updated: January 2026_  
-_Version: 3.0 - Top 5% Industry Standard_
+_Last Updated: February 2026_  
+_Version: 3.1 - Top 5% Industry Standard_
