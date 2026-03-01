@@ -1,3 +1,4 @@
+---
 name: Enterprise CI/CD Pipeline
 
 on:
@@ -31,7 +32,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: trivy-results.sarif
 
       - name: Run Bandit security scan
         run: |
