@@ -126,28 +126,28 @@
             # Grafana (Dashboards & Visualization)
             #   ↓ alerts via
             # Alertmanager (Alert Routing & Notifications)
-
+            #
             # Why Prometheus?
             # - Pull-based model (scrapes metrics from targets)
             # - Service discovery (automatic target detection)
             # - Powerful query language (PromQL)
             # - Multi-dimensional data model (labels)
             # - No external dependencies
-
+            #
             # Prometheus vs Traditional Monitoring:
             # Traditional: Agent pushes metrics to central server
             # Prometheus: Server pulls metrics from targets
             #   - Better for dynamic environments (Kubernetes)
             #   - Easier troubleshooting (see what's scraped)
             #   - No agent configuration needed
-
+            #
             # Key Concepts:
             # Metric: Named time series (e.g., http_requests_total)
             # Label: Key-value pair for dimensions (e.g., method="GET")
             # Target: Endpoint to scrape (e.g., localhost:9100/metrics)
             # Job: Collection of similar targets (e.g., node-exporters)
             # Scrape: Act of collecting metrics from target
-
+            #
             # Common Exporters:
             # node_exporter - System metrics (CPU, memory, disk, network)
             # mysqld_exporter - MySQL database metrics
@@ -495,10 +495,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status alertmanager
-  systemctl start alertmanager
-  systemctl stop alertmanager
-  systemctl restart alertmanager
+  # Alertmanager Service Management (Enterprise Standards)
+  systemctl status alertmanager                    # Check Alertmanager service status
+  systemctl start alertmanager                     # Start Alertmanager service
+  systemctl stop alertmanager                      # Stop Alertmanager service
+  systemctl restart alertmanager                   # Restart Alertmanager service
+  systemctl enable alertmanager                    # Enable at boot (Persistence)
+  systemctl disable alertmanager                   # Disable at boot
+  systemctl reload alertmanager                    # Reload configuration
 </code></pre>
 </div>
 
@@ -598,9 +602,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status node_exporter
-  systemctl start node_exporter
-  systemctl restart node_exporter
+  # Node Exporter Service Management (Enterprise Standards)
+  systemctl status node_exporter                    # Check Node Exporter service status
+  systemctl start node_exporter                     # Start Node Exporter service
+  systemctl stop node_exporter                      # Stop Node Exporter service
+  systemctl restart node_exporter                   # Restart Node Exporter service
+  systemctl enable node_exporter                    # Enable at boot (Persistence)
+  systemctl disable node_exporter                   # Disable at boot
+  systemctl reload node_exporter                    # Reload configuration
 </code></pre>
 </div>
 
@@ -624,12 +633,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status grafana-server
-  systemctl start grafana-server
-  systemctl stop grafana-server
-  systemctl restart grafana-server
-  systemctl enable grafana-server
-  systemctl disable grafana-server
+  # Grafana Service Management (Enterprise Standards)
+  systemctl status grafana-server                   # Check Grafana service status
+  systemctl start grafana-server                    # Start Grafana service
+  systemctl stop grafana-server                     # Stop Grafana service
+  systemctl restart grafana-server                  # Restart Grafana service
+  systemctl enable grafana-server                   # Enable at boot (Persistence)
+  systemctl disable grafana-server                  # Disable at boot
+  systemctl reload grafana-server                   # Reload configuration
 </code></pre>
 </div>
 
@@ -716,10 +727,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status elasticsearch
-  systemctl start elasticsearch
-  systemctl stop elasticsearch
-  systemctl restart elasticsearch
+  # Elasticsearch Service Management (Enterprise Standards)
+  systemctl status elasticsearch                  # Check Elasticsearch service status
+  systemctl start elasticsearch                   # Start Elasticsearch service
+  systemctl stop elasticsearch                    # Stop Elasticsearch service
+  systemctl restart elasticsearch                 # Restart Elasticsearch service
+  systemctl enable elasticsearch                  # Enable at boot (Persistence)
+  systemctl disable elasticsearch                 # Disable at boot
+  systemctl reload elasticsearch                  # Reload configuration
 </code></pre>
 </div>
 
@@ -829,10 +844,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status logstash
-  systemctl start logstash
-  systemctl stop logstash
-  systemctl restart logstash
+  # Logstash Service Management (Enterprise Standards)
+  systemctl status logstash                       # Check Logstash service status
+  systemctl start logstash                        # Start Logstash service
+  systemctl stop logstash                         # Stop Logstash service
+  systemctl restart logstash                      # Restart Logstash service
+  systemctl enable logstash                       # Enable at boot (Persistence)
+  systemctl disable logstash                      # Disable at boot
+  systemctl reload logstash                       # Reload configuration
 </code></pre>
 </div>
 
@@ -947,10 +966,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status kibana
-  systemctl start kibana
-  systemctl stop kibana
-  systemctl restart kibana
+  # Kibana Service Management (Enterprise Standards)
+  systemctl status kibana                         # Check Kibana service status
+  systemctl start kibana                          # Start Kibana service
+  systemctl stop kibana                           # Stop Kibana service
+  systemctl restart kibana                        # Restart Kibana service
+  systemctl enable kibana                         # Enable at boot (Persistence)
+  systemctl disable kibana                        # Disable at boot
+  systemctl reload kibana                         # Reload configuration
 </code></pre>
 </div>
 
@@ -1002,10 +1025,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status filebeat
-  systemctl start filebeat
-  systemctl stop filebeat
-  systemctl restart filebeat
+  # Filebeat Service Management (Enterprise Standards)
+  systemctl status filebeat                       # Check Filebeat service status
+  systemctl start filebeat                        # Start Filebeat service
+  systemctl stop filebeat                         # Stop Filebeat service
+  systemctl restart filebeat                      # Restart Filebeat service
+  systemctl enable filebeat                       # Enable at boot (Persistence)
+  systemctl disable filebeat                      # Disable at boot
+  systemctl reload filebeat                       # Reload configuration
 </code></pre>
 </div>
 
@@ -1054,10 +1081,14 @@
     <span class="category-description">Used in live/production environments</span>
   </div>
   <pre><code>
-  systemctl status metricbeat
-  systemctl start metricbeat
-  systemctl stop metricbeat
-  systemctl restart metricbeat
+  # Metricbeat Service Management (Enterprise Standards)
+  systemctl status metricbeat                     # Check Metricbeat service status
+  systemctl start metricbeat                      # Start Metricbeat service
+  systemctl stop metricbeat                       # Stop Metricbeat service
+  systemctl restart metricbeat                    # Restart Metricbeat service
+  systemctl enable metricbeat                     # Enable at boot (Persistence)
+  systemctl disable metricbeat                    # Disable at boot
+  systemctl reload metricbeat                     # Reload configuration
 </code></pre>
 </div>
 
@@ -1228,9 +1259,14 @@
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  systemctl status auditd
-  systemctl start auditd
-  systemctl restart auditd
+  # Auditd Service Management (Enterprise Standards)
+  systemctl status auditd                           # Check audit daemon status
+  systemctl start auditd                            # Start audit daemon
+  systemctl stop auditd                             # Stop audit daemon
+  systemctl restart auditd                          # Restart audit daemon
+  systemctl enable auditd                           # Enable at boot (Persistence)
+  systemctl disable auditd                          # Disable at boot
+  systemctl reload auditd                           # Reload configuration
 </code></pre>
 </div>
 
@@ -1330,10 +1366,14 @@
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  systemctl status fail2ban
-  systemctl start fail2ban
-  systemctl stop fail2ban
-  systemctl restart fail2ban
+  # Fail2Ban Service Management (Enterprise Standards)
+  systemctl status fail2ban                         # Check Fail2Ban service status
+  systemctl start fail2ban                          # Start Fail2Ban service
+  systemctl stop fail2ban                           # Stop Fail2Ban service
+  systemctl restart fail2ban                        # Restart Fail2Ban service
+  systemctl enable fail2ban                         # Enable at boot (Persistence)
+  systemctl disable fail2ban                        # Disable at boot
+  systemctl reload fail2ban                         # Reload configuration
 </code></pre>
 </div>
 
@@ -2004,9 +2044,14 @@
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  systemctl status clamd@scan  # Check service
-  systemctl start clamd@scan   # Start service
-  systemctl enable clamd@scan  # Enable at boot
+  # ClamAV Service Management (Enterprise Standards)
+  systemctl status clamd@scan                      # Check ClamAV service status
+  systemctl start clamd@scan                       # Start ClamAV service
+  systemctl stop clamd@scan                        # Stop ClamAV service
+  systemctl restart clamd@scan                     # Restart ClamAV service
+  systemctl enable clamd@scan                      # Enable at boot (Persistence)
+  systemctl disable clamd@scan                     # Disable at boot
+  systemctl reload clamd@scan                      # Reload configuration
 </code></pre>
 </div>
 
@@ -2108,9 +2153,14 @@
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  systemctl status falco
-  systemctl start falco
-  systemctl restart falco
+  # Falco Service Management (Enterprise Standards)
+  systemctl status falco                            # Check Falco service status
+  systemctl start falco                             # Start Falco service
+  systemctl stop falco                              # Stop Falco service
+  systemctl restart falco                           # Restart Falco service
+  systemctl enable falco                            # Enable at boot (Persistence)
+  systemctl disable falco                           # Disable at boot
+  systemctl reload falco                            # Reload configuration
 </code></pre>
 </div>
 
@@ -3408,10 +3458,16 @@
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  systemctl start haproxy
-  systemctl enable haproxy
-  haproxy -c -f /etc/haproxy/haproxy.cfg  # Check config
-  haproxy -f /etc/haproxy/haproxy.cfg -d  # Start in debug mode
+  # HAProxy Service Management (Enterprise Standards)
+  systemctl start haproxy                            # Start HAProxy service
+  systemctl stop haproxy                             # Stop HAProxy service
+  systemctl restart haproxy                          # Restart HAProxy service
+  systemctl enable haproxy                           # Enable at boot (Persistence)
+  systemctl disable haproxy                          # Disable at boot
+  systemctl reload haproxy                           # Reload configuration
+  systemctl status haproxy                           # Check HAProxy service status
+  haproxy -c -f /etc/haproxy/haproxy.cfg          # Check configuration
+  haproxy -f /etc/haproxy/haproxy.cfg -d          # Start in debug mode
 </code></pre>
 </div>
 
@@ -3462,10 +3518,14 @@
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  systemctl start keepalived
-  systemctl enable keepalived
-  systemctl status keepalived
-  systemctl restart keepalived
+  # Keepalived Service Management (Enterprise Standards)
+  systemctl start keepalived                         # Start Keepalived service
+  systemctl stop keepalived                          # Stop Keepalived service
+  systemctl restart keepalived                       # Restart Keepalived service
+  systemctl enable keepalived                        # Enable at boot (Persistence)
+  systemctl disable keepalived                       # Disable at boot
+  systemctl reload keepalived                        # Reload configuration
+  systemctl status keepalived                        # Check Keepalived service status
 </code></pre>
 </div>
 
@@ -5036,9 +5096,14 @@
 EOF
 
 # 4. Database Setup
-yum install mariadb-server
-systemctl enable --now mariadb
-mysql_secure_installation
+# MariaDB Service Management (Enterprise Standards)
+yum install mariadb-server                         # Install MariaDB server
+systemctl enable --now mariadb                    # Enable and start MariaDB service
+systemctl status mariadb                           # Check MariaDB service status
+systemctl restart mariadb                          # Restart MariaDB service
+systemctl stop mariadb                             # Stop MariaDB service
+systemctl disable mariadb                          # Disable at boot
+mysql_secure_installation                         # Secure MariaDB installation
 mysql -u root -p -e "CREATE USER 'webapp'@'localhost' IDENTIFIED BY 'password';"
 mysql -u root -p -e "GRANT ALL PRIVILEGES ON webapp.* TO 'webapp'@'localhost';"
 
