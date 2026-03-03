@@ -5092,36 +5092,128 @@
   <VirtualHost *:80>
   ServerName vhost1.example.com
   DocumentRoot /var/www/html/vhost1
-</VirtualHost>
-EOF
+  ErrorLog logs/vhost1-error_log
+  CustomLog logs/vhost1-access_log common
+  </VirtualHost>
+  EOF
 
-# 4. Database Setup
-# MariaDB Service Management (Enterprise Standards)
-yum install mariadb-server                         # Install MariaDB server
-systemctl enable --now mariadb                    # Enable and start MariaDB service
-systemctl status mariadb                           # Check MariaDB service status
-systemctl restart mariadb                          # Restart MariaDB service
-systemctl stop mariadb                             # Stop MariaDB service
-systemctl disable mariadb                          # Disable at boot
-mysql_secure_installation                         # Secure MariaDB installation
-mysql -u root -p -e "CREATE USER 'webapp'@'localhost' IDENTIFIED BY 'password';"
-mysql -u root -p -e "GRANT ALL PRIVILEGES ON webapp.* TO 'webapp'@'localhost';"
+  # SSL/TLS Configuration
+  openssl req -newkey rsa:2048 -nodes -keyout /etc/pki/tls/private/httpd.key -x509 -days 365 -out /etc/pki/tls/certs/httpd.crt
+  cat > /etc/httpd/conf.d/ssl.conf <<EOF
+  <VirtualHost *:443>
+  ServerName secure.example.com
+  DocumentRoot /var/www/html/secure
+  SSLEngine on
+  SSLCertificateFile /etc/pki/tls/certs/httpd.crt
+  SSLCertificateKeyFile /etc/pki/tls/private/httpd.key
+  </VirtualHost>
+  EOF
 
-# 5. Scripting and Automation
-cat > /usr/local/bin/backup.sh <<EOF
-#!/bin/bash
-tar -czf /backup/$(date +%Y%m%d)_backup.tar.gz /home/
-EOF
-chmod +x /usr/local/bin/backup.sh
+  # Apache Security Hardening
+  sed -i 's/ServerSignature On/ServerSignature Off/' /etc/httpd/conf/httpd.conf
+  sed -i 's/ServerTokens OS/ServerTokens Prod/' /etc/httpd/conf/httpd.conf
+  echo 'ServerTokens Prod' >> /etc/httpd/conf.d/security.conf
+  echo 'ServerSignature Off' >> /etc/httpd/conf.d/security.conf
+  echo 'TraceEnable Off' >> /etc/httpd/conf.d/security.conf
 
-# Cron job configuration
-echo "0 2 * * * /usr/local/bin/backup.sh" | crontab -
+  # Enable required modules
+  systemctl restart httpd
+  firewall-cmd --permanent --add-service={http,https}
+  firewall-cmd --reload
 
-# 6. Container Management
-yum install podman
-podman pull nginx
-podman run -d -p 8080:80 --name webserver nginx
-podman generate systemd --name webserver --files
+  # 4. Database Setup
+  # MariaDB Service Management (Enterprise Standards)
+  yum install mariadb-server                         # Install MariaDB server
+  systemctl enable --now mariadb                    # Enable and start MariaDB service
+  systemctl status mariadb                           # Check MariaDB service status
+  systemctl restart mariadb                          # Restart MariaDB service
+  systemctl stop mariadb                             # Stop MariaDB service
+  systemctl disable mariadb                          # Disable at boot
+  mysql_secure_installation                         # Secure MariaDB installation
+  mysql -u root -p -e "CREATE USER 'webapp'@'localhost' IDENTIFIED BY 'password';"
+  mysql -u root -p -e "GRANT ALL PRIVILEGES ON webapp.* TO 'webapp'@'localhost';"
+
+  # 5. Scripting and Automation
+  cat > /usr/local/bin/backup.sh <<EOF
+  #!/bin/bash
+  tar -czf /backup/$(date +%Y%m%d)_backup.tar.gz /home/
+  EOF
+  chmod +x /usr/local/bin/backup.sh
+
+  # Cron job configuration
+  echo "0 2 * * * /usr/local/bin/backup.sh" | crontab -
+
+  # 6. Container Management
+  yum install podman
+  podman pull nginx
+  podman run -d -p 8080:80 --name webserver nginx
+  podman generate systemd --name webserver --files
+
+  # 7. NFS Configuration
+  yum install nfs-utils
+  systemctl enable --now nfs-server
+  mkdir -p /srv/nfs/share
+  echo "/srv/nfs/share *(rw,sync,no_root_squash)" >> /etc/exports
+  exportfs -a
+  systemctl restart nfs-server
+
+  # 8. iSCSI Configuration
+  yum install targetcli
+  systemctl enable --now target
+  targetcli /backstores/block create name=backend dev=/dev/vdb
+  targetcli /iscsi create iqn.2024-01.com.example:storage
+  targetcli /iscsi/iqn.2024-01.com.example:storage/tpg1/luns create /backstores/block/backend
+  targetcli /iscsi/iqn.2024-01.com.example:storage/tpg1/acls create iqn.2024-01.com.example:client
+
+  # 9. Advanced SELinux
+  semanage boolean -m httpd_can_network_connect --on
+  semanage port -a -t http_port_t -p tcp 8080
+  audit2allow -w -a
+  setroubleshootd
+
+  # 10. System Performance Tuning
+  tuned-adm profile throughput-performance
+  sysctl -w vm.swappiness=10
+  echo 'vm.swappiness=10' >> /etc/sysctl.conf
+  ulimit -n 65536
+  echo '* soft nofile 65536' >> /etc/security/limits.conf
+  echo '* hard nofile 65536' >> /etc/security/limits.conf
+
+  # 11. LDAP Authentication
+  yum install openldap-clients sssd
+  authconfig --enableldap --enableldapauth --ldapserver=ldap.example.com --ldapbasedn="dc=example,dc=com" --update
+  systemctl enable --now sssd
+  getent passwd ldapuser
+  getent group ldapgroup
+
+  # 12. SMTP Configuration (Postfix)
+  yum install postfix
+  systemctl enable --now postfix
+  postconf -e 'myhostname = mail.example.com'
+  postconf -e 'mydomain = example.com'
+  postconf -e 'myorigin = $mydomain'
+  postconf -e 'inet_interfaces = all'
+  systemctl restart postfix
+
+  # 13. Time Synchronization (Chrony)
+  yum install chrony
+  systemctl enable --now chronyd
+  chronyc sources
+  chronyc tracking
+  timedatectl set-ntp true
+
+  # 14. Network Bonding
+  nmcli connection add type bond con-name bond0 ifname bond0 mode balance-rr
+  nmcli connection add type ethernet slave-type bond ifname eth1 master bond0
+  nmcli connection add type ethernet slave-type bond ifname eth2 master bond0
+  nmcli connection up bond0
+
+  # 15. Advanced Firewall Rules
+  firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.0.0.0/24" port protocol="tcp" port="3306" accept'
+  firewall-cmd --permanent --add-service={http,https,mysql,dns}
+  firewall-cmd --permanent --add-port={8080,8443}/tcp
+  firewall-cmd --reload
+  firewall-cmd --list-all
 </code></pre>
 </div>
 
@@ -5847,12 +5939,7 @@ project context or theoretical explanations.
 
 <div class="download-section">
   <h3>📖 Complete Reference Guide</h3>
-  <p>
-  This is Part 3 of 3. For the complete Linux/DevOps command reference:
-</p>
-<a href="system-admin.html" class="download-btn">Part 1: System Administration</a>
-<a href="devops-tools.html" class="download-btn">Part 2: DevOps Tools</a>
-<a href="monitoring-security.html" class="download-btn btn-current">Part 3: Monitoring & Security</a>
+  
 
 </div>
 
