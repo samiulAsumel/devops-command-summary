@@ -1155,7 +1155,11 @@
 </code></pre>
 </div>
 
-<h2 id="logging-auditing">📋 48. LOGGING & AUDITING (Advanced ELK/EFK stack, centralized logging, alerting rules)</h2>
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 1: MONITORING & OBSERVABILITY</h3>
+      </div>
+<h2 id="logging-auditing">63. 📋 LOGGING & AUDITING (Advanced ELK/EFK stack, centralized logging, alerting rules)</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -1199,7 +1203,7 @@
 </code></pre>
 </div>
 
-<h2 id="observability">🔍 49. OBSERVABILITY (Metrics + Logs + Traces, OpenTelemetry)</h2>
+<h2 id="observability">64. 🔍 OBSERVABILITY (Metrics + Logs + Traces, OpenTelemetry)</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -1262,7 +1266,1070 @@
 </code></pre>
 </div>
 
-<h2 id="security">🛡️ 50. SECURITY AND HARDENING</h2>
+<h2 id="monitoring-observability">65. 📊 MONITORING & OBSERVABILITY STACK</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">monitoring stack setup, observability implementation, metrics collection, log aggregation, and performance monitoring</strong></p>
+</div>
+
+<div>
+  <div class="command-block">
+    <h4>📊 Prometheus Advanced Configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
+    <pre><code># Prometheus configuration with multiple targets
+    global:
+    scrape_interval: 15s
+    evaluation_interval: 15s
+
+    rule_files:
+    - "alert_rules.yml"
+
+    alerting:
+    alertmanagers:
+    - static_configs:
+    - targets:
+    - alertmanager:9093
+
+    scrape_configs:
+    - job_name: 'kubernetes-apiservers'
+    kubernetes_sd_configs:
+    - role: endpoints
+    scheme: https
+    tls_config:
+    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+    action: keep
+    regex: default;kubernetes;https
+
+    - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+    - role: node
+    relabel_configs:
+    - action: labelmap
+    regex: __meta_kubernetes_node_label_(.+)
+
+    - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+    - role: pod
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+    action: keep
+    regex: true</code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>📈 Grafana Dashboard Automation</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
+    <pre><code># Grafana API automation
+    export GRAFANA_URL="http://grafana:3000"
+    export GRAFANA_TOKEN="eyJrIjoi..."
+
+    # Create dashboard
+    curl -X POST \
+    -H "Authorization: Bearer $GRAFANA_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d @dashboard.json \
+    "$GRAFANA_URL/api/dashboards/db"
+
+    # Create data source
+    curl -X POST \
+    -H "Authorization: Bearer $GRAFANA_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "name": "Prometheus",
+    "type": "prometheus",
+    "url": "http://prometheus:9090",
+    "access": "proxy",
+    "isDefault": true
+    }' \
+    "$GRAFANA_URL/api/datasources"
+
+    # Export dashboard
+    curl -H "Authorization: Bearer $GRAFANA_TOKEN" \
+    "$GRAFANA_URL/api/dashboards/uid/dashboard-uid" | jq . > dashboard-backup.json</code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>📚 ELK Stack Advanced Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
+    <pre><code># Elasticsearch cluster configuration
+    cluster.name: "production-cluster"
+    node.name: "es-node-1"
+    path.data: /usr/share/elasticsearch/data
+    path.logs: /usr/share/elasticsearch/logs
+    network.host: 0.0.0.0
+    discovery.type: single-node
+    xpack.security.enabled: true
+    xpack.monitoring.collection.enabled: true
+
+    # Logstash advanced pipeline
+    input {
+    beats {
+    port => 5044
+    }
+    kafka {
+    bootstrap_servers => "kafka:9092"
+    topics => ["application-logs"]
+    }
+    }
+
+    filter {
+    if [fields][service] == "nginx" {
+    grok {
+    match => { "message" => "%{NGINX_ACCESS}" }
+    }
+    date {
+    match => [ "timestamp", "dd/MMM/yyyy:HH:mm:ss Z" ]
+    }
+    geoip {
+    source => "clientip"
+    }
+    }
+
+    if [fields][service] == "application" {
+    json {
+    source => "message"
+    }
+    }
+    }
+
+    output {
+    elasticsearch {
+    hosts => ["elasticsearch:9200"]
+    index => "logs-%{[fields][service]}-%{+YYYY.MM.dd}"
+    template_name => "logs"
+    template_pattern => "logs-*"
+    }
+    }
+
+    # Kibana index patterns and visualizations
+    curl -X POST "kibana:5601/api/saved_objects/_import" \
+    -H "kbn-xsrf: true" \
+    --form file=@dashboards.ndjson</code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🔍 Distributed Tracing with Jaeger</h4>
+    <div class="command-category">
+      <span class="category-tag category-advanced">[ADVANCED]</span>
+      <span class="category-description">For complex production scenarios</span>
+    </div>
+    <pre><code># Jaeger deployment with Kubernetes
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+    name: jaeger
+    spec:
+    replicas: 1
+    selector:
+    matchLabels:
+    app: jaeger
+    template:
+    metadata:
+    labels:
+    app: jaeger
+    spec:
+    containers:
+    - name: jaeger
+    image: jaegertracing/all-in-one:latest
+    ports:
+    - containerPort: 16686
+    - containerPort: 14268
+    env:
+    - name: COLLECTOR_ZIPKIN_HTTP_PORT
+    value: "9411"
+
+    # OpenTelemetry collector configuration
+    receivers:
+    otlp:
+    protocols:
+    grpc:
+    endpoint: 0.0.0.0:4317
+    http:
+    endpoint: 0.0.0.0:4318
+
+    processors:
+    batch:
+    memory_limiter:
+    limit_mib: 512
+
+    exporters:
+    jaeger:
+    endpoint: jaeger:14250
+    tls:
+    insecure: true
+
+    service:
+    pipelines:
+    traces:
+    receivers: [otlp]
+    processors: [memory_limiter, batch]
+    exporters: [jaeger]</code></pre>
+  </div>
+</div>
+
+<h2 id="performance">66. ⚡ PERFORMANCE MONITORING & TUNING</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">performance bottleneck analysis, system optimization, resource utilization monitoring, capacity planning, and performance tuning exercises</strong></p>
+</div>
+
+<h3>💾 iostat (I/O Statistics)</h3>
+<div class="command-block">
+  <h4>📊 Understanding Performance Monitoring Tools</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # Linux Performance Observability Tools:
+  #
+  # CPU Monitoring:
+  # - top/htop - Real-time process viewer
+  # - mpstat - Per-CPU statistics
+  # - sar -u - Historical CPU usage
+  # - pidstat -u - Per-process CPU
+  #
+  # Memory Monitoring:
+  # - free - Memory usage overview
+  # - vmstat - Virtual memory stats
+  # - sar -r - Historical memory
+  # - pidstat -r - Per-process memory
+  #
+  # Disk I/O Monitoring:
+  # - iostat - I/O statistics
+  # - iotop - I/O by process
+  # - sar -d - Historical disk I/O
+  # - pidstat -d - Per-process I/O
+  #
+  # Network Monitoring:
+  # - ss/netstat - Socket statistics
+  # - sar -n DEV - Network interface stats
+  # - nethogs - Bandwidth by process
+  # - iftop - Interface bandwidth monitor
+
+  # Key Performance Metrics:
+  #
+  # Load Average (uptime):
+  # - 1, 5, 15 minute averages
+  # - Number of processes waiting for CPU
+  # - Rule of thumb: < number of CPU cores is good
+  # - Example: Load of 2.0 on dual-core system = 100% utilized
+  #
+  # CPU Usage (%):
+  # - us (user) - User-space processes
+  # - sy (system) - Kernel-space processes
+  # - id (idle) - Idle time (higher = less utilized)
+  # - wa (iowait) - Waiting for I/O (high = I/O bottleneck)
+  # - st (steal) - Time stolen by hypervisor (VM environments)
+  #
+  # Memory Usage:
+  # - total - Total physical RAM
+  # - used - Used memory
+  # - free - Unused memory
+  # - available - Memory available for new apps (includes cache)
+  # - buffers/cache - Kernel buffers and page cache
+  # - swap - Virtual memory on disk (high swap usage = low RAM)
+  #
+  # Disk I/O:
+  # - tps (transactions per second) - I/O operations
+  # - kB_read/s - Kilobytes read per second
+  # - kB_wrtn/s - Kilobytes written per second
+  # - %util - Disk utilization (>80% = bottleneck)
+
+  # Performance Bottleneck Identification:
+  #
+  # CPU Bottleneck:
+  # - High load average (> CPU cores)
+  # - Low %id (idle) in top
+  # - High %us or %sy
+  # Solution: Add CPU cores, optimize code, use caching
+  #
+  # Memory Bottleneck:
+  # - Low "available" memory
+  # - High swap usage
+  # - Frequent page faults
+  # Solution: Add RAM, optimize memory usage, tune swappiness
+  #
+  # Disk I/O Bottleneck:
+  # - High %iowait in top
+  # - High %util in iostat
+  # - Long response times
+  # Solution: Use SSD, RAID, optimize queries, add cache
+  #
+  # Network Bottleneck:
+  # - Packet drops/errors
+  # - High bandwidth utilization
+  # - Connection timeouts
+  # Solution: Upgrade bandwidth, use CDN, optimize traffic
+
+  # Monitoring Best Practices:
+  # 1. Establish baseline metrics (normal system behavior)
+  # 2. Monitor trends over time (not just current values)
+  # 3. Set up alerts for thresholds
+  # 4. Collect metrics at regular intervals (e.g., every 5 min)
+  # 5. Archive historical data for analysis
+  # 6. Use visualization tools (Grafana) for easier interpretation
+
+  # Common Performance Issues:
+  #
+  # High Load Average + Low CPU Usage = I/O bottleneck
+  # High CPU Usage + Low Load = CPU-intensive but not waiting
+  # High Memory Usage + Swap = Need more RAM
+  # Network Drops + Low Bandwidth = Configuration issue
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📊 Basic I/O stats - Enterprise Disk Performance Analysis</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # Enterprise I/O Statistics Analysis (Enterprise Standards)
+  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
+
+  # Basic I/O Monitoring (Enterprise)
+  iostat          # Basic report (current I/O statistics)
+  iostat -x       # Extended statistics (detailed I/O metrics)
+  iostat -x 1 10  # Every 1 second, 10 times (monitoring interval)
+  iostat -d       # Device utilization only (simplified output)
+  iostat -c       # CPU utilization only (CPU-focused monitoring)
+  iostat -p sda   # Specific device monitoring (targeted analysis)
+  iostat -m       # Display in MB/s (megabytes per second)
+  iostat -k       # Display in KB/s (kilobytes per second)
+
+  # Enterprise I/O Analysis Parameters (Enterprise)
+  # -r/s: Reads per second (disk read operations)
+  # -w/s: Writes per second (disk write operations)
+  # -rkB/s: Kilobytes read per second (read throughput)
+  # -wkB/s: Kilobytes written per second (write throughput)
+  # -await: Average I/O wait time (performance indicator)
+  # -util: Device utilization percentage (capacity usage)
+  # -svctm: System, user, CPU, I/O wait times (detailed timing)
+
+  # Advanced I/O Monitoring (Enterprise)
+  iostat -xz 5    # Extended stats, omit zeros, 5-second interval
+  iostat -y       # Display in human-readable format
+  iostat -t sda   # Show timestamp with statistics
+  iostat -j       # JSON output format (scripting integration)
+  iostat -h       # Device utilization with human-readable output
+  iostat -N 1     # Show first N devices only
+
+  # Enterprise Performance Indicators (Enterprise)
+  # - %util < 20%: Underutilized disk (consider consolidation)
+  # - %util 20-80%: Healthy utilization (optimal range)
+  # - %util > 80%: Overutilized disk (performance bottleneck)
+  # - await < 5ms: Excellent I/O performance
+  # - await 5-20ms: Good I/O performance
+  # - await > 20ms: Poor I/O performance (investigate needed)
+
+  # Enterprise Troubleshooting Scenarios (Enterprise)
+  # High await + low %util: I/O bottleneck (investigate disk health)
+  # High %util + low await: Disk capacity issue (consider cleanup)
+  # High reads/writes: Application I/O intensive (optimize queries)
+  # Fluctuating performance: Check for competing processes
+  # Consistent high await: Storage hardware issues (plan replacement)
+
+  # Enterprise Best Practices (Enterprise)
+  # - Monitor I/O during peak business hours for capacity planning
+  # - Use specific device monitoring for critical storage volumes
+  # - Combine with other metrics (CPU, memory) for complete analysis
+  # - Set up automated alerts for performance threshold breaches
+  # - Document baseline performance for comparison
+  # - Use historical data for trend analysis and capacity planning
+  # - Implement proper logging and alerting for I/O issues
+
+  # Enterprise Integration and Automation (Enterprise)
+  # - Integrate with monitoring systems (Prometheus, Grafana)
+  # - Use node_exporter for I/O metrics collection
+  # - Implement automated reporting for performance trends
+  # - Use API integration for dashboard visualization
+  # - Configure alert thresholds for proactive monitoring
+  # - Use time-series databases for historical analysis
+  # - Implement capacity planning based on I/O growth trends
+
+  # Enterprise Security Considerations (Enterprise)
+  # - Monitor I/O for unusual access patterns (security monitoring)
+  # - Use proper permissions for I/O monitoring tools
+  # - Implement audit trails for I/O performance data
+  # - Secure I/O metrics transmission (encryption for remote monitoring)
+  # - Use I/O monitoring for compliance reporting
+  # - Document I/O monitoring procedures and access controls
+  # - Regular security audits of I/O monitoring systems
+  # - Use encrypted storage for historical I/O data
+</code></pre>
+</div>
+
+<h3>🧠 vmstat (Virtual Memory Statistics)</h3>
+
+<div class="command-block">
+  <h4>💾 Virtual memory stats - Enterprise Memory Analysis</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # Enterprise Virtual Memory Analysis (Enterprise Standards)
+  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
+
+  # Basic Memory Monitoring (Enterprise)
+  vmstat               # Basic report (current memory statistics)
+  vmstat 1 10          # Every 1 second, 10 times (continuous monitoring)
+  vmstat 5 5           # Every 5 seconds, 5 times (periodic sampling)
+  vmstat -w              # Wide output format (more columns)
+  vmstat -t              # Timestamp output (time-series data)
+
+  # Enterprise Memory Analysis Parameters (Enterprise)
+  # procs: Number of processes in different states (r=running, b=blocked)
+  # memory: Memory usage information (swpd, free, buff, cache)
+  # swap: Swap space usage (si=swap in, so=swap out)
+  # io: I/O statistics (bi=blocks in, bo=blocks out)
+  # system: System activity (in=interrupts, cs=context switches)
+
+  # Advanced Memory Monitoring (Enterprise)
+  vmstat -a            # Active/inactive memory (detailed memory breakdown)
+  vmstat -s            # Memory statistics summary (historical averages)
+  vmstat -d            # Disk statistics (disk I/O information)
+  vmstat -p /dev/sda1  # Partition statistics (specific device analysis)
+  vmstat -f              # Full output format (all available statistics)
+  vmstat -m 1           # Monitor memory every 1 minute (long-term trends)
+
+  # Enterprise Memory Performance Indicators (Enterprise)
+  # - procs r: Number of running processes (system load indicator)
+  # - procs b: Blocked processes (resource contention)
+  # - swpd: Swap used (memory pressure indicator)
+  # - free: Available memory (system capacity)
+  # - buff: Buffer memory (disk caching efficiency)
+  # - cache: Page cache (memory efficiency)
+  # - si/so: Swap activity (memory management efficiency)
+
+  # Enterprise Memory Troubleshooting (Enterprise)
+  # - High swpd + low free: Memory shortage (add RAM or optimize)
+  # - High blocked processes: Resource contention (investigate bottlenecks)
+  # - Low cache efficiency: Poor disk access patterns
+  # - High context switches: System overhead (optimize applications)
+  # - Frequent swapping: Memory pressure (tune swappiness)
+
+  # Enterprise Memory Optimization (Enterprise)
+  # - Monitor memory trends for capacity planning
+  # - Use vmstat with other tools for complete analysis
+  # - Implement memory alerts for threshold breaches
+  # - Optimize application memory usage
+  # - Tune kernel parameters (vm.swappiness, vm.vfs_cache_pressure)
+  # - Use memory profiling tools for application optimization
+
+  # Enterprise Best Practices (Enterprise)
+  # - Monitor memory during peak business hours
+  # - Establish baseline memory usage patterns
+  # - Use memory monitoring with performance analysis
+  # - Implement automated alerting for memory issues
+  # - Document memory capacity and growth trends
+  # - Use memory monitoring for capacity planning
+  # - Combine with other metrics for system health assessment
+
+  # Enterprise Security Considerations (Enterprise)
+  # - Monitor memory for unusual patterns (security monitoring)
+  # - Use memory monitoring for malware detection
+  # - Implement proper access controls for monitoring tools
+  # - Secure memory monitoring data transmission
+  # - Use memory monitoring for compliance reporting
+  # - Document memory monitoring procedures and policies
+  # - Regular security audits of memory monitoring systems
+  # - Use encrypted storage for historical memory data
+</code></pre>
+</div>
+<h3>🔍 strace/ltrace (System Call Tracing)</h3>
+
+<div class="command-block">
+  <h4>🔍 strace (system calls) - Enterprise System Call Tracing</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # Enterprise System Call Tracing (Enterprise Standards)
+  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
+
+  # Basic System Call Tracing (Enterprise)
+  strace command                     # Trace system calls (full trace)
+  strace -p PID                      # Attach to running process (live monitoring)
+  strace -c command                  # Count calls summary (performance analysis)
+  strace -e open,read,write command  # Trace specific calls (targeted analysis)
+  strace -o output.txt command       # Save to file (audit trail)
+  strace -f command                  # Follow child processes (comprehensive tracing)
+  strace -T command                  # Show time spent in calls (performance timing)
+
+  # Advanced System Call Analysis (Enterprise)
+  strace -s 1000 command             # Limit string size (output control)
+  strace -v command                  # Verbose output (detailed information)
+  strace -x command                  # Non-ASCII strings display (binary data)
+  strace -ff command                 # Follow forks with output files (process tree)
+  strace -d command                  # Debug output (development analysis)
+  strace -u username command         # Run as specific user (security context)
+
+  # Enterprise System Call Categories (Enterprise)
+  # - File operations: open, read, write, close, stat, lstat
+  # - Process operations: fork, execve, exit, wait, kill
+  # - Network operations: socket, bind, connect, accept, send, recv
+  # - Memory operations: mmap, brk, mprotect, madvise
+  # - IPC operations: pipe, shmget, semget, msgget
+  # - Signal operations: kill, signal, sigaction, sigprocmask
+
+  # Enterprise Performance Analysis (Enterprise)
+  strace -c -e trace=open,read,write command  # Count specific operations
+  strace -T -c command             # Time analysis of system calls
+  strace -f -o trace.log command  # Comprehensive process tracing
+  strace -p PID -c              # Live process performance analysis
+  strace -e trace=network command  # Network system call analysis
+  strace -e trace=file command     # File system call analysis
+
+  # Enterprise Debugging and Troubleshooting (Enterprise)
+  strace -e trace=write command 2>&1 | grep -v "ENOENT"  # Find failed writes
+  strace -p PID -e trace=connect,socket  # Network connection analysis
+  strace -f -o debug.log command  # Debug child process creation
+  strace -e trace=all -c command  # Complete system call profile
+  strace -p PID -T -e trace=stat  # File access timing analysis
+  strace -e trace=execve command  # Program execution tracking
+
+  # Enterprise Security Analysis (Enterprise)
+  strace -e trace=open,access command  # File access security audit
+  strace -e trace=connect,bind command  # Network security monitoring
+  strace -e trace=setuid,setgid command  # Privilege escalation detection
+  strace -u nobody command  # Run as unprivileged user (security testing)
+  strace -e trace=write,unlink command  # File modification tracking
+  strace -p PID -e trace=execve  # Process execution monitoring
+  strace -f -o security.log command  # Comprehensive security audit
+
+  # Enterprise Best Practices (Enterprise)
+  # - Use strace for application performance optimization
+  # - Monitor specific system calls for targeted analysis
+  # - Combine strace with other monitoring tools
+  # - Use strace output for security audit trails
+  # - Implement proper signal handling for clean tracing
+  # - Use appropriate filtering to reduce trace overhead
+  # - Document strace procedures and findings
+  # - Use strace in controlled environments for security
+
+  # Enterprise Security Considerations (Enterprise)
+  # - strace can expose sensitive data (passwords, keys)
+  # - Use strace only on systems you own or have permission
+  # - Secure strace output files (proper permissions)
+  # - Use strace for security auditing and incident analysis
+  # - Implement proper access controls for strace usage
+  # - Document strace security procedures and policies
+  # - Regular security audits of strace usage and data
+  # - Use strace data for compliance reporting
+  # - Consider privacy implications when tracing user processes
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📚 ltrace (library calls) - Enterprise Library Call Tracing</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # Enterprise Library Call Tracing (Enterprise Standards)
+  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
+
+  # Basic Library Call Tracing (Enterprise)
+  ltrace command                # Trace library calls (full trace)
+  ltrace -p PID                 # Attach to running process (live monitoring)
+  ltrace -c command             # Count calls summary (performance analysis)
+  ltrace -o output.txt command  # Save to file (audit trail)
+  ltrace -f command              # Follow child processes (comprehensive tracing)
+
+  # Advanced Library Call Analysis (Enterprise)
+  ltrace -s 1000 command       # Limit string size (output control)
+  ltrace -v command              # Verbose output (detailed information)
+  ltrace -x command              # Non-ASCII strings display (binary data)
+  ltrace -ff command             # Follow forks with output files (process tree)
+  ltrace -d command              # Debug output (development analysis)
+  ltrace -u username command    # Run as specific user (security context)
+
+  # Enterprise Library Call Categories (Enterprise)
+  # - Memory functions: malloc, free, realloc, calloc
+  # - String functions: strcpy, strcat, strcmp, strlen
+  # - File functions: fopen, fread, fwrite, fclose
+  # - Network functions: socket, connect, bind, send, recv
+  # - Process functions: fork, exec, wait, kill
+  # - Thread functions: pthread_create, pthread_join, mutex
+
+  # Enterprise Performance Analysis (Enterprise)
+  ltrace -c -e malloc command  # Count memory allocations
+  ltrace -c -e fopen command   # Count file operations
+  ltrace -c -e socket command  # Count network operations
+  ltrace -T -c command       # Time analysis of library calls
+  ltrace -f -o trace.log command  # Comprehensive process tracing
+  ltrace -p PID -T -e malloc command  # Live memory allocation monitoring
+  ltrace -c -e network command  # Network library call analysis
+  ltrace -e trace=exec command  # Program execution tracking
+
+  # Enterprise Debugging and Troubleshooting (Enterprise)
+  ltrace -e trace=malloc command 2>&1 | grep -v "ENOENT"  # Find failed allocations
+  ltrace -p PID -e trace=connect,socket command  # Network connection analysis
+  ltrace -f -o debug.log command  # Debug child process creation
+  ltrace -e trace=all -c command  # Complete library call profile
+  ltrace -p PID -T -e trace=stat command  # File access timing analysis
+  ltrace -e trace=execve command  # Process execution monitoring
+  ltrace -f -o security.log command  # Comprehensive security audit
+
+  # Enterprise Security Analysis (Enterprise)
+  ltrace -e trace=open,access command  # File access security audit
+  ltrace -e trace=connect,bind command  # Network security monitoring
+  ltrace -e trace=setuid,setgid command  # Privilege escalation detection
+  ltrace -e trace=system command  # System function security monitoring
+  ltrace -u nobody command  # Run as unprivileged user (security testing)
+  ltrace -e trace=write,unlink command  # File modification tracking
+  ltrace -p PID -e trace=execve command  # Process execution security monitoring
+  ltrace -f -o security.log command  # Comprehensive security audit
+
+  # Enterprise Best Practices (Enterprise)
+  # - Use ltrace for application performance optimization
+  # - Monitor specific library calls for targeted analysis
+  # - Use ltrace output for security audit trails
+  # - Implement proper signal handling for clean tracing
+  # - Use appropriate filtering to reduce trace overhead
+  # - Document ltrace procedures and findings
+  # - Use ltrace in controlled environments for security
+  # - Combine ltrace with other monitoring tools
+  # - Use ltrace for compatibility testing and debugging
+
+  # Enterprise Security Considerations (Enterprise)
+  # - ltrace can expose sensitive data (passwords, keys)
+  # - Use ltrace only on systems you own or have permission
+  # - Secure ltrace output files (proper permissions)
+  # - Use ltrace for security auditing and incident analysis
+  # - Implement proper access controls for ltrace usage
+  # - Document ltrace security procedures and policies
+  # - Regular security audits of ltrace usage and data
+  # - Use ltrace data for compliance reporting
+  # - Consider privacy implications when tracing user processes
+</code></pre>
+</div>
+
+<h3>📊 sar (System Activity Reporter)</h3>
+
+<div class="command-block">
+  <h4>⚡ CPU usage</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar          # CPU usage (default)
+  sar -u 1 10  # CPU every 1 sec, 10 times
+  sar -u ALL   # All CPU statistics
+  sar -P ALL   # Per-CPU statistics
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>💾 Memory usage</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar -r       # Memory utilization
+  sar -r 1 10  # Memory every 1 sec
+  sar -R       # Memory statistics
+  sar -S       # Swap space utilization
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>💾 I/O and transfer rate</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar -b       # I/O transfer rate
+  sar -d       # Block device statistics
+  sar -d -p    # Pretty names for devices
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🌐 Network statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar -n DEV   # Network interface statistics
+  sar -n EDEV  # Network errors
+  sar -n TCP   # TCP statistics
+  sar -n SOCK  # Socket statistics
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>⚖️ Load average</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar -q       # Queue length and load average
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📅 Historical data</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar -f /var/log/sa/sa01      # Read from specific file
+  sar -s 10:00:00 -e 11:00:00  # Time range
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📊 Generate report</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  sar -A       # All statistics
+  sadf -d      # Database format
+</code></pre>
+</div>
+
+<h3>⚡ mpstat (Multiprocessor Statistics)</h3>
+
+<div class="command-block">
+  <h4>⚡ CPU statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  mpstat              # All CPUs summary
+  mpstat -P ALL       # Per-CPU statistics
+  mpstat -P ALL 1 10  # Every 1 second, 10 times
+  mpstat -P 0         # CPU 0 only
+</code></pre>
+</div>
+
+<h3>🔄 pidstat (Process Statistics)</h3>
+
+<div class="command-block">
+  <h4>🔄 Process statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  pidstat           # Default statistics
+  pidstat 1 10      # Every 1 second, 10 times
+  pidstat -p PID    # Specific process
+  pidstat -u        # CPU usage
+  pidstat -r        # Memory usage
+  pidstat -d        # I/O statistics
+  pidstat -t        # Thread statistics
+  pidstat -C httpd  # Processes matching name
+</code></pre>
+</div>
+
+<h3>💾 iotop (I/O Monitor)</h3>
+
+<div class="command-block">
+  <h4>💾 I/O monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  iotop          # Interactive I/O monitor
+  iotop -o       # Only processes doing I/O
+  iotop -P       # Show processes, not threads
+  iotop -a       # Accumulated I/O
+  iotop -b -n 3  # Batch mode, 3 iterations
+</code></pre>
+</div>
+
+<h3>🌐 nethogs (Network Monitor)</h3>
+
+<div class="command-block">
+  <h4>🌐 Network bandwidth per process</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  nethogs       # Monitor all interfaces
+  nethogs eth0  # Specific interface
+  nethogs -d 5  # Update every 5 seconds
+</code></pre>
+</div>
+
+<h3>📡 iftop (Interface Monitor)</h3>
+
+<div class="command-block">
+  <h4>📡 Network interface monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  iftop          # Default interface
+  iftop -i eth0  # Specific interface
+  iftop -n       # No hostname lookup
+  iftop -P       # Show port numbers
+  iftop -B       # Display bandwidth in bytes
+</code></pre>
+</div>
+
+<h3>📊 dstat (Versatile Resource Statistics)</h3>
+
+<div class="command-block">
+  <h4>📊 Combined statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  dstat            # Default output
+  dstat -c         # CPU stats only
+  dstat -d         # Disk stats only
+  dstat -n         # Network stats only
+  dstat -m         # Memory stats only
+  dstat -cdnm      # Combined stats
+  dstat --top-cpu  # Show top CPU process
+  dstat --top-mem  # Show top memory process
+  dstat --top-io   # Show top I/O process
+</code></pre>
+</div>
+
+<h3>📈 nmon (Performance Monitor)</h3>
+
+<div class="command-block">
+  <h4>📈 Interactive performance monitor</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  nmon         # Start nmon
+  # Press keys for different views:
+  # c - CPU
+  # m - Memory
+  # d - Disk I/O
+  # n - Network
+  # t - Top processes
+  # q - Quit
+</code></pre>
+</div>
+<h3>🔧 perf (Linux Profiling)</h3>
+
+<div class="command-block">
+  <h4>🔧 CPU profiling</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  perf top                        # Real-time CPU profiler
+  perf top -p PID                 # Profile specific process
+  perf record -a -g sleep 10      # Record system-wide for 10 seconds
+  perf record -p PID -g sleep 10  # Record specific process
+  perf report                     # Analyze recorded data
+  perf report --stdio             # Text-based report
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📊 Event statistics</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  perf stat command                                   # Run command and show stats
+  perf stat -p PID sleep 10                           # Stats for running process
+  perf list                                           # List available events
+  perf stat -e cache-misses,cache-references command  # Specific events
+</code></pre>
+</div>
+
+<h3>⚙️ Tuning Commands</h3>
+
+<div class="command-block">
+  <h4>⚙️ sysctl (Kernel parameters)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  sysctl -a                            # Show all parameters
+  sysctl kernel.hostname               # Show specific parameter
+  sysctl -w net.ipv4.ip_forward=1      # Set parameter temporarily
+  sysctl -p                            # Load from /etc/sysctl.conf
+  sysctl -p /etc/sysctl.d/custom.conf  # Load from specific file
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>⚙️ Common tuning parameters</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # /etc/sysctl.conf or /etc/sysctl.d/*.conf
+  # net.ipv4.ip_forward = 1
+  # net.ipv4.tcp_tw_reuse = 1
+  # vm.swappiness = 10
+  # fs.file-max = 65536
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📄 Transparent Huge Pages</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
+  <pre><code>
+  cat /sys/kernel/mm/transparent_hugepage/enabled           # Check status
+  echo never > /sys/kernel/mm/transparent_hugepage/enabled  # Disable
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>⚡ CPU governor</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
+  <pre><code>
+  cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor                 # Check
+  echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  # Set
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>💾 I/O scheduler</h4>
+  <div class="command-category">
+    <span class="category-tag category-rare">[RARE]</span>
+    <span class="category-description">Used in specific or uncommon scenarios</span>
+  </div>
+  <pre><code>
+  cat /sys/block/sda/queue/scheduler              # Check scheduler
+  echo deadline > /sys/block/sda/queue/scheduler  # Set scheduler
+</code></pre>
+</div>
+
+<h2 id="performance-optimization">67. ⚡ PERFORMANCE OPTIMIZATION & TUNING</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system performance tuning, bottleneck analysis, resource optimization, benchmarking, and performance engineering</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>⚡ System Performance Tuning</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # CPU optimization
+  echo 'performance' > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+  tuned-adm profile throughput-performance
+  cpupower frequency-set -g performance
+
+  # Memory optimization
+  echo 3 > /proc/sys/vm/drop_caches
+  sysctl -w vm.swappiness=10
+  sysctl -w vm.dirty_ratio=15
+  sysctl -w vm.dirty_background_ratio=5
+
+  # Disk I/O optimization
+  echo deadline > /sys/block/sda/queue/scheduler
+  echo 1024 > /sys/block/sda/queue/read_ahead_kb
+  tune2fs -o journal_data_writeback /dev/sda1
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🌐 Network Performance</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # TCP tuning
+  sysctl -w net.core.rmem_max=16777216
+  sysctl -w net.core.wmem_max=16777216
+  sysctl -w net.ipv4.tcp_rmem='4096 87380 16777216'
+  sysctl -w net.ipv4.tcp_wmem='4096 65536 16777216'
+  sysctl -w net.ipv4.tcp_congestion_control=bbr
+
+  # Network interface optimization
+  ethtool -G eth0 rx 4096 tx 4096
+  ethtool -K eth0 gro on lro on tso on gso on
+  tc qdisc add dev eth0 root fq_codel
+
+  # Load balancing optimization
+  nginx -t && nginx -s reload
+  haproxy -f /etc/haproxy/haproxy.cfg -D
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🚀 Application Performance</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # JVM tuning
+  export JAVA_OPTS="-Xms4g -Xmx8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+  jstat -gc -t <pid> 5s
+  jmap -histo <pid>
+
+  # Database optimization
+  mysql -e "SHOW VARIABLES LIKE 'innodb_buffer_pool_size';"
+  postgresql -c "SELECT * FROM pg_settings WHERE name = 'shared_buffers';"
+  redis-cli CONFIG SET maxmemory 2gb
+
+  # Container performance
+  docker stats --no-stream
+  kubectl top nodes
+  kubectl top pods
+</code></pre>
+</div>
+
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 2: SECURITY & HARDENING</h3>
+      </div>
+<h2 id="security">68. 🛡️ SECURITY AND HARDENING</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -2370,769 +3437,1017 @@
   </code></pre>
 </div>
 
-<h2 id="performance">⚡ 51. PERFORMANCE MONITORING & TUNING</h2>
+<h2 id="devsecops">69. 🛡️ DEVSECOPS PRACTICES</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
   <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">performance bottleneck analysis, system optimization, resource utilization monitoring, capacity planning, and performance tuning exercises</strong></p>
-</div>
-
-<h3>💾 iostat (I/O Statistics)</h3>
-<div class="command-block">
-  <h4>📊 Understanding Performance Monitoring Tools</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # Linux Performance Observability Tools:
-  #
-  # CPU Monitoring:
-  # - top/htop - Real-time process viewer
-  # - mpstat - Per-CPU statistics
-  # - sar -u - Historical CPU usage
-  # - pidstat -u - Per-process CPU
-  #
-  # Memory Monitoring:
-  # - free - Memory usage overview
-  # - vmstat - Virtual memory stats
-  # - sar -r - Historical memory
-  # - pidstat -r - Per-process memory
-  #
-  # Disk I/O Monitoring:
-  # - iostat - I/O statistics
-  # - iotop - I/O by process
-  # - sar -d - Historical disk I/O
-  # - pidstat -d - Per-process I/O
-  #
-  # Network Monitoring:
-  # - ss/netstat - Socket statistics
-  # - sar -n DEV - Network interface stats
-  # - nethogs - Bandwidth by process
-  # - iftop - Interface bandwidth monitor
-
-  # Key Performance Metrics:
-  #
-  # Load Average (uptime):
-  # - 1, 5, 15 minute averages
-  # - Number of processes waiting for CPU
-  # - Rule of thumb: < number of CPU cores is good
-  # - Example: Load of 2.0 on dual-core system = 100% utilized
-  #
-  # CPU Usage (%):
-  # - us (user) - User-space processes
-  # - sy (system) - Kernel-space processes
-  # - id (idle) - Idle time (higher = less utilized)
-  # - wa (iowait) - Waiting for I/O (high = I/O bottleneck)
-  # - st (steal) - Time stolen by hypervisor (VM environments)
-  #
-  # Memory Usage:
-  # - total - Total physical RAM
-  # - used - Used memory
-  # - free - Unused memory
-  # - available - Memory available for new apps (includes cache)
-  # - buffers/cache - Kernel buffers and page cache
-  # - swap - Virtual memory on disk (high swap usage = low RAM)
-  #
-  # Disk I/O:
-  # - tps (transactions per second) - I/O operations
-  # - kB_read/s - Kilobytes read per second
-  # - kB_wrtn/s - Kilobytes written per second
-  # - %util - Disk utilization (>80% = bottleneck)
-
-  # Performance Bottleneck Identification:
-  #
-  # CPU Bottleneck:
-  # - High load average (> CPU cores)
-  # - Low %id (idle) in top
-  # - High %us or %sy
-  # Solution: Add CPU cores, optimize code, use caching
-  #
-  # Memory Bottleneck:
-  # - Low "available" memory
-  # - High swap usage
-  # - Frequent page faults
-  # Solution: Add RAM, optimize memory usage, tune swappiness
-  #
-  # Disk I/O Bottleneck:
-  # - High %iowait in top
-  # - High %util in iostat
-  # - Long response times
-  # Solution: Use SSD, RAID, optimize queries, add cache
-  #
-  # Network Bottleneck:
-  # - Packet drops/errors
-  # - High bandwidth utilization
-  # - Connection timeouts
-  # Solution: Upgrade bandwidth, use CDN, optimize traffic
-
-  # Monitoring Best Practices:
-  # 1. Establish baseline metrics (normal system behavior)
-  # 2. Monitor trends over time (not just current values)
-  # 3. Set up alerts for thresholds
-  # 4. Collect metrics at regular intervals (e.g., every 5 min)
-  # 5. Archive historical data for analysis
-  # 6. Use visualization tools (Grafana) for easier interpretation
-
-  # Common Performance Issues:
-  #
-  # High Load Average + Low CPU Usage = I/O bottleneck
-  # High CPU Usage + Low Load = CPU-intensive but not waiting
-  # High Memory Usage + Swap = Need more RAM
-  # Network Drops + Low Bandwidth = Configuration issue
-</code></pre>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">DevSecOps implementation, security scanning, vulnerability assessment, security automation, and secure pipeline development</strong></p>
 </div>
 
 <div class="command-block">
-  <h4>📊 Basic I/O stats - Enterprise Disk Performance Analysis</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # Enterprise I/O Statistics Analysis (Enterprise Standards)
-  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
-
-  # Basic I/O Monitoring (Enterprise)
-  iostat          # Basic report (current I/O statistics)
-  iostat -x       # Extended statistics (detailed I/O metrics)
-  iostat -x 1 10  # Every 1 second, 10 times (monitoring interval)
-  iostat -d       # Device utilization only (simplified output)
-  iostat -c       # CPU utilization only (CPU-focused monitoring)
-  iostat -p sda   # Specific device monitoring (targeted analysis)
-  iostat -m       # Display in MB/s (megabytes per second)
-  iostat -k       # Display in KB/s (kilobytes per second)
-
-  # Enterprise I/O Analysis Parameters (Enterprise)
-  # -r/s: Reads per second (disk read operations)
-  # -w/s: Writes per second (disk write operations)
-  # -rkB/s: Kilobytes read per second (read throughput)
-  # -wkB/s: Kilobytes written per second (write throughput)
-  # -await: Average I/O wait time (performance indicator)
-  # -util: Device utilization percentage (capacity usage)
-  # -svctm: System, user, CPU, I/O wait times (detailed timing)
-
-  # Advanced I/O Monitoring (Enterprise)
-  iostat -xz 5    # Extended stats, omit zeros, 5-second interval
-  iostat -y       # Display in human-readable format
-  iostat -t sda   # Show timestamp with statistics
-  iostat -j       # JSON output format (scripting integration)
-  iostat -h       # Device utilization with human-readable output
-  iostat -N 1     # Show first N devices only
-
-  # Enterprise Performance Indicators (Enterprise)
-  # - %util < 20%: Underutilized disk (consider consolidation)
-  # - %util 20-80%: Healthy utilization (optimal range)
-  # - %util > 80%: Overutilized disk (performance bottleneck)
-  # - await < 5ms: Excellent I/O performance
-  # - await 5-20ms: Good I/O performance
-  # - await > 20ms: Poor I/O performance (investigate needed)
-
-  # Enterprise Troubleshooting Scenarios (Enterprise)
-  # High await + low %util: I/O bottleneck (investigate disk health)
-  # High %util + low await: Disk capacity issue (consider cleanup)
-  # High reads/writes: Application I/O intensive (optimize queries)
-  # Fluctuating performance: Check for competing processes
-  # Consistent high await: Storage hardware issues (plan replacement)
-
-  # Enterprise Best Practices (Enterprise)
-  # - Monitor I/O during peak business hours for capacity planning
-  # - Use specific device monitoring for critical storage volumes
-  # - Combine with other metrics (CPU, memory) for complete analysis
-  # - Set up automated alerts for performance threshold breaches
-  # - Document baseline performance for comparison
-  # - Use historical data for trend analysis and capacity planning
-  # - Implement proper logging and alerting for I/O issues
-
-  # Enterprise Integration and Automation (Enterprise)
-  # - Integrate with monitoring systems (Prometheus, Grafana)
-  # - Use node_exporter for I/O metrics collection
-  # - Implement automated reporting for performance trends
-  # - Use API integration for dashboard visualization
-  # - Configure alert thresholds for proactive monitoring
-  # - Use time-series databases for historical analysis
-  # - Implement capacity planning based on I/O growth trends
-
-  # Enterprise Security Considerations (Enterprise)
-  # - Monitor I/O for unusual access patterns (security monitoring)
-  # - Use proper permissions for I/O monitoring tools
-  # - Implement audit trails for I/O performance data
-  # - Secure I/O metrics transmission (encryption for remote monitoring)
-  # - Use I/O monitoring for compliance reporting
-  # - Document I/O monitoring procedures and access controls
-  # - Regular security audits of I/O monitoring systems
-  # - Use encrypted storage for historical I/O data
-</code></pre>
-</div>
-
-<h3>🧠 vmstat (Virtual Memory Statistics)</h3>
-
-<div class="command-block">
-  <h4>💾 Virtual memory stats - Enterprise Memory Analysis</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # Enterprise Virtual Memory Analysis (Enterprise Standards)
-  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
-
-  # Basic Memory Monitoring (Enterprise)
-  vmstat               # Basic report (current memory statistics)
-  vmstat 1 10          # Every 1 second, 10 times (continuous monitoring)
-  vmstat 5 5           # Every 5 seconds, 5 times (periodic sampling)
-  vmstat -w              # Wide output format (more columns)
-  vmstat -t              # Timestamp output (time-series data)
-
-  # Enterprise Memory Analysis Parameters (Enterprise)
-  # procs: Number of processes in different states (r=running, b=blocked)
-  # memory: Memory usage information (swpd, free, buff, cache)
-  # swap: Swap space usage (si=swap in, so=swap out)
-  # io: I/O statistics (bi=blocks in, bo=blocks out)
-  # system: System activity (in=interrupts, cs=context switches)
-
-  # Advanced Memory Monitoring (Enterprise)
-  vmstat -a            # Active/inactive memory (detailed memory breakdown)
-  vmstat -s            # Memory statistics summary (historical averages)
-  vmstat -d            # Disk statistics (disk I/O information)
-  vmstat -p /dev/sda1  # Partition statistics (specific device analysis)
-  vmstat -f              # Full output format (all available statistics)
-  vmstat -m 1           # Monitor memory every 1 minute (long-term trends)
-
-  # Enterprise Memory Performance Indicators (Enterprise)
-  # - procs r: Number of running processes (system load indicator)
-  # - procs b: Blocked processes (resource contention)
-  # - swpd: Swap used (memory pressure indicator)
-  # - free: Available memory (system capacity)
-  # - buff: Buffer memory (disk caching efficiency)
-  # - cache: Page cache (memory efficiency)
-  # - si/so: Swap activity (memory management efficiency)
-
-  # Enterprise Memory Troubleshooting (Enterprise)
-  # - High swpd + low free: Memory shortage (add RAM or optimize)
-  # - High blocked processes: Resource contention (investigate bottlenecks)
-  # - Low cache efficiency: Poor disk access patterns
-  # - High context switches: System overhead (optimize applications)
-  # - Frequent swapping: Memory pressure (tune swappiness)
-
-  # Enterprise Memory Optimization (Enterprise)
-  # - Monitor memory trends for capacity planning
-  # - Use vmstat with other tools for complete analysis
-  # - Implement memory alerts for threshold breaches
-  # - Optimize application memory usage
-  # - Tune kernel parameters (vm.swappiness, vm.vfs_cache_pressure)
-  # - Use memory profiling tools for application optimization
-
-  # Enterprise Best Practices (Enterprise)
-  # - Monitor memory during peak business hours
-  # - Establish baseline memory usage patterns
-  # - Use memory monitoring with performance analysis
-  # - Implement automated alerting for memory issues
-  # - Document memory capacity and growth trends
-  # - Use memory monitoring for capacity planning
-  # - Combine with other metrics for system health assessment
-
-  # Enterprise Security Considerations (Enterprise)
-  # - Monitor memory for unusual patterns (security monitoring)
-  # - Use memory monitoring for malware detection
-  # - Implement proper access controls for monitoring tools
-  # - Secure memory monitoring data transmission
-  # - Use memory monitoring for compliance reporting
-  # - Document memory monitoring procedures and policies
-  # - Regular security audits of memory monitoring systems
-  # - Use encrypted storage for historical memory data
-</code></pre>
-</div>
-<h3>🔍 strace/ltrace (System Call Tracing)</h3>
-
-<div class="command-block">
-  <h4>🔍 strace (system calls) - Enterprise System Call Tracing</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # Enterprise System Call Tracing (Enterprise Standards)
-  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
-
-  # Basic System Call Tracing (Enterprise)
-  strace command                     # Trace system calls (full trace)
-  strace -p PID                      # Attach to running process (live monitoring)
-  strace -c command                  # Count calls summary (performance analysis)
-  strace -e open,read,write command  # Trace specific calls (targeted analysis)
-  strace -o output.txt command       # Save to file (audit trail)
-  strace -f command                  # Follow child processes (comprehensive tracing)
-  strace -T command                  # Show time spent in calls (performance timing)
-
-  # Advanced System Call Analysis (Enterprise)
-  strace -s 1000 command             # Limit string size (output control)
-  strace -v command                  # Verbose output (detailed information)
-  strace -x command                  # Non-ASCII strings display (binary data)
-  strace -ff command                 # Follow forks with output files (process tree)
-  strace -d command                  # Debug output (development analysis)
-  strace -u username command         # Run as specific user (security context)
-
-  # Enterprise System Call Categories (Enterprise)
-  # - File operations: open, read, write, close, stat, lstat
-  # - Process operations: fork, execve, exit, wait, kill
-  # - Network operations: socket, bind, connect, accept, send, recv
-  # - Memory operations: mmap, brk, mprotect, madvise
-  # - IPC operations: pipe, shmget, semget, msgget
-  # - Signal operations: kill, signal, sigaction, sigprocmask
-
-  # Enterprise Performance Analysis (Enterprise)
-  strace -c -e trace=open,read,write command  # Count specific operations
-  strace -T -c command             # Time analysis of system calls
-  strace -f -o trace.log command  # Comprehensive process tracing
-  strace -p PID -c              # Live process performance analysis
-  strace -e trace=network command  # Network system call analysis
-  strace -e trace=file command     # File system call analysis
-
-  # Enterprise Debugging and Troubleshooting (Enterprise)
-  strace -e trace=write command 2>&1 | grep -v "ENOENT"  # Find failed writes
-  strace -p PID -e trace=connect,socket  # Network connection analysis
-  strace -f -o debug.log command  # Debug child process creation
-  strace -e trace=all -c command  # Complete system call profile
-  strace -p PID -T -e trace=stat  # File access timing analysis
-  strace -e trace=execve command  # Program execution tracking
-
-  # Enterprise Security Analysis (Enterprise)
-  strace -e trace=open,access command  # File access security audit
-  strace -e trace=connect,bind command  # Network security monitoring
-  strace -e trace=setuid,setgid command  # Privilege escalation detection
-  strace -u nobody command  # Run as unprivileged user (security testing)
-  strace -e trace=write,unlink command  # File modification tracking
-  strace -p PID -e trace=execve  # Process execution monitoring
-  strace -f -o security.log command  # Comprehensive security audit
-
-  # Enterprise Best Practices (Enterprise)
-  # - Use strace for application performance optimization
-  # - Monitor specific system calls for targeted analysis
-  # - Combine strace with other monitoring tools
-  # - Use strace output for security audit trails
-  # - Implement proper signal handling for clean tracing
-  # - Use appropriate filtering to reduce trace overhead
-  # - Document strace procedures and findings
-  # - Use strace in controlled environments for security
-
-  # Enterprise Security Considerations (Enterprise)
-  # - strace can expose sensitive data (passwords, keys)
-  # - Use strace only on systems you own or have permission
-  # - Secure strace output files (proper permissions)
-  # - Use strace for security auditing and incident analysis
-  # - Implement proper access controls for strace usage
-  # - Document strace security procedures and policies
-  # - Regular security audits of strace usage and data
-  # - Use strace data for compliance reporting
-  # - Consider privacy implications when tracing user processes
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📚 ltrace (library calls) - Enterprise Library Call Tracing</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # Enterprise Library Call Tracing (Enterprise Standards)
-  # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
-
-  # Basic Library Call Tracing (Enterprise)
-  ltrace command                # Trace library calls (full trace)
-  ltrace -p PID                 # Attach to running process (live monitoring)
-  ltrace -c command             # Count calls summary (performance analysis)
-  ltrace -o output.txt command  # Save to file (audit trail)
-  ltrace -f command              # Follow child processes (comprehensive tracing)
-
-  # Advanced Library Call Analysis (Enterprise)
-  ltrace -s 1000 command       # Limit string size (output control)
-  ltrace -v command              # Verbose output (detailed information)
-  ltrace -x command              # Non-ASCII strings display (binary data)
-  ltrace -ff command             # Follow forks with output files (process tree)
-  ltrace -d command              # Debug output (development analysis)
-  ltrace -u username command    # Run as specific user (security context)
-
-  # Enterprise Library Call Categories (Enterprise)
-  # - Memory functions: malloc, free, realloc, calloc
-  # - String functions: strcpy, strcat, strcmp, strlen
-  # - File functions: fopen, fread, fwrite, fclose
-  # - Network functions: socket, connect, bind, send, recv
-  # - Process functions: fork, exec, wait, kill
-  # - Thread functions: pthread_create, pthread_join, mutex
-
-  # Enterprise Performance Analysis (Enterprise)
-  ltrace -c -e malloc command  # Count memory allocations
-  ltrace -c -e fopen command   # Count file operations
-  ltrace -c -e socket command  # Count network operations
-  ltrace -T -c command       # Time analysis of library calls
-  ltrace -f -o trace.log command  # Comprehensive process tracing
-  ltrace -p PID -T -e malloc command  # Live memory allocation monitoring
-  ltrace -c -e network command  # Network library call analysis
-  ltrace -e trace=exec command  # Program execution tracking
-
-  # Enterprise Debugging and Troubleshooting (Enterprise)
-  ltrace -e trace=malloc command 2>&1 | grep -v "ENOENT"  # Find failed allocations
-  ltrace -p PID -e trace=connect,socket command  # Network connection analysis
-  ltrace -f -o debug.log command  # Debug child process creation
-  ltrace -e trace=all -c command  # Complete library call profile
-  ltrace -p PID -T -e trace=stat command  # File access timing analysis
-  ltrace -e trace=execve command  # Process execution monitoring
-  ltrace -f -o security.log command  # Comprehensive security audit
-
-  # Enterprise Security Analysis (Enterprise)
-  ltrace -e trace=open,access command  # File access security audit
-  ltrace -e trace=connect,bind command  # Network security monitoring
-  ltrace -e trace=setuid,setgid command  # Privilege escalation detection
-  ltrace -e trace=system command  # System function security monitoring
-  ltrace -u nobody command  # Run as unprivileged user (security testing)
-  ltrace -e trace=write,unlink command  # File modification tracking
-  ltrace -p PID -e trace=execve command  # Process execution security monitoring
-  ltrace -f -o security.log command  # Comprehensive security audit
-
-  # Enterprise Best Practices (Enterprise)
-  # - Use ltrace for application performance optimization
-  # - Monitor specific library calls for targeted analysis
-  # - Use ltrace output for security audit trails
-  # - Implement proper signal handling for clean tracing
-  # - Use appropriate filtering to reduce trace overhead
-  # - Document ltrace procedures and findings
-  # - Use ltrace in controlled environments for security
-  # - Combine ltrace with other monitoring tools
-  # - Use ltrace for compatibility testing and debugging
-
-  # Enterprise Security Considerations (Enterprise)
-  # - ltrace can expose sensitive data (passwords, keys)
-  # - Use ltrace only on systems you own or have permission
-  # - Secure ltrace output files (proper permissions)
-  # - Use ltrace for security auditing and incident analysis
-  # - Implement proper access controls for ltrace usage
-  # - Document ltrace security procedures and policies
-  # - Regular security audits of ltrace usage and data
-  # - Use ltrace data for compliance reporting
-  # - Consider privacy implications when tracing user processes
-</code></pre>
-</div>
-
-<h3>📊 sar (System Activity Reporter)</h3>
-
-<div class="command-block">
-  <h4>⚡ CPU usage</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar          # CPU usage (default)
-  sar -u 1 10  # CPU every 1 sec, 10 times
-  sar -u ALL   # All CPU statistics
-  sar -P ALL   # Per-CPU statistics
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>💾 Memory usage</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar -r       # Memory utilization
-  sar -r 1 10  # Memory every 1 sec
-  sar -R       # Memory statistics
-  sar -S       # Swap space utilization
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>💾 I/O and transfer rate</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar -b       # I/O transfer rate
-  sar -d       # Block device statistics
-  sar -d -p    # Pretty names for devices
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🌐 Network statistics</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar -n DEV   # Network interface statistics
-  sar -n EDEV  # Network errors
-  sar -n TCP   # TCP statistics
-  sar -n SOCK  # Socket statistics
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>⚖️ Load average</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar -q       # Queue length and load average
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📅 Historical data</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar -f /var/log/sa/sa01      # Read from specific file
-  sar -s 10:00:00 -e 11:00:00  # Time range
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📊 Generate report</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  sar -A       # All statistics
-  sadf -d      # Database format
-</code></pre>
-</div>
-
-<h3>⚡ mpstat (Multiprocessor Statistics)</h3>
-
-<div class="command-block">
-  <h4>⚡ CPU statistics</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  mpstat              # All CPUs summary
-  mpstat -P ALL       # Per-CPU statistics
-  mpstat -P ALL 1 10  # Every 1 second, 10 times
-  mpstat -P 0         # CPU 0 only
-</code></pre>
-</div>
-
-<h3>🔄 pidstat (Process Statistics)</h3>
-
-<div class="command-block">
-  <h4>🔄 Process statistics</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  pidstat           # Default statistics
-  pidstat 1 10      # Every 1 second, 10 times
-  pidstat -p PID    # Specific process
-  pidstat -u        # CPU usage
-  pidstat -r        # Memory usage
-  pidstat -d        # I/O statistics
-  pidstat -t        # Thread statistics
-  pidstat -C httpd  # Processes matching name
-</code></pre>
-</div>
-
-<h3>💾 iotop (I/O Monitor)</h3>
-
-<div class="command-block">
-  <h4>💾 I/O monitoring</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  iotop          # Interactive I/O monitor
-  iotop -o       # Only processes doing I/O
-  iotop -P       # Show processes, not threads
-  iotop -a       # Accumulated I/O
-  iotop -b -n 3  # Batch mode, 3 iterations
-</code></pre>
-</div>
-
-<h3>🌐 nethogs (Network Monitor)</h3>
-
-<div class="command-block">
-  <h4>🌐 Network bandwidth per process</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  nethogs       # Monitor all interfaces
-  nethogs eth0  # Specific interface
-  nethogs -d 5  # Update every 5 seconds
-</code></pre>
-</div>
-
-<h3>📡 iftop (Interface Monitor)</h3>
-
-<div class="command-block">
-  <h4>📡 Network interface monitoring</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  iftop          # Default interface
-  iftop -i eth0  # Specific interface
-  iftop -n       # No hostname lookup
-  iftop -P       # Show port numbers
-  iftop -B       # Display bandwidth in bytes
-</code></pre>
-</div>
-
-<h3>📊 dstat (Versatile Resource Statistics)</h3>
-
-<div class="command-block">
-  <h4>📊 Combined statistics</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  dstat            # Default output
-  dstat -c         # CPU stats only
-  dstat -d         # Disk stats only
-  dstat -n         # Network stats only
-  dstat -m         # Memory stats only
-  dstat -cdnm      # Combined stats
-  dstat --top-cpu  # Show top CPU process
-  dstat --top-mem  # Show top memory process
-  dstat --top-io   # Show top I/O process
-</code></pre>
-</div>
-
-<h3>📈 nmon (Performance Monitor)</h3>
-
-<div class="command-block">
-  <h4>📈 Interactive performance monitor</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  nmon         # Start nmon
-  # Press keys for different views:
-  # c - CPU
-  # m - Memory
-  # d - Disk I/O
-  # n - Network
-  # t - Top processes
-  # q - Quit
-</code></pre>
-</div>
-<h3>🔧 perf (Linux Profiling)</h3>
-
-<div class="command-block">
-  <h4>🔧 CPU profiling</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  perf top                        # Real-time CPU profiler
-  perf top -p PID                 # Profile specific process
-  perf record -a -g sleep 10      # Record system-wide for 10 seconds
-  perf record -p PID -g sleep 10  # Record specific process
-  perf report                     # Analyze recorded data
-  perf report --stdio             # Text-based report
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📊 Event statistics</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  perf stat command                                   # Run command and show stats
-  perf stat -p PID sleep 10                           # Stats for running process
-  perf list                                           # List available events
-  perf stat -e cache-misses,cache-references command  # Specific events
-</code></pre>
-</div>
-
-<h3>⚙️ Tuning Commands</h3>
-
-<div class="command-block">
-  <h4>⚙️ sysctl (Kernel parameters)</h4>
+  <h4>🔍 Security Scanning in CI/CD</h4>
   <div class="command-category">
     <span class="category-tag category-production">[PRODUCTION]</span>
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  sysctl -a                            # Show all parameters
-  sysctl kernel.hostname               # Show specific parameter
-  sysctl -w net.ipv4.ip_forward=1      # Set parameter temporarily
-  sysctl -p                            # Load from /etc/sysctl.conf
-  sysctl -p /etc/sysctl.d/custom.conf  # Load from specific file
+  # SAST (Static Application Security Testing)
+  sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=src/
+  bandit -r src/
+  semgrep --config=auto src/
+
+  # DAST (Dynamic Application Security Testing)
+  zap-baseline.py -t http://myapp.example.com
+  nuclei -u http://myapp.example.com
+
+  # Container security scanning
+  trivy image --severity HIGH,CRITICAL myapp:latest
+  clairctl scan myapp:latest
 </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>⚙️ Common tuning parameters</h4>
+  <h4>🔐 Secrets Management</h4>
   <div class="command-category">
     <span class="category-tag category-production">[PRODUCTION]</span>
     <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  # /etc/sysctl.conf or /etc/sysctl.d/*.conf
-  # net.ipv4.ip_forward = 1
-  # net.ipv4.tcp_tw_reuse = 1
-  # vm.swappiness = 10
-  # fs.file-max = 65536
+  # HashiCorp Vault
+  vault server -dev
+  vault auth enable approle
+  vault write auth/approle/role/myapp token_policies="myapp-policy"
+  vault read auth/approle/role/myapp/role-id
+
+  # Kubernetes secrets
+  kubectl create secret generic mysecret --from-literal=password=mypassword
+  kubectl get secret mysecret -o yaml
+  kubectl apply -f sealed-secret.yaml
+
+  # AWS Secrets Manager
+  aws secretsmanager create-secret --name myapp-secret --secret-string '{"username":"admin","password":"mypassword"}'
+  aws secretsmanager get-secret-value --secret-id myapp-secret
 </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>📄 Transparent Huge Pages</h4>
+  <h4>📋 Compliance Automation</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # OpenSCAP
+  oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-server-upstream --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
+
+  # CIS Benchmarks
+  kube-bench run --config-dir /etc/kube-bench/cfg --benchmark cis-1.6
+
+  # AWS Config
+  aws configservice put-config-rule --config-rule file://config-rule.json
+  aws configservice get-compliance-details-by-config-rule --config-rule-name my-rule
+</code></pre>
+</div>
+
+<h2 id="security-compliance">70. 🛡️ SECURITY & COMPLIANCE AUTOMATION</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">security automation, compliance checking, policy enforcement, security scanning, and automated governance</strong></p>
+</div>
+
+<div>
+  <div class="command-block">
+    <h4>🔍 Container Security Scanning</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
+    <pre><code># Trivy integration in CI/CD
+    #!/bin/bash
+    IMAGE_NAME="myapp:${BUILD_NUMBER}"
+
+    # Scan for vulnerabilities
+    trivy image --severity HIGH,CRITICAL --format json --output trivy-report.json "$IMAGE_NAME"
+
+    # Check for critical vulnerabilities
+    CRITICAL_COUNT=$(jq '.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL") | .VulnerabilityID' trivy-report.json | wc -l)
+
+    if [ "$CRITICAL_COUNT" -gt 0 ]; then
+    echo "Found $CRITICAL_COUNT critical vulnerabilities"
+    exit 1
+    fi
+
+    # Generate SARIF report for GitHub
+    trivy image --format sarif --output trivy.sarif "$IMAGE_NAME"
+
+    # Grype alternative scanning
+    grype "$IMAGE_NAME" -o json > grype-report.json</code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🛡️ Kubernetes Security Policies</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
+    <pre><code>
+    # Pod Security Standards
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+    name: secure-namespace
+    labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+    # Network Policy example
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+    name: deny-all
+    spec:
+    podSelector: {}
+    policyTypes:
+    - Ingress
+    - Egress
+
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+    name: allow-frontend
+    spec:
+    podSelector:
+    matchLabels:
+    app: frontend
+    policyTypes:
+    - Ingress
+    - Egress
+    ingress:
+    - from:
+    - podSelector:
+    matchLabels:
+    app: ingress
+    ports:
+    - protocol: TCP
+    port: 80
+
+    # OPA Gatekeeper policies
+    apiVersion: templates.gatekeeper.sh/v1beta1
+    kind: ConstraintTemplate
+    metadata:
+    name: k8srequiredlabels
+    spec:
+    crd:
+    spec:
+    names:
+    kind: K8sRequiredLabels
+    targets:
+    - target: admission.k8s.gatekeeper.sh
+    rego: |
+    package k8srequiredlabels
+    violation[{"msg": msg}] {
+    required := input.parameters.labels
+    provided := input.review.object.metadata.labels
+    missing := {x | x := required[_] not in provided}
+    count(missing) > 0
+    msg := sprintf("missing required labels: %v", [missing])
+    }</code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>✅ Compliance Automation</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
+    <pre><code>
+    # CIS Benchmarks automation
+    #!/bin/bash
+    # CIS Kubernetes Benchmark automation
+
+    # Kubernetes Apply Operations (Enterprise Standards)
+    # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
+
+    # Apply Manifests
+    kubectl apply -f https://github.com/aquasecurity/kube-bench/releases/latest/download/kube-bench.yaml
+    kubectl exec -it $(kubectl get pods -l app=kube-bench -o jsonpath='{.items[0].metadata.name}') -- \
+    kube-bench --config-dir=/etc/kube-bench/cfg --benchmark cis-1.6
+
+    # OpenSCAP scanning
+    oscap xccdf eval \
+    --profile xccdf_org.ssgproject.content_profile_cis \
+    --results-arf results.arf \
+    --report report.html \
+    /usr/share/xml/scap/ssg/content/ssg-rhel8-xccdf.xml
+
+    # AWS Config rules
+    aws configservice put-config-rule \
+    --config-rule file://s3-bucket-public-read-prohibited.json
+
+    aws configservice start-config-rules-evaluation \
+    --config-rule-name s3-bucket-public-read-prohibited
+
+    # Azure Policy
+    az policy assignment create \
+    --name 'storage-accounts-secure-transfer' \
+    --policy 'storage-accounts-secure-transfer' \
+    --scope '/subscriptions/{subscription-id}'</code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🔐 Secrets Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-security">[SECURITY]</span>
+      <span class="category-description">Security and compliance operations</span>
+    </div>
+    <pre><code>
+    # HashiCorp Vault integration
+    vault auth enable kubernetes
+    vault write auth/kubernetes/config \
+    kubernetes_host="https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT" \
+    kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+    token_reviewer_jwt=@/var/run/secrets/kubernetes.io/serviceaccount/token
+
+    vault policy write myapp - <<EOF
+    path "secret/data/myapp/*" {
+    capabilities = ["read"]
+    }
+    EOF
+
+    vault write auth/kubernetes/role/myapp \
+    bound_service_account_names=myapp \
+    bound_service_account_namespaces=default \
+    policies=myapp \
+    ttl=24h
+
+    # Kubernetes Secrets Operator
+    apiVersion: v1
+    kind: Secret
+    metadata:
+    name: vault-secret
+    annotations:
+    vault.security.banzaicloud.io/vault-role: "myapp"
+    vault.security.banzaicloud.io/vault-addr: "https://vault:8200"
+    vault.security.banzaicloud.io/vault-tls-secret: "vault-tls"
+    type: Opaque
+    stringData:
+    vault-path: "secret/data/myapp/database"
+    vault-keys: "username,password"</code></pre>
+  </div>
+</div>
+
+<h2 id="security-automation">71. 🤖 SECURITY AUTOMATION & COMPLIANCE</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">security automation, compliance checking, policy enforcement, security testing, and automated governance</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>🤖 Automated Security Testing</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # OWASP ZAP automation
+  docker run -t owasp/zap2docker-stable zap-baseline.py -t http://myapp.example.com -J report.json
+
+  # Security in pipeline
+  stage('Security Scan') {
+  parallel(
+  'SAST': { sh 'sonar-scanner' },
+  'DAST': { sh 'zap-baseline.py -t http://myapp.example.com' },
+  'Dependency Scan': { sh 'safety check' }
+  )
+  }
+
+  # Infrastructure security
+  tfsec ./terraform/
+  checkov -d ./terraform/
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📊 Compliance Monitoring</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # AWS Config rules
+  aws configservice put-config-rule --config-rule file://rule.json
+  aws configservice start-config-rule-evaluation --config-rule-name my-rule
+
+  # Azure Policy
+  az policy assignment create --name 'my-policy' --policy 'my-policy-definition' --scope '/subscriptions/my-subscription'
+
+  # Continuous compliance monitoring
+  aws configservice get-compliance-summary-by-config-rule
+  az policy state list
+</code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🚨 Incident Response Automation</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # AWS GuardDuty
+  aws guardduty create-detector --enable
+  aws guardduty create-ip-set --detector-id my-detector --ip-set-file ip-set.json
+
+  # Azure Sentinel
+  az sentinel alert-rule create --resource-group my-rg --workspace-name my-workspace --name my-rule --logic-app-resource-id /subscriptions/my-subscription/resourceGroups/my-rg/providers/Microsoft.Logic/workflows/my-workflow
+
+  # Automated response
+  aws lambda create-function --function-name incident-response --runtime python3.9 --handler incident_response.lambda_handler --zip-file fileb://function.zip
+</code></pre>
+</div>
+
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 3: HIGH AVAILABILITY & INCIDENT RESPONSE</h3>
+      </div>
+<h2 id="ha-load-balancing">72. ⚖️ HIGH AVAILABILITY & LOAD BALANCING (HAProxy, Nginx LB, Pacemaker/Corosync clusters)</h2>
+
+<!-- WHEN TO USE THESE COMMANDS SECTION -->
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">high availability setup, load balancer configuration, cluster management, failover testing, and traffic distribution optimization</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>📚 Understanding High Availability Concepts</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # High Availability (HA):
+  # - System continues operating despite component failures
+  # - Minimizes downtime and data loss
+  # - Measured in "nines" of uptime
+
+  # Availability Levels:
+  # 99%       = 3.65 days downtime/year
+  # 99.9%     = 8.77 hours downtime/year
+  # 99.99%    = 52.6 minutes downtime/year
+  # 99.999%   = 5.26 minutes downtime/year (five nines)
+  # 99.9999%  = 31.5 seconds downtime/year (six nines)
+
+  # HA Architecture Components:
+  #
+  # Load Balancer:
+  # - Distributes traffic across multiple servers
+  # - Health checks to detect failures
+  # - Examples: HAProxy, Nginx, AWS ELB
+  #
+  # Cluster:
+  # - Group of servers working together
+  # - Shared resources (IP, storage)
+  # - Automatic failover
+  # - Examples: Pacemaker, Corosync, Keepalived
+  #
+  # Redundancy:
+  # - Multiple copies of critical components
+  # - Active-Active: All nodes handle traffic
+  # - Active-Passive: Standby nodes wait for failure
+
+  # Load Balancing Algorithms:
+  #
+  # Round Robin:
+  # - Requests distributed evenly (server1, server2, server3, repeat)
+  # - Simple, fair distribution
+  # - Ignores server load
+  #
+  # Least Connections:
+  # - Send to server with fewest active connections
+  # - Better for long-lived connections
+  # - Adapts to varying server load
+  #
+  # IP Hash:
+  # - Client IP determines server
+  # - Session persistence (sticky sessions)
+  # - Same client always goes to same server
+  #
+  # Weighted:
+  # - Servers assigned weights based on capacity
+  # - More powerful servers get more traffic
+
+  # HAProxy vs Nginx Load Balancing:
+  #
+  # HAProxy:
+  # - Dedicated load balancer (L4 + L7)
+  # - Advanced health checks
+  # - SSL termination
+  # - Better for complex routing rules
+  #
+  # Nginx:
+  # - Web server + load balancer
+  # - Simpler configuration
+  # - Better for HTTP/HTTPS
+  # - Can serve static content + load balance
+
+  # Pacemaker/Corosync Cluster:
+  #
+  # Pacemaker:
+  # - Cluster Resource Manager
+  # - Manages services (resources)
+  # - Decides where resources run
+  # - Handles failover
+  #
+  # Corosync:
+  # - Cluster Communication System
+  # - Heartbeat between nodes
+  # - Detects node failures
+  # - Quorum management
+  #
+  # Resources:
+  # - Services managed by cluster (IP, database, web server)
+  # - Can be moved between nodes
+  # - Start/stop managed automatically
+
+  # Split-Brain Problem:
+  # - Cluster nodes can't communicate
+  # - Each thinks others are down
+  # - Both try to become active (data corruption risk)
+  #
+  # Solutions:
+  # - Quorum: Require majority of nodes to operate
+  # - Fencing: Shut down suspected failed nodes
+  # - STONITH: "Shoot The Other Node In The Head"
+
+  # Virtual IP (VIP):
+  # - Floating IP address
+  # - Moves between cluster nodes
+  # - Clients always connect to same IP
+  # - Automatic failover transparent to clients
+
+  # Health Checks:
+  # - TCP check: Port is open
+  # - HTTP check: Returns 200 OK
+  # - Custom script: Application-specific test
+  # - Interval: How often to check (e.g., every 5 sec)
+  # - Timeout: Max wait time for response
+  # - Failures: How many failures before marked down
+
+  # Session Persistence:
+  # - Sticky sessions (same client → same server)
+  # - Needed for stateful applications
+  # - Methods:
+  #   - Cookie-based (load balancer inserts cookie)
+  #   - IP-based (hash client IP)
+  #   - Session sharing (external session store like Redis)
+
+  # HA Best Practices:
+  # 1. No single point of failure
+  # 2. Automate failover (don't rely on manual intervention)
+  # 3. Test failover regularly
+  # 4. Monitor all components
+  # 5. Plan for split-brain scenarios
+  # 6. Document recovery procedures
+  # 7. Use automation (Ansible, Terraform)
+</code></pre>
+</div>
+
+<h3>⚖️ HAProxy Load Balancer</h3>
+<div class="command-block">
+  <h4>⚙️ Basic Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # HAProxy Service Management (Enterprise Standards)
+  systemctl start haproxy                            # Start HAProxy service
+  systemctl stop haproxy                             # Stop HAProxy service
+  systemctl restart haproxy                          # Restart HAProxy service
+  systemctl enable haproxy                           # Enable at boot (Persistence)
+  systemctl disable haproxy                          # Disable at boot
+  systemctl reload haproxy                           # Reload configuration
+  systemctl status haproxy                           # Check HAProxy service status
+  haproxy -c -f /etc/haproxy/haproxy.cfg          # Check configuration
+  haproxy -f /etc/haproxy/haproxy.cfg -d          # Start in debug mode
+</code></pre>
+</div>
+
+<h3>🌐 Nginx Load Balancing</h3>
+<div class="command-block">
+  <h4>⚙️ Configuration Example</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  upstream backend {
+  server web1.example.com;
+  server web2.example.com;
+  }
+
+  server {
+  listen 80;
+  location / {
+  proxy_pass http://backend;
+  }
+  }
+  systemctl restart nginx
+</code></pre>
+</div>
+
+<h3>🏗️ Pacemaker / Corosync Clusters</h3>
+<div class="command-block">
+  <h4>🔧 Cluster Commands</h4>
   <div class="command-category">
     <span class="category-tag category-rare">[RARE]</span>
     <span class="category-description">Used in specific or uncommon scenarios</span>
   </div>
   <pre><code>
-  cat /sys/kernel/mm/transparent_hugepage/enabled           # Check status
-  echo never > /sys/kernel/mm/transparent_hugepage/enabled  # Disable
+  pcs cluster setup --name mycluster node1 node2
+  pcs cluster start --all
+  pcs status   # Check cluster status
+  pcs resource create VirtualIP ocf:heartbeat:IPaddr ip=192.168.1.100 cidr_netmask=24
+  pcs resource enable VirtualIP
+</code></pre>
+</div>
+<h3>🛡️ Keepalived (VRRP for IP Failover)</h3>
+
+<div class="command-block">
+  <h4>⚙️ Keepalived service</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Keepalived Service Management (Enterprise Standards)
+  systemctl start keepalived                         # Start Keepalived service
+  systemctl stop keepalived                          # Stop Keepalived service
+  systemctl restart keepalived                       # Restart Keepalived service
+  systemctl enable keepalived                        # Enable at boot (Persistence)
+  systemctl disable keepalived                       # Disable at boot
+  systemctl reload keepalived                        # Reload configuration
+  systemctl status keepalived                        # Check Keepalived service status
 </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>⚡ CPU governor</h4>
+  <h4>⚙️ Configuration</h4>
   <div class="command-category">
-    <span class="category-tag category-rare">[RARE]</span>
-    <span class="category-description">Used in specific or uncommon scenarios</span>
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
   </div>
   <pre><code>
-  cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor                 # Check
-  echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  # Set
+  /etc/keepalived/keepalived.conf                   # Main configuration file
+  # Test configuration
+  keepalived -t -f /etc/keepalived/keepalived.conf  # Check config syntax
 </code></pre>
 </div>
 
 <div class="command-block">
-  <h4>💾 I/O scheduler</h4>
+  <h4>👁️ Monitor VRRP status</h4>
   <div class="command-category">
-    <span class="category-tag category-rare">[RARE]</span>
-    <span class="category-description">Used in specific or uncommon scenarios</span>
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
   </div>
   <pre><code>
-  cat /sys/block/sda/queue/scheduler              # Check scheduler
-  echo deadline > /sys/block/sda/queue/scheduler  # Set scheduler
+  ip addr show                 # Check if VIP is assigned
+  journalctl -u keepalived -f  # Follow keepalived logs
+  tcpdump -i eth0 vrrp         # Monitor VRRP packets
 </code></pre>
 </div>
 
-<h2 id="backup-monitoring-security">💾 52. BACKUP, RECOVERY, MONITORING & SECURITY</h2>
+<h2 id="service-mesh">73. 🕸️ SERVICE MESH (ISTIO/LINKERD)</h2>
+
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">service mesh implementation, traffic management, mTLS configuration, observability, and microservices security</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>🕸️ Istio Service Mesh</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Install Istio
+  curl -L https://istio.io/downloadIstio | sh -
+  cd istio-*/
+  export PATH=$PWD/bin:$PATH
+  istioctl install --set profile=demo
+  kubectl label namespace default istio-injection=enabled
+
+  # Verify installation
+  istioctl verify-install
+  istioctl version
+  kubectl get pods -n istio-system
+
+  # Deploy sample app
+  kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+  kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+
+  # Traffic Management
+  istioctl analyze                              # Analyze configuration
+  istioctl proxy-status                         # Proxy status
+  istioctl proxy-config cluster pod-name        # Proxy config
+  istioctl proxy-config route pod-name          # Route config
+  istioctl proxy-config listener pod-name       # Listener config
+  istioctl proxy-config endpoint pod-name       # Endpoint config
+
+  # Virtual Services & Destination Rules
+  kubectl apply -f virtual-service.yaml         # Apply traffic rules
+  kubectl get virtualservices                   # List virtual services
+  kubectl get destinationrules                  # List destination rules
+  kubectl describe virtualservice my-vs         # Describe virtual service
+
+  # mTLS Configuration
+  kubectl apply -f - <<EOF
+  apiVersion: security.istio.io/v1beta1
+  kind: PeerAuthentication
+  metadata:
+    name: default
+    namespace: default
+  spec:
+    mtls:
+      mode: STRICT
+  EOF
+
+  # Canary Deployments (Traffic Splitting)
+  kubectl apply -f - <<EOF
+  apiVersion: networking.istio.io/v1beta1
+  kind: VirtualService
+  metadata:
+    name: myapp
+  spec:
+    hosts:
+    - myapp
+    http:
+    - route:
+      - destination:
+          host: myapp
+          subset: v1
+        weight: 90
+      - destination:
+          host: myapp
+          subset: v2
+        weight: 10
+  EOF
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🔗 Linkerd Service Mesh</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Install Linkerd CLI
+  curl --proto '=https' -sL https://run.linkerd.io/install | sh
+  export PATH=$HOME/.linkerd2/bin:$PATH
+  linkerd version
+
+  # Install Linkerd on cluster
+  linkerd check --pre                    # Pre-install checks
+  linkerd install | kubectl apply -f -   # Install control plane
+  linkerd check                          # Verify installation
+
+  # Inject sidecar into namespace
+  kubectl get -n default deploy -o yaml | linkerd inject - | kubectl apply -f -
+
+  # Dashboard
+  linkerd viz install | kubectl apply -f -
+  linkerd viz dashboard &                # Open dashboard
+
+  # Monitoring
+  linkerd viz stat deploy                # Traffic stats
+  linkerd viz stat deploy -n default     # Per namespace
+  linkerd viz edges deploy               # Service dependencies
+  linkerd viz top deploy                 # Real-time traffic
+
+  # Troubleshooting
+  linkerd check                          # Health check
+  linkerd diagnostics proxy-metrics pod  # Proxy metrics
+  linkerd logs deploy/myapp              # Proxy logs
+  </code></pre>
+</div>
+
+<h2 id="incident-response">74. 🚨 INCIDENT RESPONSE & ON-CALL</h2>
+
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">incident response, on-call duties, post-mortem analysis, and incident management</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>🚨 Incident Response Runbook - First 5 Minutes</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # ╔══════════════════════════════════════════════════════════════════╗
+  # ║         INCIDENT RESPONSE RUNBOOK - FIRST 5 MINUTES             ║
+  # ╚══════════════════════════════════════════════════════════════════╝
+
+  # ── Step 1: Assess the Situation (30 seconds) ──
+  uptime                                          # System load & uptime
+  free -h                                         # Memory status
+  df -h                                           # Disk space
+  ss -tlnp | head -20                             # Listening ports
+  top -bn1 | head -20                             # Top processes
+
+  # ── Step 2: Check Services (1 minute) ──
+  systemctl list-units --failed                   # Failed services
+  systemctl status nginx httpd mysql postgresql   # Key services
+  docker ps -a                                    # Container status
+  kubectl get pods --all-namespaces               # K8s pods
+  kubectl get events --sort-by=.lastTimestamp      # Recent events
+
+  # ── Step 3: Check Logs (1 minute) ──
+  journalctl -p err -n 50 --since "10 min ago"    # Recent errors
+  tail -100 /var/log/syslog                       # System log
+  tail -100 /var/log/nginx/error.log              # Web server errors
+  tail -100 /var/log/mysql/error.log              # Database errors
+  dmesg | tail -20                                # Kernel messages
+
+  # ── Step 4: Network Check (30 seconds) ──
+  ping -c 3 8.8.8.8                               # Internet connectivity
+  ss -s                                           # Socket statistics summary
+  netstat -tuln | grep LISTEN                     # Listening services
+  curl -sI https://localhost | head -5             # Local HTTP check
+
+  # ── Step 5: Resource Exhaustion Check (1 minute) ──
+  # CPU
+  mpstat 1 3                                      # CPU per core
+  ps aux --sort=-%cpu | head -10                  # Top CPU processes
+
+  # Memory
+  vmstat 1 3                                      # Virtual memory stats
+  ps aux --sort=-%mem | head -10                  # Top memory processes
+
+  # Disk I/O
+  iostat -x 1 3                                   # Disk I/O stats
+  iotop -obn1 | head -20                          # Top I/O processes (if available)
+
+  # Disk Space
+  df -h                                           # Filesystem usage
+  du -sh /var/log/* | sort -rh | head -10         # Large log dirs
+  find / -type f -size +100M 2>/dev/null          # Large files
+
+  # ── Step 6: Quick Fixes ──
+
+  # Restart failed service
+  systemctl restart nginx
+
+  # Kill runaway process
+  kill -15 $(ps aux --sort=-%cpu | awk 'NR==2{print $2}')
+
+  # Clear disk space (emergency)
+  journalctl --vacuum-size=100M                   # Clean journal logs
+  find /tmp -type f -mtime +7 -delete             # Clean old temp files
+  find /var/log -name "*.gz" -delete              # Clean compressed logs
+
+  # Restart container
+  docker restart container_name
+
+  # Scale up K8s deployment
+  kubectl scale deployment myapp --replicas=3
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🔍 Deep Dive Investigation Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # ── Process Investigation ──
+  ps auxf                                         # Process tree
+  pstree -p                                       # Process tree with PIDs
+  lsof -p PID                                     # Files opened by process
+  strace -p PID -c -S time                        # System call profiling
+  ls -la /proc/PID/fd/ | wc -l                    # File descriptor count
+  cat /proc/PID/status                            # Process status details
+  cat /proc/PID/limits                            # Resource limits
+  cat /proc/PID/environ | tr '\0' '\n'            # Environment variables
+
+  # ── Network Investigation ──
+  ss -tnp | grep :80                              # Connections on port 80
+  ss -tn state established | wc -l                # Count established connections
+  tcpdump -i eth0 -c 100 -n port 80               # Capture HTTP traffic
+  tcpdump -i any -n 'host 10.0.0.1'              # Traffic to/from host
+  conntrack -L 2>/dev/null | head -20             # Connection tracking
+  ip -s link show eth0                            # Interface statistics
+
+  # ── Application Investigation ──
+  # Nginx
+  nginx -t                                        # Test config
+  tail -f /var/log/nginx/access.log | grep " 5[0-9][0-9] "  # 5xx errors
+  tail -f /var/log/nginx/error.log                # Error log
+  curl -sI http://localhost | head -10            # Response headers
+
+  # Apache
+  httpd -t                                        # Test config
+  apachectl status                                # Status
+  tail -f /var/log/httpd/error_log                # Error log
+
+  # MySQL
+  mysql -e "SHOW PROCESSLIST;"                    # Active queries
+  mysql -e "SHOW ENGINE INNODB STATUS\G"          # InnoDB status
+  mysql -e "SHOW GLOBAL STATUS LIKE 'Threads%';"  # Thread stats
+  mysql -e "SHOW GLOBAL STATUS LIKE 'Slow%';"     # Slow query stats
+
+  # PostgreSQL
+  psql -c "SELECT * FROM pg_stat_activity;"       # Active queries
+  psql -c "SELECT * FROM pg_locks;"               # Lock info
+  psql -c "SELECT * FROM pg_stat_bgwriter;"       # Background writer
+
+  # Docker
+  docker logs --tail 100 container_name           # Container logs
+  docker stats --no-stream                        # Resource usage
+  docker inspect container_name | jq '.[0].State' # Container state
+  docker exec container_name cat /var/log/app.log # App logs inside container
+
+  # Kubernetes
+  kubectl logs pod-name --tail=100 -f             # Pod logs
+  kubectl logs pod-name --previous                # Previous container logs
+  kubectl describe pod pod-name                   # Pod details
+  kubectl exec -it pod-name -- /bin/sh            # Shell into pod
+  kubectl top pod pod-name                        # Resource usage
+  kubectl get events --field-selector involvedObject.name=pod-name  # Pod events
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📊 Post-Incident Analysis Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # ── Historical Analysis ──
+  # System resource trends
+  sar -u 1 60                                     # CPU for last hour
+  sar -r 1 60                                     # Memory for last hour
+  sar -b 1 60                                     # I/O for last hour
+  sar -n DEV 1 60                                 # Network for last hour
+
+  # Journal analysis
+  journalctl --since "2 hours ago" --until "1 hour ago"  # Specific time window
+  journalctl -p err --since yesterday              # Yesterday's errors
+  journalctl _PID=1234                             # Specific PID logs
+  journalctl -u nginx --since today                # Service logs
+
+  # Log analysis with grep/awk
+  awk '{print $4}' access.log | sort | uniq -c | sort -rn | head -10  # Top IPs
+  grep "5[0-9][0-9]" access.log | wc -l           # Count 5xx errors
+  awk '$9 == 500' access.log | awk '{print $7}' | sort | uniq -c | sort -rn  # 500 by URL
+  grep -c "OOM" /var/log/syslog                    # Out of memory events
+  zgrep "error" /var/log/syslog.*.gz               # Search compressed logs
+
+  # Timeline reconstruction
+  journalctl --since "2024-01-15 14:00:00" --until "2024-01-15 15:00:00" -o short-iso
+  last -20                                         # Recent logins
+  lastb -20                                        # Failed login attempts
+  ausearch -ts recent -i                           # Recent audit events
+  </code></pre>
+</div>
+
+<h2 id="chaos-engineering">75. 💥 CHAOS ENGINEERING (CHAOS MESH/GREMLIN)</h2>
+
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">chaos engineering experiments, resilience testing, fault injection, and system stability verification</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>💥 Chaos Mesh (Kubernetes Chaos Engineering)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Install Chaos Mesh
+  curl -sSL https://mirrors.chaos-mesh.org/v2.6.0/install.sh | bash
+  kubectl get pods -n chaos-testing
+
+  # Access Dashboard
+  kubectl port-forward -n chaos-testing svc/chaos-dashboard 2333:2333
+  # Visit http://localhost:2333
+
+  # ── Pod Chaos (Kill/Stop Pods) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: PodChaos
+  metadata:
+    name: pod-failure-example
+    namespace: chaos-testing
+  spec:
+    action: pod-failure
+    mode: one
+    selector:
+      namespaces:
+        - default
+      labelSelectors:
+        app: myapp
+    duration: "30s"
+  EOF
+
+  # ── Network Chaos (Latency/Loss) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: NetworkChaos
+  metadata:
+    name: network-delay
+    namespace: chaos-testing
+  spec:
+    action: delay
+    mode: all
+    selector:
+      namespaces:
+        - default
+      labelSelectors:
+        app: myapp
+    delay:
+      latency: "100ms"
+      jitter: "50ms"
+      correlation: "50"
+    duration: "60s"
+  EOF
+
+  # ── Stress Chaos (CPU/Memory Pressure) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: StressChaos
+  metadata:
+    name: cpu-stress
+    namespace: chaos-testing
+  spec:
+    mode: one
+    selector:
+      namespaces:
+        - default
+      labelSelectors:
+        app: myapp
+    stressors:
+      cpu:
+        workers: 2
+        load: 80
+    duration: "60s"
+  EOF
+
+  # ── IO Chaos (Disk I/O Faults) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: IOChaos
+  metadata:
+    name: io-delay
+    namespace: chaos-testing
+  spec:
+    action: latency
+    mode: all
+    selector:
+      namespaces:
+        - default
+    delay: "100ms"
+    path: "/var/data/**"
+    duration: "30s"
+  EOF
+
+  # ── Time Chaos (Clock Skew) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: TimeChaos
+  metadata:
+    name: time-skew
+    namespace: chaos-testing
+  spec:
+    mode: all
+    selector:
+      namespaces:
+        - default
+    timeOffset: "-1h"
+    duration: "60s"
+  EOF
+
+  # Manage Experiments
+  kubectl get chaos -A                         # List all experiments
+  kubectl describe chaos pod-failure-example   # Describe experiment
+  kubectl delete chaos pod-failure-example     # Stop experiment
+  kubectl logs -n chaos-testing -l app=chaos-daemon  # Daemon logs
+  </code></pre>
+</div>
+
+<h2 id="backup-monitoring-security">76. 💾 BACKUP, RECOVERY, MONITORING & SECURITY</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -3491,988 +4806,11 @@
 </code></pre>
 </div>
 </div>
-<h2 id="ha-load-balancing">⚖️ 53. HIGH AVAILABILITY & LOAD BALANCING (HAProxy, Nginx LB, Pacemaker/Corosync clusters)</h2>
 
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">high availability setup, load balancer configuration, cluster management, failover testing, and traffic distribution optimization</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>📚 Understanding High Availability Concepts</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # High Availability (HA):
-  # - System continues operating despite component failures
-  # - Minimizes downtime and data loss
-  # - Measured in "nines" of uptime
-
-  # Availability Levels:
-  # 99%       = 3.65 days downtime/year
-  # 99.9%     = 8.77 hours downtime/year
-  # 99.99%    = 52.6 minutes downtime/year
-  # 99.999%   = 5.26 minutes downtime/year (five nines)
-  # 99.9999%  = 31.5 seconds downtime/year (six nines)
-
-  # HA Architecture Components:
-  #
-  # Load Balancer:
-  # - Distributes traffic across multiple servers
-  # - Health checks to detect failures
-  # - Examples: HAProxy, Nginx, AWS ELB
-  #
-  # Cluster:
-  # - Group of servers working together
-  # - Shared resources (IP, storage)
-  # - Automatic failover
-  # - Examples: Pacemaker, Corosync, Keepalived
-  #
-  # Redundancy:
-  # - Multiple copies of critical components
-  # - Active-Active: All nodes handle traffic
-  # - Active-Passive: Standby nodes wait for failure
-
-  # Load Balancing Algorithms:
-  #
-  # Round Robin:
-  # - Requests distributed evenly (server1, server2, server3, repeat)
-  # - Simple, fair distribution
-  # - Ignores server load
-  #
-  # Least Connections:
-  # - Send to server with fewest active connections
-  # - Better for long-lived connections
-  # - Adapts to varying server load
-  #
-  # IP Hash:
-  # - Client IP determines server
-  # - Session persistence (sticky sessions)
-  # - Same client always goes to same server
-  #
-  # Weighted:
-  # - Servers assigned weights based on capacity
-  # - More powerful servers get more traffic
-
-  # HAProxy vs Nginx Load Balancing:
-  #
-  # HAProxy:
-  # - Dedicated load balancer (L4 + L7)
-  # - Advanced health checks
-  # - SSL termination
-  # - Better for complex routing rules
-  #
-  # Nginx:
-  # - Web server + load balancer
-  # - Simpler configuration
-  # - Better for HTTP/HTTPS
-  # - Can serve static content + load balance
-
-  # Pacemaker/Corosync Cluster:
-  #
-  # Pacemaker:
-  # - Cluster Resource Manager
-  # - Manages services (resources)
-  # - Decides where resources run
-  # - Handles failover
-  #
-  # Corosync:
-  # - Cluster Communication System
-  # - Heartbeat between nodes
-  # - Detects node failures
-  # - Quorum management
-  #
-  # Resources:
-  # - Services managed by cluster (IP, database, web server)
-  # - Can be moved between nodes
-  # - Start/stop managed automatically
-
-  # Split-Brain Problem:
-  # - Cluster nodes can't communicate
-  # - Each thinks others are down
-  # - Both try to become active (data corruption risk)
-  #
-  # Solutions:
-  # - Quorum: Require majority of nodes to operate
-  # - Fencing: Shut down suspected failed nodes
-  # - STONITH: "Shoot The Other Node In The Head"
-
-  # Virtual IP (VIP):
-  # - Floating IP address
-  # - Moves between cluster nodes
-  # - Clients always connect to same IP
-  # - Automatic failover transparent to clients
-
-  # Health Checks:
-  # - TCP check: Port is open
-  # - HTTP check: Returns 200 OK
-  # - Custom script: Application-specific test
-  # - Interval: How often to check (e.g., every 5 sec)
-  # - Timeout: Max wait time for response
-  # - Failures: How many failures before marked down
-
-  # Session Persistence:
-  # - Sticky sessions (same client → same server)
-  # - Needed for stateful applications
-  # - Methods:
-  #   - Cookie-based (load balancer inserts cookie)
-  #   - IP-based (hash client IP)
-  #   - Session sharing (external session store like Redis)
-
-  # HA Best Practices:
-  # 1. No single point of failure
-  # 2. Automate failover (don't rely on manual intervention)
-  # 3. Test failover regularly
-  # 4. Monitor all components
-  # 5. Plan for split-brain scenarios
-  # 6. Document recovery procedures
-  # 7. Use automation (Ansible, Terraform)
-</code></pre>
-</div>
-
-<h3>⚖️ HAProxy Load Balancer</h3>
-<div class="command-block">
-  <h4>⚙️ Basic Commands</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # HAProxy Service Management (Enterprise Standards)
-  systemctl start haproxy                            # Start HAProxy service
-  systemctl stop haproxy                             # Stop HAProxy service
-  systemctl restart haproxy                          # Restart HAProxy service
-  systemctl enable haproxy                           # Enable at boot (Persistence)
-  systemctl disable haproxy                          # Disable at boot
-  systemctl reload haproxy                           # Reload configuration
-  systemctl status haproxy                           # Check HAProxy service status
-  haproxy -c -f /etc/haproxy/haproxy.cfg          # Check configuration
-  haproxy -f /etc/haproxy/haproxy.cfg -d          # Start in debug mode
-</code></pre>
-</div>
-
-<h3>🌐 Nginx Load Balancing</h3>
-<div class="command-block">
-  <h4>⚙️ Configuration Example</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  upstream backend {
-  server web1.example.com;
-  server web2.example.com;
-  }
-
-  server {
-  listen 80;
-  location / {
-  proxy_pass http://backend;
-  }
-  }
-  systemctl restart nginx
-</code></pre>
-</div>
-
-<h3>🏗️ Pacemaker / Corosync Clusters</h3>
-<div class="command-block">
-  <h4>🔧 Cluster Commands</h4>
-  <div class="command-category">
-    <span class="category-tag category-rare">[RARE]</span>
-    <span class="category-description">Used in specific or uncommon scenarios</span>
-  </div>
-  <pre><code>
-  pcs cluster setup --name mycluster node1 node2
-  pcs cluster start --all
-  pcs status   # Check cluster status
-  pcs resource create VirtualIP ocf:heartbeat:IPaddr ip=192.168.1.100 cidr_netmask=24
-  pcs resource enable VirtualIP
-</code></pre>
-</div>
-<h3>🛡️ Keepalived (VRRP for IP Failover)</h3>
-
-<div class="command-block">
-  <h4>⚙️ Keepalived service</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Keepalived Service Management (Enterprise Standards)
-  systemctl start keepalived                         # Start Keepalived service
-  systemctl stop keepalived                          # Stop Keepalived service
-  systemctl restart keepalived                       # Restart Keepalived service
-  systemctl enable keepalived                        # Enable at boot (Persistence)
-  systemctl disable keepalived                       # Disable at boot
-  systemctl reload keepalived                        # Reload configuration
-  systemctl status keepalived                        # Check Keepalived service status
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>⚙️ Configuration</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  /etc/keepalived/keepalived.conf                   # Main configuration file
-  # Test configuration
-  keepalived -t -f /etc/keepalived/keepalived.conf  # Check config syntax
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>👁️ Monitor VRRP status</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  ip addr show                 # Check if VIP is assigned
-  journalctl -u keepalived -f  # Follow keepalived logs
-  tcpdump -i eth0 vrrp         # Monitor VRRP packets
-</code></pre>
-</div>
-
-<h2 id="advanced-kubernetes">🏭 54. ADVANCED KUBERNETES PRODUCTION PATTERNS</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes production deployment, cluster scaling, resource optimization, production troubleshooting, and enterprise container orchestration</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🏭 Production Cluster Setup</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Multi-master cluster setup
-  kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint="load-balancer-ip:6443"
-  kubeadm join load-balancer-ip:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
-
-  # High availability etcd cluster
-  etcdctl member list
-  etcdctl endpoint health
-  etcdctl snapshot save backup.db
-  etcdctl snapshot status backup.db
-
-  # Cluster backup and restore
-  kubeadm config upload from-flags --pod-network-cidr=10.244.0.0/16
-  kubectl get configmap kubeadm-config -n kube-system -o yaml
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🌐 Advanced Networking</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Network policies enforcement
-  kubectl apply -f network-policy.yaml
-  kubectl get networkpolicies
-  kubectl describe networkpolicy <policy-name>
-
-  # Service mesh with Istio
-  istioctl install --set profile=demo
-  kubectl label namespace default istio-injection=enabled
-  kubectl apply -f <app>.yaml
-  istioctl proxy-status
-
-  # Ingress controllers
-  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
-  kubectl get ingress
-  kubectl describe ingress <ingress-name>
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>💾 Storage Management</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Persistent volume claims
-  kubectl get pvc
-  kubectl describe pvc <pvc-name>
-  kubectl get pv
-
-  # Storage classes
-  kubectl get storageclass
-  kubectl describe storageclass <class-name>
-
-  # CSI drivers
-  kubectl get csidrivers
-  kubectl get csinodes
-  kubectl get csistoragecapacities
-</code></pre>
-</div>
-
-<h2 id="kubernetes-security">🔐 55. KUBERNETES SECURITY & RBAC</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes security hardening, RBAC implementation, pod security policies, network policies setup, and container security auditing</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🔐 RBAC Configuration</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Create service account
-  kubectl create serviceaccount <sa-name>
-  kubectl get serviceaccount <sa-name>
-
-  # Create role and role binding
-  kubectl create role <role-name> --verb=get,list,watch --resource=pods
-  kubectl create rolebinding <binding-name> --role=<role-name> --user=<username>
-
-  # Cluster roles
-  kubectl create clusterrole <cluster-role-name> --verb=* --resource=*
-  kubectl create clusterrolebinding <binding-name> --clusterrole=<cluster-role-name> --serviceaccount=default:<sa-name>
-
-  # Check permissions
-  kubectl auth can-i get pods --as=<username>
-  kubectl auth can-i create deployments --as=system:serviceaccount:<namespace>:<sa-name>
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🛡️ Pod Security Policies</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Security contexts
-  kubectl get podsecuritypolicies
-  kubectl describe podsecuritypolicy <policy-name>
-
-  # Admission controllers
-  kubectl get validatingwebhookconfigurations
-  kubectl get mutatingwebhookconfigurations
-
-  # Network policies
-  kubectl get networkpolicy
-  kubectl describe networkpolicy <policy-name>
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🔍 Security Scanning</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Image scanning with Trivy
-  trivy image <image-name>
-  trivy image --severity HIGH,CRITICAL <image-name>
-
-  # Falco security monitoring
-  falco -o /etc/falco/falco_rules.local.yaml
-  kubectl logs -n falco -l app=falco
-
-  # Kubernetes security audit
-  kubectl get events --field-selector type=Warning
-  kubectl audit-proxy
-</code></pre>
-</div>
-
-<h2 id="kubernetes-monitoring">📊 56. KUBERNETES MONITORING & OBSERVABILITY</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">Kubernetes cluster monitoring, container metrics collection, pod performance analysis, and Kubernetes observability stack deployment</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>📊 Prometheus Stack</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Install Prometheus Operator
-  kubectl create namespace monitoring
-  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-  helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
-
-  # Check monitoring components
-  kubectl get pods -n monitoring
-  kubectl get svc -n monitoring
-  kubectl get prometheus -n monitoring
-
-  # Custom metrics
-  kubectl get servicemonitors
-  kubectl describe servicemonitor <monitor-name>
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🔗 Distributed Tracing</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Jaeger installation
-  kubectl create namespace observability
-  kubectl apply -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.41.0/jaeger-operator.yaml
-  kubectl apply -f - <<EOF
-  apiVersion: jaegertracing.io/v1
-  kind: Jaeger
-  metadata:
-  name: simplest
-  EOF
-
-  # OpenTelemetry
-  kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
-  kubectl get otel-collector
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📝 Logging and Analysis</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Fluent Bit/Fluentd
-  helm repo add fluent https://fluent.github.io/helm-charts
-  helm install fluent-bit fluent/fluent-bit -n logging
-
-  # Elasticsearch and Kibana
-  helm repo add elastic https://helm.elastic.co
-  helm install elasticsearch elastic/elasticsearch -n logging
-  helm install kibana elastic/kibana -n logging
-
-  # Log aggregation
-  kubectl logs -f -n logging deployment/fluent-bit
-  kubectl get pods -n logging
-</code></pre>
-</div>
-
-<h2 id="enterprise-cicd">🏗️ 57. ENTERPRISE CI/CD PIPELINES</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">CI/CD pipeline setup, build automation, deployment orchestration, continuous integration, and enterprise DevOps workflows</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🏗️ Jenkins Enterprise Setup</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Jenkins master-slave configuration
-  docker run -d -p 8080:8080 -p 50000:50000 --name jenkins-master jenkins/jenkins:lts
-  docker exec -it jenkins-master bash
-  # Configure slaves via Jenkins UI or CLI
-
-  # Pipeline as Code
-  pipeline {
-  agent any
-  stages {
-  stage('Build') {
-  steps {
-  sh 'mvn clean package'
-  }
-  }
-  stage('Test') {
-  steps {
-  sh 'mvn test'
-  }
-  }
-  stage('Deploy') {
-  steps {
-  sh 'kubectl apply -f k8s/'
-  }
-  }
-  }
-  }
-
-  # Blue-green deployment
-  stage('Blue-Green Deploy') {
-  steps {
-  script {
-  def active = sh(script: 'kubectl get service app -o jsonpath="{.spec.selector.color}"', returnStdout: true).trim()
-  def newColor = active == 'blue' ? 'green' : 'blue'
-  sh "kubectl set image deployment/app app=myapp:${BUILD_NUMBER} --record"
-  sh "kubectl patch service app -p '{\"spec\":{\"selector\":{\"color\":\"${newColor}\"}}}'"
-  }
-  }
-  }
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🚀 GitOps with ArgoCD</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Install ArgoCD
-  kubectl create namespace argocd
-  kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
-  # Deploy application
-  argocd app create myapp --repo https://github.com/user/myapp.git --path k8s --dest-server https://kubernetes.default.svc --dest-namespace default
-  argocd app sync myapp
-  argocd app get myapp
-
-  # Sync strategies
-  argocd app set myapp --sync-policy automated --auto-prune
-  argocd app set myapp --sync-option PrunePropagationPolicy=foreground
-  argocd app set myapp --sync-option RespectIgnoreDifferences=true
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>⚡ Advanced Pipeline Features</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Multi-branch pipelines
-  # Jenkinsfile with branch-specific logic
-  if (env.BRANCH_NAME == 'main') {
-  // Production deployment
-  } else if (env.BRANCH_NAME.startsWith('feature/')) {
-  // Feature branch testing
-  }
-
-  # Container-based builds
-  podTemplate {
-  node('pod') {
-  container('maven') {
-  sh 'mvn clean package'
-  }
-  container('docker') {
-  sh 'docker build -t myapp:${BUILD_NUMBER} .'
-  }
-  }
-  }
-
-  # Parallel testing
-  parallel(
-  'unit-tests': { sh 'mvn test' },
-  'integration-tests': { sh 'mvn verify -P integration' },
-  'security-scan': { sh 'trivy fs .' }
-  )
-</code></pre>
-</div>
-
-<h2 id="gitops-advanced">🌀 58. ADVANCED GITOPS & AUTOMATION</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">GitOps workflows, infrastructure as code, automated deployments, configuration management, and Git-driven operations</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🌀 Flux CD GitOps</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Install Flux
-  flux bootstrap github --owner=<username> --repository=<repo> --branch=main --path=./clusters/my-cluster
-
-  # Create GitRepository
-  flux create source git myapp --url=https://github.com/user/myapp.git --branch=main --interval=5m
-
-  # Create Kustomization
-  flux create kustomization myapp --source=myapp --path=./k8s --prune=true --interval=10m
-
-  # Check reconciliation
-  flux get kustomizations
-  flux get sources git
-  flux reconcile kustomization myapp --with-source
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🏗️ Infrastructure as Code</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Crossplane for cloud resources
-  kubectl apply -f https://github.com/crossplane/crossplane/releases/latest/download/crossplane.yaml
-  kubectl apply -f - <<EOF
-  apiVersion: pkg.crossplane.io/v1
-  kind: Provider
-  metadata:
-  name: provider-aws
-  spec:
-  package: crossplane/provider-aws:v0.32.0
-  EOF
-
-  # Create cloud resources via Kubernetes
-  kubectl apply -f - <<EOF
-  apiVersion: s3.aws.crossplane.io/v1beta1
-  kind: Bucket
-  metadata:
-  name: my-bucket
-  spec:
-  forProvider:
-  region: us-east-1
-  providerConfigRef:
-  name: aws-provider
-  EOF
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📋 Policy as Code</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Open Policy Agent (OPA)
-  kubectl apply -f https://github.com/open-policy-agent/gatekeeper/releases/latest/download/gatekeeper.yaml
-
-  # Create constraint template
-  kubectl apply -f - <<EOF
-  apiVersion: templates.gatekeeper.sh/v1beta1
-  kind: ConstraintTemplate
-  metadata:
-  name: k8srequiredlabels
-  spec:
-  crd:
-  spec:
-  names:
-  kind: K8sRequiredLabels
-  targets:
-  - target: admission.k8s.gatekeeper.sh
-  rego: |
-  package k8srequiredlabels
-  violation[{"msg": msg}] {
-  required := input.parameters.labels
-  provided := input.review.object.metadata.labels
-  missing := {x | x := required[_] not in provided}
-  count(missing) > 0
-  msg := sprintf("missing required labels: %v", [missing])
-  }
-  EOF
-</code></pre>
-</div>
-
-<h2 id="cloud-architecture">☁️ 59. CLOUD ARCHITECTURE PATTERNS</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">cloud architecture design, multi-cloud deployment, hybrid cloud setup, cloud migration, and enterprise cloud strategy</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>☁️ Multi-Cloud Strategy</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # AWS CLI advanced operations
-  aws ec2 describe-instances --filters Name=tag:Environment,Values=Production
-  aws s3 ls --recursive s3://my-bucket/
-  aws cloudformation deploy --template-file template.yaml --stack-name my-stack --capabilities CAPABILITY_IAM
-
-  # CLOUD CONTEXT NOTE
-  # Cloud Context: In cloud environments, these commands are often used alongside provider-native monitoring services such as AWS CloudWatch.
-
-  # Azure CLI
-  az vm list --resource-group my-rg
-  az storage account list --output table
-  az group deployment create --resource-group my-rg --template-file template.json
-
-  # GCP CLI
-  gcloud compute instances list --filter="labels.env=prod"
-  gcloud storage ls gs://my-bucket/
-  gcloud deployment-manager deployments create my-deployment --template=template.jinja
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>⚡ Serverless Architecture</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # AWS Lambda
-  aws lambda create-function --function-name my-function --runtime python3.9 --handler lambda_function.lambda_handler --zip-file fileb://function.zip
-  aws lambda invoke --function-name my-function output.txt
-
-  # Azure Functions
-  az functionapp create --resource-group my-rg --consumption-plan-location eastus --runtime python --functions-version 4 --name my-function-app
-
-  # Google Cloud Functions
-  gcloud functions deploy my-function --runtime python39 --trigger-http --allow-unauthenticated
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🐳 Container Orchestration in Cloud</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # EKS (Amazon EKS)
-  aws eks create-cluster --name my-cluster --role-arn arn:aws:iam::account:role/EKSServiceRole --resources-vpc-config subnetIds=subnet-123,subnet-456
-  aws eks update-kubeconfig --name my-cluster
-  kubectl get nodes
-
-  # AKS (Azure Kubernetes Service)
-  az aks create --resource-group my-rg --name my-cluster --node-count 3 --enable-addons monitoring
-  az aks get-credentials --resource-group my-rg --name my-cluster
-
-  # GKE (Google Kubernetes Engine)
-  gcloud container clusters create my-cluster --num-nodes=3 --zone us-central1-a
-  gcloud container clusters get-credentials my-cluster --zone us-central1-a
-</code></pre>
-</div>
-
-<h2 id="cost-optimization">💰 60. COST OPTIMIZATION STRATEGIES</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">cloud cost analysis, resource optimization, budget monitoring, rightsizing, and expense management</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>⚡ Resource Optimization</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # AWS Cost Explorer
-  aws ce get-cost-and-usage --time-period Start=2023-01-01,End=2023-01-31 --granularity MONTHLY --metrics BlendedCost
-  aws ce get-dimension-values --time-period Start=2023-01-01,End=2023-01-31 --dimension SERVICE
-
-  # Azure Cost Management
-  az consumption usage list --start-date 2023-01-01 --end-date 2023-01-31
-  az billing account list
-
-  # GCP Cost Analysis
-  gcloud billing accounts list
-  gcloud logging read 'resource.type="gce_instance" AND timestamp>="2023-01-01T00:00:00Z"' --limit 1000
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📈 Auto-scaling Optimization</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Kubernetes HPA
-  kubectl autoscale deployment myapp --cpu-percent=50 --min=1 --max=10
-  kubectl get hpa
-  kubectl describe hpa myapp
-
-  # AWS Auto Scaling
-  aws autoscaling create-auto-scaling-group --auto-scaling-group-name my-asg --launch-configuration-name my-lc --min-size 1 --max-size 10 --desired-capacity 3
-
-  # Azure Scale Sets
-  az vmss create --resource-group my-rg --name my-vmss --image UbuntuLTS --upgrade-policy-mode Automatic --instance-count 3
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>💾 Storage Optimization</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # AWS S3 lifecycle policies
-  aws s3api put-bucket-lifecycle-configuration --bucket my-bucket --lifecycle-configuration file://lifecycle.json
-
-  # Azure Storage tiering
-  az storage blob set-tier --container-name my-container --name my-blob --tier Cool
-
-  # GCP Storage classes
-  gsutil lifecycle set lifecycle.json gs://my-bucket/
-  gsutil defstorageclass set NEARLINE gs://my-bucket/*
-</code></pre>
-</div>
-
-<h2 id="devsecops">🛡️ 61. DEVSECOPS PRACTICES</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">DevSecOps implementation, security scanning, vulnerability assessment, security automation, and secure pipeline development</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🔍 Security Scanning in CI/CD</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # SAST (Static Application Security Testing)
-  sonar-scanner -Dsonar.projectKey=myproject -Dsonar.sources=src/
-  bandit -r src/
-  semgrep --config=auto src/
-
-  # DAST (Dynamic Application Security Testing)
-  zap-baseline.py -t http://myapp.example.com
-  nuclei -u http://myapp.example.com
-
-  # Container security scanning
-  trivy image --severity HIGH,CRITICAL myapp:latest
-  clairctl scan myapp:latest
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🔐 Secrets Management</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # HashiCorp Vault
-  vault server -dev
-  vault auth enable approle
-  vault write auth/approle/role/myapp token_policies="myapp-policy"
-  vault read auth/approle/role/myapp/role-id
-
-  # Kubernetes secrets
-  kubectl create secret generic mysecret --from-literal=password=mypassword
-  kubectl get secret mysecret -o yaml
-  kubectl apply -f sealed-secret.yaml
-
-  # AWS Secrets Manager
-  aws secretsmanager create-secret --name myapp-secret --secret-string '{"username":"admin","password":"mypassword"}'
-  aws secretsmanager get-secret-value --secret-id myapp-secret
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📋 Compliance Automation</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # OpenSCAP
-  oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig-rhel7-server-upstream --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
-
-  # CIS Benchmarks
-  kube-bench run --config-dir /etc/kube-bench/cfg --benchmark cis-1.6
-
-  # AWS Config
-  aws configservice put-config-rule --config-rule file://config-rule.json
-  aws configservice get-compliance-details-by-config-rule --config-rule-name my-rule
-</code></pre>
-</div>
-
-<h2 id="security-automation">🤖 62. SECURITY AUTOMATION & COMPLIANCE</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">security automation, compliance checking, policy enforcement, security testing, and automated governance</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🤖 Automated Security Testing</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # OWASP ZAP automation
-  docker run -t owasp/zap2docker-stable zap-baseline.py -t http://myapp.example.com -J report.json
-
-  # Security in pipeline
-  stage('Security Scan') {
-  parallel(
-  'SAST': { sh 'sonar-scanner' },
-  'DAST': { sh 'zap-baseline.py -t http://myapp.example.com' },
-  'Dependency Scan': { sh 'safety check' }
-  )
-  }
-
-  # Infrastructure security
-  tfsec ./terraform/
-  checkov -d ./terraform/
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📊 Compliance Monitoring</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # AWS Config rules
-  aws configservice put-config-rule --config-rule file://rule.json
-  aws configservice start-config-rule-evaluation --config-rule-name my-rule
-
-  # Azure Policy
-  az policy assignment create --name 'my-policy' --policy 'my-policy-definition' --scope '/subscriptions/my-subscription'
-
-  # Continuous compliance monitoring
-  aws configservice get-compliance-summary-by-config-rule
-  az policy state list
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🚨 Incident Response Automation</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # AWS GuardDuty
-  aws guardduty create-detector --enable
-  aws guardduty create-ip-set --detector-id my-detector --ip-set-file ip-set.json
-
-  # Azure Sentinel
-  az sentinel alert-rule create --resource-group my-rg --workspace-name my-workspace --name my-rule --logic-app-resource-id /subscriptions/my-subscription/resourceGroups/my-rg/providers/Microsoft.Logic/workflows/my-workflow
-
-  # Automated response
-  aws lambda create-function --function-name incident-response --runtime python3.9 --handler incident_response.lambda_handler --zip-file fileb://function.zip
-</code></pre>
-</div>
-
-<h2 id="interview-prep">🎯 63. INTERVIEW PREPARATION - SYSTEM DESIGN</h2>
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 4: CAREER & PROFESSIONAL DEVELOPMENT</h3>
+      </div>
+<h2 id="interview-prep">77. 🎯 INTERVIEW PREPARATION - SYSTEM DESIGN</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -4573,7 +4911,7 @@
 </code></pre>
 </div>
 
-<h2 id="career-advancement">📈 64. CAREER ADVANCEMENT & CERTIFICATIONS</h2>
+<h2 id="career-advancement">78. 📈 CAREER ADVANCEMENT & CERTIFICATIONS</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -4674,183 +5012,7 @@
 </code></pre>
 </div>
 
-<h2 id="performance-optimization">⚡ 65. PERFORMANCE OPTIMIZATION & TUNING</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system performance tuning, bottleneck analysis, resource optimization, benchmarking, and performance engineering</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>⚡ System Performance Tuning</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # CPU optimization
-  echo 'performance' > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-  tuned-adm profile throughput-performance
-  cpupower frequency-set -g performance
-
-  # Memory optimization
-  echo 3 > /proc/sys/vm/drop_caches
-  sysctl -w vm.swappiness=10
-  sysctl -w vm.dirty_ratio=15
-  sysctl -w vm.dirty_background_ratio=5
-
-  # Disk I/O optimization
-  echo deadline > /sys/block/sda/queue/scheduler
-  echo 1024 > /sys/block/sda/queue/read_ahead_kb
-  tune2fs -o journal_data_writeback /dev/sda1
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🌐 Network Performance</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # TCP tuning
-  sysctl -w net.core.rmem_max=16777216
-  sysctl -w net.core.wmem_max=16777216
-  sysctl -w net.ipv4.tcp_rmem='4096 87380 16777216'
-  sysctl -w net.ipv4.tcp_wmem='4096 65536 16777216'
-  sysctl -w net.ipv4.tcp_congestion_control=bbr
-
-  # Network interface optimization
-  ethtool -G eth0 rx 4096 tx 4096
-  ethtool -K eth0 gro on lro on tso on gso on
-  tc qdisc add dev eth0 root fq_codel
-
-  # Load balancing optimization
-  nginx -t && nginx -s reload
-  haproxy -f /etc/haproxy/haproxy.cfg -D
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🚀 Application Performance</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # JVM tuning
-  export JAVA_OPTS="-Xms4g -Xmx8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
-  jstat -gc -t <pid> 5s
-  jmap -histo <pid>
-
-  # Database optimization
-  mysql -e "SHOW VARIABLES LIKE 'innodb_buffer_pool_size';"
-  postgresql -c "SELECT * FROM pg_settings WHERE name = 'shared_buffers';"
-  redis-cli CONFIG SET maxmemory 2gb
-
-  # Container performance
-  docker stats --no-stream
-  kubectl top nodes
-  kubectl top pods
-</code></pre>
-</div>
-
-<h2 id="advanced-troubleshooting">🔧 66. ADVANCED TROUBLESHOOTING METHODOLOGIES</h2>
-
-<!-- WHEN TO USE THESE COMMANDS SECTION -->
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system troubleshooting, root cause analysis, incident response, debugging complex issues, and problem resolution</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🔧 System Troubleshooting Framework</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # 1. Information gathering
-  dmesg | tail -50
-  journalctl -p err -n 100
-  top -b -n 1 | head -20
-  free -m
-  df -h
-  netstat -tuln
-
-  # 2. Process analysis
-  ps aux --sort=-%cpu | head -10
-  ps aux --sort=-%mem | head -10
-  strace -p <PID> -c
-  lsof -p <PID>
-
-  # 3. Network troubleshooting
-  ping -c 4 8.8.8.8
-  traceroute google.com
-  nslookup google.com
-  ss -tuln
-  tcpdump -i eth0 -c 10
-
-  # 4. Disk troubleshooting
-  iostat -x 1 5
-  iotop -o
-  df -i
-  du -sh /* | sort -rh | head -10
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🐛 Application Troubleshooting</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # Web server issues
-  curl -I http://localhost
-  nginx -t
-  apache2ctl configtest
-  systemctl status nginx
-
-  # Database issues
-  mysql -e "SHOW PROCESSLIST;"
-  pg_stat_activity
-  redis-cli INFO stats
-
-  # Container issues
-  docker logs <container>
-  kubectl logs <pod>
-  kubectl describe pod <pod>
-  kubectl get events --sort-by=.metadata.creationTimestamp
-</code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📊 Performance Bottleneck Analysis</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # CPU bottleneck analysis
-  perf top -p <PID>
-  perf record -p <PID> -g
-  perf report
-
-  # Memory analysis
-  valgrind --tool=memcheck ./program
-  pmap <PID>
-  cat /proc/<PID>/smaps
-
-  # I/O analysis
-  iostat -x 1
-  blktrace /dev/sda
-  btrace /dev/sda
-</code></pre>
-</div>
-
-<h2 id="real-projects">🌍 67. REAL-WORLD PROJECT EXAMPLES</h2>
+<h2 id="real-projects">79. 🌍 REAL-WORLD PROJECT EXAMPLES</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -4983,7 +5145,7 @@
 </code></pre>
 </div>
 
-<h2 id="project-templates">📁 68. PROJECT TEMPLATES & STARTERS</h2>
+<h2 id="project-templates">80. 📁 PROJECT TEMPLATES & STARTERS</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -5178,7 +5340,7 @@
 </code></pre>
 </div>
 
-<h2 id="certification-guides">🎓 69. CERTIFICATION PREPARATION GUIDES</h2>
+<h2 id="certification-guides">81. 🎓 CERTIFICATION PREPARATION GUIDES</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -5450,7 +5612,7 @@
 </code></pre>
 </div>
 
-<h2 id="exam-strategies">📚 70. EXAM STRATEGIES & CAREER DEVELOPMENT</h2>
+<h2 id="exam-strategies">82. 📚 EXAM STRATEGIES & CAREER DEVELOPMENT</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -5600,7 +5762,7 @@
 </code></pre>
 </div>
 
-<h2 id="final-resources">📚 71. FINAL RESOURCES & REFERENCE</h2>
+<h2 id="final-resources">83. 📚 FINAL RESOURCES & REFERENCE</h2>
 
 <!-- WHEN TO USE THESE COMMANDS SECTION -->
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -6021,495 +6183,7 @@
         </code></pre>
       </div>
 
-<h2 id="service-mesh">🕸️ 72. SERVICE MESH (ISTIO/LINKERD)</h2>
-
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">service mesh implementation, traffic management, mTLS configuration, observability, and microservices security</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🕸️ Istio Service Mesh</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Install Istio
-  curl -L https://istio.io/downloadIstio | sh -
-  cd istio-*/
-  export PATH=$PWD/bin:$PATH
-  istioctl install --set profile=demo
-  kubectl label namespace default istio-injection=enabled
-
-  # Verify installation
-  istioctl verify-install
-  istioctl version
-  kubectl get pods -n istio-system
-
-  # Deploy sample app
-  kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
-  kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
-
-  # Traffic Management
-  istioctl analyze                              # Analyze configuration
-  istioctl proxy-status                         # Proxy status
-  istioctl proxy-config cluster pod-name        # Proxy config
-  istioctl proxy-config route pod-name          # Route config
-  istioctl proxy-config listener pod-name       # Listener config
-  istioctl proxy-config endpoint pod-name       # Endpoint config
-
-  # Virtual Services & Destination Rules
-  kubectl apply -f virtual-service.yaml         # Apply traffic rules
-  kubectl get virtualservices                   # List virtual services
-  kubectl get destinationrules                  # List destination rules
-  kubectl describe virtualservice my-vs         # Describe virtual service
-
-  # mTLS Configuration
-  kubectl apply -f - <<EOF
-  apiVersion: security.istio.io/v1beta1
-  kind: PeerAuthentication
-  metadata:
-    name: default
-    namespace: default
-  spec:
-    mtls:
-      mode: STRICT
-  EOF
-
-  # Canary Deployments (Traffic Splitting)
-  kubectl apply -f - <<EOF
-  apiVersion: networking.istio.io/v1beta1
-  kind: VirtualService
-  metadata:
-    name: myapp
-  spec:
-    hosts:
-    - myapp
-    http:
-    - route:
-      - destination:
-          host: myapp
-          subset: v1
-        weight: 90
-      - destination:
-          host: myapp
-          subset: v2
-        weight: 10
-  EOF
-  </code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🔗 Linkerd Service Mesh</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Install Linkerd CLI
-  curl --proto '=https' -sL https://run.linkerd.io/install | sh
-  export PATH=$HOME/.linkerd2/bin:$PATH
-  linkerd version
-
-  # Install Linkerd on cluster
-  linkerd check --pre                    # Pre-install checks
-  linkerd install | kubectl apply -f -   # Install control plane
-  linkerd check                          # Verify installation
-
-  # Inject sidecar into namespace
-  kubectl get -n default deploy -o yaml | linkerd inject - | kubectl apply -f -
-
-  # Dashboard
-  linkerd viz install | kubectl apply -f -
-  linkerd viz dashboard &                # Open dashboard
-
-  # Monitoring
-  linkerd viz stat deploy                # Traffic stats
-  linkerd viz stat deploy -n default     # Per namespace
-  linkerd viz edges deploy               # Service dependencies
-  linkerd viz top deploy                 # Real-time traffic
-
-  # Troubleshooting
-  linkerd check                          # Health check
-  linkerd diagnostics proxy-metrics pod  # Proxy metrics
-  linkerd logs deploy/myapp              # Proxy logs
-  </code></pre>
-</div>
-
-<h2 id="network-troubleshooting">🌐 73. NETWORK TROUBLESHOOTING & SECURITY</h2>
-
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">network troubleshooting, firewall configuration, VPN setup, and network security</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🌐 Network Troubleshooting Toolkit</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # ── Connectivity Testing ──
-  ping -c 4 8.8.8.8                              # Basic connectivity
-  ping -c 4 -s 1472 -M do google.com             # MTU test
-  traceroute -n google.com                         # Route tracing
-  mtr --report --report-cycles 10 google.com      # Continuous trace
-  tracepath google.com                             # MTU discovery
-
-  # ── DNS Troubleshooting ──
-  dig google.com +short                            # Quick DNS
-  dig +trace google.com                            # DNS delegation
-  dig @8.8.8.8 google.com                         # Specific DNS server
-  dig google.com MX +short                         # Mail records
-  nslookup google.com                              # Legacy DNS
-  host -t A google.com                             # A record
-  resolvectl status                                # systemd-resolved status
-  cat /etc/resolv.conf                             # DNS config
-
-  # ── Port & Connection Testing ──
-  nc -zv google.com 80                             # Test TCP port
-  nc -zv -w 5 google.com 443                       # With timeout
-  nc -l 8080                                       # Listen on port
-  ss -tlnp | grep :80                              # Who's on port 80
-  lsof -i :80                                      # Alternative check
-  curl -v telnet://google.com:80                   # Test with curl
-
-  # ── Packet Capture ──
-  tcpdump -i eth0 -c 100                           # Basic capture
-  tcpdump -i any -n 'port 80'                      # HTTP traffic
-  tcpdump -i eth0 -w capture.pcap                  # Save to file
-  tcpdump -r capture.pcap                          # Read capture
-  tcpdump -nn -A -s0 'tcp port 80'                # Show HTTP content
-
-  # ── Bandwidth & Performance ──
-  iperf3 -s                                        # Start server
-  iperf3 -c server-ip                              # Test bandwidth
-  curl -o /dev/null http://speedtest.tele2.net/10MB.zip  # Download speed
-  nload eth0                                       # Real-time bandwidth
-  iftop -i eth0                                    # Connection bandwidth
-  vnstat -l                                        # Live traffic stats
-
-  # ── Connection Tracking ──
-  ss -s                                            # Socket summary
-  ss -tn state established | wc -l                 # Count connections
-  ss -tn state time-wait | wc -l                   # TIME_WAIT count
-  ss -tnp | grep :80                               # Port 80 connections
-  cat /proc/net/nf_conntrack | head -20            # Connection tracking
-  conntrack -S                                      # Conntrack stats
-  </code></pre>
-</div>
-
-<h2 id="incident-response">🚨 74. INCIDENT RESPONSE & ON-CALL</h2>
-
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">incident response, on-call duties, post-mortem analysis, and incident management</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>🚨 Incident Response Runbook - First 5 Minutes</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # ╔══════════════════════════════════════════════════════════════════╗
-  # ║         INCIDENT RESPONSE RUNBOOK - FIRST 5 MINUTES             ║
-  # ╚══════════════════════════════════════════════════════════════════╝
-
-  # ── Step 1: Assess the Situation (30 seconds) ──
-  uptime                                          # System load & uptime
-  free -h                                         # Memory status
-  df -h                                           # Disk space
-  ss -tlnp | head -20                             # Listening ports
-  top -bn1 | head -20                             # Top processes
-
-  # ── Step 2: Check Services (1 minute) ──
-  systemctl list-units --failed                   # Failed services
-  systemctl status nginx httpd mysql postgresql   # Key services
-  docker ps -a                                    # Container status
-  kubectl get pods --all-namespaces               # K8s pods
-  kubectl get events --sort-by=.lastTimestamp      # Recent events
-
-  # ── Step 3: Check Logs (1 minute) ──
-  journalctl -p err -n 50 --since "10 min ago"    # Recent errors
-  tail -100 /var/log/syslog                       # System log
-  tail -100 /var/log/nginx/error.log              # Web server errors
-  tail -100 /var/log/mysql/error.log              # Database errors
-  dmesg | tail -20                                # Kernel messages
-
-  # ── Step 4: Network Check (30 seconds) ──
-  ping -c 3 8.8.8.8                               # Internet connectivity
-  ss -s                                           # Socket statistics summary
-  netstat -tuln | grep LISTEN                     # Listening services
-  curl -sI https://localhost | head -5             # Local HTTP check
-
-  # ── Step 5: Resource Exhaustion Check (1 minute) ──
-  # CPU
-  mpstat 1 3                                      # CPU per core
-  ps aux --sort=-%cpu | head -10                  # Top CPU processes
-
-  # Memory
-  vmstat 1 3                                      # Virtual memory stats
-  ps aux --sort=-%mem | head -10                  # Top memory processes
-
-  # Disk I/O
-  iostat -x 1 3                                   # Disk I/O stats
-  iotop -obn1 | head -20                          # Top I/O processes (if available)
-
-  # Disk Space
-  df -h                                           # Filesystem usage
-  du -sh /var/log/* | sort -rh | head -10         # Large log dirs
-  find / -type f -size +100M 2>/dev/null          # Large files
-
-  # ── Step 6: Quick Fixes ──
-
-  # Restart failed service
-  systemctl restart nginx
-
-  # Kill runaway process
-  kill -15 $(ps aux --sort=-%cpu | awk 'NR==2{print $2}')
-
-  # Clear disk space (emergency)
-  journalctl --vacuum-size=100M                   # Clean journal logs
-  find /tmp -type f -mtime +7 -delete             # Clean old temp files
-  find /var/log -name "*.gz" -delete              # Clean compressed logs
-
-  # Restart container
-  docker restart container_name
-
-  # Scale up K8s deployment
-  kubectl scale deployment myapp --replicas=3
-  </code></pre>
-</div>
-
-<div class="command-block">
-  <h4>🔍 Deep Dive Investigation Commands</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # ── Process Investigation ──
-  ps auxf                                         # Process tree
-  pstree -p                                       # Process tree with PIDs
-  lsof -p PID                                     # Files opened by process
-  strace -p PID -c -S time                        # System call profiling
-  ls -la /proc/PID/fd/ | wc -l                    # File descriptor count
-  cat /proc/PID/status                            # Process status details
-  cat /proc/PID/limits                            # Resource limits
-  cat /proc/PID/environ | tr '\0' '\n'            # Environment variables
-
-  # ── Network Investigation ──
-  ss -tnp | grep :80                              # Connections on port 80
-  ss -tn state established | wc -l                # Count established connections
-  tcpdump -i eth0 -c 100 -n port 80               # Capture HTTP traffic
-  tcpdump -i any -n 'host 10.0.0.1'              # Traffic to/from host
-  conntrack -L 2>/dev/null | head -20             # Connection tracking
-  ip -s link show eth0                            # Interface statistics
-
-  # ── Application Investigation ──
-  # Nginx
-  nginx -t                                        # Test config
-  tail -f /var/log/nginx/access.log | grep " 5[0-9][0-9] "  # 5xx errors
-  tail -f /var/log/nginx/error.log                # Error log
-  curl -sI http://localhost | head -10            # Response headers
-
-  # Apache
-  httpd -t                                        # Test config
-  apachectl status                                # Status
-  tail -f /var/log/httpd/error_log                # Error log
-
-  # MySQL
-  mysql -e "SHOW PROCESSLIST;"                    # Active queries
-  mysql -e "SHOW ENGINE INNODB STATUS\G"          # InnoDB status
-  mysql -e "SHOW GLOBAL STATUS LIKE 'Threads%';"  # Thread stats
-  mysql -e "SHOW GLOBAL STATUS LIKE 'Slow%';"     # Slow query stats
-
-  # PostgreSQL
-  psql -c "SELECT * FROM pg_stat_activity;"       # Active queries
-  psql -c "SELECT * FROM pg_locks;"               # Lock info
-  psql -c "SELECT * FROM pg_stat_bgwriter;"       # Background writer
-
-  # Docker
-  docker logs --tail 100 container_name           # Container logs
-  docker stats --no-stream                        # Resource usage
-  docker inspect container_name | jq '.[0].State' # Container state
-  docker exec container_name cat /var/log/app.log # App logs inside container
-
-  # Kubernetes
-  kubectl logs pod-name --tail=100 -f             # Pod logs
-  kubectl logs pod-name --previous                # Previous container logs
-  kubectl describe pod pod-name                   # Pod details
-  kubectl exec -it pod-name -- /bin/sh            # Shell into pod
-  kubectl top pod pod-name                        # Resource usage
-  kubectl get events --field-selector involvedObject.name=pod-name  # Pod events
-  </code></pre>
-</div>
-
-<div class="command-block">
-  <h4>📊 Post-Incident Analysis Commands</h4>
-  <div class="command-category">
-    <span class="category-tag category-debug">[DEBUG]</span>
-    <span class="category-description">Used for troubleshooting and investigation</span>
-  </div>
-  <pre><code>
-  # ── Historical Analysis ──
-  # System resource trends
-  sar -u 1 60                                     # CPU for last hour
-  sar -r 1 60                                     # Memory for last hour
-  sar -b 1 60                                     # I/O for last hour
-  sar -n DEV 1 60                                 # Network for last hour
-
-  # Journal analysis
-  journalctl --since "2 hours ago" --until "1 hour ago"  # Specific time window
-  journalctl -p err --since yesterday              # Yesterday's errors
-  journalctl _PID=1234                             # Specific PID logs
-  journalctl -u nginx --since today                # Service logs
-
-  # Log analysis with grep/awk
-  awk '{print $4}' access.log | sort | uniq -c | sort -rn | head -10  # Top IPs
-  grep "5[0-9][0-9]" access.log | wc -l           # Count 5xx errors
-  awk '$9 == 500' access.log | awk '{print $7}' | sort | uniq -c | sort -rn  # 500 by URL
-  grep -c "OOM" /var/log/syslog                    # Out of memory events
-  zgrep "error" /var/log/syslog.*.gz               # Search compressed logs
-
-  # Timeline reconstruction
-  journalctl --since "2024-01-15 14:00:00" --until "2024-01-15 15:00:00" -o short-iso
-  last -20                                         # Recent logins
-  lastb -20                                        # Failed login attempts
-  ausearch -ts recent -i                           # Recent audit events
-  </code></pre>
-</div>
-
-<h2 id="chaos-engineering">💥 75. CHAOS ENGINEERING (CHAOS MESH/GREMLIN)</h2>
-
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">chaos engineering experiments, resilience testing, fault injection, and system stability verification</strong></p>
-</div>
-
-<div class="command-block">
-  <h4>💥 Chaos Mesh (Kubernetes Chaos Engineering)</h4>
-  <div class="command-category">
-    <span class="category-tag category-production">[PRODUCTION]</span>
-    <span class="category-description">Used in production environments</span>
-  </div>
-  <pre><code>
-  # Install Chaos Mesh
-  curl -sSL https://mirrors.chaos-mesh.org/v2.6.0/install.sh | bash
-  kubectl get pods -n chaos-testing
-
-  # Access Dashboard
-  kubectl port-forward -n chaos-testing svc/chaos-dashboard 2333:2333
-  # Visit http://localhost:2333
-
-  # ── Pod Chaos (Kill/Stop Pods) ──
-  kubectl apply -f - <<EOF
-  apiVersion: chaos-mesh.org/v1alpha1
-  kind: PodChaos
-  metadata:
-    name: pod-failure-example
-    namespace: chaos-testing
-  spec:
-    action: pod-failure
-    mode: one
-    selector:
-      namespaces:
-        - default
-      labelSelectors:
-        app: myapp
-    duration: "30s"
-  EOF
-
-  # ── Network Chaos (Latency/Loss) ──
-  kubectl apply -f - <<EOF
-  apiVersion: chaos-mesh.org/v1alpha1
-  kind: NetworkChaos
-  metadata:
-    name: network-delay
-    namespace: chaos-testing
-  spec:
-    action: delay
-    mode: all
-    selector:
-      namespaces:
-        - default
-      labelSelectors:
-        app: myapp
-    delay:
-      latency: "100ms"
-      jitter: "50ms"
-      correlation: "50"
-    duration: "60s"
-  EOF
-
-  # ── Stress Chaos (CPU/Memory Pressure) ──
-  kubectl apply -f - <<EOF
-  apiVersion: chaos-mesh.org/v1alpha1
-  kind: StressChaos
-  metadata:
-    name: cpu-stress
-    namespace: chaos-testing
-  spec:
-    mode: one
-    selector:
-      namespaces:
-        - default
-      labelSelectors:
-        app: myapp
-    stressors:
-      cpu:
-        workers: 2
-        load: 80
-    duration: "60s"
-  EOF
-
-  # ── IO Chaos (Disk I/O Faults) ──
-  kubectl apply -f - <<EOF
-  apiVersion: chaos-mesh.org/v1alpha1
-  kind: IOChaos
-  metadata:
-    name: io-delay
-    namespace: chaos-testing
-  spec:
-    action: latency
-    mode: all
-    selector:
-      namespaces:
-        - default
-    delay: "100ms"
-    path: "/var/data/**"
-    duration: "30s"
-  EOF
-
-  # ── Time Chaos (Clock Skew) ──
-  kubectl apply -f - <<EOF
-  apiVersion: chaos-mesh.org/v1alpha1
-  kind: TimeChaos
-  metadata:
-    name: time-skew
-    namespace: chaos-testing
-  spec:
-    mode: all
-    selector:
-      namespaces:
-        - default
-    timeOffset: "-1h"
-    duration: "60s"
-  EOF
-
-  # Manage Experiments
-  kubectl get chaos -A                         # List all experiments
-  kubectl describe chaos pod-failure-example   # Describe experiment
-  kubectl delete chaos pod-failure-example     # Stop experiment
-  kubectl logs -n chaos-testing -l app=chaos-daemon  # Daemon logs
-  </code></pre>
-</div>
-
-<h2 id="summary">📋 76. SUMMARY</h2>
+<h2 id="summary">84. 📋 SUMMARY</h2>
 
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
   <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
@@ -6543,6 +6217,32 @@
         </div>
 </div>
 
+<!-- SECTION PREV/NEXT NAVIGATION -->
+<div id="sectionNavContainer"></div>
+
+<div class="download-section">
+  <h3>📖 Complete Reference Guide</h3>
+</div>
+
+<div class="warning">
+  <p>
+  <strong>Note:</strong> This reference guide is optimized for quick
+  lookup. Commands are organized by function rather than complexity.
+  Always test commands in a safe environment before using in production.
+  </p>
+</div>
+<div class="info-box" style="border-left-color: #ff6b9d; margin-top: 50px;">
+  <h3 style="color: #ff6b9d">🎯 Section Complete?</h3>
+  <ul>
+    <li><strong>📚 Next Steps:</strong> Continue to <a href="index.html" style="color: #ff6b9d;">main page</a> or explore other sections</li>
+      <li><strong>🔍 Quick Review:</strong> Use Ctrl+F to find specific commands</li>
+        <li><strong>💼 Career Focus:</strong> Practice these commands for senior-level positions</li>
+          <li><strong>📖 Documentation:</strong> Check <a href="README.md">README.md</a> for full overview</li>
+          </ul>
+        </div>
+</div>
+  </body>
+</html>
 <!-- SECTION PREV/NEXT NAVIGATION -->
 <div id="sectionNavContainer"></div>
 

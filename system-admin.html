@@ -118,7 +118,9 @@
           </ul>
         </div>
 
-        <h2 id="system-info">🖥️ 01. SYSTEM INFORMATION & NAVIGATION</h2>
+        
+      
+      <h2 id="system-info">01. 🖥️ SYSTEM INFORMATION & NAVIGATION</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -1107,7 +1109,7 @@
           </code></pre>
         </div>
 
-        <h2 id="file-ops">📁 02. FILE OPERATIONS</h2>
+        <h2 id="file-ops">02. 📁 FILE OPERATIONS</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -3143,7 +3145,7 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="text-editors">✍️ 03. TEXT EDITORS</h2>
+        <h2 id="text-editors">03. ✍️ TEXT EDITORS</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -3517,7 +3519,7 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="permissions">🔐 04. FILE PERMISSIONS & OWNERSHIP</h2>
+        <h2 id="permissions">04. 🔐 FILE PERMISSIONS & OWNERSHIP</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -3749,7 +3751,64 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="user-mgmt">👥 05. USER & GROUP MANAGEMENT</h2>
+        <h2 id="selinux">05. 🛡️ SELINUX COMPREHENSIVE GUIDE</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">security hardening, access control, service troubleshooting, RHEL exam preparation</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>📊 SELinux Status & Modes</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  getenforce                                 # Current mode (Enforcing/Permissive/Disabled)
+  sestatus                                   # Detailed SELinux status
+  setenforce 0                               # Switch to Permissive (temporary)
+  setenforce 1                               # Switch to Enforcing (temporary)
+  cat /etc/selinux/config                    # Config file (permanent changes)
+  getsebool -a                               # List all booleans
+  setsebool -P httpd_can_network_connect on  # Set boolean permanently
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📁 File Context Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  ls -Z /var/www/html                        # Show SELinux context
+  semanage fcontext -l | grep /var/www       # List default contexts
+  semanage fcontext -a -t httpd_sys_content_t "/custom/www(/.*)?"
+  restorecon -Rv /custom/www                 # Apply context
+  chcon -t httpd_sys_content_t file.html     # Temporary context change
+  fixfiles relabel                           # Full relabel on reboot
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🌐 Port Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  semanage port -l                           # Show all port definitions
+  semanage port -a -t http_port_t -p tcp 8080  # Add port
+  semanage port -m -t http_port_t -p tcp 8888  # Modify port
+  semanage port -d -t http_port_t -p tcp 8080  # Delete port
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔍 Troubleshooting with Audit Logs</h4>
+        <div class="command-category"><span class="category-tag category-debug">[DEBUG]</span></div>
+        <pre><code>
+  ausearch -m AVC -ts recent                 # Recent AVC denials
+  ausearch -m AVC -c httpd                   # Denials for httpd
+  audit2allow -w -a                          # Show why denials happened
+  audit2allow -a -M mypol                    # Generate policy module
+  semodule -i mypol.pp                        # Install policy module
+  semanage permissive -a httpd_t             # Make httpd_t permissive
+        </code></pre>
+      </div>
+<h2 id="user-mgmt">06. 👥 USER & GROUP MANAGEMENT</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -4026,7 +4085,56 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="process-mgmt">⚙️ 06. PROCESS MANAGEMENT</h2>
+        
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 2: SYSTEM MANAGEMENT</h3>
+      </div>
+<h2 id="limits-pam">07. 🔒 SYSTEM LIMITS, PAM &amp; RESOURCE CONTROL</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">resource limits, user session management, PAM setup</strong></p>
+      </div>
+      <div class="command-block">
+        <h4>📊 ulimit &amp; Resource Limits</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  ulimit -a                                  # All limits for current user
+  ulimit -n                                  # Max open files
+  ulimit -u                                  # Max processes
+  ulimit -n 65535                            # Set max open files
+  cat /proc/PID/limits                       # Limits for running process
+  prlimit --pid PID                          # Process limits
+        </code></pre>
+      </div>
+      <div class="command-block">
+        <h4>📝 /etc/security/limits.conf</h4>
+        <div class="command-category"><span class="category-tag category-production">[PRODUCTION]</span></div>
+        <pre><code>
+  # Format: <domain> <type> <item> <value>
+  # student    hard    nofile    65535
+  # @developers hard    nproc     8192
+  # *          soft    nofile    1024
+  # Drop-in: /etc/security/limits.d/90-custom.conf
+        </code></pre>
+      </div>
+      <div class="command-block">
+        <h4>🔐 PAM Configuration</h4>
+        <div class="command-category"><span class="category-tag category-production">[PRODUCTION]</span></div>
+        <pre><code>
+  ls /etc/pam.d/                             # PAM service configs
+  cat /etc/pam.d/system-auth                 # System auth config
+  cat /etc/security/pwquality.conf           # Password quality
+  faillock --user username                   # Failed login attempts
+  faillock --user username --reset           # Reset failed attempts
+        </code></pre>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 1: FOUNDATIONS</h3>
+      </div>
+
+      <h2 id="process-mgmt">08. ⚙️ PROCESS MANAGEMENT</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -4421,7 +4529,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="systemd">🔧 07. SYSTEMD SERVICE MANAGEMENT</h2>
+      <h2 id="systemd">09. 🔧 SYSTEMD SERVICE MANAGEMENT</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -4810,7 +4918,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="package-mgmt">📦 08. PACKAGE MANAGEMENT (DNF/YUM)</h2>
+      <h2 id="package-mgmt">10. 📦 PACKAGE MANAGEMENT (DNF/YUM)</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -5045,7 +5153,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="rpm">📋 09. RPM PACKAGE MANAGEMENT</h2>
+      <h2 id="rpm">11. 📋 RPM PACKAGE MANAGEMENT</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -5184,7 +5292,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="logging">📊 10. SYSTEM LOGGING</h2>
+      <h2 id="logging">12. 📊 SYSTEM LOGGING</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -5559,7 +5667,11 @@ Test in non-production systems whenever possible.
   subscription-manager unregister                                              # Unregister system
         </code></pre>
       </div>
-      <h2 id="disk-management">💾 11. DISK MANAGEMENT</h2>
+      
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 3: STORAGE & MEMORY</h3>
+      </div>
+<h2 id="disk-management">13. 💾 DISK MANAGEMENT</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -6157,7 +6269,138 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="networking">🌐 12. NETWORKING BASICS</h2>
+      <h2 id="lvm">14. 💾 LOGICAL VOLUME MANAGER (LVM)</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">storage provisioning, disk resizing, filesystem expansion, storage migration</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>📦 Physical Volume (PV) Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  pvcreate /dev/sdb /dev/sdc                 # Initialize disks for LVM
+  pvs                                        # Brief PV list
+  pvdisplay                                  # Detailed PV info
+  pvscan                                     # Scan all PVs
+  pvmove /dev/sdb /dev/sdc                   # Move data off PV before removal
+  pvremove /dev/sdb                          # Remove PV from LVM
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📦 Volume Group (VG) Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  vgcreate vg_data /dev/sdb /dev/sdc         # Create VG from PVs
+  vgextend vg_data /dev/sdd                  # Add PV to existing VG
+  vgs                                        # Brief VG list
+  vgdisplay                                  # Detailed VG info
+  vgreduce vg_data /dev/sdb                  # Remove PV from VG
+  vgrename vg_data vg_storage                # Rename VG
+  vgremove vg_data                           # Remove VG
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>💾 Logical Volume (LV) Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  lvcreate -n lv_home -L 10G vg_data         # Create 10GB LV
+  lvcreate -n lv_home -l 100%FREE vg_data    # Use all free space
+  lvextend -L +5G /dev/vg_data/lv_home       # Add 5GB to LV
+  lvextend -r -L +5G /dev/vg_data/lv_home    # Auto-resize filesystem
+  resize2fs /dev/vg_data/lv_home             # Resize ext4
+  xfs_growfs /dev/vg_data/lv_home            # Resize XFS
+  lvs                                        # List all LVs
+  lvdisplay                                  # Detailed LV info
+  lvremove /dev/vg_data/lv_home              # Remove LV
+  lvcreate -s -n lv_snap -L 1G /dev/vg_data/lv_home  # Create snapshot
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔄 LVM Thin Provisioning</h4>
+        <div class="command-category"><span class="category-tag category-production">[PRODUCTION]</span></div>
+        <pre><code>
+  lvcreate -L 50G -T vg_data/thin_pool       # Create thin pool
+  lvcreate -V 100G -T vg_data/thin_pool -n thin_vol  # Thin volume (over-provisioned)
+  lvs vg_data/thin_pool -o+data_percent      # Check usage
+  lvextend -L +20G vg_data/thin_pool         # Extend thin pool
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔍 LVM Troubleshooting</h4>
+        <div class="command-category"><span class="category-tag category-debug">[DEBUG]</span></div>
+        <pre><code>
+  vgck vg_data                               # Verify VG metadata
+  lvscan                                     # Scan all LVs
+  vgcfgbackup vg_data                        # Backup VG config
+  vgcfgrestore vg_data                       # Restore VG config
+  cat /etc/lvm/lvm.conf                      # LVM configuration
+        </code></pre>
+      </div>
+<h2 id="memory-swap">15. 🧠 MEMORY & SWAP MANAGEMENT</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">memory monitoring, swap configuration, OOM troubleshooting, performance tuning</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>📊 Memory Monitoring</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  free -h                                    # Human-readable memory info
+  free -h -s 5                               # Refresh every 5 seconds
+  cat /proc/meminfo                          # Detailed memory info
+  ps aux --sort=-%mem | head -20             # Top 20 memory consumers
+  pmap -x PID                                # Detailed process memory map
+  vmstat 1 10                                # Virtual memory stats
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>💿 Swap Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  swapon --show                              # Show active swap
+  cat /proc/swaps                            # Swap devices from proc
+
+  # Create swap file
+  dd if=/dev/zero of=/swapfile bs=1M count=2048
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+  # /etc/fstab: /swapfile swap swap defaults 0 0
+
+  swapoff /swapfile                          # Disable swap
+  swapoff -a                                 # Disable all swap
+
+  # Adjust swappiness
+  cat /proc/sys/vm/swappiness               # Current value
+  sysctl vm.swappiness=10                   # Set temporarily
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>⚠️ OOM Killer</h4>
+        <div class="command-category"><span class="category-tag category-debug">[DEBUG]</span></div>
+        <pre><code>
+  dmesg | grep -i "oom\|out of memory\|killed process"
+  journalctl -k | grep -i "oom"
+  echo -1000 > /proc/PID/oom_score_adj       # Protect from OOM killer
+  echo 1000 > /proc/PID/oom_score_adj        # Prefer to kill
+  sync && echo 3 > /proc/sys/vm/drop_caches  # Clear caches (testing only)
+        </code></pre>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 4: NETWORKING</h3>
+      </div>
+<h2 id="networking">16. 🌐 NETWORKING BASICS</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -7129,7 +7372,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="firewall">🛡️ 13. FIREWALL MANAGEMENT</h2>
+      <h2 id="firewall">17. 🛡️ FIREWALL MANAGEMENT</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -7524,7 +7767,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="ssh">🔑 14. SSH (SECURE SHELL)</h2>
+      <h2 id="ssh">18. 🔑 SSH (SECURE SHELL)</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -8005,7 +8248,168 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="text-processing">🔍 15. TEXT PROCESSING</h2>
+      <h2 id="ntp-time">19. 🕐 NTP & TIME SYNCHRONIZATION</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">time synchronization, timezone management, certificate validation</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>⏰ Chrony (RHEL 8+ Default)</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  systemctl status chronyd                   # Check chrony status
+  systemctl enable --now chronyd             # Enable and start
+  chronyc tracking                           # Time sync status
+  chronyc sources -v                         # Time sources
+  chronyc sourcestats                        # Source statistics
+  chronyc makestep                            # Step clock immediately
+  # /etc/chrony.conf: server ntp.example.com iburst
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🌍 Timezone Management</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  timedatectl                                # Show all time info
+  timedatectl list-timezones                 # All timezones
+  timedatectl set-timezone America/New_York  # Set timezone
+  timedatectl set-ntp true                   # Enable NTP sync
+  hwclock --systohc                          # Sync hardware from system
+  hwclock --hctosys                          # Sync system from hardware
+  date -s "2026-04-02 12:00:00"             # Set time manually
+        </code></pre>
+      </div>
+<h2 id="sysctl">20. ⚙️ KERNEL PARAMETERS & SYSCTL TUNING</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">performance tuning, security hardening, network optimization</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>📊 View & Set Parameters</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  sysctl -a                                  # Show all parameters
+  sysctl -a | grep tcp                       # Filter by keyword
+  sysctl net.ipv4.ip_forward                 # View specific parameter
+  sysctl -w net.ipv4.ip_forward=1            # Set temporarily
+  sysctl -p                                  # Reload from /etc/sysctl.conf
+  sysctl --system                            # Load all system configs
+  echo "net.ipv4.tcp_tw_reuse = 1" > /etc/sysctl.d/99-custom.conf
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🌐 Network Tuning</h4>
+        <div class="command-category"><span class="category-tag category-production">[PRODUCTION]</span></div>
+        <pre><code>
+  sysctl -w net.core.rmem_max=16777216       # Max receive buffer
+  sysctl -w net.core.wmem_max=16777216       # Max send buffer
+  sysctl -w net.core.somaxconn=65535         # Max listen backlog
+  sysctl -w net.ipv4.tcp_tw_reuse=1          # Reuse TIME_WAIT sockets
+  sysctl -w net.ipv4.tcp_fin_timeout=30      # FIN timeout
+  sysctl -w net.ipv4.tcp_syncookies=1        # SYN cookies (DDoS protection)
+  sysctl -w net.ipv4.ip_forward=1            # Enable IP forwarding
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🛡️ Security Parameters</h4>
+        <div class="command-category"><span class="category-tag category-production">[PRODUCTION]</span></div>
+        <pre><code>
+  sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1
+  sysctl -w net.ipv4.conf.all.rp_filter=1    # Reverse path filtering
+  sysctl -w net.ipv4.conf.all.accept_redirects=0
+  sysctl -w kernel.randomize_va_space=2       # Full ASLR
+  sysctl -w kernel.dmesg_restrict=1           # Restrict dmesg
+  sysctl -w fs.file-max=2097152              # Max open files
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🖥️ VM Tuning</h4>
+        <div class="command-category"><span class="category-tag category-production">[PRODUCTION]</span></div>
+        <pre><code>
+  sysctl -w vm.swappiness=10                 # Less swap usage
+  sysctl -w vm.dirty_ratio=15                # % RAM before sync write
+  sysctl -w vm.dirty_background_ratio=5      # % RAM for background write
+  sysctl -w vm.overcommit_memory=0           # Heuristic overcommit
+  sysctl -w vm.min_free_kbytes=65536         # Min free memory (64MB)
+        </code></pre>
+      </div>
+<h2 id="network-troubleshooting">21. 🌐 NETWORK TROUBLESHOOTING & SECURITY</h2>
+
+<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">network troubleshooting, firewall configuration, VPN setup, and network security</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>🌐 Network Troubleshooting Toolkit</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # ── Connectivity Testing ──
+  ping -c 4 8.8.8.8                              # Basic connectivity
+  ping -c 4 -s 1472 -M do google.com             # MTU test
+  traceroute -n google.com                         # Route tracing
+  mtr --report --report-cycles 10 google.com      # Continuous trace
+  tracepath google.com                             # MTU discovery
+
+  # ── DNS Troubleshooting ──
+  dig google.com +short                            # Quick DNS
+  dig +trace google.com                            # DNS delegation
+  dig @8.8.8.8 google.com                         # Specific DNS server
+  dig google.com MX +short                         # Mail records
+  nslookup google.com                              # Legacy DNS
+  host -t A google.com                             # A record
+  resolvectl status                                # systemd-resolved status
+  cat /etc/resolv.conf                             # DNS config
+
+  # ── Port & Connection Testing ──
+  nc -zv google.com 80                             # Test TCP port
+  nc -zv -w 5 google.com 443                       # With timeout
+  nc -l 8080                                       # Listen on port
+  ss -tlnp | grep :80                              # Who's on port 80
+  lsof -i :80                                      # Alternative check
+  curl -v telnet://google.com:80                   # Test with curl
+
+  # ── Packet Capture ──
+  tcpdump -i eth0 -c 100                           # Basic capture
+  tcpdump -i any -n 'port 80'                      # HTTP traffic
+  tcpdump -i eth0 -w capture.pcap                  # Save to file
+  tcpdump -r capture.pcap                          # Read capture
+  tcpdump -nn -A -s0 'tcp port 80'                # Show HTTP content
+
+  # ── Bandwidth & Performance ──
+  iperf3 -s                                        # Start server
+  iperf3 -c server-ip                              # Test bandwidth
+  curl -o /dev/null http://speedtest.tele2.net/10MB.zip  # Download speed
+  nload eth0                                       # Real-time bandwidth
+  iftop -i eth0                                    # Connection bandwidth
+  vnstat -l                                        # Live traffic stats
+
+  # ── Connection Tracking ──
+  ss -s                                            # Socket summary
+  ss -tn state established | wc -l                 # Count connections
+  ss -tn state time-wait | wc -l                   # TIME_WAIT count
+  ss -tnp | grep :80                               # Port 80 connections
+  cat /proc/net/nf_conntrack | head -20            # Connection tracking
+  conntrack -S                                      # Conntrack stats
+  </code></pre>
+</div>
+
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 5: AUTOMATION & SCRIPTING</h3>
+      </div>
+<h2 id="text-processing">22. 🔍 TEXT PROCESSING</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -8755,7 +9159,7 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
-      <h2 id="yaml">🎯 16. YAML FUNDAMENTALS - COMMAND REFERENCE</h2>
+      <h2 id="yaml">23. 🎯 YAML FUNDAMENTALS - COMMAND REFERENCE</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -9793,7 +10197,7 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="scripting">🚀 17. BASH SCRIPTING ESSENTIALS</h2>
+        <h2 id="scripting">24. 🚀 BASH SCRIPTING ESSENTIALS</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -11823,7 +12227,7 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="backup">💿 18. BACKUP AND RECOVERY</h2>
+        <h2 id="backup">25. 💿 BACKUP AND RECOVERY</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -12483,408 +12887,734 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
-        <h2 id="automation">⏰ 19. AUTOMATION AND SCHEDULING</h2>
+        
+      <h2 id="automation-scheduling">26. ⏰ AUTOMATION AND SCHEDULING</h2>
 
-        <!-- WHEN TO USE THESE COMMANDS SECTION -->
-        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-          <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-          <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">task scheduling, automation workflows, job management, system maintenance, and scheduled operations</strong></p>
-        </div>
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">task scheduling, cron jobs, systemd timers, automated workflows</strong></p>
+      </div>
+      <div class="command-block">
+        <h4>⏰ Cron Jobs</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  crontab -e                                 # Edit user crontab
+  crontab -l                                 # List user cron jobs
+  crontab -r                                 # Remove user crontab
+  # Format: m h dom mon dow command
+  # 0 2 * * * /usr/bin/backup.sh            # Daily at 2 AM
+  # */5 * * * * /usr/bin/monitor.sh         # Every 5 minutes
+  cat /etc/crontab                           # System crontab
+  ls /etc/cron.d/                            # Cron directories
+        </code></pre>
+      </div>
+      <div class="command-block">
+        <h4>🔧 Systemd Timers</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  systemctl list-timers                      # List all timers
+  systemctl list-timers --all                # Including inactive
+  systemctl status backup.timer              # Timer status
+  systemctl enable --now backup.timer        # Enable timer
+  systemctl start backup.timer               # Start timer
+        </code></pre>
+      </div>
+      <div class="command-block">
+        <h4>📅 at Command</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  at 2:00 PM                                 # Schedule for 2 PM
+  at now + 2 hours                           # Schedule in 2 hours
+  atq                                        # List pending jobs
+  atrm JOB_ID                                # Remove scheduled job
+        </code></pre>
+      </div>
 
-        <h3>⏰ cron (Scheduled Tasks)</h3>
-        <div class="command-block">
-          <h4>📅 Understanding Cron Scheduling</h4>
+      <h2 id="boot-grub">27. 🚀 BOOT PROCESS, GRUB & SYSTEM RECOVERY</h2>
+
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use during: <strong style="color: #79c0ff;">boot troubleshooting, GRUB config, kernel changes, password recovery</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>🔧 GRUB2 Configuration</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  cat /etc/default/grub                       # Main GRUB settings
+  grub2-mkconfig -o /boot/grub2/grub.cfg     # Regenerate config (BIOS)
+  grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg  # Regenerate (UEFI)
+  grubby --default-kernel                     # Show default kernel
+  grubby --info=ALL                           # List all kernels
+  grubby --set-default /boot/vmlinuz-5.14.0  # Set default kernel
+  grubby --args="transparent_hugepage=never" --update-kernel=ALL
+  grub2-setpassword                           # Set GRUB password
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔐 Root Password Recovery</h4>
+        <div class="command-category"><span class="category-tag category-rare">[RARE]</span></div>
+        <pre><code>
+  # At GRUB menu: press 'e', add 'rd.break' to linux line, Ctrl+X
+  mount -o remount,rw /sysroot
+  chroot /sysroot
+  passwd root
+  touch /.autorelabel                         # Force SELinux relabel
+  exit; exit
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🔍 Boot Troubleshooting</h4>
+        <div class="command-category"><span class="category-tag category-debug">[DEBUG]</span></div>
+        <pre><code>
+  systemd-analyze                             # Total boot time
+  systemd-analyze blame                       # Slowest services
+  systemd-analyze critical-chain              # Critical path
+  journalctl -b                               # Current boot logs
+  journalctl -b -1                            # Previous boot logs
+  systemctl --failed                          # List failed units
+  dracut -f /boot/initramfs-$(uname -r).img $(uname -r)  # Rebuild initramfs
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🎯 Systemd Targets</h4>
+        <div class="command-category"><span class="category-tag category-common">[COMMON]</span></div>
+        <pre><code>
+  systemctl get-default                        # Show default target
+  systemctl set-default multi-user.target      # Text mode
+  systemctl set-default graphical.target       # GUI mode
+  systemctl isolate rescue.target              # Rescue mode
+  # poweroff.target(0) rescue(1) multi-user(3) graphical(5) reboot(6)
+        </code></pre>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #58a6ff; border-radius: 12px; padding: 15px 25px; margin: 40px 0 20px 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);">
+        <h3 style="color: #58a6ff; margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 1px;">PART 6: ADVANCED & REFERENCE</h3>
+      </div>
+<h2 id="advanced-system">28. 🎓 ADVANCED SYSTEM ADMINISTRATION</h2>
+
+      <!-- WHEN TO USE THESE COMMANDS SECTION -->
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">advanced system administration, performance optimization, system tuning, enterprise management, and complex troubleshooting</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>📊 System Performance Analysis</h4>
     <div class="command-category">
       <span class="category-tag category-common">[COMMON]</span>
       <span class="category-description">Frequently used in daily operations</span>
     </div>
     <pre><code>
-  # Cron Time Field Ranges:
-  # Minute:     0-59
-  # Hour:       0-23
-  # Day:        1-31
-  # Month:      1-12 (or Jan-Dec)
-  # Day of Week: 0-7 (0 and 7 = Sunday, or Sun-Sat)
+  # Advanced CPU monitoring
+  mpstat 1 5               # CPU statistics every 1 sec, 5 times
+  sar -u 1 10              # CPU utilization report
+  pidstat -u -p ALL 1      # Per-process CPU usage
+  perf top -p <PID>  # Real-time performance profiling
 
-  # Special Characters:
-  # *  - Any value (every)
-  # ,  - Value list separator (1,5,10)
-  # -  - Range (1-5 means 1,2,3,4,5)
-  # /  - Step values (*/5 = every 5)
+  # Memory analysis
+  free -h -s 5             # Memory usage every 5 seconds
+  vmstat 1 10              # Virtual memory statistics
+  slabtop                  # Kernel slab cache information
+  cat /proc/meminfo | grep -E "(MemTotal|MemFree|Cached|Swap)"
 
-  # Common Time Examples:
-  # 0 2 * * *        Every day at 2:00 AM
-  # */15 * * * *     Every 15 minutes
-  # 0 */4 * * *      Every 4 hours
-  # 30 1 * * 0       Every Sunday at 1:30 AM
-  # 0 9-17 * * 1-5   9 AM to 5 PM, Monday to Friday (hourly)
-  # 0 0 1 * *        First day of every month at midnight
-  # 0 0 1 1 *        January 1st at midnight (yearly)
+  # I/O performance
+  iostat -x 1 5            # Extended I/O statistics
+  iotop -o                 # Top I/O processes
+  sar -b 1 5               # I/O and transfer rate
+  nfsiostat 1 5            # NFS I/O statistics
 
-  # Special Strings:
-  # @reboot    - Run once at startup
-  # @yearly    - Run once a year (0 0 1 1 *)
-  # @annually  - Same as @yearly
-  # @monthly   - Run once a month (0 0 1 * *)
-  # @weekly    - Run once a week (0 0 * * 0)
-  # @daily     - Run once a day (0 0 * * *)
-  # @midnight  - Same as @daily
-  # @hourly    - Run once an hour (0 * * * *)
+  # System tuning
+  echo 'performance' > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+  echo 1000000 > /proc/sys/vm/dirty_background_bytes
+  echo 5000000 > /proc/sys/vm/dirty_bytes
+  sysctl -w net.core.rmem_max=16777216
+        </code></pre>
+      </div>
 
-  # Environment Variables in Crontab:
-  # SHELL=/bin/bash         # Shell to use
-  # PATH=/usr/local/bin:/usr/bin:/bin  # Search path
-  # MAILTO=admin@example.com           # Email output to
-  # HOME=/home/user                    # Home directory
+      <div class="command-block">
+        <h4>🌐 Advanced Network Configuration</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Network bonding
+  nmcli con add type bond bond0 mode=802.3ad
+  nmcli con add type ethernet slave-type bond ifname eth0 master bond0
+  nmcli con up bond0
 
-  # Cron Best Practices:
-  # 1. Always use absolute paths in scripts
-  # 2. Redirect output to log files
-  #    0 2 * * * /path/script.sh >> /var/log/myscript.log 2>&1
-  # 3. Set MAILTO to receive error notifications
-  # 4. Test scripts manually before scheduling
-  # 5. Use locking to prevent overlapping executions
-  #    0 * * * * flock -n /tmp/script.lock /path/script.sh
-  # 6. Document cron entries with comments
-  #    # Daily backup at 2 AM
-  #    0 2 * * * /usr/local/bin/backup.sh
+  # VLAN configuration
+  nmcli con add type vlan con-name vlan100 dev eth0 id 100
+  nmcli con modify vlan100 ipv4.addresses 192.168.1.100/24
+  nmcli con up vlan100
 
-  # Debugging Cron Issues:
-  # - Check cron logs: grep CRON /var/log/syslog
-  # - Verify cron service: systemctl status crond
-  # - Test with short interval first: */2 * * * *
-  # - Check script permissions: chmod +x script.sh
-  # - Verify PATH and environment variables
-          </code></pre>
-        </div>
+  # Bridge setup
+  nmcli con add type bridge con-name br0
+  nmcli con modify br0 ip4 192.168.1.1/24
+  nmcli con add type bridge-slave ifname eth0 master br0
 
-        <div class="command-block">
-          <h4>👁️ View crontab</h4>
+  # Advanced routing
+  ip route add 10.0.0.0/24 via 192.168.1.254 dev eth0
+  ip route add default via 192.168.1.254 dev eth0
+  ip route show table main
+  ip rule add from 192.168.1.100 table 100
+
+  # Network namespaces
+  ip netns add production
+  ip netns exec production ip link set lo up
+  ip netns exec production ip addr add 10.0.0.1/24 dev eth0
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📦 cgroups - Resource Control (Linux Containers Foundation)</h4>
     <div class="command-category">
       <span class="category-tag category-production">[PRODUCTION]</span>
       <span class="category-description">Used in production environments</span>
     </div>
     <pre><code>
-  crontab -l              # List current user's crontab
-  crontab -l -u username  # List specific user's crontab
-  sudo crontab -l         # List root's crontab
-          </code></pre>
-        </div>
+  # cgroups (Control Groups) - Limit, account for, and isolate resource usage
+  # Foundation of Docker, Kubernetes resource limits, systemd resource control
 
-        <div class="command-block">
-          <h4>✏️ Edit crontab</h4>
-    <div class="command-category">
-      <span class="category-tag category-production">[PRODUCTION]</span>
-      <span class="category-description">Used in production environments</span>
-    </div>
-    <pre><code>
-  crontab -e              # Edit current user's crontab
-  crontab -e -u username  # Edit specific user's crontab
-          </code></pre>
-        </div>
+  # ── cgroups v2 (Modern - RHEL 8+/Ubuntu 20.04+) ──
 
-        <div class="command-block">
-          <h4>🗑️ Remove crontab</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  crontab -r              # Remove current user's crontab
-  crontab -r -u username  # Remove specific user's crontab
-          </code></pre>
-        </div>
+  # View cgroup hierarchy
+  cat /proc/self/cgroup                           # Current process cgroup
+  systemd-cgls                                    # Tree view of cgroups
+  systemd-cgtop                                   # Top-like cgroup monitor
 
-        <div class="command-block">
-          <h4>📝 Crontab format</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  # Crontab format:
-  # * * * * * command
-  # │ │ │ │ │
-  # │ │ │ │ └─── Day of week (0-7, 0 and 7 are Sunday)
-  # │ │ │ └───── Month (1-12)
-  # │ │ └─────── Day of month (1-31)
-  # │ └───────── Hour (0-23)
-  # └─────────── Minute (0-59)
+  # systemd resource control (preferred method)
+  systemctl status myservice                      # Check service cgroup
+  systemd-cgls myservice                          # View service cgroup tree
 
-  # Examples:
-  # 0 2 * * * /path/to/script.sh         # Daily at 2 AM
-  # */5 * * * * /path/to/script.sh       # Every 5 minutes
-  # 0 */2 * * * /path/to/script.sh       # Every 2 hours
-  # 0 9-17 * * 1-5 /path/to/script.sh    # 9 AM to 5 PM, Mon-Fri
-  # 0 0 1 * * /path/to/script.sh         # First day of month
-  # @reboot /path/to/script.sh           # At system boot
-  # @daily /path/to/script.sh            # Daily
-  # @weekly /path/to/script.sh           # Weekly
-  # @monthly /path/to/script.sh          # Monthly
-          </code></pre>
-        </div>
+  # Set CPU limits for a service
+  systemctl set-property myservice CPUQuota=50%              # Limit to 50% CPU
+  systemctl set-property myservice CPUShares=512             # CPU weight (1024=default)
+  systemctl set-property myservice AllowedCPUs=0-3           # Limit to CPUs 0-3
+  systemctl set-property myservice CPUQuota=200%             # Allow 2 cores
 
-        <div class="command-block">
-          <h4>🖥️ System-wide cron</h4>
-    <div class="command-category">
-      <span class="category-tag category-production">[PRODUCTION]</span>
-      <span class="category-description">Used in production environments</span>
-    </div>
-    <pre><code>
-  /etc/crontab        # System crontab
-  /etc/cron.d/        # Additional cron files
-  /etc/cron.daily/    # Daily scripts
-  /etc/cron.weekly/   # Weekly scripts
-  /etc/cron.monthly/  # Monthly scripts
-  /etc/cron.hourly/   # Hourly scripts
-          </code></pre>
-        </div>
+  # Set memory limits for a service
+  systemctl set-property myservice MemoryMax=512M            # Hard memory limit
+  systemctl set-property myservice MemoryHigh=256M           # Soft memory limit
+  systemctl set-property myservice MemorySwapMax=0           # Disable swap
 
-        <div class="command-block">
-          <h4>📋 Cron logs</h4>
-    <div class="command-category">
-      <span class="category-tag category-debug">[DEBUG]</span>
-      <span class="category-description">Used for troubleshooting and investigation</span>
-    </div>
-    <pre><code>
-  tail -f /var/log/cron      # Follow cron logs
-  grep CRON /var/log/syslog  # Check cron execution (Ubuntu/Debian)
-  journalctl -u crond        # Systemd cron logs (RHEL/CentOS)
-  systemctl status crond     # Check cron service status
-          </code></pre>
-        </div>
+  # Set I/O limits for a service
+  systemctl set-property myservice IOWeight=500               # I/O weight (1-10000)
+  systemctl set-property myservice IOReadBandwidthMax="/dev/sda 10M"  # Read limit
+  systemctl set-property myservice IOWriteBandwidthMax="/dev/sda 5M"   # Write limit
 
-        <div class="command-block">
-          <h4>📁 Crontab file locations</h4>
-    <div class="command-category">
-      <span class="category-tag category-production">[PRODUCTION]</span>
-      <span class="category-description">Used in production environments</span>
-    </div>
-    <pre><code>
-  # User crontabs:
-  /var/spool/cron/crontabs/username    # Debian/Ubuntu
-  /var/spool/cron/username             # RHEL/CentOS
-  
-  # System crontabs:
-  /etc/crontab                         # Main system crontab
-  /etc/cron.d/                         # Additional system crontabs
-  /etc/cron.hourly/                    # Hourly scripts
-  /etc/cron.daily/                     # Daily scripts
-  /etc/cron.weekly/                    # Weekly scripts
-  /etc/cron.monthly/                   # Monthly scripts
-  
-  # Install crontab from file:
-  crontab filename                     # Install from file
-  crontab -l > backup.txt              # Backup current crontab
-          </code></pre>
-        </div>
+  # Set process limits
+  systemctl set-property myservice TasksMax=100              # Max processes/threads
 
-        <div class="command-block">
-          <h4>🔧 Crontab environment and troubleshooting</h4>
-    <div class="command-category">
-      <span class="category-tag category-debug">[DEBUG]</span>
-      <span class="category-description">Used for troubleshooting and investigation</span>
-    </div>
-    <pre><code>
-  # Environment variables in crontab:
-  SHELL=/bin/bash                      # Shell to use
-  PATH=/usr/local/bin:/usr/bin:/bin   # Command search path
-  MAILTO=admin@example.com            # Email output destination
-  HOME=/home/user                      # Home directory
-  LOGNAME=user                         # Username
-  
-  # Common issues and solutions:
-  # Problem: Command not found
-  # Solution: Use full paths or set PATH
-  0 2 * * * /usr/local/bin/script.sh   # Use full path
-  
-  # Problem: Script can't find files
-  # Solution: Change directory first
-  0 2 * * * cd /app && ./backup.sh    # Change directory
-  
-  # Problem: No output/errors visible
-  # Solution: Redirect output to log
-  0 2 * * * /path/to/script.sh >> /var/log/backup.log 2>&1
-  
-  # Test cron entries safely:
-  */2 * * * * /path/to/test.sh         # Test every 2 minutes
-  flock -n /tmp/script.lock /path/script.sh  # Prevent overlaps
-          </code></pre>
-        </div>
+  # Persistent limits (create override file)
+  # /etc/systemd/system/myservice.service.d/limits.conf
+  # [Service]
+  # CPUQuota=50%
+  # MemoryMax=512M
+  # TasksMax=100
 
-        <h3>⏰ at (One-Time Scheduled Tasks)</h3>
-
-        <div class="command-block">
-          <h4>📅 Schedule one-time task</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  at 10:00             # Schedule for 10:00 AM today
-  at now + 5 minutes   # In 5 minutes
-  at now + 2 hours     # In 2 hours
-  at 22:00 tomorrow    # 10 PM tomorrow
-  at 09:00 2024-12-25  # Specific date and time
-
-  # In at prompt, enter commands, then Ctrl+D to save
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>📋 List scheduled jobs</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  atq          # List all jobs
-  at -l        # Alternative
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>👁️ View job details</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  at -c job_number  # Show job commands
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>🗑️ Remove scheduled job</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  atrm job_number   # Remove job
-  at -r job_number  # Alternative
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>💡 Examples</h4>
-    <div class="command-category">
-      <span class="category-tag category-debug">[DEBUG]</span>
-      <span class="category-description">Used for troubleshooting and investigation</span>
-    </div>
-    <pre><code>
-  echo "/path/to/script.sh" | at now + 1 hour
-  at 02:00 <<EOF
-  /usr/bin/backup.sh
-  /usr/bin/cleanup.sh
-  EOF
-          </code></pre>
-        </div>
-
-        <h3>⏱️ systemd Timers (Modern Alternative to Cron)</h3>
-
-        <div class="command-block">
-          <h4>📋 List all timers</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  systemctl list-timers        # Active timers
-  systemctl list-timers --all  # All timers
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>📝 Create timer (requires .timer and .service files)</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  # /etc/systemd/system/mytask.timer
-  # /etc/systemd/system/mytask.service
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>⚡ Enable and start timer</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  systemctl enable mytask.timer
-  systemctl start mytask.timer
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>📊 Check timer status</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  systemctl status mytask.timer
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>🔧 Manual trigger</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  systemctl start mytask.service
-          </code></pre>
-        </div>
-
-        <div class="command-block">
-          <h4>🔄 Reload after editing</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
+  # Apply persistent limits
   systemctl daemon-reload
-          </code></pre>
-        </div>
 
-        <h3>👁️ watch (Repeat Command)</h3>
+  # View current limits
+  systemctl show myservice | grep -E "(CPU|Memory|IO|Tasks)"
 
-        <div class="command-block">
-          <h4>🔄 Execute command repeatedly</h4>
+  # ── cgroups v2 Filesystem (Direct Control) ──
+
+  # Mount cgroup v2
+  mount -t cgroup2 none /sys/fs/cgroup
+
+  # Create a cgroup
+  mkdir /sys/fs/cgroup/mygroup
+
+  # Set CPU limit (50% of one core = 50000/100000)
+  echo 50000 > /sys/fs/cgroup/mygroup/cpu.max
+  echo 100000 > /sys/fs/cgroup/mygroup/cpu.max    # Full core
+
+  # Set memory limit
+  echo 536870912 > /sys/fs/cgroup/mygroup/memory.max  # 512MB
+
+  # Add process to cgroup
+  echo $PID > /sys/fs/cgroup/mygroup/cgroup.procs
+
+  # Run command in cgroup
+  systemd-run --scope -p CPUQuota=50% -p MemoryMax=512M mycommand
+
+  # ── Real-world Docker cgroup examples ──
+  docker run --cpus=1.5 --memory=512m nginx         # Docker resource limits
+  docker run --cpu-shares=512 nginx                  # CPU weight
+  docker run --blkio-weight=500 nginx                # I/O weight
+  docker run --pids-limit=100 nginx                  # Process limit
+
+  # ── Kubernetes resource limits ──
+  # resources:
+  #   requests:
+  #     cpu: "250m"         # 0.25 CPU
+  #     memory: "256Mi"
+  #   limits:
+  #     cpu: "500m"         # 0.5 CPU
+  #     memory: "512Mi"
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🌐 Linux Namespaces - Process Isolation</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Linux Namespaces - Foundation of Containers
+  # Provide isolated views of system resources
+
+  # Namespace Types:
+  # PID     - Process IDs (isolated process tree)
+  # NET     - Network interfaces, ports, routes
+  # MNT     - Mount points
+  # UTS     - Hostname and domain
+  # IPC     - Shared memory, message queues
+  # USER    - UID/GID mappings
+  # CGROUP  - cgroup root directory
+  # TIME    - System clocks (kernel 5.6+)
+
+  # View namespace of a process
+  ls -la /proc/$$/ns/                              # All namespaces
+  ls -la /proc/$$/ns/net                           # Network namespace
+  readlink /proc/$$/ns/pid                         # PID namespace ID
+
+  # Create namespace with unshare
+  unshare --net --mount --pid --fork bash           # New isolated shell
+  unshare --net ip link                             # Isolated network
+  unshare --uts bash                                # Isolated hostname
+  unshare --pid --fork --mount bash                 # Full container-like
+
+  # Network namespace example
+  ip netns add ns1                                 # Create network namespace
+  ip netns add ns2
+  ip link add veth1 type veth peer name veth2      # Create veth pair
+  ip link set veth1 netns ns1                      # Move veth to ns1
+  ip link set veth2 netns ns2
+  ip netns exec ns1 ip addr add 10.0.0.1/24 dev veth1
+  ip netns exec ns2 ip addr add 10.0.0.2/24 dev veth2
+  ip netns exec ns1 ip link set veth1 up
+  ip netns exec ns2 ip link set veth2 up
+  ip netns exec ns1 ping 10.0.0.2                  # Test connectivity
+
+  # List network namespaces
+  ip netns list
+  ip netns exec ns1 ip addr                        # Run command in namespace
+
+  # Enter namespace of running process
+  nsenter --target PID --net ip addr               # Enter network namespace
+  nsenter --target PID --mount ls /                # Enter mount namespace
+  nsenter --target PID --pid ps aux                # Enter PID namespace
+
+  # Cleanup
+  ip netns del ns1                                 # Delete namespace
+
+  # ── Docker namespace usage ──
+  docker inspect --format '{{.State.Pid}}' container_name   # Get container PID
+  nsenter --target $PID --net --mount --pid bash              # Enter container
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🛡️ System Security Hardening</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # SELinux advanced configuration
+  semanage fcontext -a -t httpd_sys_content_t "/var/www/html(/.*)?"
+  semanage port -a -t http_port_t -p tcp 8080
+  semanage permissive -a httpd_t
+  audit2allow -w -a
+
+  # AppArmor configuration
+  aa-status                         # Show AppArmor status
+  aa-complain /usr/sbin/nginx       # Set to complain mode
+  aa-enforce /usr/sbin/nginx        # Set to enforce mode
+  aa-genprof /usr/sbin/nginx        # Generate profile
+
+  # System auditing
+  auditctl -w /etc/passwd -p wa -k passwd_changes
+  auditctl -w /etc/shadow -p wa -k shadow_changes
+  auditctl -w /etc/sudoers -p wa -k sudoers_changes
+  ausearch -k passwd_changes
+
+  # Security scanning
+  lynis audit system                # System security audit
+  chkrootkit                        # Rootkit scanner
+  rkhunter --check --skip-keypress  # Rootkit hunter
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>💾 Advanced Storage Management</h4>
     <div class="command-category">
       <span class="category-tag category-common">[COMMON]</span>
       <span class="category-description">Frequently used in daily operations</span>
     </div>
     <pre><code>
-  watch command       # Every 2 seconds (default)
-  watch -n 5 command  # Every 5 seconds
-  watch -d command    # Highlight differences
-  watch -t command    # No title
-  watch -b command    # Beep on error
-  watch -x command    # Exec instead of sh -c
-          </code></pre>
-        </div>
+  # LVM advanced operations
+  pvcreate /dev/sdb /dev/sdc
+  vgcreate datavg /dev/sdb /dev/sdc
+  lvcreate -n data -L 10G datavg
+  lvextend -L +5G /dev/datavg/data
+  xfs_growfs /dev/datavg/data
 
-        <div class="command-block">
-          <h4>💡 Examples</h4>
+  # Software RAID
+  mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+  mdadm --detail /dev/md0
+  mdadm --grow /dev/md0 --raid-devices=3 --add /dev/sdd
+
+  # Filesystem tuning
+  tune2fs -o journal_data_writeback /dev/sda1
+  tune2fs -m 1 /dev/sda1
+  e4defrag /dev/sda1
+  xfs_fsr /dev/sda1
+
+  # Quota management
+  quotacheck -avug
+  quotaon -avug
+  edquota user1
+  repquota -a
+        </code></pre>
+      </div>
+
+      <h2 id="enterprise-automation">29. 🏢 ENTERPRISE AUTOMATION & SCRIPTING</h2>
+
+      <!-- WHEN TO USE THESE COMMANDS SECTION -->
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">enterprise automation, advanced scripting, DevOps workflows, infrastructure automation, and large-scale system management</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>⚡ Advanced Bash Scripting</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  #!/bin/bash
+  # Enterprise backup script with error handling
+
+  set -euo pipefail
+  IFS=$'\n\t'
+
+  # Logging function
+  log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" | tee -a /var/log/backup.log
+  }
+
+  # Error handling
+  error_exit() {
+  log "ERROR: $1"
+  exit 1
+  }
+
+  # Backup function with validation
+  backup_directory() {
+  local src_dir=$1
+  local dest_dir=$2
+  local backup_file="${dest_dir}/backup_$(date +%Y%m%d_%H%M%S).tar.gz"
+
+  log "Starting backup of $src_dir"
+
+  # Create destination if not exists
+  mkdir -p "$dest_dir" || error_exit "Cannot create destination directory"
+
+  # Perform backup with compression
+  tar -czf "$backup_file" -C "$(dirname "$src_dir")" "$(basename "$src_dir")" || error_exit "Backup failed"
+
+  # Verify backup integrity
+  tar -tzf "$backup_file" > /dev/null || error_exit "Backup verification failed"
+
+  log "Backup completed: $backup_file"
+  log "Backup size: $(du -h "$backup_file" | cut -f1)"
+  }
+
+  # Main execution
+  main() {
+  local backup_source="/home"
+  local backup_dest="/backup"
+
+  # Check root privileges
+  [[ $EUID -eq 0 ]] || error_exit "This script must be run as root"
+
+  # Check available space
+  local required_space=$(du -s "$backup_source" | cut -f1)
+  local available_space=$(df "$backup_dest" | awk 'NR==2 {print $4*1024}')
+
+  if [[ $required_space -gt $available_space ]]; then
+  error_exit "Insufficient disk space for backup"
+  fi
+
+  backup_directory "$backup_source" "$backup_dest"
+
+  # Cleanup old backups (keep last 7)
+  find "$backup_dest" -name "backup_*.tar.gz" -mtime +7 -delete
+  log "Old backups cleaned up"
+  }
+
+  main "$@"
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📊 System Monitoring Script</h4>
     <div class="command-category">
       <span class="category-tag category-debug">[DEBUG]</span>
       <span class="category-description">Used for troubleshooting and investigation</span>
     </div>
     <pre><code>
-  watch df -h                       # Monitor disk usage
-  watch -n 1 'ps aux | grep httpd'  # Monitor processes
-  watch -d free -m                  # Monitor memory with highlights
-  watch kubectl get pods            # Monitor Kubernetes pods
-          </code></pre>
-        </div>
+  #!/bin/bash
+  # Comprehensive system monitoring
 
-        <h2 id="misc">🔧 20. MISCELLANEOUS USEFUL COMMANDS</h2>
+  ALERT_THRESHOLD_CPU=80
+  ALERT_THRESHOLD_MEM=90
+  ALERT_THRESHOLD_DISK=85
+  LOG_FILE="/var/log/system_monitor.log"
+
+  check_cpu() {
+  local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
+  if (( $(echo "$cpu_usage > $ALERT_THRESHOLD_CPU" | bc -l) )); then
+  echo "[$(date)] CPU ALERT: ${cpu_usage}%" >> "$LOG_FILE"
+  return 1
+  fi
+  return 0
+  }
+
+  check_memory() {
+  local mem_usage=$(free | grep Mem | awk '{printf "%.1f", $3/$2 * 100.0}')
+  if (( $(echo "$mem_usage > $ALERT_THRESHOLD_MEM" | bc -l) )); then
+  echo "[$(date)] MEMORY ALERT: ${mem_usage}%" >> "$LOG_FILE"
+  return 1
+  fi
+  return 0
+  }
+
+  check_disk() {
+  local disk_usage=$(df / | awk 'NR==2 {print $5}' | cut -d'%' -f1)
+  if [[ $disk_usage -gt $ALERT_THRESHOLD_DISK ]]; then
+  echo "[$(date)] DISK ALERT: ${disk_usage}%" >> "$LOG_FILE"
+  return 1
+  fi
+  return 0
+  }
+
+  check_services() {
+  local services=("nginx" "mysql" "sshd")
+  for service in "${services[@]}"; do
+  if ! systemctl is-active --quiet "$service"; then
+  echo "[$(date)] SERVICE ALERT: $service is down" >> "$LOG_FILE"
+  fi
+  done
+  }
+
+  # Main monitoring loop
+  while true; do
+  check_cpu
+  check_memory
+  check_disk
+  check_services
+  sleep 60
+  done
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>⚙️ Configuration Management</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  #!/bin/bash
+  # Automated configuration deployment
+
+  CONFIG_DIR="/etc/configs"
+  BACKUP_DIR="/backup/configs"
+  LOG_FILE="/var/log/config_deploy.log"
+
+  deploy_config() {
+  local config_file=$1
+  local target_path=$2
+  local service_name=$3
+
+  # Backup current config
+  if [[ -f "$target_path" ]]; then
+  cp "$target_path" "${BACKUP_DIR}/$(basename "$target_path").$(date +%Y%m%d_%H%M%S)"
+  fi
+
+  # Deploy new config
+  cp "$CONFIG_DIR/$config_file" "$target_path"
+
+  # Validate configuration
+  case "$service_name" in
+  "nginx")
+  nginx -t || return 1
+  ;;
+  "apache")
+  apache2ctl configtest || return 1
+  ;;
+  "sshd")
+  sshd -t || return 1
+  ;;
+  esac
+
+  # Restart service
+  systemctl restart "$service_name"
+  echo "[$(date)] Deployed $config_file to $target_path" >> "$LOG_FILE"
+  }
+
+  # Batch deployment
+  deploy_configs() {
+  local configs=(
+  "nginx.conf:/etc/nginx/nginx.conf:nginx"
+  "sshd_config:/etc/ssh/sshd_config:sshd"
+  "my.cnf:/etc/mysql/my.cnf:mysql"
+  )
+
+  for config in "${configs[@]}"; do
+  IFS=':' read -r file target service <<< "$config"
+  deploy_config "$file" "$target" "$service"
+  done
+  }
+
+  deploy_configs
+        </code></pre>
+      </div>
+
+      <h2 id="troubleshooting">30. 🔬 ADVANCED TROUBLESHOOTING TECHNIQUES</h2>
+
+      <!-- WHEN TO USE THESE COMMANDS SECTION -->
+      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
+        <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system troubleshooting, diagnostic analysis, problem solving, performance debugging, and issue resolution</strong></p>
+      </div>
+
+      <div class="command-block">
+        <h4>🔍 System Diagnosis Framework</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  #!/bin/bash
+  # Comprehensive system diagnosis
+
+  DIAGNOSTIC_DIR="/tmp/system_diag_$(date +%Y%m%d_%H%M%S)"
+  mkdir -p "$DIAGNOSTIC_DIR"
+
+  # System information
+  echo "=== System Information ===" > "$DIAGNOSTIC_DIR/system_info.txt"
+  uname -a >> "$DIAGNOSTIC_DIR/system_info.txt"
+  cat /etc/os-release >> "$DIAGNOSTIC_DIR/system_info.txt"
+  uptime >> "$DIAGNOSTIC_DIR/system_info.txt"
+
+  # Hardware information
+  echo "=== Hardware Information ===" > "$DIAGNOSTIC_DIR/hardware.txt"
+  lscpu >> "$DIAGNOSTIC_DIR/hardware.txt"
+  free -h >> "$DIAGNOSTIC_DIR/hardware.txt"
+  lsblk >> "$DIAGNOSTIC_DIR/hardware.txt"
+  lspci >> "$DIAGNOSTIC_DIR/hardware.txt"
+
+  # Network configuration
+  echo "=== Network Configuration ===" > "$DIAGNOSTIC_DIR/network.txt"
+  ip addr show >> "$DIAGNOSTIC_DIR/network.txt"
+  ip route show >> "$DIAGNOSTIC_DIR/network.txt"
+  ss -tuln >> "$DIAGNOSTIC_DIR/network.txt"
+  cat /etc/resolv.conf >> "$DIAGNOSTIC_DIR/network.txt"
+
+  # Running processes
+  echo "=== Running Processes ===" > "$DIAGNOSTIC_DIR/processes.txt"
+  ps aux >> "$DIAGNOSTIC_DIR/processes.txt"
+  top -bn1 >> "$DIAGNOSTIC_DIR/processes.txt"
+
+  # System logs
+  echo "=== System Logs (last 100 lines) ===" > "$DIAGNOSTIC_DIR/logs.txt"
+  journalctl -n 100 >> "$DIAGNOSTIC_DIR/logs.txt"
+  dmesg | tail -100 >> "$DIAGNOSTIC_DIR/logs.txt"
+
+  # Service status
+  echo "=== Service Status ===" > "$DIAGNOSTIC_DIR/services.txt"
+  systemctl list-units --type=service --state=failed >> "$DIAGNOSTIC_DIR/services.txt"
+  systemctl list-units --type=service --state=running >> "$DIAGNOSTIC_DIR/services.txt"
+
+  # Package information
+  echo "=== Package Information ===" > "$DIAGNOSTIC_DIR/packages.txt"
+  rpm -qa | wc -l >> "$DIAGNOSTIC_DIR/packages.txt"
+  dnf history list | head -20 >> "$DIAGNOSTIC_DIR/packages.txt"
+
+  # Create archive
+  tar -czf "/tmp/system_diagnostic_$(date +%Y%m%d_%H%M%S).tar.gz" -C "$(dirname "$DIAGNOSTIC_DIR")" "$(basename "$DIAGNOSTIC_DIR")"
+  echo "Diagnostic report created: $DIAGNOSTIC_DIR"
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📊 Performance Analysis</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # CPU performance analysis
+  perf record -a -g sleep 10
+  perf report
+
+  # Memory leak detection
+  valgrind --tool=memcheck --leak-check=full ./program
+  massif ./program
+
+  # Network performance analysis
+  tcpdump -i eth0 -w capture.pcap
+  tshark -r capture.pcap -Y "http.request.method == GET"
+
+  # Disk performance analysis
+  fio --name=random-write --ioengine=libaio --iodepth=1 --rw=randwrite --bs=4k --direct=1 --size=1G --numjobs=1 --runtime=60 --group-reporting
+
+  # System call tracing
+  strace -p <PID> -c -o trace.txt
+  strace -f -e trace=network ./program
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🚀 Boot Troubleshooting</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Boot analysis
+  systemd-analyze
+  systemd-analyze blame
+  systemd-analyze critical-chain
+
+  # Boot parameters
+  cat /proc/cmdline
+  grub2-editenv list
+  grub2-mkconfig -o /boot/grub2/grub.cfg
+
+  # Emergency mode
+  systemctl emergency
+  journalctl -b -p err
+
+  # Recovery mode
+  mount -o remount,rw /
+  fsck -f /dev/sda1
+        </code></pre>
+      </div>
+
+      <h2 id="misc">31. 🔧 MISCELLANEOUS USEFUL COMMANDS</h2>
 
         <!-- WHEN TO USE THESE COMMANDS SECTION -->
         <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -13364,627 +14094,7 @@ history | grep keyword        # Quickly find commands relevant to tasks
   </code></pre>
 </div>
 
-      <h2 id="advanced-system">🎓 21. ADVANCED SYSTEM ADMINISTRATION</h2>
-
-      <!-- WHEN TO USE THESE COMMANDS SECTION -->
-      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-        <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">advanced system administration, performance optimization, system tuning, enterprise management, and complex troubleshooting</strong></p>
-      </div>
-
-      <div class="command-block">
-        <h4>📊 System Performance Analysis</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  # Advanced CPU monitoring
-  mpstat 1 5               # CPU statistics every 1 sec, 5 times
-  sar -u 1 10              # CPU utilization report
-  pidstat -u -p ALL 1      # Per-process CPU usage
-  perf top -p <PID>  # Real-time performance profiling
-
-  # Memory analysis
-  free -h -s 5             # Memory usage every 5 seconds
-  vmstat 1 10              # Virtual memory statistics
-  slabtop                  # Kernel slab cache information
-  cat /proc/meminfo | grep -E "(MemTotal|MemFree|Cached|Swap)"
-
-  # I/O performance
-  iostat -x 1 5            # Extended I/O statistics
-  iotop -o                 # Top I/O processes
-  sar -b 1 5               # I/O and transfer rate
-  nfsiostat 1 5            # NFS I/O statistics
-
-  # System tuning
-  echo 'performance' > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-  echo 1000000 > /proc/sys/vm/dirty_background_bytes
-  echo 5000000 > /proc/sys/vm/dirty_bytes
-  sysctl -w net.core.rmem_max=16777216
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>🌐 Advanced Network Configuration</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  # Network bonding
-  nmcli con add type bond bond0 mode=802.3ad
-  nmcli con add type ethernet slave-type bond ifname eth0 master bond0
-  nmcli con up bond0
-
-  # VLAN configuration
-  nmcli con add type vlan con-name vlan100 dev eth0 id 100
-  nmcli con modify vlan100 ipv4.addresses 192.168.1.100/24
-  nmcli con up vlan100
-
-  # Bridge setup
-  nmcli con add type bridge con-name br0
-  nmcli con modify br0 ip4 192.168.1.1/24
-  nmcli con add type bridge-slave ifname eth0 master br0
-
-  # Advanced routing
-  ip route add 10.0.0.0/24 via 192.168.1.254 dev eth0
-  ip route add default via 192.168.1.254 dev eth0
-  ip route show table main
-  ip rule add from 192.168.1.100 table 100
-
-  # Network namespaces
-  ip netns add production
-  ip netns exec production ip link set lo up
-  ip netns exec production ip addr add 10.0.0.1/24 dev eth0
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>📦 cgroups - Resource Control (Linux Containers Foundation)</h4>
-    <div class="command-category">
-      <span class="category-tag category-production">[PRODUCTION]</span>
-      <span class="category-description">Used in production environments</span>
-    </div>
-    <pre><code>
-  # cgroups (Control Groups) - Limit, account for, and isolate resource usage
-  # Foundation of Docker, Kubernetes resource limits, systemd resource control
-
-  # ── cgroups v2 (Modern - RHEL 8+/Ubuntu 20.04+) ──
-
-  # View cgroup hierarchy
-  cat /proc/self/cgroup                           # Current process cgroup
-  systemd-cgls                                    # Tree view of cgroups
-  systemd-cgtop                                   # Top-like cgroup monitor
-
-  # systemd resource control (preferred method)
-  systemctl status myservice                      # Check service cgroup
-  systemd-cgls myservice                          # View service cgroup tree
-
-  # Set CPU limits for a service
-  systemctl set-property myservice CPUQuota=50%              # Limit to 50% CPU
-  systemctl set-property myservice CPUShares=512             # CPU weight (1024=default)
-  systemctl set-property myservice AllowedCPUs=0-3           # Limit to CPUs 0-3
-  systemctl set-property myservice CPUQuota=200%             # Allow 2 cores
-
-  # Set memory limits for a service
-  systemctl set-property myservice MemoryMax=512M            # Hard memory limit
-  systemctl set-property myservice MemoryHigh=256M           # Soft memory limit
-  systemctl set-property myservice MemorySwapMax=0           # Disable swap
-
-  # Set I/O limits for a service
-  systemctl set-property myservice IOWeight=500               # I/O weight (1-10000)
-  systemctl set-property myservice IOReadBandwidthMax="/dev/sda 10M"  # Read limit
-  systemctl set-property myservice IOWriteBandwidthMax="/dev/sda 5M"   # Write limit
-
-  # Set process limits
-  systemctl set-property myservice TasksMax=100              # Max processes/threads
-
-  # Persistent limits (create override file)
-  # /etc/systemd/system/myservice.service.d/limits.conf
-  # [Service]
-  # CPUQuota=50%
-  # MemoryMax=512M
-  # TasksMax=100
-
-  # Apply persistent limits
-  systemctl daemon-reload
-
-  # View current limits
-  systemctl show myservice | grep -E "(CPU|Memory|IO|Tasks)"
-
-  # ── cgroups v2 Filesystem (Direct Control) ──
-
-  # Mount cgroup v2
-  mount -t cgroup2 none /sys/fs/cgroup
-
-  # Create a cgroup
-  mkdir /sys/fs/cgroup/mygroup
-
-  # Set CPU limit (50% of one core = 50000/100000)
-  echo 50000 > /sys/fs/cgroup/mygroup/cpu.max
-  echo 100000 > /sys/fs/cgroup/mygroup/cpu.max    # Full core
-
-  # Set memory limit
-  echo 536870912 > /sys/fs/cgroup/mygroup/memory.max  # 512MB
-
-  # Add process to cgroup
-  echo $PID > /sys/fs/cgroup/mygroup/cgroup.procs
-
-  # Run command in cgroup
-  systemd-run --scope -p CPUQuota=50% -p MemoryMax=512M mycommand
-
-  # ── Real-world Docker cgroup examples ──
-  docker run --cpus=1.5 --memory=512m nginx         # Docker resource limits
-  docker run --cpu-shares=512 nginx                  # CPU weight
-  docker run --blkio-weight=500 nginx                # I/O weight
-  docker run --pids-limit=100 nginx                  # Process limit
-
-  # ── Kubernetes resource limits ──
-  # resources:
-  #   requests:
-  #     cpu: "250m"         # 0.25 CPU
-  #     memory: "256Mi"
-  #   limits:
-  #     cpu: "500m"         # 0.5 CPU
-  #     memory: "512Mi"
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>🌐 Linux Namespaces - Process Isolation</h4>
-    <div class="command-category">
-      <span class="category-tag category-production">[PRODUCTION]</span>
-      <span class="category-description">Used in production environments</span>
-    </div>
-    <pre><code>
-  # Linux Namespaces - Foundation of Containers
-  # Provide isolated views of system resources
-
-  # Namespace Types:
-  # PID     - Process IDs (isolated process tree)
-  # NET     - Network interfaces, ports, routes
-  # MNT     - Mount points
-  # UTS     - Hostname and domain
-  # IPC     - Shared memory, message queues
-  # USER    - UID/GID mappings
-  # CGROUP  - cgroup root directory
-  # TIME    - System clocks (kernel 5.6+)
-
-  # View namespace of a process
-  ls -la /proc/$$/ns/                              # All namespaces
-  ls -la /proc/$$/ns/net                           # Network namespace
-  readlink /proc/$$/ns/pid                         # PID namespace ID
-
-  # Create namespace with unshare
-  unshare --net --mount --pid --fork bash           # New isolated shell
-  unshare --net ip link                             # Isolated network
-  unshare --uts bash                                # Isolated hostname
-  unshare --pid --fork --mount bash                 # Full container-like
-
-  # Network namespace example
-  ip netns add ns1                                 # Create network namespace
-  ip netns add ns2
-  ip link add veth1 type veth peer name veth2      # Create veth pair
-  ip link set veth1 netns ns1                      # Move veth to ns1
-  ip link set veth2 netns ns2
-  ip netns exec ns1 ip addr add 10.0.0.1/24 dev veth1
-  ip netns exec ns2 ip addr add 10.0.0.2/24 dev veth2
-  ip netns exec ns1 ip link set veth1 up
-  ip netns exec ns2 ip link set veth2 up
-  ip netns exec ns1 ping 10.0.0.2                  # Test connectivity
-
-  # List network namespaces
-  ip netns list
-  ip netns exec ns1 ip addr                        # Run command in namespace
-
-  # Enter namespace of running process
-  nsenter --target PID --net ip addr               # Enter network namespace
-  nsenter --target PID --mount ls /                # Enter mount namespace
-  nsenter --target PID --pid ps aux                # Enter PID namespace
-
-  # Cleanup
-  ip netns del ns1                                 # Delete namespace
-
-  # ── Docker namespace usage ──
-  docker inspect --format '{{.State.Pid}}' container_name   # Get container PID
-  nsenter --target $PID --net --mount --pid bash              # Enter container
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>🛡️ System Security Hardening</h4>
-    <div class="command-category">
-      <span class="category-tag category-production">[PRODUCTION]</span>
-      <span class="category-description">Used in production environments</span>
-    </div>
-    <pre><code>
-  # SELinux advanced configuration
-  semanage fcontext -a -t httpd_sys_content_t "/var/www/html(/.*)?"
-  semanage port -a -t http_port_t -p tcp 8080
-  semanage permissive -a httpd_t
-  audit2allow -w -a
-
-  # AppArmor configuration
-  aa-status                         # Show AppArmor status
-  aa-complain /usr/sbin/nginx       # Set to complain mode
-  aa-enforce /usr/sbin/nginx        # Set to enforce mode
-  aa-genprof /usr/sbin/nginx        # Generate profile
-
-  # System auditing
-  auditctl -w /etc/passwd -p wa -k passwd_changes
-  auditctl -w /etc/shadow -p wa -k shadow_changes
-  auditctl -w /etc/sudoers -p wa -k sudoers_changes
-  ausearch -k passwd_changes
-
-  # Security scanning
-  lynis audit system                # System security audit
-  chkrootkit                        # Rootkit scanner
-  rkhunter --check --skip-keypress  # Rootkit hunter
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>💾 Advanced Storage Management</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  # LVM advanced operations
-  pvcreate /dev/sdb /dev/sdc
-  vgcreate datavg /dev/sdb /dev/sdc
-  lvcreate -n data -L 10G datavg
-  lvextend -L +5G /dev/datavg/data
-  xfs_growfs /dev/datavg/data
-
-  # Software RAID
-  mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
-  mdadm --detail /dev/md0
-  mdadm --grow /dev/md0 --raid-devices=3 --add /dev/sdd
-
-  # Filesystem tuning
-  tune2fs -o journal_data_writeback /dev/sda1
-  tune2fs -m 1 /dev/sda1
-  e4defrag /dev/sda1
-  xfs_fsr /dev/sda1
-
-  # Quota management
-  quotacheck -avug
-  quotaon -avug
-  edquota user1
-  repquota -a
-        </code></pre>
-      </div>
-
-      <h2 id="enterprise-automation">🏢 22. ENTERPRISE AUTOMATION & SCRIPTING</h2>
-
-      <!-- WHEN TO USE THESE COMMANDS SECTION -->
-      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-        <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">enterprise automation, advanced scripting, DevOps workflows, infrastructure automation, and large-scale system management</strong></p>
-      </div>
-
-      <div class="command-block">
-        <h4>⚡ Advanced Bash Scripting</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  #!/bin/bash
-  # Enterprise backup script with error handling
-
-  set -euo pipefail
-  IFS=$'\n\t'
-
-  # Logging function
-  log() {
-  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" | tee -a /var/log/backup.log
-  }
-
-  # Error handling
-  error_exit() {
-  log "ERROR: $1"
-  exit 1
-  }
-
-  # Backup function with validation
-  backup_directory() {
-  local src_dir=$1
-  local dest_dir=$2
-  local backup_file="${dest_dir}/backup_$(date +%Y%m%d_%H%M%S).tar.gz"
-
-  log "Starting backup of $src_dir"
-
-  # Create destination if not exists
-  mkdir -p "$dest_dir" || error_exit "Cannot create destination directory"
-
-  # Perform backup with compression
-  tar -czf "$backup_file" -C "$(dirname "$src_dir")" "$(basename "$src_dir")" || error_exit "Backup failed"
-
-  # Verify backup integrity
-  tar -tzf "$backup_file" > /dev/null || error_exit "Backup verification failed"
-
-  log "Backup completed: $backup_file"
-  log "Backup size: $(du -h "$backup_file" | cut -f1)"
-  }
-
-  # Main execution
-  main() {
-  local backup_source="/home"
-  local backup_dest="/backup"
-
-  # Check root privileges
-  [[ $EUID -eq 0 ]] || error_exit "This script must be run as root"
-
-  # Check available space
-  local required_space=$(du -s "$backup_source" | cut -f1)
-  local available_space=$(df "$backup_dest" | awk 'NR==2 {print $4*1024}')
-
-  if [[ $required_space -gt $available_space ]]; then
-  error_exit "Insufficient disk space for backup"
-  fi
-
-  backup_directory "$backup_source" "$backup_dest"
-
-  # Cleanup old backups (keep last 7)
-  find "$backup_dest" -name "backup_*.tar.gz" -mtime +7 -delete
-  log "Old backups cleaned up"
-  }
-
-  main "$@"
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>📊 System Monitoring Script</h4>
-    <div class="command-category">
-      <span class="category-tag category-debug">[DEBUG]</span>
-      <span class="category-description">Used for troubleshooting and investigation</span>
-    </div>
-    <pre><code>
-  #!/bin/bash
-  # Comprehensive system monitoring
-
-  ALERT_THRESHOLD_CPU=80
-  ALERT_THRESHOLD_MEM=90
-  ALERT_THRESHOLD_DISK=85
-  LOG_FILE="/var/log/system_monitor.log"
-
-  check_cpu() {
-  local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
-  if (( $(echo "$cpu_usage > $ALERT_THRESHOLD_CPU" | bc -l) )); then
-  echo "[$(date)] CPU ALERT: ${cpu_usage}%" >> "$LOG_FILE"
-  return 1
-  fi
-  return 0
-  }
-
-  check_memory() {
-  local mem_usage=$(free | grep Mem | awk '{printf "%.1f", $3/$2 * 100.0}')
-  if (( $(echo "$mem_usage > $ALERT_THRESHOLD_MEM" | bc -l) )); then
-  echo "[$(date)] MEMORY ALERT: ${mem_usage}%" >> "$LOG_FILE"
-  return 1
-  fi
-  return 0
-  }
-
-  check_disk() {
-  local disk_usage=$(df / | awk 'NR==2 {print $5}' | cut -d'%' -f1)
-  if [[ $disk_usage -gt $ALERT_THRESHOLD_DISK ]]; then
-  echo "[$(date)] DISK ALERT: ${disk_usage}%" >> "$LOG_FILE"
-  return 1
-  fi
-  return 0
-  }
-
-  check_services() {
-  local services=("nginx" "mysql" "sshd")
-  for service in "${services[@]}"; do
-  if ! systemctl is-active --quiet "$service"; then
-  echo "[$(date)] SERVICE ALERT: $service is down" >> "$LOG_FILE"
-  fi
-  done
-  }
-
-  # Main monitoring loop
-  while true; do
-  check_cpu
-  check_memory
-  check_disk
-  check_services
-  sleep 60
-  done
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>⚙️ Configuration Management</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  #!/bin/bash
-  # Automated configuration deployment
-
-  CONFIG_DIR="/etc/configs"
-  BACKUP_DIR="/backup/configs"
-  LOG_FILE="/var/log/config_deploy.log"
-
-  deploy_config() {
-  local config_file=$1
-  local target_path=$2
-  local service_name=$3
-
-  # Backup current config
-  if [[ -f "$target_path" ]]; then
-  cp "$target_path" "${BACKUP_DIR}/$(basename "$target_path").$(date +%Y%m%d_%H%M%S)"
-  fi
-
-  # Deploy new config
-  cp "$CONFIG_DIR/$config_file" "$target_path"
-
-  # Validate configuration
-  case "$service_name" in
-  "nginx")
-  nginx -t || return 1
-  ;;
-  "apache")
-  apache2ctl configtest || return 1
-  ;;
-  "sshd")
-  sshd -t || return 1
-  ;;
-  esac
-
-  # Restart service
-  systemctl restart "$service_name"
-  echo "[$(date)] Deployed $config_file to $target_path" >> "$LOG_FILE"
-  }
-
-  # Batch deployment
-  deploy_configs() {
-  local configs=(
-  "nginx.conf:/etc/nginx/nginx.conf:nginx"
-  "sshd_config:/etc/ssh/sshd_config:sshd"
-  "my.cnf:/etc/mysql/my.cnf:mysql"
-  )
-
-  for config in "${configs[@]}"; do
-  IFS=':' read -r file target service <<< "$config"
-  deploy_config "$file" "$target" "$service"
-  done
-  }
-
-  deploy_configs
-        </code></pre>
-      </div>
-
-      <h2 id="troubleshooting">🔬 23. ADVANCED TROUBLESHOOTING TECHNIQUES</h2>
-
-      <!-- WHEN TO USE THESE COMMANDS SECTION -->
-      <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-        <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-        <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system troubleshooting, diagnostic analysis, problem solving, performance debugging, and issue resolution</strong></p>
-      </div>
-
-      <div class="command-block">
-        <h4>🔍 System Diagnosis Framework</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  #!/bin/bash
-  # Comprehensive system diagnosis
-
-  DIAGNOSTIC_DIR="/tmp/system_diag_$(date +%Y%m%d_%H%M%S)"
-  mkdir -p "$DIAGNOSTIC_DIR"
-
-  # System information
-  echo "=== System Information ===" > "$DIAGNOSTIC_DIR/system_info.txt"
-  uname -a >> "$DIAGNOSTIC_DIR/system_info.txt"
-  cat /etc/os-release >> "$DIAGNOSTIC_DIR/system_info.txt"
-  uptime >> "$DIAGNOSTIC_DIR/system_info.txt"
-
-  # Hardware information
-  echo "=== Hardware Information ===" > "$DIAGNOSTIC_DIR/hardware.txt"
-  lscpu >> "$DIAGNOSTIC_DIR/hardware.txt"
-  free -h >> "$DIAGNOSTIC_DIR/hardware.txt"
-  lsblk >> "$DIAGNOSTIC_DIR/hardware.txt"
-  lspci >> "$DIAGNOSTIC_DIR/hardware.txt"
-
-  # Network configuration
-  echo "=== Network Configuration ===" > "$DIAGNOSTIC_DIR/network.txt"
-  ip addr show >> "$DIAGNOSTIC_DIR/network.txt"
-  ip route show >> "$DIAGNOSTIC_DIR/network.txt"
-  ss -tuln >> "$DIAGNOSTIC_DIR/network.txt"
-  cat /etc/resolv.conf >> "$DIAGNOSTIC_DIR/network.txt"
-
-  # Running processes
-  echo "=== Running Processes ===" > "$DIAGNOSTIC_DIR/processes.txt"
-  ps aux >> "$DIAGNOSTIC_DIR/processes.txt"
-  top -bn1 >> "$DIAGNOSTIC_DIR/processes.txt"
-
-  # System logs
-  echo "=== System Logs (last 100 lines) ===" > "$DIAGNOSTIC_DIR/logs.txt"
-  journalctl -n 100 >> "$DIAGNOSTIC_DIR/logs.txt"
-  dmesg | tail -100 >> "$DIAGNOSTIC_DIR/logs.txt"
-
-  # Service status
-  echo "=== Service Status ===" > "$DIAGNOSTIC_DIR/services.txt"
-  systemctl list-units --type=service --state=failed >> "$DIAGNOSTIC_DIR/services.txt"
-  systemctl list-units --type=service --state=running >> "$DIAGNOSTIC_DIR/services.txt"
-
-  # Package information
-  echo "=== Package Information ===" > "$DIAGNOSTIC_DIR/packages.txt"
-  rpm -qa | wc -l >> "$DIAGNOSTIC_DIR/packages.txt"
-  dnf history list | head -20 >> "$DIAGNOSTIC_DIR/packages.txt"
-
-  # Create archive
-  tar -czf "/tmp/system_diagnostic_$(date +%Y%m%d_%H%M%S).tar.gz" -C "$(dirname "$DIAGNOSTIC_DIR")" "$(basename "$DIAGNOSTIC_DIR")"
-  echo "Diagnostic report created: $DIAGNOSTIC_DIR"
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>📊 Performance Analysis</h4>
-    <div class="command-category">
-      <span class="category-tag category-common">[COMMON]</span>
-      <span class="category-description">Frequently used in daily operations</span>
-    </div>
-    <pre><code>
-  # CPU performance analysis
-  perf record -a -g sleep 10
-  perf report
-
-  # Memory leak detection
-  valgrind --tool=memcheck --leak-check=full ./program
-  massif ./program
-
-  # Network performance analysis
-  tcpdump -i eth0 -w capture.pcap
-  tshark -r capture.pcap -Y "http.request.method == GET"
-
-  # Disk performance analysis
-  fio --name=random-write --ioengine=libaio --iodepth=1 --rw=randwrite --bs=4k --direct=1 --size=1G --numjobs=1 --runtime=60 --group-reporting
-
-  # System call tracing
-  strace -p <PID> -c -o trace.txt
-  strace -f -e trace=network ./program
-        </code></pre>
-      </div>
-
-      <div class="command-block">
-        <h4>🚀 Boot Troubleshooting</h4>
-    <div class="command-category">
-      <span class="category-tag category-debug">[DEBUG]</span>
-      <span class="category-description">Used for troubleshooting and investigation</span>
-    </div>
-    <pre><code>
-  # Boot analysis
-  systemd-analyze
-  systemd-analyze blame
-  systemd-analyze critical-chain
-
-  # Boot parameters
-  cat /proc/cmdline
-  grub2-editenv list
-  grub2-mkconfig -o /boot/grub2/grub.cfg
-
-  # Emergency mode
-  systemctl emergency
-  journalctl -b -p err
-
-  # Recovery mode
-  mount -o remount,rw /
-  fsck -f /dev/sda1
-        </code></pre>
-      </div>
-
-      <h2 id="useful">💡 24. USEFUL ONE-LINER COMMANDS</h2>
+      <h2 id="useful">32. 💡 USEFUL ONE-LINER COMMANDS</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
       <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -16102,7 +16212,7 @@ history | grep keyword        # Quickly find commands relevant to tasks
               <p style="color: #c9d1d9; text-align: center; margin-bottom: 25px;">Essential commands for RHCSA (EX200) exam preparation and practical application</p>
             </div>
 
-            <h2 id="rhcsa-exam-commands">🎓 RHCSA EXAM ESSENTIAL COMMANDS</h2>
+            <h2 id="rhcsa-exam-commands">33. 🎓 RHCSA EXAM ESSENTIAL COMMANDS</h2>
 
             <div class="command-block">
               <h4>🔧 RHEL System Registration & Subscription Management</h4>
@@ -16942,6 +17052,23 @@ history | grep keyword        # Quickly find commands relevant to tasks
             </div>
 
             <!-- SECTION PREV/NEXT NAVIGATION -->
+            <div id="sectionNavContainer"></div>
+
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
+              <h4 style="color: #00d9ff; margin-top: 0;">🏆 Ready for Next Level?</h4>
+              <p style="color: #c9d1d9; font-size: 1em; margin-bottom: 15px;">
+              Master this section and advance your DevOps career
+            </p>
+            <div style="margin-top: 15px;">
+              <a href="index.html" style="display: inline-block; background: #00d9ff; color: #0d1117; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🏠 Back to Home</a>
+              <a href="devops-tools.html" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🛠️ DevOps Tools</a>
+              <a href="monitoring-security.html" style="display: inline-block; background: #ff6b9d; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🔒 Security</a>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+<!-- SECTION PREV/NEXT NAVIGATION -->
             <div id="sectionNavContainer"></div>
 
             <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
