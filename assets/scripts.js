@@ -351,7 +351,7 @@ const TOCGenerator = {
   },
 
   /**
-   * Create TOC items from headings
+   * Create TOC items from headings with progress checkboxes
    * @param {NodeList} headings - Headings to convert
    * @returns {Array} Array of TOC list items
    */
@@ -365,6 +365,15 @@ const TOCGenerator = {
 
         const li = document.createElement("li");
         li.className = `toc-level-${level}`;
+
+        if (level === 2) {
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.className = "toc-checkbox";
+          checkbox.setAttribute("data-section", heading.id);
+          checkbox.setAttribute("aria-label", `Mark ${title} as completed`);
+          li.appendChild(checkbox);
+        }
 
         const a = document.createElement("a");
         a.href = `#${heading.id}`;
@@ -510,6 +519,421 @@ const NavigationManager = {
   },
 };
 
+// Search Module
+const SearchManager = {
+  sections: [],
+
+  init() {
+    try {
+      this.buildIndex();
+      this.bindEvents();
+    } catch (error) {
+      console.error("Search initialization failed:", error);
+    }
+  },
+
+  buildIndex() {
+    const headings = document.querySelectorAll("h2[id], h3[id]");
+    this.sections = [];
+
+    headings.forEach((heading) => {
+      const id = heading.id;
+      const title = heading.textContent.trim();
+      let content = "";
+
+      let sibling = heading.nextElementSibling;
+      while (sibling && !sibling.matches("h2, h3")) {
+        content += sibling.textContent + " ";
+        sibling = sibling.nextElementSibling;
+      }
+
+      this.sections.push({
+        id: id,
+        title: title,
+        content: content.trim().toLowerCase(),
+        titleLower: title.toLowerCase(),
+      });
+    });
+  },
+
+  bindEvents() {
+    const searchInput = Utils.safeQuery("#searchInput");
+    const clearBtn = Utils.safeQuery("#searchClearBtn");
+
+    if (searchInput) {
+      searchInput.addEventListener(
+        "input",
+        Utils.debounce(() => this.performSearch(), 200)
+      );
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => this.clearSearch());
+    }
+  },
+
+  performSearch() {
+    const searchInput = Utils.safeQuery("#searchInput");
+    const resultsContainer = Utils.safeQuery("#searchResultsContainer");
+    const clearBtn = Utils.safeQuery("#searchClearBtn");
+
+    if (!searchInput || !resultsContainer) return;
+
+    const query = searchInput.value.trim().toLowerCase();
+
+    if (!query) {
+      resultsContainer.classList.remove("visible");
+      if (clearBtn) clearBtn.classList.remove("visible");
+      return;
+    }
+
+    if (clearBtn) clearBtn.classList.add("visible");
+
+    const results = this.sections
+      .filter((section) => {
+        return (
+          section.titleLower.includes(query) ||
+          section.content.includes(query)
+        );
+      })
+      .slice(0, 20);
+
+    this.renderResults(results, query);
+  },
+
+  renderResults(results, query) {
+    const resultsContainer = Utils.safeQuery("#searchResultsContainer");
+    if (!resultsContainer) return;
+
+    resultsContainer.classList.add("visible");
+
+    if (results.length === 0) {
+      resultsContainer.innerHTML = `
+        <div class="search-no-results">
+          <div class="no-results-icon">🔍</div>
+          <p>No results found for "<strong>${this.escapeHtml(query)}</strong>"</p>
+        </div>
+      `;
+      return;
+    }
+
+    let html = `<div class="search-result-count">${results.length} result${results.length > 1 ? "s" : ""} found</div>`;
+
+    results.forEach((result) => {
+      let context = "";
+      const idx = result.content.indexOf(query);
+      if (idx !== -1) {
+        const start = Math.max(0, idx - 40);
+        const end = Math.min(result.content.length, idx + query.length + 60);
+        context =
+          (start > 0 ? "..." : "") +
+          result.content.slice(start, end).replace(
+            new RegExp(`(${this.escapeRegex(query)})`, "gi"),
+            "<mark>$1</mark>"
+          ) +
+          (end < result.content.length ? "..." : "");
+      }
+
+      html += `
+        <div class="search-result-item" onclick="SearchManager.jumpToSection('${result.id}')">
+          <div class="result-section">${this.escapeHtml(result.title)}</div>
+          ${context ? `<div class="result-context">${context}</div>` : ""}
+        </div>
+      `;
+    });
+
+    resultsContainer.innerHTML = html;
+  },
+
+  jumpToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      element.classList.add("section-flash");
+      setTimeout(() => element.classList.remove("section-flash"), 1000);
+    }
+  },
+
+  clearSearch() {
+    const searchInput = Utils.safeQuery("#searchInput");
+    const resultsContainer = Utils.safeQuery("#searchResultsContainer");
+    const clearBtn = Utils.safeQuery("#searchClearBtn");
+
+    if (searchInput) searchInput.value = "";
+    if (resultsContainer) resultsContainer.classList.remove("visible");
+    if (clearBtn) clearBtn.classList.remove("visible");
+  },
+
+  escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  },
+
+  escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  },
+};
+
+// Progress Tracking Module
+const ProgressTracker = {
+  storageKey: "learning-progress",
+
+  init() {
+    try {
+      this.loadProgress();
+      this.bindEvents();
+      this.updateProgressBar();
+    } catch (error) {
+      console.error("Progress tracker initialization failed:", error);
+    }
+  },
+
+  getProgress() {
+    try {
+      const data = localStorage.getItem(this.storageKey);
+      return data ? JSON.parse(data) : {};
+    } catch {
+      return {};
+    }
+  },
+
+  saveProgress(progress) {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(progress));
+    } catch (error) {
+      console.warn("Failed to save progress:", error);
+    }
+  },
+
+  getPageKey() {
+    return window.location.pathname.split("/").pop() || "index.html";
+  },
+
+  loadProgress() {
+    const progress = this.getProgress();
+    const pageKey = this.getPageKey();
+    const pageProgress = progress[pageKey] || {};
+
+    document.querySelectorAll(".toc-checkbox").forEach((checkbox) => {
+      const sectionId = checkbox.getAttribute("data-section");
+      if (pageProgress[sectionId]) {
+        checkbox.checked = true;
+        const li = checkbox.closest("li");
+        if (li) li.classList.add("completed");
+      }
+    });
+  },
+
+  bindEvents() {
+    document.querySelectorAll(".toc-checkbox").forEach((checkbox) => {
+      checkbox.addEventListener("change", (e) => {
+        const sectionId = e.target.getAttribute("data-section");
+        const progress = this.getProgress();
+        const pageKey = this.getPageKey();
+
+        if (!progress[pageKey]) progress[pageKey] = {};
+
+        if (e.target.checked) {
+          progress[pageKey][sectionId] = true;
+          const li = e.target.closest("li");
+          if (li) li.classList.add("completed");
+        } else {
+          delete progress[pageKey][sectionId];
+          const li = e.target.closest("li");
+          if (li) li.classList.remove("completed");
+        }
+
+        this.saveProgress(progress);
+        this.updateProgressBar();
+      });
+    });
+
+    const resetBtn = Utils.safeQuery("#progressResetBtn");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => this.resetProgress());
+    }
+  },
+
+  updateProgressBar() {
+    const total = document.querySelectorAll(".toc-checkbox").length;
+    const completed = document.querySelectorAll(".toc-checkbox:checked").length;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    const fill = Utils.safeQuery("#progressBarFill");
+    const text = Utils.safeQuery("#progressText");
+
+    if (fill) fill.style.width = percentage + "%";
+    if (text) text.textContent = `${completed}/${total} sections (${percentage}%)`;
+  },
+
+  resetProgress() {
+    const progress = this.getProgress();
+    const pageKey = this.getPageKey();
+    delete progress[pageKey];
+    this.saveProgress(progress);
+
+    document.querySelectorAll(".toc-checkbox").forEach((checkbox) => {
+      checkbox.checked = false;
+      const li = checkbox.closest("li");
+      if (li) li.classList.remove("completed");
+    });
+
+    this.updateProgressBar();
+  },
+};
+
+// Breadcrumb Module
+const BreadcrumbManager = {
+  init() {
+    try {
+      this.bindScrollHandler();
+    } catch (error) {
+      console.error("Breadcrumb initialization failed:", error);
+    }
+  },
+
+  bindScrollHandler() {
+    const debouncedHandler = Utils.debounce(
+      this.updateBreadcrumb.bind(this),
+      50
+    );
+    window.addEventListener("scroll", debouncedHandler, { passive: true });
+  },
+
+  updateBreadcrumb() {
+    const breadcrumbCurrent = Utils.safeQuery("#breadcrumbCurrent");
+    if (!breadcrumbCurrent) return;
+
+    const headings = document.querySelectorAll("h2[id]");
+    let currentTitle = "";
+
+    headings.forEach((heading) => {
+      const rect = heading.getBoundingClientRect();
+      if (rect.top <= 120) {
+        currentTitle = heading.textContent.trim();
+      }
+    });
+
+    if (currentTitle) {
+      breadcrumbCurrent.textContent = currentTitle;
+    }
+  },
+};
+
+// Section Navigation Module (Prev/Next)
+const SectionNavManager = {
+  sections: [],
+
+  init() {
+    try {
+      this.buildSectionList();
+      this.renderPrevNext();
+      this.updatePrevNextOnScroll();
+      this.bindScrollHandler();
+    } catch (error) {
+      console.error("Section navigation initialization failed:", error);
+    }
+  },
+
+  buildSectionList() {
+    this.sections = [];
+    document.querySelectorAll("h2[id]").forEach((heading) => {
+      this.sections.push({
+        id: heading.id,
+        title: heading.textContent.trim(),
+      });
+    });
+  },
+
+  renderPrevNext() {
+    const container = Utils.safeQuery("#sectionNavContainer");
+    if (!container || this.sections.length === 0) return;
+
+    let html = "";
+    this.sections.forEach((section, index) => {
+      const prev = index > 0 ? this.sections[index - 1] : null;
+      const next =
+        index < this.sections.length - 1 ? this.sections[index + 1] : null;
+
+      html += `<div class="section-nav" data-section-nav="${section.id}" style="display:none;">`;
+
+      if (prev) {
+        html += `
+          <a href="#${prev.id}" class="section-nav-btn prev" onclick="event.preventDefault(); document.getElementById('${prev.id}').scrollIntoView({behavior:'smooth',block:'start'});">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">${prev.title}</span>
+          </a>
+        `;
+      } else {
+        html += `<div class="section-nav-center"></div>`;
+      }
+
+      if (next) {
+        html += `
+          <a href="#${next.id}" class="section-nav-btn next" onclick="event.preventDefault(); document.getElementById('${next.id}').scrollIntoView({behavior:'smooth',block:'start'});">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">${next.title}</span>
+          </a>
+        `;
+      }
+
+      html += `</div>`;
+    });
+
+    container.innerHTML = html;
+  },
+
+  bindScrollHandler() {
+    const debouncedHandler = Utils.debounce(
+      this.updatePrevNextOnScroll.bind(this),
+      100
+    );
+    window.addEventListener("scroll", debouncedHandler, { passive: true });
+  },
+
+  updatePrevNextOnScroll() {
+    const navs = document.querySelectorAll("[data-section-nav]");
+    let currentId = "";
+
+    document.querySelectorAll("h2[id]").forEach((heading) => {
+      const rect = heading.getBoundingClientRect();
+      if (rect.top <= 120) {
+        currentId = heading.id;
+      }
+    });
+
+    navs.forEach((nav) => {
+      if (nav.getAttribute("data-section-nav") === currentId) {
+        nav.style.display = "flex";
+      } else {
+        nav.style.display = "none";
+      }
+    });
+  },
+};
+
+// TOC Toggle Module
+const TOCToggle = {
+  init() {
+    try {
+      const toggleBtn = Utils.safeQuery("#tocToggleBtn");
+      const tocContainer = Utils.safeQuery(".section-index");
+
+      if (toggleBtn && tocContainer) {
+        toggleBtn.addEventListener("click", () => {
+          tocContainer.classList.toggle("collapsed");
+          toggleBtn.textContent = tocContainer.classList.contains("collapsed")
+            ? "▶ Show Contents"
+            : "▼ Hide Contents";
+        });
+      }
+    } catch (error) {
+      console.error("TOC toggle initialization failed:", error);
+    }
+  },
+};
+
 // Main Application Controller
 const App = {
   /**
@@ -526,6 +950,13 @@ const App = {
       CodeFormatter.formatComments();
       CodeFormatter.cleanCodeBlocks();
       TOCGenerator.generate();
+
+      // Learning Guide modules
+      SearchManager.init();
+      ProgressTracker.init();
+      BreadcrumbManager.init();
+      SectionNavManager.init();
+      TOCToggle.init();
 
       console.log("✅ All modules initialized successfully");
     } catch (error) {
@@ -560,6 +991,11 @@ if (typeof module !== "undefined" && module.exports) {
     Accessibility,
     TOCGenerator,
     NavigationManager,
+    SearchManager,
+    ProgressTracker,
+    BreadcrumbManager,
+    SectionNavManager,
+    TOCToggle,
     Utils,
   };
 }

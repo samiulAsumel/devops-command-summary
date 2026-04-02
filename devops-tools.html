@@ -92,8 +92,39 @@
 
           <h1>📚 Linux/DevOps Command Reference Guide</h1>
 
+          <!-- SEARCH BAR -->
+          <div class="search-container">
+            <h3>🔍 Search Commands & Topics</h3>
+            <div class="search-wrapper">
+              <input type="text" id="searchInput" class="search-input" placeholder="Type to search... (e.g., docker, kubectl, terraform)">
+              <button id="searchClearBtn" class="search-clear-btn">✕</button>
+            </div>
+            <div id="searchResultsContainer" class="search-results-container"></div>
+          </div>
+
+          <!-- BREADCRUMB NAVIGATION -->
+          <div class="breadcrumb-nav" id="breadcrumbNav">
+            <a href="index.html">🏠 Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a href="devops-tools.html">🛠️ DevOps Tools</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current" id="breadcrumbCurrent">Overview</span>
+          </div>
+
+          <!-- PROGRESS TRACKER -->
+          <div class="progress-bar-container">
+            <span class="progress-text" id="progressText">0/0 sections (0%)</span>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+            <button id="progressResetBtn" class="progress-reset-btn">Reset</button>
+          </div>
+
           <div class="section-index">
-            <h3>📋 Table of Contents</h3>
+            <h3 style="display: flex; align-items: center; justify-content: space-between;">
+              📋 Table of Contents
+              <button id="tocToggleBtn" class="toc-toggle-btn">▼ Hide Contents</button>
+            </h3>
             <ul id="toc-list">
               <!-- JS will populate this automatically -->
             </ul>
@@ -6375,6 +6406,196 @@
       # Delete Resources
       kubectl delete daemonset ds-name</code></pre>
     </div>
+  </div>
+
+  <h3>⎈ Helm - Kubernetes Package Manager</h3>
+
+  <div class="command-block">
+    <h4>📦 Helm Installation & Setup</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+    # Install Helm
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    helm version                                    # Verify installation
+
+    # Add repositories
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm repo add stable https://charts.helm.sh/stable
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update                                # Update all repos
+    helm repo list                                  # List repos
+    helm repo remove repo-name                      # Remove repo
+    helm search repo nginx                          # Search for charts
+    helm search hub nginx                           # Search Artifact Hub
+    </code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🚀 Helm Install & Manage Releases</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+    # Install releases
+    helm install my-nginx bitnami/nginx                          # Basic install
+    helm install my-nginx bitnami/nginx --namespace myns         # Specific namespace
+    helm install my-nginx bitnami/nginx --create-namespace       # Create namespace
+    helm install my-nginx bitnami/nginx --version 15.0.0         # Specific chart version
+    helm install my-nginx bitnami/nginx -f values.yaml           # Custom values
+    helm install my-nginx bitnami/nginx --set key=value          # Override single value
+    helm install my-nginx bitnami/nginx --set key.subkey=value   # Nested value
+    helm install my-nginx bitnami/nginx --dry-run                # Test without installing
+    helm install my-nginx bitnami/nginx --wait                   # Wait for ready
+    helm install my-nginx bitnami/nginx --atomic                 # Rollback on failure
+
+    # Upgrade releases
+    helm upgrade my-nginx bitnami/nginx                          # Upgrade to latest
+    helm upgrade my-nginx bitnami/nginx -f new-values.yaml       # With new values
+    helm upgrade my-nginx bitnami/nginx --version 16.0.0         # Upgrade chart version
+    helm upgrade my-nginx bitnami/nginx --install                # Install if not exists
+    helm upgrade my-nginx bitnami/nginx --atomic                 # Rollback on failure
+    helm upgrade my-nginx bitnami/nginx --history-max 5          # Limit revision history
+
+    # Rollback
+    helm rollback my-nginx 1                                     # Rollback to revision 1
+    helm rollback my-nginx 1 --wait                              # Wait for ready
+    helm history my-nginx                                        # Show revision history
+
+    # Uninstall
+    helm uninstall my-nginx                                      # Remove release
+    helm uninstall my-nginx --keep-history                       # Keep history for rollback
+    helm uninstall my-nginx -n myns                              # From specific namespace
+    </code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🔍 Helm Inspect & Debug</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+    # List releases
+    helm list                                                   # All releases
+    helm list --all                                             # Include failed/uninstalled
+    helm list --all-namespaces                                  # All namespaces
+    helm list -o json                                           # JSON output
+    helm list --filter 'nginx*'                                 # Filter by name
+
+    # Status & Info
+    helm status my-nginx                                        # Release status
+    helm status my-nginx --show-resources                       # Show K8s resources
+    helm get all my-nginx                                       # All release info
+    helm get values my-nginx                                    # User-supplied values
+    helm get values my-nginx --all                              # All computed values
+    helm get manifest my-nginx                                  # Rendered manifest
+    helm get hooks my-nginx                                     # Release hooks
+    helm get notes my-nginx                                     # Release notes
+
+    # Inspect charts
+    helm show all bitnami/nginx                                 # All chart info
+    helm show chart bitnami/nginx                               # Chart metadata
+    helm show values bitnami/nginx                              # Default values
+    helm show readme bitnami/nginx                              # Chart README
+
+    # Template rendering (debug)
+    helm template my-release bitnami/nginx                      # Render templates locally
+    helm template my-release bitnami/nginx -f values.yaml       # With values
+    helm template my-release bitnami/nginx --debug              # Debug output
+    </code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🛠️ Helm Chart Development</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+    # Create new chart
+    helm create mychart                                         # Scaffold new chart
+    helm create mychart --starter=starter                       # From starter
+
+    # Chart structure
+    # mychart/
+    #   Chart.yaml          # Chart metadata
+    #   values.yaml         # Default values
+    #   charts/             # Dependencies
+    #   templates/
+    #     deployment.yaml   # Deployment template
+    #     service.yaml      # Service template
+    #     ingress.yaml      # Ingress template
+    #     _helpers.tpl      # Template helpers
+    #     NOTES.txt         # Post-install notes
+
+    # Lint and package
+    helm lint mychart/                                          # Lint chart
+    helm package mychart/                                       # Package chart
+    helm package mychart/ --version 1.0.0                      # Set version
+    helm push mychart-1.0.0.tgz oci://registry.example.com/charts  # Push to OCI registry
+
+    # Dependencies
+    helm dependency update mychart/                             # Update dependencies
+    helm dependency list mychart/                               # List dependencies
+    helm dependency build mychart/                              # Build dependency lock
+    </code></pre>
+  </div>
+
+  <div class="command-block">
+    <h4>🏗️ Production Helm Patterns</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+    # Install popular production charts
+    # Nginx Ingress Controller
+    helm install ingress-nginx ingress-nginx/ingress-nginx \
+      --namespace ingress-nginx --create-namespace \
+      --set controller.replicaCount=2
+
+    # Prometheus + Grafana (kube-prometheus-stack)
+    helm install monitoring prometheus-community/kube-prometheus-stack \
+      --namespace monitoring --create-namespace \
+      --set grafana.adminPassword=secret
+
+    # Cert-Manager (Let's Encrypt)
+    helm install cert-manager jetstack/cert-manager \
+      --namespace cert-manager --create-namespace \
+      --set installCRDs=true
+
+    # ArgoCD
+    helm install argocd argo/argo-cd \
+      --namespace argocd --create-namespace \
+      --set server.service.type=LoadBalancer
+
+    # PostgreSQL
+    helm install postgresql bitnami/postgresql \
+      --set auth.postgresPassword=secret \
+      --set primary.persistence.size=10Gi
+
+    # Redis
+    helm install redis bitnami/redis \
+      --set auth.password=secret \
+      --set architecture=replication
+
+    # Helmfile (manage multiple releases)
+    # helmfile.yaml
+    # releases:
+    #   - name: ingress-nginx
+    #     namespace: ingress-nginx
+    #     chart: ingress-nginx/ingress-nginx
+    #     values:
+    #       - controller.replicaCount: 2
+    helmfile sync                                                # Apply all releases
+    helmfile diff                                                # Show changes
+    helmfile lint                                                # Validate all
+    </code></pre>
   </div>
 
   <h2 id="ansible">🤖 32. ANSIBLE COMMANDS</h2>
@@ -18357,6 +18578,9 @@ resultsContainer.innerHTML = "";
           msg: "Database password: {{ db_password }}"
             </code></pre>
             </div>
+
+            <!-- SECTION PREV/NEXT NAVIGATION -->
+            <div id="sectionNavContainer"></div>
 
             <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
               <h4 style="color: #00d9ff; margin-top: 0;">🏆 Ready for Next Level?</h4>

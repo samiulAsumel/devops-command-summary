@@ -78,10 +78,41 @@
           }
         </style>
 
+        <!-- SEARCH BAR -->
+        <div class="search-container">
+          <h3>🔍 Search Commands & Topics</h3>
+          <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="Type to search... (e.g., chmod, docker, nginx)">
+            <button id="searchClearBtn" class="search-clear-btn">✕</button>
+          </div>
+          <div id="searchResultsContainer" class="search-results-container"></div>
+        </div>
+
+        <!-- BREADCRUMB NAVIGATION -->
+        <div class="breadcrumb-nav" id="breadcrumbNav">
+          <a href="index.html">🏠 Home</a>
+          <span class="breadcrumb-separator">›</span>
+          <a href="system-admin.html">💻 System Admin</a>
+          <span class="breadcrumb-separator">›</span>
+          <span class="breadcrumb-current" id="breadcrumbCurrent">Overview</span>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-bar-container">
+          <span class="progress-text" id="progressText">0/0 sections (0%)</span>
+          <div class="progress-bar">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+          <button id="progressResetBtn" class="progress-reset-btn">Reset</button>
+        </div>
+
         <h1>📚 Linux/DevOps Command Reference Guide</h1>
 
         <div class="section-index">
-          <h3>📋 Table of Contents</h3>
+          <h3 style="display: flex; align-items: center; justify-content: space-between;">
+            📋 Table of Contents
+            <button id="tocToggleBtn" class="toc-toggle-btn">▼ Hide Contents</button>
+          </h3>
           <ul id="toc-list">
             <!-- JS will populate this automatically -->
           </ul>
@@ -4158,6 +4189,78 @@ Test in non-production systems whenever possible.
           </code></pre>
         </div>
 
+        <div class="command-block">
+          <h4>📡 Complete Linux Signals Reference Table</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # ╔══════════════════════════════════════════════════════════════════════╗
+  # ║                    COMPLETE SIGNALS REFERENCE                       ║
+  # ╠═══════╦══════════╦════════════╦══════════════════════════════════════╣
+  # ║ No.   ║ Name     ║ Action     ║ Description                          ║
+  # ╠═══════╬══════════╬════════════╬══════════════════════════════════════╣
+  # ║  1    ║ SIGHUP   ║ Terminate  ║ Hangup / Reload config               ║
+  # ║  2    ║ SIGINT   ║ Terminate  ║ Interrupt (Ctrl+C)                   ║
+  # ║  3    ║ SIGQUIT  ║ Core dump  ║ Quit (Ctrl+\)                        ║
+  # ║  4    ║ SIGILL   ║ Core dump  ║ Illegal instruction                  ║
+  # ║  5    ║ SIGTRAP  ║ Core dump  ║ Trace/breakpoint trap                ║
+  # ║  6    ║ SIGABRT  ║ Core dump  ║ Abort signal                         ║
+  # ║  7    ║ SIGBUS   ║ Core dump  ║ Bus error                            ║
+  # ║  8    ║ SIGFPE   ║ Core dump  ║ Floating point exception             ║
+  # ║  9    ║ SIGKILL  ║ Terminate  ║ Force kill (CANNOT be caught!)       ║
+  # ║ 10    ║ SIGUSR1  ║ Terminate  ║ User-defined signal 1                ║
+  # ║ 11    ║ SIGSEGV  ║ Core dump  ║ Segmentation fault                   ║
+  # ║ 12    ║ SIGUSR2  ║ Terminate  ║ User-defined signal 2                ║
+  # ║ 13    ║ SIGPIPE  ║ Terminate  ║ Broken pipe                          ║
+  # ║ 14    ║ SIGALRM  ║ Terminate  ║ Alarm clock                          ║
+  # ║ 15    ║ SIGTERM  ║ Terminate  ║ Graceful termination (DEFAULT)       ║
+  # ║ 16    ║ SIGSTKFL ║ Terminate  ║ Stack fault                          ║
+  # ║ 17    ║ SIGCHLD  ║ Ignore     ║ Child stopped/terminated             ║
+  # ║ 18    ║ SIGCONT  ║ Continue   ║ Continue if stopped                  ║
+  # ║ 19    ║ SIGSTOP  ║ Stop       ║ Stop process (CANNOT be caught!)     ║
+  # ║ 20    ║ SIGTSTP  ║ Stop       ║ Terminal stop (Ctrl+Z)               ║
+  # ║ 21    ║ SIGTTIN  ║ Stop       ║ Background read from tty             ║
+  # ║ 22    ║ SIGTTOU  ║ Stop       ║ Background write to tty              ║
+  # ║ 23    ║ SIGURG   ║ Ignore     ║ Urgent condition on socket           ║
+  # ║ 24    ║ SIGXCPU  ║ Core dump  ║ CPU time limit exceeded              ║
+  # ║ 25    ║ SIGXFSZ  ║ Core dump  ║ File size limit exceeded             ║
+  # ║ 26    ║ SIGVTALRM║ Terminate  ║ Virtual alarm clock                  ║
+  # ║ 27    ║ SIGPROF  ║ Terminate  ║ Profiling timer                      ║
+  # ║ 28    ║ SIGWINCH ║ Ignore     ║ Window size change                   ║
+  # ║ 29    ║ SIGIO    ║ Terminate  ║ I/O now possible                     ║
+  # ║ 30    ║ SIGPWR   ║ Terminate  ║ Power failure                        ║
+  # ║ 31    ║ SIGSYS   ║ Core dump  ║ Bad system call                      ║
+  # ╚═══════╩══════════╩════════════╩══════════════════════════════════════╝
+
+  # Practical Signal Usage Examples
+  kill -1 PID    # SIGHUP  - Reload config (nginx, sshd, etc.)
+  kill -2 PID    # SIGINT  - Same as Ctrl+C
+  kill -9 PID    # SIGKILL - Force kill (use as last resort!)
+  kill -10 PID   # SIGUSR1 - App-specific (e.g., rotate logs)
+  kill -12 PID   # SIGUSR2 - App-specific
+  kill -15 PID   # SIGTERM - Graceful shutdown (DEFAULT, try first!)
+  kill -18 PID   # SIGCONT - Resume stopped process
+  kill -19 PID   # SIGSTOP - Stop process (un-killable)
+  kill -20 PID   # SIGTSTP - Stop process (can be caught)
+
+  # Real-world Signal Examples
+  kill -HUP $(cat /var/run/nginx.pid)      # Reload nginx config
+  kill -USR1 $(cat /var/run/rsyslogd.pid)  # Rotate rsyslog logs
+  kill -WINCH $(cat /var/run/nginx.pid)    # Graceful worker shutdown
+
+  # Send signal to process group
+  kill -SIGTERM -PID                        # Kill process group
+  kill -9 -PID                              # Force kill process group
+
+  # Trap signals in scripts
+  trap 'echo "Caught SIGHUP"' HUP
+  trap 'cleanup; exit' INT TERM
+  trap '' INT                              # Ignore Ctrl+C
+          </code></pre>
+        </div>
+
         <h3>🔄 Background Jobs</h3>
 
         <div class="command-block">
@@ -4520,6 +4623,96 @@ Test in non-production systems whenever possible.
   systemctl start timer-name.timer   # Start timer
   systemctl enable timer-name.timer  # Enable timer
   systemctl status timer-name.timer  # Timer status
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>⏰ Systemd Timer Units - Modern Cron Replacement</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Systemd Timers vs Cron:
+  # - More reliable (journald logging, dependency management)
+  # - Better resource control (cgroups, CPU/memory limits)
+  # - Supports calendar, monotonic, and persistent timers
+  # - Better error handling and retry logic
+  # - Integrated with systemd ecosystem
+
+  # List all timers
+  systemctl list-timers                          # Active timers
+  systemctl list-timers --all                    # All timers (including inactive)
+  systemctl list-timers --all --no-pager         # Without paging
+
+  # Timer Unit File Example (/etc/systemd/system/backup.timer)
+  # [Unit]
+  # Description=Daily Backup Timer
+  #
+  # [Timer]
+  # OnCalendar=*-*-* 02:00:00                    # Daily at 2 AM
+  # Persistent=true                               # Run if missed
+  # RandomizedDelaySec=300                        # Random delay (0-300s)
+  #
+  # [Install]
+  # WantedBy=timers.target
+
+  # Timer Schedule Formats (OnCalendar)
+  OnCalendar=*-*-* 02:00:00          # Daily at 2:00 AM
+  OnCalendar=*-*-* *:00:00           # Every hour
+  OnCalendar=Mon *-*-* 09:00:00      # Every Monday at 9 AM
+  OnCalendar=*-*-01 00:00:00         # First day of month
+  OnCalendar=Mon..Fri *-*-* 08:00:00 # Weekdays at 8 AM
+  OnCalendar=2024-01-01 00:00:00     # Specific date
+  OnCalendar=hourly                   # Every hour
+  OnCalendar=daily                    # Every day
+  OnCalendar=weekly                   # Every week
+  OnCalendar=monthly                  # Every month
+
+  # Monotonic Timers (relative to events)
+  OnBootSec=15min                    # 15 min after boot
+  OnStartupSec=10min                 # 10 min after systemd start
+  OnUnitActiveSec=1h                 # 1 hour after last activation
+  OnUnitInactiveSec=30min            # 30 min after last deactivation
+
+  # Timer Management
+  systemctl start backup.timer       # Start timer
+  systemctl stop backup.timer        # Stop timer
+  systemctl enable backup.timer      # Enable on boot
+  systemctl disable backup.timer     # Disable on boot
+  systemctl status backup.timer      # Check status
+  systemctl show backup.timer        # Show all properties
+
+  # Debugging Timers
+  journalctl -u backup.timer         # Timer logs
+  journalctl -u backup.service       # Service logs triggered by timer
+  systemd-analyze calendar "Mon *-*-* 09:00:00"  # Verify calendar spec
+  systemd-analyze calendar "*-*-* 02:00:00" --iterations=5  # Show next 5 runs
+
+  # Real-world Example - Log Rotation Timer
+  # /etc/systemd/system/logrotate.timer
+  # [Unit]
+  # Description=Log Rotation Timer
+  #
+  # [Timer]
+  # OnCalendar=daily
+  # Persistent=true
+  # RandomizedDelaySec=1800
+  #
+  # [Install]
+  # WantedBy=timers.target
+
+  # Real-world Example - Health Check Timer
+  # /etc/systemd/system/healthcheck.timer
+  # [Unit]
+  # Description=Health Check Timer
+  #
+  # [Timer]
+  # OnUnitActiveSec=5min
+  # AccuracySec=1s
+  #
+  # [Install]
+  # WantedBy=timers.target
         </code></pre>
       </div>
 
@@ -6606,6 +6799,336 @@ Test in non-production systems whenever possible.
         </code></pre>
       </div>
 
+      <h3>🌐 curl - Transfer Data (The Swiss Army Knife)</h3>
+
+      <div class="command-block">
+        <h4>📥 Basic curl Usage</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Basic Requests
+  curl https://example.com                    # GET request (output to stdout)
+  curl -o file.html https://example.com       # Save output to file
+  curl -O https://example.com/file.tar.gz     # Save with remote filename
+  curl -L https://example.com                 # Follow redirects
+  curl -v https://example.com                 # Verbose output (headers + body)
+  curl -s https://example.com                 # Silent mode (no progress bar)
+  curl -sS https://example.com                # Silent but show errors
+  curl -i https://example.com                 # Include response headers
+  curl -I https://example.com                 # HEAD request only (headers)
+  curl -k https://example.com                 # Skip SSL verification
+  curl -4 https://example.com                 # Force IPv4
+  curl -6 https://example.com                 # Force IPv6
+
+  # With Headers
+  curl -H "Content-Type: application/json" https://api.example.com
+  curl -H "Authorization: Bearer TOKEN" https://api.example.com
+  curl -H "User-Agent: MyApp/1.0" https://example.com
+  curl -A "Mozilla/5.0" https://example.com   # Set User-Agent
+
+  # POST Requests
+  curl -X POST https://api.example.com/data                          # POST
+  curl -X POST -d "key=value" https://api.example.com                # Form data
+  curl -X POST -d '{"key":"value"}' -H "Content-Type: application/json" https://api.example.com  # JSON POST
+  curl -X POST -F "file=@/path/to/file" https://api.example.com/upload  # File upload
+  curl -X POST -d @data.json https://api.example.com                 # POST from file
+  curl -X PUT -d '{"key":"value"}' https://api.example.com/data      # PUT
+  curl -X DELETE https://api.example.com/data/1                      # DELETE
+
+  # Authentication
+  curl -u username:password https://api.example.com           # Basic auth
+  curl --digest -u username:password https://api.example.com  # Digest auth
+  curl --oauth2-bearer TOKEN https://api.example.com          # OAuth2
+
+  # SSL/TLS
+  curl --cert client.pem https://api.example.com              # Client certificate
+  curl --key client-key.pem --cert client.pem https://api.example.com  # With key
+  curl --cacert ca-bundle.pem https://api.example.com         # Custom CA bundle
+  curl -k https://self-signed.example.com                     # Skip verification
+
+  # Download
+  curl -o output.tar.gz https://example.com/file.tar.gz      # Download with name
+  curl -O https://example.com/file.tar.gz                     # Download with original name
+  curl -C - -O https://example.com/largefile.tar.gz           # Resume download
+  curl -z file.html https://example.com/file.html             # Download if newer
+  curl --limit-rate 1M -O https://example.com/largefile.iso   # Limit bandwidth
+  curl -# -O https://example.com/file.tar.gz                  # Progress bar
+
+  # Timeouts & Retries
+  curl --connect-timeout 10 https://example.com    # Connection timeout (seconds)
+  curl --max-time 30 https://example.com           # Max total time
+  curl --retry 3 https://example.com               # Retry on failure
+  curl --retry-delay 5 https://example.com         # Delay between retries
+
+  # Debugging
+  curl -v https://example.com                      # Verbose
+  curl --trace trace.txt https://example.com       # Full trace to file
+  curl --trace-ascii trace.txt https://example.com # ASCII trace
+  curl -w "HTTP Code: %{http_code}\n" https://example.com  # Write-out format
+  curl -w "Time: %{time_total}s\nSize: %{size_download} bytes\n" https://example.com
+        </code></pre>
+      </div>
+
+      <h3>📥 wget - Download Files</h3>
+
+      <div class="command-block">
+        <h4>📥 wget Comprehensive Reference</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Basic Download
+  wget https://example.com/file.tar.gz              # Download file
+  wget -O custom-name.tar.gz https://example.com/file.tar.gz  # Custom filename
+  wget -P /tmp/ https://example.com/file.tar.gz     # Download to specific directory
+
+  # Background & Resume
+  wget -b https://example.com/largefile.iso          # Background download
+  wget -c https://example.com/largefile.iso          # Resume partial download
+  wget -N https://example.com/file.tar.gz            # Download only if newer
+
+  # Limit & Control
+  wget --limit-rate=1m https://example.com/file.iso  # Limit bandwidth (1 MB/s)
+  wget --wait=5 https://example.com/file.tar.gz      # Wait 5s between downloads
+  wget --random-wait https://example.com/file.tar.gz # Random wait (polite crawling)
+  wget -t 3 https://example.com/file.tar.gz          # Retry 3 times
+  wget --timeout=30 https://example.com/file.tar.gz  # Set timeout
+
+  # Mirror / Recursive
+  wget -m https://example.com/                       # Mirror entire site
+  wget -r -l 2 https://example.com/                  # Recursive, depth 2
+  wget -r -np https://example.com/dir/               # No parent directories
+  wget -r -A "*.pdf,*.tar.gz" https://example.com/   # Accept specific file types
+  wget -r -R "*.jpg,*.png" https://example.com/      # Reject specific file types
+  wget --mirror --convert-links https://example.com/ # Mirror and fix links
+
+  # Authentication
+  wget --user=username --password=password https://example.com/file
+  wget --ask-password https://example.com/file       # Prompt for password
+
+  # Batch Download
+  wget -i urls.txt                                   # Download from URL list file
+  wget https://example.com/file{1..10}.tar.gz        # Download multiple files
+
+  # Output & Logging
+  wget -q https://example.com/file                   # Quiet mode
+  wget -o log.txt https://example.com/file           # Log to file
+  wget -a log.txt https://example.com/file           # Append to log
+  wget --no-check-certificate https://example.com    # Skip SSL verification
+        </code></pre>
+      </div>
+
+      <h3>📡 tcpdump - Packet Capture & Analysis</h3>
+
+      <div class="command-block">
+        <h4>📡 tcpdump Comprehensive Reference</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Basic Capture
+  tcpdump                          # Capture on default interface
+  tcpdump -i eth0                  # Capture on specific interface
+  tcpdump -i any                   # Capture on all interfaces
+  tcpdump -c 100                   # Capture 100 packets then stop
+  tcpdump -w capture.pcap          # Save to file
+  tcpdump -r capture.pcap          # Read from file
+  tcpdump -n                       # Don't resolve hostnames
+  tcpdump -nn                      # Don't resolve hostnames or ports
+  tcpdump -v                       # Verbose output
+  tcpdump -vv                      # More verbose
+  tcpdump -X                       # Show hex and ASCII
+  tcpdump -A                       # Show ASCII only
+  tcpdump -e                       # Show link-layer headers
+  tcpdump -s 0                     # Capture full packets (no truncation)
+  tcpdump -q                       # Less protocol info
+
+  # Filter by Host
+  tcpdump host 192.168.1.10               # Traffic to/from host
+  tcpdump src host 192.168.1.10           # Traffic from host
+  tcpdump dst host 192.168.1.10           # Traffic to host
+  tcpdump host 192.168.1.10 and port 80   # Host AND port
+
+  # Filter by Port
+  tcpdump port 80                          # HTTP traffic
+  tcpdump port 443                         # HTTPS traffic
+  tcpdump port 22                          # SSH traffic
+  tcpdump src port 80                      # Source port
+  tcpdump dst port 443                     # Destination port
+  tcpdump portrange 8000-9000              # Port range
+
+  # Filter by Protocol
+  tcpdump tcp                              # TCP only
+  tcpdump udp                              # UDP only
+  tcpdump icmp                             # ICMP (ping)
+  tcpdump arp                              # ARP
+  tcpdump "tcp[tcpflags] & tcp-syn != 0"   # SYN packets
+  tcpdump "tcp[tcpflags] & tcp-rst != 0"   # RST packets
+  tcpdump "tcp[tcpflags] & tcp-fin != 0"   # FIN packets
+
+  # HTTP Analysis
+  tcpdump -i eth0 -A -s0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'  # HTTP content
+  tcpdump -i eth0 -A -s0 'tcp port 443'   # HTTPS (encrypted)
+  tcpdump -i lo -A -s0 'tcp port 8080'    # Local app traffic
+
+  # Complex Filters
+  tcpdump 'host 10.0.0.1 and (port 80 or port 443)'   # Multiple ports
+  tcpdump 'src 10.0.0.0/24 and dst port 3306'          # Subnet + port
+  tcpdump 'tcp[tcpflags] & (tcp-syn) != 0 and not tcp[tcpflags] & (tcp-ack) != 0'  # SYN only (new connections)
+  tcpdump 'greater 1000'                  # Packets larger than 1000 bytes
+  tcpdump 'less 64'                       # Packets smaller than 64 bytes
+  tcpdump 'ip[2:2] > 576'                # IP total length > 576
+
+  # Practical Examples
+  tcpdump -i eth0 -n -c 50 'port 80' -w http.pcap          # Capture 50 HTTP packets
+  tcpdump -i eth0 -n 'dst port 53'                           # DNS queries
+  tcpdump -i eth0 -n 'icmp'                                  # All ping traffic
+  tcpdump -i eth0 -n 'tcp[tcpflags] & tcp-syn != 0'         # New connections
+  tcpdump -i eth0 -n 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0'  # Connection open/close
+  tcpdump -G 3600 -w 'capture-%Y%m%d-%H%M%S.pcap'           # Rotate files hourly
+        </code></pre>
+      </div>
+
+      <h3>🔄 rsync & scp - File Transfer</h3>
+
+      <div class="command-block">
+        <h4>🔄 rsync - Advanced File Sync</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Basic Sync
+  rsync -av source/ dest/                          # Archive + verbose sync
+  rsync -avz source/ user@host:/dest/              # Remote sync with compression
+  rsync -av --delete source/ dest/                 # Sync and delete extras
+  rsync -av --progress source/ dest/               # Show progress
+
+  # Common Flags
+  rsync -a   # Archive mode (preserves permissions, times, symlinks, etc.)
+  rsync -v   # Verbose
+  rsync -z   # Compress during transfer
+  rsync -P   # Show progress + allow resume (--partial --progress)
+  rsync -h   # Human-readable sizes
+  rsync -n   # Dry run (show what would happen)
+  rsync -q   # Quiet mode
+  rsync -c   # Checksum (slower but more accurate)
+  rsync -r   # Recursive (included in -a)
+  rsync -l   # Copy symlinks as symlinks
+  rsync -t   # Preserve modification times
+  rsync -p   # Preserve permissions
+  rsync -o   # Preserve owner
+  rsync -g   # Preserve group
+  rsync -D   # Preserve devices and special files
+
+  # Include/Exclude
+  rsync -av --exclude='*.log' source/ dest/        # Exclude log files
+  rsync -av --exclude='node_modules' source/ dest/ # Exclude dirs
+  rsync -av --exclude-from='exclude.txt' source/ dest/  # Exclude from file
+  rsync -av --include='*.py' --exclude='*' source/ dest/  # Include only Python
+
+  # Bandwidth & Performance
+  rsync --bwlimit=5000 -av source/ dest/           # Limit to 5 MB/s
+  rsync --no-compress -av source/ dest/            # Disable compression
+
+  # Backup with rsync
+  rsync -av --backup --backup-dir=/backup/incremental/$(date +%Y%m%d) source/ dest/
+  rsync -av --link-dest=/backup/previous/ source/ dest/  # Hard-link unchanged files
+
+  # Over SSH
+  rsync -avz -e "ssh -p 2222" source/ user@host:/dest/  # Custom SSH port
+  rsync -avz --rsync-path="sudo rsync" source/ user@host:/dest/  # Run rsync as root
+
+  # Real-world Examples
+  rsync -avzP --delete /var/www/ backup@backup-server:/backup/www/  # Website backup
+  rsync -avz --exclude='.git' --exclude='*.tmp' ./project/ user@host:/project/
+  rsync -avz --dry-run /data/ /backup/data/   # Preview before sync
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📤 scp - Secure Copy</h4>
+    <div class="command-category">
+      <span class="category-tag category-common">[COMMON]</span>
+      <span class="category-description">Frequently used in daily operations</span>
+    </div>
+    <pre><code>
+  # Local to Remote
+  scp file.txt user@host:/path/to/dest/            # Copy file
+  scp -r dir/ user@host:/path/to/dest/             # Copy directory
+  scp -P 2222 file.txt user@host:/path/            # Custom port
+
+  # Remote to Local
+  scp user@host:/path/file.txt ./                  # Download file
+  scp -r user@host:/path/dir/ ./                   # Download directory
+
+  # Between Remote Hosts (via local)
+  scp user1@host1:/file.txt user2@host2:/path/     # Host to host
+
+  # Options
+  scp -C file.txt user@host:/path/                 # Compression
+  scp -l 1000 file.txt user@host:/path/            # Limit bandwidth (Kbit/s)
+  scp -v file.txt user@host:/path/                 # Verbose
+  scp -i ~/.ssh/id_rsa file.txt user@host:/path/   # Specify key
+  scp -o "StrictHostKeyChecking=no" file.txt user@host:/path/  # Skip host key check
+        </code></pre>
+      </div>
+
+      <h3>🔧 Network Troubleshooting (Advanced)</h3>
+
+      <div class="command-block">
+        <h4>🔍 Quick Network Debug Commands</h4>
+    <div class="command-category">
+      <span class="category-tag category-debug">[DEBUG]</span>
+      <span class="category-description">Used for troubleshooting and investigation</span>
+    </div>
+    <pre><code>
+  # Quick Connectivity Check
+  ping -c 4 8.8.8.8 && echo "Internet OK" || echo "Internet FAIL"
+  curl -s --connect-timeout 5 https://google.com > /dev/null && echo "HTTPS OK"
+
+  # Find What's Using a Port
+  ss -tlnp | grep :80                    # Who's on port 80
+  lsof -i :80                            # Alternative
+  fuser 80/tcp                           # PID using port 80
+
+  # Network Interface Speed
+  ethtool eth0 | grep Speed              # Link speed
+  cat /sys/class/net/eth0/speed          # Speed (Mbps)
+
+  # DNS Troubleshooting
+  dig +short google.com                  # Quick DNS lookup
+  dig +trace google.com                  # Trace DNS delegation
+  dig @8.8.8.8 google.com               # Test specific DNS server
+  cat /etc/resolv.conf                   # Check configured DNS
+  systemd-resolve --status               # DNS resolver status (systemd)
+
+  # Connection Testing
+  nc -zv google.com 80                   # Test TCP port
+  nc -zv google.com 443                  # Test HTTPS port
+  nc -zv 192.168.1.1 22                 # Test SSH
+  timeout 5 bash -c 'cat < /dev/null > /dev/tcp/google.com/80' && echo "Port open"
+
+  # Bandwidth Testing
+  curl -o /dev/null http://speedtest.tele2.net/10MB.zip    # Download speed test
+  dd if=/dev/zero bs=1M count=100 | nc host 9999           # Network throughput
+
+  # Packet Capture (Quick)
+  tcpdump -i eth0 -c 100 -n 'port 80'            # Capture 100 HTTP packets
+  tcpdump -i any -n 'icmp'                        # Capture all ping traffic
+  tcpdump -i eth0 -n 'host 10.0.0.1'             # Capture traffic for host
+
+  # Trace Route
+  traceroute -n google.com                        # Trace without DNS
+  mtr --report google.com                         # Continuous trace report
+  tracepath google.com                            # MTU discovery trace
+        </code></pre>
+      </div>
+
       <h2 id="firewall">🛡️ 13. FIREWALL MANAGEMENT</h2>
 
       <!-- WHEN TO USE THESE COMMANDS SECTION -->
@@ -7557,6 +8080,110 @@ Test in non-production systems whenever possible.
   grep -E 'pattern?' file           # Zero or one
   grep -E 'pattern{3}' file         # Exactly 3 occurrences
   grep -E 'pattern{2,5}' file       # Between 2 and 5
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>📖 Complete Regular Expressions Reference</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # ╔══════════════════════════════════════════════════════════════════╗
+  # ║              REGULAR EXPRESSIONS CHEAT SHEET                     ║
+  # ╠══════════════════════════════════════════════════════════════════╣
+  # ║ ANCHORS                                                         ║
+  # ║   ^         Start of line          ^hello                       ║
+  # ║   $         End of line            world$                       ║
+  # ║   \b        Word boundary          \bword\b                     ║
+  # ║                                                                   ║
+  # ║ CHARACTER CLASSES                                                ║
+  # ║   .         Any character (except newline)                       ║
+  # ║   [abc]     Any of a, b, or c                                    ║
+  # ║   [^abc]    NOT a, b, or c                                       ║
+  # ║   [a-z]     Any lowercase letter                                 ║
+  # ║   [A-Z]     Any uppercase letter                                 ║
+  # ║   [0-9]     Any digit                                            ║
+  # ║   [a-zA-Z]  Any letter                                           ║
+  # ║   [a-zA-Z0-9] Any alphanumeric                                   ║
+  # ║                                                                   ║
+  # ║ PREDEFINED CLASSES                                               ║
+  # ║   \d        Digit [0-9]                                          ║
+  # ║   \D        Non-digit                                            ║
+  # ║   \w        Word char [a-zA-Z0-9_]                               ║
+  # ║   \W        Non-word character                                   ║
+  # ║   \s        Whitespace [ \t\n\r\f]                               ║
+  # ║   \S        Non-whitespace                                       ║
+  # ║                                                                   ║
+  # ║ QUANTIFIERS                                                      ║
+  # ║   *         Zero or more       a* matches "", "a", "aaa"        ║
+  # ║   +         One or more        a+ matches "a", "aaa"            ║
+  # ║   ?         Zero or one        colou?r matches "color", "colour"║
+  # ║   {n}       Exactly n          a{3} matches "aaa"               ║
+  # ║   {n,}      n or more         a{2,} matches "aa", "aaa", ...   ║
+  # ║   {n,m}     Between n and m   a{2,4} matches "aa","aaa","aaaa" ║
+  # ║                                                                   ║
+  # ║ GROUPS & ALTERNATION                                              ║
+  # ║   (abc)     Capturing group                                       ║
+  # ║   (?:abc)   Non-capturing group                                   ║
+  # ║   a|b       Alternation (OR)                                      ║
+  # ║   \1        Backreference to group 1                              ║
+  # ║                                                                   ║
+  # ║ ESCAPE SEQUENCES                                                 ║
+  # ║   \.        Literal dot                                           ║
+  # ║   \\        Literal backslash                                     ║
+  # ║   \(        Literal parenthesis                                   ║
+  # ║   \n        Newline                                               ║
+  # ║   \t        Tab                                                   ║
+  # ╚══════════════════════════════════════════════════════════════════╝
+
+  # PRACTICAL REGEX EXAMPLES FOR DEVOPS
+
+  # IP Address (basic)
+  grep -E '([0-9]{1,3}\.){3}[0-9]{1,3}' file
+
+  # Email Address
+  grep -E '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' file
+
+  # URL
+  grep -E 'https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' file
+
+  # Date (YYYY-MM-DD)
+  grep -E '[0-9]{4}-[0-9]{2}-[0-9]{2}' file
+
+  # Time (HH:MM:SS)
+  grep -E '[0-9]{2}:[0-9]{2}:[0-9]{2}' file
+
+  # MAC Address
+  grep -E '([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}' file
+
+  # UUID
+  grep -E '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' file
+
+  # HTTP Status Code
+  grep -E '" [0-9]{3} ' access.log
+
+  # JSON Key-Value
+  grep -E '"[a-zA-Z_]+":\s*"[^"]*"' config.json
+
+  # Kubernetes Pod Name
+  grep -E '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*' file
+
+  # Docker Image Tag
+  grep -E '[a-zA-Z0-9./-]+:[a-zA-Z0-9._-]+' file
+
+  # Kubernetes Resource Version
+  grep -E 'v[0-9]+(alpha[0-9]+|beta[0-9]+)?' file
+
+  # sed with regex
+  sed -E 's/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/[\1]/g' file    # Wrap IPs in brackets
+  sed -E 's/^(.+)@(.+)$/\2/' file                               # Extract domain from email
+  sed -E 's/https?:\/\/([^\/]+).*/\1/' file                      # Extract hostname from URL
+
+  # awk with regex
+  awk '/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ {print $1}' file      # Print IPs
+  awk '$0 ~ /error|ERROR|Error/ {print NR": "$0}' file          # Print error lines with numbers
         </code></pre>
       </div>
 
@@ -12814,6 +13441,158 @@ history | grep keyword        # Quickly find commands relevant to tasks
       </div>
 
       <div class="command-block">
+        <h4>📦 cgroups - Resource Control (Linux Containers Foundation)</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # cgroups (Control Groups) - Limit, account for, and isolate resource usage
+  # Foundation of Docker, Kubernetes resource limits, systemd resource control
+
+  # ── cgroups v2 (Modern - RHEL 8+/Ubuntu 20.04+) ──
+
+  # View cgroup hierarchy
+  cat /proc/self/cgroup                           # Current process cgroup
+  systemd-cgls                                    # Tree view of cgroups
+  systemd-cgtop                                   # Top-like cgroup monitor
+
+  # systemd resource control (preferred method)
+  systemctl status myservice                      # Check service cgroup
+  systemd-cgls myservice                          # View service cgroup tree
+
+  # Set CPU limits for a service
+  systemctl set-property myservice CPUQuota=50%              # Limit to 50% CPU
+  systemctl set-property myservice CPUShares=512             # CPU weight (1024=default)
+  systemctl set-property myservice AllowedCPUs=0-3           # Limit to CPUs 0-3
+  systemctl set-property myservice CPUQuota=200%             # Allow 2 cores
+
+  # Set memory limits for a service
+  systemctl set-property myservice MemoryMax=512M            # Hard memory limit
+  systemctl set-property myservice MemoryHigh=256M           # Soft memory limit
+  systemctl set-property myservice MemorySwapMax=0           # Disable swap
+
+  # Set I/O limits for a service
+  systemctl set-property myservice IOWeight=500               # I/O weight (1-10000)
+  systemctl set-property myservice IOReadBandwidthMax="/dev/sda 10M"  # Read limit
+  systemctl set-property myservice IOWriteBandwidthMax="/dev/sda 5M"   # Write limit
+
+  # Set process limits
+  systemctl set-property myservice TasksMax=100              # Max processes/threads
+
+  # Persistent limits (create override file)
+  # /etc/systemd/system/myservice.service.d/limits.conf
+  # [Service]
+  # CPUQuota=50%
+  # MemoryMax=512M
+  # TasksMax=100
+
+  # Apply persistent limits
+  systemctl daemon-reload
+
+  # View current limits
+  systemctl show myservice | grep -E "(CPU|Memory|IO|Tasks)"
+
+  # ── cgroups v2 Filesystem (Direct Control) ──
+
+  # Mount cgroup v2
+  mount -t cgroup2 none /sys/fs/cgroup
+
+  # Create a cgroup
+  mkdir /sys/fs/cgroup/mygroup
+
+  # Set CPU limit (50% of one core = 50000/100000)
+  echo 50000 > /sys/fs/cgroup/mygroup/cpu.max
+  echo 100000 > /sys/fs/cgroup/mygroup/cpu.max    # Full core
+
+  # Set memory limit
+  echo 536870912 > /sys/fs/cgroup/mygroup/memory.max  # 512MB
+
+  # Add process to cgroup
+  echo $PID > /sys/fs/cgroup/mygroup/cgroup.procs
+
+  # Run command in cgroup
+  systemd-run --scope -p CPUQuota=50% -p MemoryMax=512M mycommand
+
+  # ── Real-world Docker cgroup examples ──
+  docker run --cpus=1.5 --memory=512m nginx         # Docker resource limits
+  docker run --cpu-shares=512 nginx                  # CPU weight
+  docker run --blkio-weight=500 nginx                # I/O weight
+  docker run --pids-limit=100 nginx                  # Process limit
+
+  # ── Kubernetes resource limits ──
+  # resources:
+  #   requests:
+  #     cpu: "250m"         # 0.25 CPU
+  #     memory: "256Mi"
+  #   limits:
+  #     cpu: "500m"         # 0.5 CPU
+  #     memory: "512Mi"
+        </code></pre>
+      </div>
+
+      <div class="command-block">
+        <h4>🌐 Linux Namespaces - Process Isolation</h4>
+    <div class="command-category">
+      <span class="category-tag category-production">[PRODUCTION]</span>
+      <span class="category-description">Used in production environments</span>
+    </div>
+    <pre><code>
+  # Linux Namespaces - Foundation of Containers
+  # Provide isolated views of system resources
+
+  # Namespace Types:
+  # PID     - Process IDs (isolated process tree)
+  # NET     - Network interfaces, ports, routes
+  # MNT     - Mount points
+  # UTS     - Hostname and domain
+  # IPC     - Shared memory, message queues
+  # USER    - UID/GID mappings
+  # CGROUP  - cgroup root directory
+  # TIME    - System clocks (kernel 5.6+)
+
+  # View namespace of a process
+  ls -la /proc/$$/ns/                              # All namespaces
+  ls -la /proc/$$/ns/net                           # Network namespace
+  readlink /proc/$$/ns/pid                         # PID namespace ID
+
+  # Create namespace with unshare
+  unshare --net --mount --pid --fork bash           # New isolated shell
+  unshare --net ip link                             # Isolated network
+  unshare --uts bash                                # Isolated hostname
+  unshare --pid --fork --mount bash                 # Full container-like
+
+  # Network namespace example
+  ip netns add ns1                                 # Create network namespace
+  ip netns add ns2
+  ip link add veth1 type veth peer name veth2      # Create veth pair
+  ip link set veth1 netns ns1                      # Move veth to ns1
+  ip link set veth2 netns ns2
+  ip netns exec ns1 ip addr add 10.0.0.1/24 dev veth1
+  ip netns exec ns2 ip addr add 10.0.0.2/24 dev veth2
+  ip netns exec ns1 ip link set veth1 up
+  ip netns exec ns2 ip link set veth2 up
+  ip netns exec ns1 ping 10.0.0.2                  # Test connectivity
+
+  # List network namespaces
+  ip netns list
+  ip netns exec ns1 ip addr                        # Run command in namespace
+
+  # Enter namespace of running process
+  nsenter --target PID --net ip addr               # Enter network namespace
+  nsenter --target PID --mount ls /                # Enter mount namespace
+  nsenter --target PID --pid ps aux                # Enter PID namespace
+
+  # Cleanup
+  ip netns del ns1                                 # Delete namespace
+
+  # ── Docker namespace usage ──
+  docker inspect --format '{{.State.Pid}}' container_name   # Get container PID
+  nsenter --target $PID --net --mount --pid bash              # Enter container
+        </code></pre>
+      </div>
+
+      <div class="command-block">
         <h4>🛡️ System Security Hardening</h4>
     <div class="command-category">
       <span class="category-tag category-production">[PRODUCTION]</span>
@@ -16161,6 +16940,9 @@ history | grep keyword        # Quickly find commands relevant to tasks
   tar -tzf backup.tar.gz | head -10       # Backup content check
             </code></pre>
             </div>
+
+            <!-- SECTION PREV/NEXT NAVIGATION -->
+            <div id="sectionNavContainer"></div>
 
             <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
               <h4 style="color: #00d9ff; margin-top: 0;">🏆 Ready for Next Level?</h4>

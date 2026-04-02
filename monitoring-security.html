@@ -88,25 +88,49 @@
 
           <h1>📚 Linux/DevOps Command Reference Guide</h1>
 
+          <!-- SEARCH BAR -->
+          <div class="search-container">
+            <h3>🔍 Search Commands & Topics</h3>
+            <div class="search-wrapper">
+              <input type="text" id="searchInput" class="search-input" placeholder="Type to search... (e.g., firewall, ssh, monitoring)">
+              <button id="searchClearBtn" class="search-clear-btn">✕</button>
+            </div>
+            <div id="searchResultsContainer" class="search-results-container"></div>
+          </div>
+
+          <!-- BREADCRUMB NAVIGATION -->
+          <div class="breadcrumb-nav" id="breadcrumbNav">
+            <a href="index.html">🏠 Home</a>
+            <span class="breadcrumb-separator">›</span>
+            <a href="monitoring-security.html">🔒 Monitoring & Security</a>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-current" id="breadcrumbCurrent">Overview</span>
+          </div>
+
+          <!-- PROGRESS TRACKER -->
+          <div class="progress-bar-container">
+            <span class="progress-text" id="progressText">0/0 sections (0%)</span>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+            <button id="progressResetBtn" class="progress-reset-btn">Reset</button>
+          </div>
+
           <div class="warning">
             <strong>Important Security Note:</strong> Many security commands
             require root/sudo privileges. Use with caution and only on systems you
             own or have permission to test.
           </div>
           <div class="section-index">
-            <h3>📋 Table of Contents</h3>
+            <h3 style="display: flex; align-items: center; justify-content: space-between;">
+              📋 Table of Contents
+              <button id="tocToggleBtn" class="toc-toggle-btn">▼ Hide Contents</button>
+            </h3>
             <ul id="toc-list">
               <!-- JS will populate this automatically -->
-            </ul>
-          </div>
-
-          <h2 id="monitoring">📊 47. MONITORING COMMANDS</h2>
-
-          <!-- WHEN TO USE THESE COMMANDS SECTION -->
-          <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-            <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-            <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">system health monitoring, performance analysis, infrastructure observability, metric collection, alert setup, and production environment troubleshooting</strong></p>
-          </div>
+          </ul>
+        </div>
+</div>
 
           <div class="command-block">
             <h4>📊 Understanding Modern Monitoring Stack</h4>
@@ -2185,6 +2209,165 @@
   <pre><code>
   cat /etc/shadow
 </code></pre>
+</div>
+
+<h3>🛡️ Linux Server Hardening Checklist (Production-Ready)</h3>
+
+<div class="command-block">
+  <h4>🔒 Complete Server Hardening Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # ╔══════════════════════════════════════════════════════════════════╗
+  # ║          LINUX SERVER HARDENING - COMPLETE CHECKLIST             ║
+  # ╚══════════════════════════════════════════════════════════════════╝
+
+  # ── 1. SSH Hardening ──
+  # Edit /etc/ssh/sshd_config:
+  PermitRootLogin no                          # Disable root SSH login
+  PasswordAuthentication no                   # Disable password auth (use keys)
+  PubkeyAuthentication yes                    # Enable key auth
+  MaxAuthTries 3                              # Max login attempts
+  ClientAliveInterval 300                     # Idle timeout (seconds)
+  ClientAliveCountMax 2                       # Max alive messages
+  AllowUsers deployer admin                   # Whitelist users
+  Protocol 2                                  # SSH protocol 2 only
+  X11Forwarding no                            # Disable X11
+  PermitEmptyPasswords no                     # No empty passwords
+  LoginGraceTime 60                           # Login timeout
+  Banner /etc/issue.net                       # Warning banner
+  LogLevel VERBOSE                            # Verbose logging
+  # Apply: systemctl restart sshd
+
+  # ── 2. Firewall Configuration ──
+  # Using firewalld
+  firewall-cmd --set-default-zone=drop        # Default deny all
+  firewall-cmd --zone=drop --add-service=ssh  # Allow SSH
+  firewall-cmd --zone=drop --add-service=http # Allow HTTP
+  firewall-cmd --zone=drop --add-service=https # Allow HTTPS
+  firewall-cmd --runtime-to-permanent         # Make persistent
+  firewall-cmd --list-all                     # Verify rules
+
+  # Using iptables (if firewalld not available)
+  iptables -P INPUT DROP                      # Default drop
+  iptables -P FORWARD DROP                    # Drop forwarding
+  iptables -P OUTPUT ACCEPT                   # Allow outbound
+  iptables -A INPUT -i lo -j ACCEPT           # Allow loopback
+  iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 22 -j ACCEPT   # SSH
+  iptables -A INPUT -p tcp --dport 80 -j ACCEPT   # HTTP
+  iptables -A INPUT -p tcp --dport 443 -j ACCEPT  # HTTPS
+  iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT  # Ping
+  iptables-save > /etc/iptables.rules         # Save rules
+
+  # ── 3. Kernel Hardening (/etc/sysctl.conf) ──
+  net.ipv4.tcp_syncookies = 1                 # SYN flood protection
+  net.ipv4.conf.all.rp_filter = 1             # Reverse path filtering
+  net.ipv4.conf.default.rp_filter = 1
+  net.ipv4.conf.all.accept_redirects = 0      # Disable ICMP redirects
+  net.ipv4.conf.default.accept_redirects = 0
+  net.ipv4.conf.all.send_redirects = 0
+  net.ipv4.conf.default.send_redirects = 0
+  net.ipv4.conf.all.accept_source_route = 0   # Disable source routing
+  net.ipv4.conf.default.accept_source_route = 0
+  net.ipv4.icmp_echo_ignore_broadcasts = 1    # Ignore broadcast pings
+  net.ipv4.icmp_ignore_bogus_error_responses = 1
+  net.ipv4.conf.all.log_martians = 1          # Log suspicious packets
+  net.ipv4.conf.default.log_martians = 1
+  net.ipv4.tcp_timestamps = 0                 # Disable timestamps
+  kernel.randomize_va_space = 2               # ASLR full randomization
+  kernel.kptr_restrict = 2                    # Hide kernel pointers
+  kernel.dmesg_restrict = 1                   # Restrict dmesg
+  kernel.yama.ptrace_scope = 1                # Restrict ptrace
+  fs.suid_dumpable = 0                        # No core dumps for SUID
+  # Apply: sysctl -p
+
+  # ── 4. User & Password Policies ──
+  # /etc/login.defs
+  PASS_MAX_DAYS 90                            # Max password age
+  PASS_MIN_DAYS 7                             # Min days between changes
+  PASS_MIN_LEN 12                             # Minimum password length
+  PASS_WARN_AGE 14                            # Warning before expiry
+
+  # Lock account after 5 failed attempts
+  authfail pam_faillock.so preaudit deny=5 unlock_time=900
+  # /etc/pam.d/system-auth or /etc/pam.d/common-password
+
+  # Password complexity
+  pam_pwquality.so minlen=12 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1
+
+  # ── 5. Disable Unnecessary Services ──
+  systemctl disable avahi-daemon               # mDNS
+  systemctl disable cups                       # Printing
+  systemctl disable bluetooth                  # Bluetooth
+  systemctl disable postfix                    # Mail (if not needed)
+  systemctl list-unit-files --type=service --state=enabled  # List enabled
+
+  # ── 6. File Permissions Hardening ──
+  chmod 700 /root                             # Root home
+  chmod 600 /etc/shadow                       # Shadow file
+  chmod 600 /etc/gshadow                      # Group shadow
+  chmod 644 /etc/passwd                       # Passwd file
+  chmod 644 /etc/group                        # Group file
+  chmod 600 /etc/ssh/sshd_config              # SSH config
+  chmod 400 /boot/grub2/grub.cfg              # GRUB config
+
+  # Find world-writable files
+  find / -type f -perm -0002 -exec ls -la {} \; 2>/dev/null
+
+  # Find SUID/SGID files
+  find / -type f \( -perm -4000 -o -perm -2000 \) -exec ls -la {} \;
+
+  # ── 7. Audit & Monitoring ──
+  # Monitor critical files
+  auditctl -w /etc/passwd -p wa -k passwd_changes
+  auditctl -w /etc/shadow -p wa -k shadow_changes
+  auditctl -w /etc/sudoers -p wa -k sudoers_changes
+  auditctl -w /etc/ssh/sshd_config -p wa -k sshd_changes
+  auditctl -w /var/log/ -p wa -k log_changes
+
+  # Monitor privileged commands
+  auditctl -a always,exit -F arch=b64 -S execve -F euid=0 -k root_commands
+
+  # ── 8. Automatic Security Updates ──
+  # RHEL/CentOS
+  dnf install dnf-automatic
+  # Edit /etc/dnf/automatic.conf:
+  # apply_updates = yes
+  # upgrade_type = security
+  systemctl enable --now dnf-automatic.timer
+
+  # Ubuntu/Debian
+  apt install unattended-upgrades
+  dpkg-reconfigure -plow unattended-upgrades
+
+  # ── 9. Intrusion Detection ──
+  # AIDE (File Integrity)
+  aide --init                                  # Initialize database
+  cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  aide --check                                 # Check integrity
+
+  # Rootkit detection
+  rkhunter --update                            # Update database
+  rkhunter --check --skip-keypress             # Scan system
+  chkrootkit                                   # Alternative scanner
+  lynis audit system                           # Security audit
+
+  # ── 10. Log Management ──
+  # Ensure logging is enabled
+  systemctl enable --now rsyslog
+  systemctl enable --now auditd
+
+  # Centralized logging (add to /etc/rsyslog.conf)
+  # *.* @@logserver.example.com:514
+
+  # Log rotation (verify /etc/logrotate.conf)
+  # Keep 12 weeks of logs
+  # Compress old logs
+  # Create new empty log after rotation
+  </code></pre>
 </div>
 
 <h2 id="performance">⚡ 51. PERFORMANCE MONITORING & TUNING</h2>
@@ -5845,11 +6028,177 @@
   <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">service mesh implementation, traffic management, mTLS configuration, observability, and microservices security</strong></p>
 </div>
 
+<div class="command-block">
+  <h4>🕸️ Istio Service Mesh</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Install Istio
+  curl -L https://istio.io/downloadIstio | sh -
+  cd istio-*/
+  export PATH=$PWD/bin:$PATH
+  istioctl install --set profile=demo
+  kubectl label namespace default istio-injection=enabled
+
+  # Verify installation
+  istioctl verify-install
+  istioctl version
+  kubectl get pods -n istio-system
+
+  # Deploy sample app
+  kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+  kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+
+  # Traffic Management
+  istioctl analyze                              # Analyze configuration
+  istioctl proxy-status                         # Proxy status
+  istioctl proxy-config cluster pod-name        # Proxy config
+  istioctl proxy-config route pod-name          # Route config
+  istioctl proxy-config listener pod-name       # Listener config
+  istioctl proxy-config endpoint pod-name       # Endpoint config
+
+  # Virtual Services & Destination Rules
+  kubectl apply -f virtual-service.yaml         # Apply traffic rules
+  kubectl get virtualservices                   # List virtual services
+  kubectl get destinationrules                  # List destination rules
+  kubectl describe virtualservice my-vs         # Describe virtual service
+
+  # mTLS Configuration
+  kubectl apply -f - <<EOF
+  apiVersion: security.istio.io/v1beta1
+  kind: PeerAuthentication
+  metadata:
+    name: default
+    namespace: default
+  spec:
+    mtls:
+      mode: STRICT
+  EOF
+
+  # Canary Deployments (Traffic Splitting)
+  kubectl apply -f - <<EOF
+  apiVersion: networking.istio.io/v1beta1
+  kind: VirtualService
+  metadata:
+    name: myapp
+  spec:
+    hosts:
+    - myapp
+    http:
+    - route:
+      - destination:
+          host: myapp
+          subset: v1
+        weight: 90
+      - destination:
+          host: myapp
+          subset: v2
+        weight: 10
+  EOF
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🔗 Linkerd Service Mesh</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Install Linkerd CLI
+  curl --proto '=https' -sL https://run.linkerd.io/install | sh
+  export PATH=$HOME/.linkerd2/bin:$PATH
+  linkerd version
+
+  # Install Linkerd on cluster
+  linkerd check --pre                    # Pre-install checks
+  linkerd install | kubectl apply -f -   # Install control plane
+  linkerd check                          # Verify installation
+
+  # Inject sidecar into namespace
+  kubectl get -n default deploy -o yaml | linkerd inject - | kubectl apply -f -
+
+  # Dashboard
+  linkerd viz install | kubectl apply -f -
+  linkerd viz dashboard &                # Open dashboard
+
+  # Monitoring
+  linkerd viz stat deploy                # Traffic stats
+  linkerd viz stat deploy -n default     # Per namespace
+  linkerd viz edges deploy               # Service dependencies
+  linkerd viz top deploy                 # Real-time traffic
+
+  # Troubleshooting
+  linkerd check                          # Health check
+  linkerd diagnostics proxy-metrics pod  # Proxy metrics
+  linkerd logs deploy/myapp              # Proxy logs
+  </code></pre>
+</div>
+
 <h2 id="network-troubleshooting">🌐 73. NETWORK TROUBLESHOOTING & SECURITY</h2>
 
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
   <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
   <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">network troubleshooting, firewall configuration, VPN setup, and network security</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>🌐 Network Troubleshooting Toolkit</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # ── Connectivity Testing ──
+  ping -c 4 8.8.8.8                              # Basic connectivity
+  ping -c 4 -s 1472 -M do google.com             # MTU test
+  traceroute -n google.com                         # Route tracing
+  mtr --report --report-cycles 10 google.com      # Continuous trace
+  tracepath google.com                             # MTU discovery
+
+  # ── DNS Troubleshooting ──
+  dig google.com +short                            # Quick DNS
+  dig +trace google.com                            # DNS delegation
+  dig @8.8.8.8 google.com                         # Specific DNS server
+  dig google.com MX +short                         # Mail records
+  nslookup google.com                              # Legacy DNS
+  host -t A google.com                             # A record
+  resolvectl status                                # systemd-resolved status
+  cat /etc/resolv.conf                             # DNS config
+
+  # ── Port & Connection Testing ──
+  nc -zv google.com 80                             # Test TCP port
+  nc -zv -w 5 google.com 443                       # With timeout
+  nc -l 8080                                       # Listen on port
+  ss -tlnp | grep :80                              # Who's on port 80
+  lsof -i :80                                      # Alternative check
+  curl -v telnet://google.com:80                   # Test with curl
+
+  # ── Packet Capture ──
+  tcpdump -i eth0 -c 100                           # Basic capture
+  tcpdump -i any -n 'port 80'                      # HTTP traffic
+  tcpdump -i eth0 -w capture.pcap                  # Save to file
+  tcpdump -r capture.pcap                          # Read capture
+  tcpdump -nn -A -s0 'tcp port 80'                # Show HTTP content
+
+  # ── Bandwidth & Performance ──
+  iperf3 -s                                        # Start server
+  iperf3 -c server-ip                              # Test bandwidth
+  curl -o /dev/null http://speedtest.tele2.net/10MB.zip  # Download speed
+  nload eth0                                       # Real-time bandwidth
+  iftop -i eth0                                    # Connection bandwidth
+  vnstat -l                                        # Live traffic stats
+
+  # ── Connection Tracking ──
+  ss -s                                            # Socket summary
+  ss -tn state established | wc -l                 # Count connections
+  ss -tn state time-wait | wc -l                   # TIME_WAIT count
+  ss -tnp | grep :80                               # Port 80 connections
+  cat /proc/net/nf_conntrack | head -20            # Connection tracking
+  conntrack -S                                      # Conntrack stats
+  </code></pre>
 </div>
 
 <h2 id="incident-response">🚨 74. INCIDENT RESPONSE & ON-CALL</h2>
@@ -5859,11 +6208,305 @@
   <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">incident response, on-call duties, post-mortem analysis, and incident management</strong></p>
 </div>
 
+<div class="command-block">
+  <h4>🚨 Incident Response Runbook - First 5 Minutes</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # ╔══════════════════════════════════════════════════════════════════╗
+  # ║         INCIDENT RESPONSE RUNBOOK - FIRST 5 MINUTES             ║
+  # ╚══════════════════════════════════════════════════════════════════╝
+
+  # ── Step 1: Assess the Situation (30 seconds) ──
+  uptime                                          # System load & uptime
+  free -h                                         # Memory status
+  df -h                                           # Disk space
+  ss -tlnp | head -20                             # Listening ports
+  top -bn1 | head -20                             # Top processes
+
+  # ── Step 2: Check Services (1 minute) ──
+  systemctl list-units --failed                   # Failed services
+  systemctl status nginx httpd mysql postgresql   # Key services
+  docker ps -a                                    # Container status
+  kubectl get pods --all-namespaces               # K8s pods
+  kubectl get events --sort-by=.lastTimestamp      # Recent events
+
+  # ── Step 3: Check Logs (1 minute) ──
+  journalctl -p err -n 50 --since "10 min ago"    # Recent errors
+  tail -100 /var/log/syslog                       # System log
+  tail -100 /var/log/nginx/error.log              # Web server errors
+  tail -100 /var/log/mysql/error.log              # Database errors
+  dmesg | tail -20                                # Kernel messages
+
+  # ── Step 4: Network Check (30 seconds) ──
+  ping -c 3 8.8.8.8                               # Internet connectivity
+  ss -s                                           # Socket statistics summary
+  netstat -tuln | grep LISTEN                     # Listening services
+  curl -sI https://localhost | head -5             # Local HTTP check
+
+  # ── Step 5: Resource Exhaustion Check (1 minute) ──
+  # CPU
+  mpstat 1 3                                      # CPU per core
+  ps aux --sort=-%cpu | head -10                  # Top CPU processes
+
+  # Memory
+  vmstat 1 3                                      # Virtual memory stats
+  ps aux --sort=-%mem | head -10                  # Top memory processes
+
+  # Disk I/O
+  iostat -x 1 3                                   # Disk I/O stats
+  iotop -obn1 | head -20                          # Top I/O processes (if available)
+
+  # Disk Space
+  df -h                                           # Filesystem usage
+  du -sh /var/log/* | sort -rh | head -10         # Large log dirs
+  find / -type f -size +100M 2>/dev/null          # Large files
+
+  # ── Step 6: Quick Fixes ──
+
+  # Restart failed service
+  systemctl restart nginx
+
+  # Kill runaway process
+  kill -15 $(ps aux --sort=-%cpu | awk 'NR==2{print $2}')
+
+  # Clear disk space (emergency)
+  journalctl --vacuum-size=100M                   # Clean journal logs
+  find /tmp -type f -mtime +7 -delete             # Clean old temp files
+  find /var/log -name "*.gz" -delete              # Clean compressed logs
+
+  # Restart container
+  docker restart container_name
+
+  # Scale up K8s deployment
+  kubectl scale deployment myapp --replicas=3
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>🔍 Deep Dive Investigation Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # ── Process Investigation ──
+  ps auxf                                         # Process tree
+  pstree -p                                       # Process tree with PIDs
+  lsof -p PID                                     # Files opened by process
+  strace -p PID -c -S time                        # System call profiling
+  ls -la /proc/PID/fd/ | wc -l                    # File descriptor count
+  cat /proc/PID/status                            # Process status details
+  cat /proc/PID/limits                            # Resource limits
+  cat /proc/PID/environ | tr '\0' '\n'            # Environment variables
+
+  # ── Network Investigation ──
+  ss -tnp | grep :80                              # Connections on port 80
+  ss -tn state established | wc -l                # Count established connections
+  tcpdump -i eth0 -c 100 -n port 80               # Capture HTTP traffic
+  tcpdump -i any -n 'host 10.0.0.1'              # Traffic to/from host
+  conntrack -L 2>/dev/null | head -20             # Connection tracking
+  ip -s link show eth0                            # Interface statistics
+
+  # ── Application Investigation ──
+  # Nginx
+  nginx -t                                        # Test config
+  tail -f /var/log/nginx/access.log | grep " 5[0-9][0-9] "  # 5xx errors
+  tail -f /var/log/nginx/error.log                # Error log
+  curl -sI http://localhost | head -10            # Response headers
+
+  # Apache
+  httpd -t                                        # Test config
+  apachectl status                                # Status
+  tail -f /var/log/httpd/error_log                # Error log
+
+  # MySQL
+  mysql -e "SHOW PROCESSLIST;"                    # Active queries
+  mysql -e "SHOW ENGINE INNODB STATUS\G"          # InnoDB status
+  mysql -e "SHOW GLOBAL STATUS LIKE 'Threads%';"  # Thread stats
+  mysql -e "SHOW GLOBAL STATUS LIKE 'Slow%';"     # Slow query stats
+
+  # PostgreSQL
+  psql -c "SELECT * FROM pg_stat_activity;"       # Active queries
+  psql -c "SELECT * FROM pg_locks;"               # Lock info
+  psql -c "SELECT * FROM pg_stat_bgwriter;"       # Background writer
+
+  # Docker
+  docker logs --tail 100 container_name           # Container logs
+  docker stats --no-stream                        # Resource usage
+  docker inspect container_name | jq '.[0].State' # Container state
+  docker exec container_name cat /var/log/app.log # App logs inside container
+
+  # Kubernetes
+  kubectl logs pod-name --tail=100 -f             # Pod logs
+  kubectl logs pod-name --previous                # Previous container logs
+  kubectl describe pod pod-name                   # Pod details
+  kubectl exec -it pod-name -- /bin/sh            # Shell into pod
+  kubectl top pod pod-name                        # Resource usage
+  kubectl get events --field-selector involvedObject.name=pod-name  # Pod events
+  </code></pre>
+</div>
+
+<div class="command-block">
+  <h4>📊 Post-Incident Analysis Commands</h4>
+  <div class="command-category">
+    <span class="category-tag category-debug">[DEBUG]</span>
+    <span class="category-description">Used for troubleshooting and investigation</span>
+  </div>
+  <pre><code>
+  # ── Historical Analysis ──
+  # System resource trends
+  sar -u 1 60                                     # CPU for last hour
+  sar -r 1 60                                     # Memory for last hour
+  sar -b 1 60                                     # I/O for last hour
+  sar -n DEV 1 60                                 # Network for last hour
+
+  # Journal analysis
+  journalctl --since "2 hours ago" --until "1 hour ago"  # Specific time window
+  journalctl -p err --since yesterday              # Yesterday's errors
+  journalctl _PID=1234                             # Specific PID logs
+  journalctl -u nginx --since today                # Service logs
+
+  # Log analysis with grep/awk
+  awk '{print $4}' access.log | sort | uniq -c | sort -rn | head -10  # Top IPs
+  grep "5[0-9][0-9]" access.log | wc -l           # Count 5xx errors
+  awk '$9 == 500' access.log | awk '{print $7}' | sort | uniq -c | sort -rn  # 500 by URL
+  grep -c "OOM" /var/log/syslog                    # Out of memory events
+  zgrep "error" /var/log/syslog.*.gz               # Search compressed logs
+
+  # Timeline reconstruction
+  journalctl --since "2024-01-15 14:00:00" --until "2024-01-15 15:00:00" -o short-iso
+  last -20                                         # Recent logins
+  lastb -20                                        # Failed login attempts
+  ausearch -ts recent -i                           # Recent audit events
+  </code></pre>
+</div>
+
 <h2 id="chaos-engineering">💥 75. CHAOS ENGINEERING (CHAOS MESH/GREMLIN)</h2>
 
 <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
   <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
   <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">chaos engineering experiments, resilience testing, fault injection, and system stability verification</strong></p>
+</div>
+
+<div class="command-block">
+  <h4>💥 Chaos Mesh (Kubernetes Chaos Engineering)</h4>
+  <div class="command-category">
+    <span class="category-tag category-production">[PRODUCTION]</span>
+    <span class="category-description">Used in production environments</span>
+  </div>
+  <pre><code>
+  # Install Chaos Mesh
+  curl -sSL https://mirrors.chaos-mesh.org/v2.6.0/install.sh | bash
+  kubectl get pods -n chaos-testing
+
+  # Access Dashboard
+  kubectl port-forward -n chaos-testing svc/chaos-dashboard 2333:2333
+  # Visit http://localhost:2333
+
+  # ── Pod Chaos (Kill/Stop Pods) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: PodChaos
+  metadata:
+    name: pod-failure-example
+    namespace: chaos-testing
+  spec:
+    action: pod-failure
+    mode: one
+    selector:
+      namespaces:
+        - default
+      labelSelectors:
+        app: myapp
+    duration: "30s"
+  EOF
+
+  # ── Network Chaos (Latency/Loss) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: NetworkChaos
+  metadata:
+    name: network-delay
+    namespace: chaos-testing
+  spec:
+    action: delay
+    mode: all
+    selector:
+      namespaces:
+        - default
+      labelSelectors:
+        app: myapp
+    delay:
+      latency: "100ms"
+      jitter: "50ms"
+      correlation: "50"
+    duration: "60s"
+  EOF
+
+  # ── Stress Chaos (CPU/Memory Pressure) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: StressChaos
+  metadata:
+    name: cpu-stress
+    namespace: chaos-testing
+  spec:
+    mode: one
+    selector:
+      namespaces:
+        - default
+      labelSelectors:
+        app: myapp
+    stressors:
+      cpu:
+        workers: 2
+        load: 80
+    duration: "60s"
+  EOF
+
+  # ── IO Chaos (Disk I/O Faults) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: IOChaos
+  metadata:
+    name: io-delay
+    namespace: chaos-testing
+  spec:
+    action: latency
+    mode: all
+    selector:
+      namespaces:
+        - default
+    delay: "100ms"
+    path: "/var/data/**"
+    duration: "30s"
+  EOF
+
+  # ── Time Chaos (Clock Skew) ──
+  kubectl apply -f - <<EOF
+  apiVersion: chaos-mesh.org/v1alpha1
+  kind: TimeChaos
+  metadata:
+    name: time-skew
+    namespace: chaos-testing
+  spec:
+    mode: all
+    selector:
+      namespaces:
+        - default
+    timeOffset: "-1h"
+    duration: "60s"
+  EOF
+
+  # Manage Experiments
+  kubectl get chaos -A                         # List all experiments
+  kubectl describe chaos pod-failure-example   # Describe experiment
+  kubectl delete chaos pod-failure-example     # Stop experiment
+  kubectl logs -n chaos-testing -l app=chaos-daemon  # Daemon logs
+  </code></pre>
 </div>
 
 <h2 id="summary">📋 76. SUMMARY</h2>
@@ -5897,8 +6540,11 @@
     
     # Keep practicing these commands to master DevOps!
     </code></pre>
-  </div>
+        </div>
 </div>
+
+<!-- SECTION PREV/NEXT NAVIGATION -->
+<div id="sectionNavContainer"></div>
 
 <div class="download-section">
   <h3>📖 Complete Reference Guide</h3>
@@ -5921,59 +6567,5 @@
           </ul>
         </div>
 </div>
-
-</h2>
-
-<div style="background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
-  <h4 style="color: #58a6ff; margin-bottom: 10px;">When to Use These Commands:</h4>
-  <p style="color: #8b949e; margin: 0;">Use the following commands during: <strong style="color: #79c0ff;">review and practice, exam preparation, interview prep, and career advancement</strong></p>
-</div>
-
-<div>
-  <h3>📋 DevOps Commands Summary</h3>
-
-  <div class="command-block">
-    <h4>📚 Key Takeaways</h4>
-    <div class="command-category">
-      <span class="category-tag category-beginner">[BEGINNER]</span>
-      <span class="category-description">For newcomers to DevOps</span>
-    </div>
-    <pre><code>
-    # Congratulations on completing the DevOps journey!
-    # This comprehensive guide covered essential commands for:
-    
-    # 1. System Administration & Linux
-    # 2. Containerization & Orchestration
-    # 3. Infrastructure as Code
-    # 4. CI/CD Pipelines
-    # 5. Monitoring & Observability
-    # 6. Security & Compliance
-    # 7. Cloud Platforms
-    # 8. Advanced DevOps Practices
-    
-    # Keep practicing these commands to master DevOps!
-    </code></pre>
-  </div>
-</div>
-
-<div class="download-section">
-  <h3>📖 Complete Reference Guide</h3>
-</div>
-
-<div class="warning">
-  <p>
-  <strong>Note:</strong> This reference guide is optimized for quick
-  lookup. Commands are organized by function rather than complexity.
-  Always test commands in a safe environment before using in production.
-  </p>
-</div>
-<div class="info-box" style="border-left-color: #ff6b9d; margin-top: 50px;">
-  <h3 style="color: #ff6b9d">🎯 Section Complete?</h3>
-  <ul>
-    <li><strong>📚 Next Steps:</strong> Continue to <a href="index.html" style="color: #ff6b9d;">main page</a> or explore other sections</li>
-      <li><strong>🔍 Quick Review:</strong> Use Ctrl+F to find specific commands</li>
-        <li><strong>💼 Career Focus:</strong> Practice these commands for senior-level positions</li>
-          <li><strong>📖 Documentation:</strong> Check <a href="README.md">README.md</a> for full overview</li>
-          </ul>
-        </div>
-</div>
+  </body>
+</html>

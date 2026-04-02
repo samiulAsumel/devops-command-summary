@@ -119,6 +119,60 @@
         }
       </style>
 
+      <!-- GLOBAL SEARCH -->
+      <div class="search-container" style="max-width: 700px; margin: 0 auto 30px auto;">
+        <h3>🔍 Search All Topics</h3>
+        <div class="search-wrapper">
+          <input type="text" id="globalSearchInput" class="search-input" placeholder="Search across all sections... (e.g., chmod, docker, nginx, ssh)">
+          <button id="searchClearBtn" class="search-clear-btn">✕</button>
+        </div>
+        <div id="searchResultsContainer" class="search-results-container"></div>
+      </div>
+
+      <!-- LEARNING PATH GUIDE -->
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 40px;">
+        <h3 style="color: #00d9ff; margin-top: 0; text-align: center; font-size: 1.4rem;">🎯 Recommended Learning Path</h3>
+        <p style="color: #c9d1d9; text-align: center; margin-bottom: 20px;">Follow this order from scratch to expert level</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div style="background: rgba(0,217,255,0.08); border-left: 4px solid #28a745; padding: 15px; border-radius: 8px;">
+            <div style="color: #28a745; font-weight: bold; font-size: 0.85em;">PHASE 1 - FOUNDATION</div>
+            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
+              <a href="system-admin.html#system-info" style="color: #00d9ff; text-decoration: none;">01. System Info</a><br>
+              <a href="system-admin.html#file-ops" style="color: #00d9ff; text-decoration: none;">02. File Operations</a><br>
+              <a href="system-admin.html#text-editors" style="color: #00d9ff; text-decoration: none;">03. Text Editors</a><br>
+              <a href="system-admin.html#permissions" style="color: #00d9ff; text-decoration: none;">04. Permissions</a>
+            </div>
+          </div>
+          <div style="background: rgba(255,193,7,0.08); border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px;">
+            <div style="color: #ffc107; font-weight: bold; font-size: 0.85em;">PHASE 2 - CORE SKILLS</div>
+            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
+              <a href="system-admin.html#process-mgmt" style="color: #00d9ff; text-decoration: none;">06. Process Mgmt</a><br>
+              <a href="system-admin.html#networking" style="color: #00d9ff; text-decoration: none;">12. Networking</a><br>
+              <a href="system-admin.html#scripting" style="color: #00d9ff; text-decoration: none;">17. Bash Scripting</a><br>
+              <a href="devops-tools.html#git" style="color: #00d9ff; text-decoration: none;">29. Git Version Control</a>
+            </div>
+          </div>
+          <div style="background: rgba(255,107,157,0.08); border-left: 4px solid #ff6b9d; padding: 15px; border-radius: 8px;">
+            <div style="color: #ff6b9d; font-weight: bold; font-size: 0.85em;">PHASE 3 - DEVOPS</div>
+            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
+              <a href="devops-tools.html#docker-from-scratch" style="color: #00d9ff; text-decoration: none;">26. Docker</a><br>
+              <a href="devops-tools.html#kubernetes" style="color: #00d9ff; text-decoration: none;">31. Kubernetes</a><br>
+              <a href="devops-tools.html#ansible" style="color: #00d9ff; text-decoration: none;">32. Ansible</a><br>
+              <a href="devops-tools.html#terraform-from-scratch" style="color: #00d9ff; text-decoration: none;">27. Terraform</a>
+            </div>
+          </div>
+          <div style="background: rgba(220,53,69,0.08); border-left: 4px solid #dc3545; padding: 15px; border-radius: 8px;">
+            <div style="color: #dc3545; font-weight: bold; font-size: 0.85em;">PHASE 4 - EXPERT</div>
+            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
+              <a href="monitoring-security.html#security" style="color: #00d9ff; text-decoration: none;">50. Security Hardening</a><br>
+              <a href="monitoring-security.html#advanced-kubernetes" style="color: #00d9ff; text-decoration: none;">54. Advanced K8s</a><br>
+              <a href="monitoring-security.html#devsecops" style="color: #00d9ff; text-decoration: none;">61. DevSecOps</a><br>
+              <a href="monitoring-security.html#interview-prep" style="color: #00d9ff; text-decoration: none;">63. Interview Prep</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="section-header floating-section">
         <div class="section-container">
           <div class="section-title-content">
@@ -1494,5 +1548,101 @@
         }
       }
     </style>
+
+    <script>
+      // Global Search for Index Page
+      (function() {
+        const searchData = [
+          { title: "System Information & Navigation", page: "system-admin.html", section: "system-info" },
+          { title: "File Operations", page: "system-admin.html", section: "file-ops" },
+          { title: "Text Editors", page: "system-admin.html", section: "text-editors" },
+          { title: "File Permissions & Ownership", page: "system-admin.html", section: "permissions" },
+          { title: "User & Group Management", page: "system-admin.html", section: "user-mgmt" },
+          { title: "Process Management", page: "system-admin.html", section: "process-mgmt" },
+          { title: "Systemd Service Management", page: "system-admin.html", section: "systemd" },
+          { title: "Package Management (DNF/YUM)", page: "system-admin.html", section: "package-mgmt" },
+          { title: "RPM Package Management", page: "system-admin.html", section: "rpm" },
+          { title: "System Logging", page: "system-admin.html", section: "logging" },
+          { title: "Disk Management", page: "system-admin.html", section: "disk-management" },
+          { title: "Networking Basics", page: "system-admin.html", section: "networking" },
+          { title: "Firewall Management", page: "system-admin.html", section: "firewall" },
+          { title: "SSH (Secure Shell)", page: "system-admin.html", section: "ssh" },
+          { title: "Text Processing (grep, awk, sed)", page: "system-admin.html", section: "text-processing" },
+          { title: "YAML Fundamentals", page: "system-admin.html", section: "yaml" },
+          { title: "Bash Scripting Essentials", page: "system-admin.html", section: "scripting" },
+          { title: "Backup and Recovery", page: "system-admin.html", section: "backup" },
+          { title: "Automation and Scheduling", page: "system-admin.html", section: "automation" },
+          { title: "Advanced System Administration", page: "system-admin.html", section: "advanced-system" },
+          { title: "AWS - From Scratch", page: "devops-tools.html", section: "aws-from-scratch" },
+          { title: "Docker Containerization", page: "devops-tools.html", section: "docker-from-scratch" },
+          { title: "Terraform IaC", page: "devops-tools.html", section: "terraform-from-scratch" },
+          { title: "Python for DevOps", page: "devops-tools.html", section: "python" },
+          { title: "Git Version Control", page: "devops-tools.html", section: "git" },
+          { title: "Docker Commands", page: "devops-tools.html", section: "docker" },
+          { title: "Kubernetes (kubectl) Commands", page: "devops-tools.html", section: "kubernetes" },
+          { title: "Ansible Commands", page: "devops-tools.html", section: "ansible" },
+          { title: "Terraform Commands", page: "devops-tools.html", section: "terraform" },
+          { title: "AWS CLI Commands", page: "devops-tools.html", section: "aws" },
+          { title: "Container Security", page: "devops-tools.html", section: "container-security" },
+          { title: "CI/CD Tools (Jenkins, GitHub Actions)", page: "devops-tools.html", section: "cicd-tools" },
+          { title: "Monitoring Commands", page: "monitoring-security.html", section: "monitoring" },
+          { title: "Logging & Auditing (ELK Stack)", page: "monitoring-security.html", section: "logging-auditing" },
+          { title: "Security and Hardening", page: "monitoring-security.html", section: "security" },
+          { title: "Performance Monitoring & Tuning", page: "monitoring-security.html", section: "performance" },
+          { title: "High Availability & Load Balancing", page: "monitoring-security.html", section: "ha-load-balancing" },
+          { title: "Advanced Kubernetes", page: "monitoring-security.html", section: "advanced-kubernetes" },
+          { title: "DevSecOps Practices", page: "monitoring-security.html", section: "devsecops" },
+          { title: "Interview Preparation", page: "monitoring-security.html", section: "interview-prep" },
+          { title: "HashiCorp Vault", page: "devops-tools.html", section: "vault" },
+          { title: "Databases (MySQL, PostgreSQL)", page: "devops-tools.html", section: "databases" },
+          { title: "Microsoft Azure", page: "devops-tools.html", section: "azure" },
+          { title: "Google Cloud Platform", page: "devops-tools.html", section: "gcp" },
+          { title: "GitOps (ArgoCD/Flux)", page: "devops-tools.html", section: "gitops" },
+          { title: "Service Mesh (Istio/Linkerd)", page: "monitoring-security.html", section: "service-mesh" },
+          { title: "Incident Response & On-Call", page: "monitoring-security.html", section: "incident-response" },
+          { title: "Chaos Engineering", page: "monitoring-security.html", section: "chaos-engineering" },
+        ];
+
+        const searchInput = document.getElementById('globalSearchInput');
+        const resultsContainer = document.getElementById('searchResultsContainer');
+        const clearBtn = document.getElementById('searchClearBtn');
+
+        if (!searchInput) return;
+
+        searchInput.addEventListener('input', function() {
+          const query = this.value.trim().toLowerCase();
+          if (!query) {
+            resultsContainer.classList.remove('visible');
+            clearBtn.classList.remove('visible');
+            return;
+          }
+          clearBtn.classList.add('visible');
+
+          const results = searchData.filter(item =>
+            item.title.toLowerCase().includes(query)
+          );
+
+          if (results.length === 0) {
+            resultsContainer.innerHTML = '<div class="search-no-results"><div class="no-results-icon">🔍</div><p>No topics found</p></div>';
+          } else {
+            let html = '<div class="search-result-count">' + results.length + ' topic(s) found</div>';
+            results.forEach(r => {
+              html += '<div class="search-result-item" onclick="window.location.href=\'' + r.page + '#' + r.section + '\'">';
+              html += '<div class="result-section">' + r.title + '</div>';
+              html += '<div class="result-context" style="color:#8b949e;font-size:0.85em;">Go to ' + r.page + '</div>';
+              html += '</div>';
+            });
+            resultsContainer.innerHTML = html;
+          }
+          resultsContainer.classList.add('visible');
+        });
+
+        clearBtn.addEventListener('click', function() {
+          searchInput.value = '';
+          resultsContainer.classList.remove('visible');
+          clearBtn.classList.remove('visible');
+        });
+      })();
+    </script>
   </body>
 </html>
