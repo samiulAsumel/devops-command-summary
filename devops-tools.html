@@ -524,7 +524,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    it mergetool                                                   # Launch merge tool</code></pre>
+    git mergetool                                                   # Launch merge tool</code></pre>
   </div>
 
   <h3>🌐 Remote Repositories</h3>
@@ -539,7 +539,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    it remote                                                      # List remotes
+    git remote                                                      # List remotes
     git remote -v                                                   # List with URLs
     git remote show origin                                          # Show remote details</code></pre>
   </div>
@@ -554,7 +554,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    it remote add origin url                                       # Add remote
+    git remote add origin url                                       # Add remote
     git remote add upstream url                                     # Add upstream remote</code></pre>
   </div>
 
@@ -568,7 +568,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    it remote remove origin                                        # Remove remote
+    git remote remove origin                                        # Remove remote
     git remote rename old new                                       # Rename remote</code></pre>
   </div>
 
@@ -582,7 +582,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    it fetch                                                       # Fetch from default remote
+    git fetch                                                       # Fetch from default remote
     git fetch origin                                                # Fetch from specific remote
     git fetch --all                                                 # Fetch from all remotes
     git pull                                                        # Fetch and merge
@@ -600,7 +600,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    it push                                                        # Push to default remote/branch
+    git push                                                        # Push to default remote/branch
     git push origin main                                            # Push to specific remote/branch
     git push -u origin main                                         # Push and set upstream
     git push --all                                                  # Push all branches
@@ -4984,7 +4984,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get deployments                                         # List deployments
+      kubectl get deployments                                         # List deployments
       kubectl get deploy                                              # Short form
       kubectl get deployments -A                                      # All namespaces</code></pre>
     </div>
@@ -4999,7 +4999,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl create deployment nginx --image=nginx                   # Create deployment
+      kubectl create deployment nginx --image=nginx                   # Create deployment
       kubectl create deployment nginx --image=nginx --replicas=3      # With replicas</code></pre>
     </div>
 
@@ -5013,7 +5013,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl describe deployment deployment-name</code></pre>
+      kubectl describe deployment deployment-name</code></pre>
     </div>
 
     <div class="command-block">
@@ -5026,7 +5026,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl scale deployment deployment-name --replicas=5</code></pre>
+      kubectl scale deployment deployment-name --replicas=5</code></pre>
     </div>
 
     <div class="command-block">
@@ -5039,7 +5039,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl set image deployment/deployment-name container=image:tag
+      kubectl set image deployment/deployment-name container=image:tag
       kubectl rollout restart deployment/deployment-name              # Restart deployment</code></pre>
     </div>
 
@@ -5053,7 +5053,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl rollout status deployment/deployment-name                 # Check status
+      kubectl rollout status deployment/deployment-name                 # Check status
       kubectl rollout history deployment/deployment-name                # View history
       kubectl rollout undo deployment/deployment-name                   # Rollback
       kubectl rollout undo deployment/deployment-name --to-revision=2   # Specific revision</code></pre>
@@ -5069,7 +5069,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl delete deployment deployment-name</code></pre>
+      kubectl delete deployment deployment-name</code></pre>
     </div>
     <h3>📈 Horizontal Pod Autoscaler (HPA)</h3>
 
@@ -5083,7 +5083,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get hpa                                                                 # List HPAs
+      kubectl get hpa                                                                 # List HPAs
       kubectl get hpa -A                                                              # All namespaces
       kubectl autoscale deployment deployment-name --cpu-percent=50 --min=1 --max=10  # Create HPA
       kubectl describe hpa hpa-name                                                   # HPA details
@@ -5107,7 +5107,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get services                                            # List services
+      kubectl get services                                            # List services
       kubectl get svc                                                 # Short form
       kubectl get services -A                                         # All namespaces</code></pre>
     </div>
@@ -5122,7 +5122,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl describe service service-name</code></pre>
+      kubectl describe service service-name</code></pre>
     </div>
 
     <div class="command-block">
@@ -5135,7 +5135,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl expose deployment deployment-name --port=80 --type=NodePort   # Expose deployment
+      kubectl expose deployment deployment-name --port=80 --type=NodePort   # Expose deployment
       kubectl create service clusterip myservice --tcp=80:8080              # ClusterIP service</code></pre>
     </div>
 
@@ -5149,7 +5149,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl delete service service-name</code></pre>
+      kubectl delete service service-name</code></pre>
     </div>
 
     <h3>📂 Namespaces</h3>
@@ -5164,7 +5164,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get namespaces                                          # List all namespaces
+      kubectl get namespaces                                          # List all namespaces
       kubectl get ns                                                  # Short form</code></pre>
     </div>
 
@@ -5178,7 +5178,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl create namespace mynamespace</code></pre>
+      kubectl create namespace mynamespace</code></pre>
     </div>
 
     <div class="command-block">
@@ -5191,7 +5191,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl create namespace mynamespace</code></pre>
+      kubectl create namespace mynamespace</code></pre>
     </div>
 
     <div class="command-block">
@@ -5204,7 +5204,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl delete namespace mynamespace</code></pre>
+      kubectl delete namespace mynamespace</code></pre>
     </div>
 
     <div class="command-block">
@@ -5217,7 +5217,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl config set-context --current --namespace=mynamespace</code></pre>
+      kubectl config set-context --current --namespace=mynamespace</code></pre>
     </div>
 
     <h3>⚙️ ConfigMaps and Secrets</h3>
@@ -5232,7 +5232,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get configmaps                                          # List ConfigMaps
+      kubectl get configmaps                                          # List ConfigMaps
       kubectl get cm                                                  # Short form
       kubectl describe configmap cm-name
       kubectl create configmap myconfig --from-literal=key=value
@@ -5488,7 +5488,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get secrets                                             # List secrets
+      kubectl get secrets                                             # List secrets
       kubectl describe secret secret-name
       kubectl create secret generic mysecret --from-literal=password=mypass
       kubectl create secret generic mysecret --from-file=./secret.txt
@@ -5512,7 +5512,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl apply -f file.yaml                                      # Apply from file
+      kubectl apply -f file.yaml                                      # Apply from file
 
       # Kubernetes Apply Operations (Enterprise Standards)
       # Compatible with: Red Hat OpenShift, Debian, Ubuntu, openSUSE, Arch
@@ -5537,7 +5537,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl create -f file.yaml                                     # Create from file</code></pre>
+      kubectl create -f file.yaml                                     # Create from file</code></pre>
     </div>
 
     <div class="command-block">
@@ -5550,7 +5550,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl delete -f file.yaml                                     # Delete resources in file</code></pre>
+      kubectl delete -f file.yaml                                     # Delete resources in file</code></pre>
     </div>
 
     <div class="command-block">
@@ -5563,7 +5563,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl replace -f file.yaml                                    # Replace existing resource</code></pre>
+      kubectl replace -f file.yaml                                    # Replace existing resource</code></pre>
     </div>
 
     <div class="command-block">
@@ -5576,7 +5576,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl edit deployment deployment-name                         # Edit in editor</code></pre>
+      kubectl edit deployment deployment-name                         # Edit in editor</code></pre>
     </div>
 
     <div class="command-block">
@@ -5589,7 +5589,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl patch deployment deployment-name -p '{"spec":{"replicas":5}}'</code></pre>
+      kubectl patch deployment deployment-name -p '{"spec":{"replicas":5}}'</code></pre>
     </div>
 
     <h3>🖥️ Nodes</h3>
@@ -5604,7 +5604,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get nodes                                               # List all nodes
+      kubectl get nodes                                               # List all nodes
       kubectl get nodes -o wide                                       # Wide output</code></pre>
     </div>
 
@@ -5618,7 +5618,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl describe node node-name</code></pre>
+      kubectl describe node node-name</code></pre>
     </div>
 
     <div class="command-block">
@@ -5631,7 +5631,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl cordon node-name                                            # Mark node unschedulable
+      kubectl cordon node-name                                            # Mark node unschedulable
       kubectl uncordon node-name                                          # Mark node schedulable
       kubectl drain node-name                                             # Drain node for maintenance
       kubectl drain node-name --ignore-daemonsets --delete-emptydir-data  # Force drain</code></pre>
@@ -5649,7 +5649,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl label pods pod-name app=myapp                           # Add label
+      kubectl label pods pod-name app=myapp                           # Add label
       kubectl label pods pod-name app-                                # Remove label
       kubectl label pods pod-name app=newapp --overwrite              # Update label</code></pre>
     </div>
@@ -5664,7 +5664,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl annotate pods pod-name description="My pod"             # Add annotation
+      kubectl annotate pods pod-name description="My pod"             # Add annotation
       kubectl annotate pods pod-name description-                     # Remove annotation</code></pre>
     </div>
 
@@ -5680,7 +5680,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl top nodes                                               # Node resource usage
+      kubectl top nodes                                               # Node resource usage
       kubectl top pods                                                # Pod resource usage
       kubectl top pod pod-name                                        # Specific pod usage
       kubectl top pods -n namespace                                   # Namespace pods usage</code></pre>
@@ -5696,7 +5696,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get events                                              # List cluster events
+      kubectl get events                                              # List cluster events
       kubectl get events --sort-by=.metadata.creationTimestamp        # Sorted events
       kubectl get events -n namespace                                 # Namespace events</code></pre>
     </div>
@@ -5711,7 +5711,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl describe pod pod-name                                   # Detailed pod info (shows errors)
+      kubectl describe pod pod-name                                   # Detailed pod info (shows errors)
       kubectl logs pod-name --previous                                # Logs from crashed container
       kubectl get pod pod-name -o yaml                                # Full pod specification</code></pre>
     </div>
@@ -5726,7 +5726,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl debug pod-name -it --image=busybox                      # Add debug container</code></pre>
+      kubectl debug pod-name -it --image=busybox                      # Add debug container</code></pre>
     </div>
 
     <div class="command-block">
@@ -5739,7 +5739,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get deployment deployment-name -o yaml > deployment.yaml  # Export to file</code></pre>
+      kubectl get deployment deployment-name -o yaml > deployment.yaml  # Export to file</code></pre>
     </div>
 
     <h3>🔐 RBAC (Role-Based Access Control)</h3>
@@ -5811,7 +5811,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl create role myrole --verb=get,list --resource=pods</code></pre>
+      kubectl create role myrole --verb=get,list --resource=pods</code></pre>
     </div>
 
     <div class="command-block">
@@ -5824,7 +5824,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl create rolebinding mybinding --role=myrole --user=myuser</code></pre>
+      kubectl create rolebinding mybinding --role=myrole --user=myuser</code></pre>
     </div>
 
     <h3>⏰ Jobs and CronJobs</h3>
@@ -5839,7 +5839,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get jobs                                                # List jobs
+      kubectl get jobs                                                # List jobs
       kubectl describe job job-name
       kubectl create job myjob --image=busybox -- echo "Hello"
 
@@ -5860,7 +5860,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get cronjobs                                            # List cronjobs
+      kubectl get cronjobs                                            # List cronjobs
       kubectl get cj                                                  # Short form
       kubectl describe cronjob cronjob-name
       kubectl create cronjob mycron --image=busybox --schedule="*/5 * * * *" -- echo "Hello"
@@ -5884,7 +5884,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get ingress                                             # List ingress resources
+      kubectl get ingress                                             # List ingress resources
       kubectl get ing                                                 # Short form
       kubectl describe ingress ingress-name
 
@@ -5907,7 +5907,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get pv                                                  # List persistent volumes
+      kubectl get pv                                                  # List persistent volumes
       kubectl describe pv pv-name</code></pre>
     </div>
 
@@ -5921,7 +5921,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get pvc                                                 # List PVCs
+      kubectl get pvc                                                 # List PVCs
       kubectl describe pvc pvc-name
 
       # Kubernetes Delete Operations (Enterprise Standards)
@@ -5943,7 +5943,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get statefulsets                                        # List StatefulSets
+      kubectl get statefulsets                                        # List StatefulSets
       kubectl get sts                                                 # Short form
       kubectl describe statefulset ss-name
 
@@ -5972,7 +5972,7 @@
       # Enterprise Standards
       # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-      ubectl get daemonsets                                          # List DaemonSets
+      kubectl get daemonsets                                          # List DaemonSets
       kubectl get ds                                                  # Short form
       kubectl describe daemonset ds-name
 
@@ -7100,7 +7100,7 @@
     # Enterprise Standards
     # Compatible with: Red Hat, Debian, Ubuntu, openSUSE, Arch
 
-    xport TF_LOG=TRACE                                             # Set log level (TRACE, DEBUG, INFO, WARN, ERROR)
+    export TF_LOG=TRACE                                             # Set log level (TRACE, DEBUG, INFO, WARN, ERROR)
     export TF_LOG_PATH=terraform.log                                # Log to file
 
     # Terraform Apply Operations (Enterprise Standards)
@@ -18888,23 +18888,4 @@ resultsContainer.innerHTML = "";
     </div>
   </body>
 </html>
-<!-- SECTION PREV/NEXT NAVIGATION -->
-            <div id="sectionNavContainer"></div>
 
-            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #0d1117; border-radius: 10px; border: 2px solid #30363d;">
-              <h4 style="color: #00d9ff; margin-top: 0;">🏆 Ready for Next Level?</h4>
-              <p style="color: #c9d1d9; font-size: 1em; margin-bottom: 15px;">
-              Master this section and advance your DevOps career
-            </p>
-            <div style="margin-top: 15px;">
-              <a href="index.html" style="display: inline-block; background: #00d9ff; color: #0d1117; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🏠 Back to Home</a>
-              <a href="system-admin.html" style="display: inline-block; background: #ff6b9d; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">💻 System Admin</a>
-              <a href="monitoring-security.html" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin: 5px;">🔒 Security</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </body>
-</html>
