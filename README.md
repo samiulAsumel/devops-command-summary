@@ -3,21 +3,21 @@
 <div align="center">
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-3.1-green.svg)
+![Version](https://img.shields.io/badge/version-3.2-green.svg)
 ![Status](https://img.shields.io/badge/status-production--ready-brightgreen.svg)
-![Coverage](https://img.shields.io/badge/coverage-67%20sections-orange.svg)
-![Commands](https://img.shields.io/badge/commands-1171%20blocks-red.svg)
+![Coverage](https://img.shields.io/badge/coverage-84%20sections-orange.svg)
+![Commands](https://img.shields.io/badge/commands-3000%2B-red.svg)
 
 </div>
 
 ## 🎯 Overview
 
-This is the **most comprehensive Linux/DevOps command reference** available, designed for **top 5% industry candidates**. With **67 sections and 1171 code blocks**, this resource covers everything from basic system administration to advanced enterprise DevOps practices.
+This is the **most comprehensive Linux/DevOps command reference** available, designed for **top 5% industry candidates**. With **84 sections and 3000+ commands**, this resource covers everything from basic system administration to advanced enterprise DevOps practices.
 
 ## 🚀 Key Highlights
 
-- ✅ **67 Comprehensive Sections** - From basics to advanced enterprise topics
-- ✅ **1171 Code Blocks** - Practical, copy-paste ready commands
+- ✅ **84 Comprehensive Sections** - From basics to advanced enterprise topics
+- ✅ **3000+ Commands** - Practical, copy-paste ready commands
 - ✅ **Industry-Standard Content** - Used by top-tier professionals
 - ✅ **Safety-Classified Commands** - Clear usage guidelines and warnings
 - ✅ **Interactive Web Interface** - Modern HTML-based navigation
@@ -44,81 +44,98 @@ This reference uses a comprehensive classification system to help you understand
 
 ## 📊 Coverage Breakdown
 
-### 🖥️ System Administration (24 sections)
+### 🖥️ System Administration (33 sections)
 
 - System Information & Navigation (01)
 - File Operations (02)
 - Text Editors (03)
 - File Permissions & Ownership (04)
-- User & Group Management (05)
-- Process Management (06)
-- Systemd Service Management (07)
-- Package Management (Dnf/Yum) (08)
-- Rpm Package Management (09)
-- System Logging (10)
-- Disk Management (11)
-- Networking Basics (12)
-- Firewall Management (13)
-- SSH (Secure Shell) (14)
-- Text Processing (15)
-- YAML Fundamentals - From Scratch To Hero (16)
-- Bash Scripting Essentials (17)
-- Backup And Recovery (18)
-- Automation And Scheduling (19)
-- Miscellaneous Useful Commands (20)
-- Advanced System Administration ⭐ (21)
-- Enterprise Automation & Scripting ⭐ (22)
-- Advanced Troubleshooting Techniques ⭐ (23)
-- Useful One-Liner Commands ⭐ (24)
+- SELinux Comprehensive Guide (05)
+- User & Group Management (06)
+- System Limits, PAM & Resource Control (07)
+- Process Management (08)
+- Systemd Service Management (09)
+- Package Management (DNF/YUM) (10)
+- RPM Package Management (11)
+- System Logging (12)
+- Disk Management (13)
+- Logical Volume Manager (LVM) (14)
+- Memory & Swap Management (15)
+- Networking Basics (16)
+- Firewall Management (17)
+- SSH (Secure Shell) (18)
+- NTP & Time Synchronization (19)
+- Kernel Parameters & Sysctl Tuning (20)
+- Network Troubleshooting & Security (21)
+- Text Processing (22)
+- YAML Fundamentals (23)
+- Bash Scripting Essentials (24)
+- Backup and Recovery (25)
+- Automation and Scheduling (26)
+- Boot Process, GRUB & System Recovery (27)
+- Advanced System Administration ⭐ (28)
+- Enterprise Automation & Scripting ⭐ (29)
+- Advanced Troubleshooting Techniques ⭐ (30)
+- Miscellaneous Useful Commands (31)
+- Useful One-Liner Commands (32)
+- RHCSA Exam Essential Commands (33)
 
-### 🚀 DevOps Tools (17 sections)
+### 🚀 DevOps Tools (29 sections)
 
-- Amazon Web Services (AWS) - From Scratch (25)
-- Docker Containerization - From Scratch (26)
-- Terraform IaC - From Scratch (27)
-- Python For DevOps - Basics (28)
-- Git Version Control (29)
-- Docker Commands (30)
-- Kubernetes (Kubectl) Commands (31)
-- Ansible Commands (32)
-- Terraform Commands (33)
-- AWS CLI Commands (34)
-- Container Security (Image Scanning, Pod Security Policies, K8s, RBAC) (35)
-- CI/CD Tools (Jenkins, GitHub Actions, GitLab CI Pipelines) (36)
-- Advanced Cloud (Terraform Modules, AWS Services: S3, EC2, RDS, IAM, Multi-Cloud) (37)
-- Advanced DevOps Workflows ⭐ (38)
-- Monitoring & Observability Stack ⭐ (39)
-- Security & Compliance Automation ⭐ (40)
-- Automation One-Liners Commands ⭐ (41)
+- Git Version Control (34)
+- Python for DevOps - Basics (35)
+- Docker Containerization - From Scratch (36)
+- Docker Commands (37)
+- Podman Container Management (38)
+- Container Security (39)
+- Kubernetes (kubectl) Commands (40)
+- Advanced Kubernetes Production Patterns (41)
+- Kubernetes Security & RBAC (42)
+- Kubernetes Monitoring & Observability (43)
+- Terraform IaC - From Scratch (44)
+- Terraform Commands (45)
+- Ansible Commands (46)
+- AWS - From Scratch (47)
+- AWS CLI Commands (48)
+- Microsoft Azure (49)
+- Google Cloud Platform (GCP) (50)
+- Advanced Cloud (51)
+- Cloud Architecture (52)
+- Cost Optimization (53)
+- Databases (MySQL, PostgreSQL) (54)
+- HashiCorp Vault (55)
+- CI/CD Tools (56)
+- Enterprise CI/CD (57)
+- GitOps (ArgoCD/Flux) (58)
+- Advanced GitOps (59)
+- Advanced DevOps Workflows (60)
+- Automation One-Liners (61)
+- RHCE Exam Commands (62)
 
-### 🔒 Monitoring & Security (26 sections)
+### 🔒 Monitoring & Security (22 sections)
 
-- Monitoring Commands (42)
-- Logging & Auditing (Advanced ELK/EFK Stack, Centralized Logging, Alerting Rules) (43)
-- Observability (Metrics + Logs + Traces, OpenTelemetry) (44)
-- Security And Hardening (45)
-- Performance Monitoring & Tuning (46)
-- Backup, Recovery, Monitoring & Security (47)
-- High Availability & Load Balancing (HAProxy, Nginx LB, Pacemaker/Corosync Clusters) (48)
-- Advanced Kubernetes Production Patterns ⭐ (49)
-- Kubernetes Security & RBAC ⭐ (50)
-- Kubernetes Monitoring & Observability ⭐ (51)
-- Enterprise CI/CD Pipelines ⭐ (52)
-- Advanced GitOps & Automation ⭐ (53)
-- Cloud Architecture Patterns ⭐ (54)
-- Cost Optimization Strategies ⭐ (55)
-- DevSecOps Practices ⭐ (56)
-- Security Automation & Compliance ⭐ (57)
-- Interview Preparation - System Design ⭐ (58)
-- Career Advancement & Certifications ⭐ (59)
-- Performance Optimization & Tuning ⭐ (60)
-- Advanced Troubleshooting Methodologies ⭐ (61)
-- Real-World Project Examples ⭐ (62)
-- Project Templates & Starters ⭐ (63)
-- Certification Preparation Guides ⭐ (64)
-- Exam Strategies & Career Development ⭐ (65)
-- Final Resources & Reference ⭐ (66)
-- Summary ⭐ (67)
+- Logging & Auditing (63)
+- Observability (64)
+- Monitoring & Observability Stack (65)
+- Performance Monitoring & Tuning (66)
+- Performance Optimization & Tuning (67)
+- Security and Hardening (68)
+- DevSecOps Practices (69)
+- Security & Compliance Automation (70)
+- Security Automation & Compliance (71)
+- High Availability & Load Balancing (72)
+- Service Mesh (Istio/Linkerd) (73)
+- Incident Response & On-Call (74)
+- Chaos Engineering (75)
+- Backup, Recovery, Monitoring & Security (76)
+- Interview Preparation - System Design (77)
+- Career Advancement & Certifications (78)
+- Real-World Project Examples (79)
+- Project Templates & Starters (80)
+- Certification Preparation Guides (81)
+- Exam Strategies & Career Development (82)
+- Final Resources & Reference (83)
+- Summary (84)
 
 ## 🎯 Target Audience
 
@@ -191,10 +208,10 @@ python3 -m http.server 8000
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| **Total Sections** | 67 | ✅ Complete |
-| **Code Blocks** | 1,171 | ✅ Comprehensive |
+| **Total Sections** | 84 | ✅ Complete |
+| **Total Commands** | 3000+ | ✅ Comprehensive |
 | **Web Pages** | 4 | ✅ Interactive |
-| **Topics Covered** | 500+ | ✅ Extensive |
+| **Lines of Code** | 43,796 | ✅ Extensive |
 | **Difficulty Levels** | Beginner → Expert | ✅ Progressive |
 
 ## 🤝 Contributing
@@ -217,6 +234,13 @@ python3 -m http.server 8000
 
 ## 📝 Change Log
 
+### Version 3.2 (April 2026)
+
+- ✅ Fixed encoding issues in index.html
+- ✅ Fixed broken internal links
+- ✅ Enhanced Learning Path UI
+- ✅ Improved HTML validation
+
 ### Version 3.1 (February 2026)
 
 - ✅ Added **Advanced Kubernetes** patterns
@@ -233,7 +257,7 @@ python3 -m http.server 8000
 
 ## 🎉 Conclusion
 
-**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **67 sections, 1171 code blocks, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
+**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **84 sections, 3000+ commands, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
 
 **🚀 Ready to excel in the top tier of the industry!**
 
@@ -241,21 +265,12 @@ python3 -m http.server 8000
 
 ### Get Help
 
-- 📧 **Email Support**: [support@example.com]
-- 💬 **Discord Community**: [Join our server]
-- 🐛 **Issue Reporting**: [GitHub Issues]
-- 📖 **Documentation**: [Online Wiki]
-
-### Professional Services
-
-- 🎓 **Training Programs**: Available for teams
-- 🔧 **Consulting**: Enterprise implementation
-- 📋 **Code Reviews**: Professional validation
-- 🚀 **Career Coaching**: Interview preparation
+- 🐛 **Issue Reporting**: [GitHub Issues](https://github.com/samiulAsumel/devops-command-summary/issues)
+- 📖 **Documentation**: Built into each HTML file
 
 ---
 
-_**Last Updated:** March 2026_  
-_**Version:** 3.1 - Top 5% Industry Standard_  
-_**Maintained by:** DevOps Community_  
+_**Last Updated:** April 2026  
+_**Version:** 3.2 - Top 5% Industry Standard  
+_**Maintained by:** samiulAsumel  
 _**License:** MIT License_
