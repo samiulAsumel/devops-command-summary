@@ -130,44 +130,123 @@
       </div>
 
       <!-- LEARNING PATH GUIDE -->
-      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 40px;">
-        <h3 style="color: #00d9ff; margin-top: 0; text-align: center; font-size: 1.4rem;">🎯 Recommended Learning Path</h3>
-        <p style="color: #c9d1d9; text-align: center; margin-bottom: 20px;">Follow this order from scratch to expert level</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-          <div style="background: rgba(0,217,255,0.08); border-left: 4px solid #28a745; padding: 15px; border-radius: 8px;">
-            <div style="color: #28a745; font-weight: bold; font-size: 0.85em;">PHASE 1 - FOUNDATION</div>
-            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
-              <a href="system-admin.html#system-info" style="color: #00d9ff; text-decoration: none;">01. System Info</a><br>
-              <a href="system-admin.html#file-ops" style="color: #00d9ff; text-decoration: none;">02. File Operations</a><br>
-              <a href="system-admin.html#text-editors" style="color: #00d9ff; text-decoration: none;">03. Text Editors</a><br>
-              <a href="system-admin.html#permissions" style="color: #00d9ff; text-decoration: none;">04. Permissions</a>
+      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 40px; position: relative;">
+        <div style="text-align: center; margin-bottom: 25px;">
+          <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.6rem; font-weight: 700;">🚀 Comprehensive Learning Path</h3>
+          <p style="color: #c9d1d9; margin-bottom: 15px; font-size: 1.1em;">Master DevOps from beginner to expert with structured learning</p>
+          <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap;">
+            <span style="color: #28a745; font-size: 0.9em;">⏱️ Total: ~120-160 hours</span>
+            <span style="color: #ffc107; font-size: 0.9em;">📚 83 Comprehensive Modules</span>
+            <span style="color: #ff6b9d; font-size: 0.9em;">🎯 Job-Ready Skills</span>
+            <span style="color: #dc3545; font-size: 0.9em;">🏆 Industry Certification Prep</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div style="background: #21262d; border-radius: 10px; padding: 3px; margin-bottom: 25px;">
+          <div style="background: linear-gradient(90deg, #28a745 0%, #ffc107 50%, #ff6b9d 75%, #dc3545 100%); height: 8px; border-radius: 8px; width: 100%;"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          <!-- PHASE 1 - FOUNDATION -->
+          <div style="background: rgba(40,167,69,0.1); border: 2px solid #28a745; padding: 20px; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 10px; right: 10px; background: #28a745; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75em; font-weight: bold;">BEGINNER</div>
+            <div style="color: #28a745; font-weight: bold; font-size: 1em; margin-bottom: 8px;">🌱 PHASE 1 - LINUX FOUNDATION</div>
+            <div style="color: #c9d1d9; margin-bottom: 12px; font-size: 0.85em; opacity: 0.9;">⏱️ 20-30 hours | 📋 8 modules</div>
+            <div style="color: #c9d1d9; font-size: 0.85em; line-height: 1.4;">
+              <a href="system-admin.html#system-info" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 01. 🖥️ System Information & Navigation</a><br>
+              <a href="system-admin.html#file-ops" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 02. 📁 File Operations & Management</a><br>
+              <a href="system-admin.html#text-editors" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 03. ✍️ Text Editors (vim/nano)</a><br>
+              <a href="system-admin.html#permissions" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 04. 🔐 File Permissions & Ownership</a><br>
+              <a href="system-admin.html#user-mgmt" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 05. 👥 User & Group Management</a><br>
+              <a href="system-admin.html#process-mgmt" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 06. ⚙️ Process Management</a><br>
+              <a href="system-admin.html#systemd" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 07. 🔄 Systemd Services</a><br>
+              <a href="system-admin.html#networking" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 10. 🌐 Networking Basics</a><br>
+              <a href="system-admin.html#scripting" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 18. 🐚 Bash Scripting Essentials</a><br>
+            </div>
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(40,167,69,0.3);">
+              <div style="color: #28a745; font-size: 0.8em; font-weight: bold;">🎯 Goal: Master Linux fundamentals</div>
             </div>
           </div>
-          <div style="background: rgba(255,193,7,0.08); border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px;">
-            <div style="color: #ffc107; font-weight: bold; font-size: 0.85em;">PHASE 2 - CORE SKILLS</div>
-            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
-              <a href="system-admin.html#process-mgmt" style="color: #00d9ff; text-decoration: none;">06. Process Mgmt</a><br>
-              <a href="system-admin.html#networking" style="color: #00d9ff; text-decoration: none;">16. Networking</a><br>
-              <a href="system-admin.html#scripting" style="color: #00d9ff; text-decoration: none;">24. Bash Scripting</a><br>
-              <a href="devops-tools.html#git" style="color: #00d9ff; text-decoration: none;">34. Git Version Control</a>
+
+          <!-- PHASE 2 - CORE SKILLS -->
+          <div style="background: rgba(255,193,7,0.1); border: 2px solid #ffc107; padding: 20px; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 10px; right: 10px; background: #ffc107; color: #21262d; padding: 4px 8px; border-radius: 12px; font-size: 0.75em; font-weight: bold;">INTERMEDIATE</div>
+            <div style="color: #ffc107; font-weight: bold; font-size: 1em; margin-bottom: 8px;">🚀 PHASE 2 - CORE DEVOPS SKILLS</div>
+            <div style="color: #c9d1d9; margin-bottom: 12px; font-size: 0.85em; opacity: 0.9;">⏱️ 30-40 hours | 📋 12 modules</div>
+            <div style="color: #c9d1d9; font-size: 0.85em; line-height: 1.4;">
+              <a href="system-admin.html#systemd" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 07. 🔄 Systemd Service Management</a><br>
+              <a href="system-admin.html#package-mgmt" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 08. 📦 Package Management (DNF/YUM)</a><br>
+              <a href="system-admin.html#networking" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 10. 🌐 Networking Basics</a><br>
+              <a href="system-admin.html#scripting" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 18. 🐚 Bash Scripting Essentials</a><br>
+              <a href="devops-tools.html#git" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 34. 📦 Git Version Control</a><br>
+              <a href="devops-tools.html#python" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 35. 🐍 Python for DevOps</a><br>
+            </div>
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,193,7,0.3);">
+              <div style="color: #ffc107; font-size: 0.8em; font-weight: bold;">🎯 Goal: Build core DevOps toolkit</div>
             </div>
           </div>
-          <div style="background: rgba(255,107,157,0.08); border-left: 4px solid #ff6b9d; padding: 15px; border-radius: 8px;">
-            <div style="color: #ff6b9d; font-weight: bold; font-size: 0.85em;">PHASE 3 - DEVOPS</div>
-            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
-              <a href="devops-tools.html#docker-from-scratch" style="color: #00d9ff; text-decoration: none;">36. Docker</a><br>
-              <a href="devops-tools.html#kubernetes" style="color: #00d9ff; text-decoration: none;">40. Kubernetes</a><br>
-              <a href="devops-tools.html#ansible" style="color: #00d9ff; text-decoration: none;">46. Ansible</a><br>
-              <a href="devops-tools.html#terraform-from-scratch" style="color: #00d9ff; text-decoration: none;">44. Terraform</a>
+
+          <!-- PHASE 3 - DEVOPS -->
+          <div style="background: rgba(255,107,157,0.1); border: 2px solid #ff6b9d; padding: 20px; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 10px; right: 10px; background: #ff6b9d; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75em; font-weight: bold;">ADVANCED</div>
+            <div style="color: #ff6b9d; font-weight: bold; font-size: 1em; margin-bottom: 8px;">🏗️ PHASE 3 - CONTAINERIZATION & ORCHESTRATION</div>
+            <div style="color: #c9d1d9; margin-bottom: 12px; font-size: 0.85em; opacity: 0.9;">⏱️ 40-50 hours | 📋 15 modules</div>
+            <div style="color: #c9d1d9; font-size: 0.85em; line-height: 1.4;">
+              <a href="devops-tools.html#docker-from-scratch" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 36. 🐳 Docker - From Scratch</a><br>
+              <a href="devops-tools.html#kubernetes" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 40. ☸️ Kubernetes Commands</a><br>
+              <a href="devops-tools.html#advanced-kubernetes" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 41. 🏭 Advanced Kubernetes</a><br>
+              <a href="devops-tools.html#terraform-from-scratch" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 44. 🏗️ Terraform - From Scratch</a><br>
+              <a href="devops-tools.html#ansible" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 46. 🤖 Ansible Commands</a><br>
+            </div>
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,107,157,0.3);">
+              <div style="color: #ff6b9d; font-size: 0.8em; font-weight: bold;">🎯 Goal: Master container orchestration</div>
             </div>
           </div>
-          <div style="background: rgba(220,53,69,0.08); border-left: 4px solid #dc3545; padding: 15px; border-radius: 8px;">
-            <div style="color: #dc3545; font-weight: bold; font-size: 0.85em;">PHASE 4 - EXPERT</div>
-            <div style="color: #c9d1d9; margin-top: 8px; font-size: 0.9em;">
-              <a href="monitoring-security.html#security" style="color: #00d9ff; text-decoration: none;">68. Security Hardening</a><br>
-              <a href="devops-tools.html#advanced-kubernetes" style="color: #00d9ff; text-decoration: none;">41. Advanced K8s</a><br>
-              <a href="monitoring-security.html#devsecops" style="color: #00d9ff; text-decoration: none;">69. DevSecOps</a><br>
-              <a href="monitoring-security.html#interview-prep" style="color: #00d9ff; text-decoration: none;">77. Interview Prep</a>
+
+          <!-- PHASE 4 - EXPERT -->
+          <div style="background: rgba(220,53,69,0.1); border: 2px solid #dc3545; padding: 20px; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 10px; right: 10px; background: #dc3545; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75em; font-weight: bold;">EXPERT</div>
+            <div style="color: #dc3545; font-weight: bold; font-size: 1em; margin-bottom: 8px;">🏆 PHASE 4 - EXPERT & SPECIALIZATION</div>
+            <div style="color: #c9d1d9; margin-bottom: 12px; font-size: 0.85em; opacity: 0.9;">⏱️ 30-40 hours | 📋 18+ modules</div>
+            <div style="color: #c9d1d9; font-size: 0.85em; line-height: 1.4;">
+              <a href="monitoring-security.html#security" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 68. 🛡️ Security Hardening</a><br>
+              <a href="monitoring-security.html#monitoring-observability" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 65. 📊 Monitoring Stack</a><br>
+              <a href="monitoring-security.html#ha-load-balancing" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 72. ⚖️ High Availability & LB</a><br>
+              <a href="monitoring-security.html#interview-prep" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 77. 🎯 Interview Preparation</a><br>
+              <a href="system-admin.html#rhcsa-exam-commands" style="color: #00d9ff; text-decoration: none; display: block; padding: 3px 0; transition: all 0.2s;" onmouseover="this.style.paddingLeft='10px'" onmouseout="this.style.paddingLeft='0'">✓ 33. 🎓 RHCSA Exam Commands</a><br>
+            </div>
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(220,53,69,0.3);">
+              <div style="color: #dc3545; font-size: 0.8em; font-weight: bold;">🎯 Goal: Become DevOps expert & job-ready</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Features -->
+        <div style="margin-top: 25px; padding: 20px; background: rgba(0,217,255,0.05); border-radius: 10px; border: 1px solid rgba(0,217,255,0.2);">
+          <div style="text-align: center; margin-bottom: 15px;">
+            <h4 style="color: #00d9ff; margin: 0; font-size: 1.1rem;">🎓 Learning Features & Benefits</h4>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; text-align: center;">
+            <div>
+              <div style="color: #28a745; font-size: 1.5em; margin-bottom: 5px;">📚</div>
+              <div style="color: #c9d1d9; font-size: 0.9em; font-weight: bold;">Comprehensive Content</div>
+              <div style="color: #8b949e; font-size: 0.8em;">83 modules covering all DevOps areas</div>
+            </div>
+            <div>
+              <div style="color: #ffc107; font-size: 1.5em; margin-bottom: 5px;">🎯</div>
+              <div style="color: #c9d1d9; font-size: 0.9em; font-weight: bold;">Real-World Focus</div>
+              <div style="color: #8b949e; font-size: 0.8em;">Industry-standard commands & practices</div>
+            </div>
+            <div>
+              <div style="color: #ff6b9d; font-size: 1.5em; margin-bottom: 5px;">🏆</div>
+              <div style="color: #c9d1d9; font-size: 0.9em; font-weight: bold;">Certification Ready</div>
+              <div style="color: #8b949e; font-size: 0.8em;">RHCSA, RHCE, Cloud certification prep</div>
+            </div>
+            <div>
+              <div style="color: #dc3545; font-size: 1.5em; margin-bottom: 5px;">💼</div>
+              <div style="color: #c9d1d9; font-size: 0.9em; font-weight: bold;">Career Focused</div>
+              <div style="color: #8b949e; font-size: 0.8em;">Interview prep & job market skills</div>
             </div>
           </div>
         </div>
@@ -201,26 +280,26 @@
             <li>02. 📁 File Operations</li>
             <li>03. ✍️ Text Editors</li>
             <li>04. 🔐 Permissions &amp; Ownership</li>
-            <li>05. 🛡️ SELinux Guide</li>
-            <li>06. 👥 User &amp; Group Management</li>
-            <li>07. 🔒 System Limits &amp; PAM</li>
-            <li>08. ⚙️ Process Management</li>
-            <li>09. 🔄 Systemd Services</li>
-            <li>10. 📦 Package Management</li>
-            <li>11. 📋 RPM Management</li>
-            <li>12. 📊 System Logging</li>
-            <li>13. 💾 Disk Management</li>
-            <li>14. 💾 LVM</li>
-            <li>15. 🧠 Memory &amp; Swap</li>
-            <li>16. 🌐 Networking</li>
-            <li>17. 🔥 Firewall</li>
-            <li>18. 🔐 SSH</li>
-            <li>19. 🕐 NTP &amp; Time Sync</li>
-            <li>20. ⚙️ Kernel &amp; sysctl</li>
-            <li>21. 🌐 Network Troubleshooting</li>
-            <li>22. 📄 Text Processing</li>
-            <li>23. 📋 YAML</li>
-            <li>24. 🐚 Bash Scripting</li>
+            <li>05. 👥 User &amp; Group Management</li>
+            <li>06. ⚙️ Process Management</li>
+            <li>07. 🔄 Systemd Services</li>
+            <li>08. 📦 Package Management</li>
+            <li>09. 📋 RPM Management</li>
+            <li>10. 🌐 Networking</li>
+            <li>11. 🔥 Firewall</li>
+            <li>12. 🔐 SSH</li>
+            <li>13. 🕐 NTP &amp; Time Sync</li>
+            <li>14. ⚙️ Kernel &amp; sysctl</li>
+            <li>15. 🌐 Network Troubleshooting</li>
+            <li>16. 📄 Text Processing</li>
+            <li>17. 📋 YAML</li>
+            <li>18. 🐚 Bash Scripting</li>
+            <li>19. 💾 Disk Management</li>
+            <li>20. 💾 LVM</li>
+            <li>21. 🧠 Memory &amp; Swap</li>
+            <li>22. 📊 System Logging</li>
+            <li>23. 🔒 System Limits &amp; PAM</li>
+            <li>24. 🛡️ SELinux Guide</li>
             <li>25. 💾 Backup &amp; Recovery</li>
             <li>26. ⏰ Automation &amp; Scheduling</li>
             <li>27. 🚀 Boot Process &amp; GRUB</li>
