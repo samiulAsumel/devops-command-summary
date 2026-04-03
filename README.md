@@ -6,7 +6,7 @@
 ![Version](https://img.shields.io/badge/version-3.2-green.svg)
 ![Status](https://img.shields.io/badge/status-production--ready-brightgreen.svg)
 ![Coverage](https://img.shields.io/badge/coverage-84%20sections-orange.svg)
-![Commands](https://img.shields.io/badge/commands-3000%2B-red.svg)
+![Commands](https://img.shields.io/badge/commands-1311-red.svg)
 
 </div>
 
@@ -17,7 +17,7 @@ This is the **most comprehensive Linux/DevOps command reference** available, des
 ## 🚀 Key Highlights
 
 - ✅ **84 Comprehensive Sections** - From basics to advanced enterprise topics
-- ✅ **3000+ Commands** - Practical, copy-paste ready commands
+- ✅ **1311 Code Blocks** - Practical, copy-paste ready commands
 - ✅ **Industry-Standard Content** - Used by top-tier professionals
 - ✅ **Safety-Classified Commands** - Clear usage guidelines and warnings
 - ✅ **Interactive Web Interface** - Modern HTML-based navigation
@@ -209,7 +209,7 @@ python3 -m http.server 8000
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Total Sections** | 84 | ✅ Complete |
-| **Total Commands** | 3000+ | ✅ Comprehensive |
+| **Code Blocks** | 1,311 | ✅ Comprehensive |
 | **Web Pages** | 4 | ✅ Interactive |
 | **Lines of Code** | 43,796 | ✅ Extensive |
 | **Difficulty Levels** | Beginner → Expert | ✅ Progressive |
@@ -257,7 +257,7 @@ python3 -m http.server 8000
 
 ## 🎉 Conclusion
 
-**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **84 sections, 3000+ commands, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
+**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **84 sections, 1311 code blocks, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
 
 **🚀 Ready to excel in the top tier of the industry!**
 

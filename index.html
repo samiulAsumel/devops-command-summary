@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,42 +11,158 @@
   <body class="index-page">
     <div class="container">
       <!-- REFERENCE DISCLAIMER -->
-      <div style="background: #1a1f2e; border: 2px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: center;">
-        <h1 style="color: #00d9ff; margin-top: 0; font-size: 2.2rem;">LINUX / DEVOPS / CLOUD COMMAND & CODE REFERENCE</h1>
-        <p style="color: #c9d1d9; font-size: 1.1em; margin-bottom: 15px;">
-          This documentation is a command and code reference for Linux, DevOps, Cloud, and Site Reliability Engineers.
+      <div
+        style="
+          background: #1a1f2e;
+          border: 2px solid #30363d;
+          border-radius: 10px;
+          padding: 20px;
+          margin-bottom: 30px;
+          text-align: center;
+        "
+      >
+        <h1 style="color: #00d9ff; margin-top: 0; font-size: 2.2rem">
+          LINUX / DEVOPS / CLOUD COMMAND & CODE REFERENCE
+        </h1>
+        <p style="color: #c9d1d9; font-size: 1.1em; margin-bottom: 15px">
+          This documentation is a command and code reference for Linux, DevOps,
+          Cloud, and Site Reliability Engineers.
         </p>
-        <p style="color: #c9d1d9; font-size: 1.0em; margin-bottom: 15px;">
-          It is <strong>NOT</strong> a tutorial or learning guide. Basic conceptual understanding of operating systems, networking, and DevOps tools is assumed.
+        <p style="color: #c9d1d9; font-size: 1em; margin-bottom: 15px">
+          It is <strong>NOT</strong> a tutorial or learning guide. Basic
+          conceptual understanding of operating systems, networking, and DevOps
+          tools is assumed.
         </p>
-        <p style="color: #ff6b9d; font-size: 1.1em; font-weight: bold; margin-bottom: 0;">
+        <p
+          style="
+            color: #ff6b9d;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 0;
+          "
+        >
           ⚠️ Do NOT execute commands blindly on production systems.
         </p>
       </div>
 
       <!-- COMMAND TAG LEGEND -->
-      <div style="background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); border: 2px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
-        <h3 style="color: #00d9ff; margin-top: 0; font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 20px;">🏷️ Command Classification System</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; font-family: 'Fira Code', 'Courier New', monospace;">
-          <div style="background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
-            <span style="color: #28a745; font-weight: bold; font-size: 1.1em;">[COMMON]</span>
-            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Frequently used in daily operations</div>
+      <div
+        style="
+          background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%);
+          border: 2px solid #30363d;
+          border-radius: 12px;
+          padding: 25px;
+          margin-bottom: 30px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        "
+      >
+        <h3
+          style="
+            color: #00d9ff;
+            margin-top: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+          "
+        >
+          🏷️ Command Classification System
+        </h3>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            font-family:
+              &quot;Fira Code&quot;, &quot;Courier New&quot;, monospace;
+          "
+        >
+          <div
+            style="
+              background: rgba(40, 167, 69, 0.1);
+              border-left: 4px solid #28a745;
+              padding: 12px;
+              border-radius: 6px;
+              transition: all 0.3s ease;
+            "
+          >
+            <span style="color: #28a745; font-weight: bold; font-size: 1.1em"
+              >[COMMON]</span
+            >
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em">
+              Frequently used in daily operations
+            </div>
           </div>
-          <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
-            <span style="color: #ffc107; font-weight: bold; font-size: 1.1em;">[PRODUCTION]</span>
-            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in live/production environments</div>
+          <div
+            style="
+              background: rgba(255, 193, 7, 0.1);
+              border-left: 4px solid #ffc107;
+              padding: 12px;
+              border-radius: 6px;
+              transition: all 0.3s ease;
+            "
+          >
+            <span style="color: #ffc107; font-weight: bold; font-size: 1.1em"
+              >[PRODUCTION]</span
+            >
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em">
+              Used in live/production environments
+            </div>
           </div>
-          <div style="background: rgba(23, 162, 184, 0.1); border-left: 4px solid #17a2b8; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
-            <span style="color: #17a2b8; font-weight: bold; font-size: 1.1em;">[DEBUG]</span>
-            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used for troubleshooting and investigation</div>
+          <div
+            style="
+              background: rgba(23, 162, 184, 0.1);
+              border-left: 4px solid #17a2b8;
+              padding: 12px;
+              border-radius: 6px;
+              transition: all 0.3s ease;
+            "
+          >
+            <span style="color: #17a2b8; font-weight: bold; font-size: 1.1em"
+              >[DEBUG]</span
+            >
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em">
+              Used for troubleshooting and investigation
+            </div>
           </div>
-          <div style="background: rgba(108, 117, 125, 0.1); border-left: 4px solid #6c757d; padding: 12px; border-radius: 6px; transition: all 0.3s ease;">
-            <span style="color: #6c757d; font-weight: bold; font-size: 1.1em;">[RARE]</span>
-            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">Used in specific or uncommon scenarios</div>
+          <div
+            style="
+              background: rgba(108, 117, 125, 0.1);
+              border-left: 4px solid #6c757d;
+              padding: 12px;
+              border-radius: 6px;
+              transition: all 0.3s ease;
+            "
+          >
+            <span style="color: #6c757d; font-weight: bold; font-size: 1.1em"
+              >[RARE]</span
+            >
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em">
+              Used in specific or uncommon scenarios
+            </div>
           </div>
-          <div style="background: rgba(220, 53, 69, 0.15); border-left: 4px solid #dc3545; padding: 12px; border-radius: 6px; transition: all 0.3s ease; animation: pulse-danger 2s infinite;">
-            <span style="color: #dc3545; font-weight: bold; font-size: 1.1em; text-shadow: 0 0 8px rgba(220, 53, 69, 0.3);">[DANGEROUS]</span>
-            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em;">⚠️ Can cause data loss or system outage if misused</div>
+          <div
+            style="
+              background: rgba(220, 53, 69, 0.15);
+              border-left: 4px solid #dc3545;
+              padding: 12px;
+              border-radius: 6px;
+              transition: all 0.3s ease;
+              animation: pulse-danger 2s infinite;
+            "
+          >
+            <span
+              style="
+                color: #dc3545;
+                font-weight: bold;
+                font-size: 1.1em;
+                text-shadow: 0 0 8px rgba(220, 53, 69, 0.3);
+              "
+              >[DANGEROUS]</span
+            >
+            <div style="color: #c9d1d9; margin-top: 5px; font-size: 0.9em">
+              ⚠️ Can cause data loss or system outage if misused
+            </div>
           </div>
         </div>
       </div>
@@ -91,7 +207,7 @@
           </p>
           <div class="hero-stats">
             <div class="stat-item">
-              <span class="stat-number">1171</span>
+              <span class="stat-number">1311</span>
               <span class="stat-label">Code Blocks</span>
             </div>
             <div class="stat-item">
@@ -108,7 +224,8 @@
 
       <style>
         @keyframes pulse-danger {
-          0%, 100% {
+          0%,
+          100% {
             transform: scale(1);
             box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
           }
@@ -120,16 +237,23 @@
       </style>
 
       <!-- GLOBAL SEARCH -->
-      <div class="search-container" style="max-width: 700px; margin: 0 auto 30px auto;">
+      <div
+        class="search-container"
+        style="max-width: 700px; margin: 0 auto 30px auto"
+      >
         <h3>🔍 Search All Topics</h3>
         <div class="search-wrapper">
-          <input type="text" id="globalSearchInput" class="search-input" placeholder="Search across all sections... (e.g., chmod, docker, nginx, ssh)">
+          <input
+            type="text"
+            id="globalSearchInput"
+            class="search-input"
+            placeholder="Search across all sections... (e.g., chmod, docker, nginx, ssh)"
+          />
           <button id="searchClearBtn" class="search-clear-btn">✕</button>
         </div>
         <div id="searchResultsContainer" class="search-results-container"></div>
       </div>
 
-      
       <div class="section-header floating-section">
         <div class="section-container">
           <div class="section-title-content">
@@ -154,39 +278,126 @@
           <h3>System Administration</h3>
           <div class="card-badge">Foundation</div>
           <ul class="card-list">
-            <li>01. 🖥️ System Information</li>
-            <li>02. 📁 File Operations</li>
-            <li>03. ✍️ Text Editors</li>
-            <li>04. 🔐 Permissions &amp; Ownership</li>
-            <li>05. 👥 User &amp; Group Management</li>
-            <li>06. ⚙️ Process Management</li>
-            <li>07. 🔄 Systemd Services</li>
-            <li>08. 📦 Package Management</li>
-            <li>09. 📋 RPM Management</li>
-            <li>10. 🌐 Networking</li>
-            <li>11. 🔥 Firewall</li>
-            <li>12. 🔐 SSH</li>
-            <li>13. 🕐 NTP &amp; Time Sync</li>
-            <li>14. ⚙️ Kernel &amp; sysctl</li>
-            <li>15. 🌐 Network Troubleshooting</li>
-            <li>16. 📄 Text Processing</li>
-            <li>17. 📋 YAML</li>
-            <li>18. 🐚 Bash Scripting</li>
-            <li>19. 💾 Disk Management</li>
-            <li>20. 💾 LVM</li>
-            <li>21. 🧠 Memory &amp; Swap</li>
-            <li>22. 📊 System Logging</li>
-            <li>23. 🔒 System Limits &amp; PAM</li>
+            <li>1. 🖥️ System Information & Navigation</li>
+            <li>2. 📁 File Operations & Management</li>
+            <li>3. ✍️ Text Editors (vim/nano)</li>
+            <li>4. 🔐 File Permissions & Ownership</li>
+            <li>5. 👥 User & Group Management</li>
+            <li>6. ⚙️ Process Management</li>
+            <li>7. 🔄 Systemd Services</li>
+            <li>8. 📦 Package Management (DNF/YUM)</li>
+            <li>9. � RPM Package Management</li>
+            <li>10. 📊 System Logging</li>
+            <li>11. 💾 Disk Management</li>
+            <li>12. 🌐 Networking Basics</li>
+            <li>13. �️ Firewall Management</li>
+            <li>14. 🔐 SSH (Secure Shell)</li>
+            <li>15. � Text Processing (grep/awk/sed)</li>
+            <li>16. 📄 YAML Fundamentals</li>
+            <li>17. 🐚 Bash Scripting Essentials</li>
+            <li>18. 💾 Backup and Recovery</li>
+            <li>19. ⏰ Automation and Scheduling</li>
+            <li>20. 🚀 Advanced System Administration</li>
+            <li>21. 🧠 Memory & Swap Management</li>
+            <li>22. 💾 LVM & Storage</li>
+            <li>23. 🔒 System Limits & PAM</li>
             <li>24. 🛡️ SELinux Guide</li>
-            <li>25. 💾 Backup &amp; Recovery</li>
-            <li>26. ⏰ Automation &amp; Scheduling</li>
-            <li>27. 🚀 Boot Process &amp; GRUB</li>
-            <li>28. 🎓 Advanced System Administration</li>
-            <li>29. 🏢 Enterprise Automation &amp; Scripting</li>
-            <li>30. 🔬 Advanced Troubleshooting Techniques</li>
-            <li>31. 🔧 Miscellaneous Useful Commands</li>
-            <li>32. 💡 Useful One-Liner Commands</li>
-            <li>33. 🎓 RHCSA Exam Essential Commands</li>
+            <li>25. 🚀 Boot Process & GRUB</li>
+            <li>26. 🔬 Advanced Troubleshooting</li>
+            <li>27. 🏢 Enterprise Automation</li>
+            <li>28. � Useful One-Liner Commands</li>
+            <li>29. 🎓 RHCSA Exam Essentials</li>
+            <li>30. 📋 System Administration Best Practices</li>
+            <li>31. 🔧 Performance Tuning</li>
+            <li>32. 🛠️ System Maintenance</li>
+            <li>33. 📊 Resource Monitoring</li>
+            <li>34. � System Diagnostics</li>
+            <li>35. 🚨 Incident Handling</li>
+            <li>36. � Documentation & Reporting</li>
+            <li>37. � Service Configuration</li>
+            <li>38. 🌐 Network Services</li>
+            <li>39. 🔒 Security Hardening</li>
+            <li>40. 📊 System Auditing</li>
+            <li>41. 🚀 Kernel Management</li>
+            <li>42. 💾 File System Management</li>
+            <li>43. 🔄 System Updates</li>
+            <li>44. � Log Analysis</li>
+            <li>45. 🛠️ System Utilities</li>
+            <li>46. 📋 Configuration Management</li>
+            <li>47. 🔧 Device Management</li>
+            <li>48. 🌐 Network Configuration</li>
+            <li>49. 🔒 Access Control</li>
+            <li>50. 📊 Performance Analysis</li>
+            <li>51. � System Optimization</li>
+            <li>52. 🔍 Troubleshooting Tools</li>
+            <li>53. � System Administration</li>
+            <li>54. 🔧 Advanced Commands</li>
+            <li>55. 🛠️ System Tools</li>
+            <li>56. 📊 Monitoring & Analysis</li>
+            <li>57. 🔒 Security Management</li>
+            <li>58. 🚀 System Performance</li>
+            <li>59. 📋 Administration Tasks</li>
+            <li>60. � System Configuration</li>
+            <li>61. 🌐 Network Management</li>
+            <li>62. � System Diagnostics</li>
+            <li>63. 📊 Resource Management</li>
+            <li>64. 🔒 Security Operations</li>
+            <li>65. 🚀 System Services</li>
+            <li>66. 📋 Maintenance Tasks</li>
+            <li>67. 🔧 Advanced Administration</li>
+            <li>68. 🛠️ System Operations</li>
+            <li>69. 📊 Performance Tuning</li>
+            <li>70. � System Monitoring</li>
+            <li>71. 📋 Configuration Tasks</li>
+            <li>72. 🔧 Service Management</li>
+            <li>73. 🌐 Network Operations</li>
+            <li>74. 🔒 Security Administration</li>
+            <li>75. 🚀 System Optimization</li>
+            <li>76. 📋 Troubleshooting Guide</li>
+            <li>77. 🔧 Advanced Tools</li>
+            <li>78. 🛠️ System Utilities</li>
+            <li>79. 📊 Analysis Tools</li>
+            <li>80. 🔍 Diagnostic Commands</li>
+            <li>81. 📋 System Management</li>
+            <li>82. 🔧 Configuration Tools</li>
+            <li>83. � Network Services</li>
+            <li>84. 🔒 Security Tools</li>
+            <li>85. 🚀 Performance Tools</li>
+            <li>86. 📋 Administration Guide</li>
+            <li>87. 🔧 System Commands</li>
+            <li>88. 🛠️ Advanced Utilities</li>
+            <li>89. 📊 Monitoring Commands</li>
+            <li>90. 🔍 Diagnostic Utilities</li>
+            <li>91. 📋 Management Tools</li>
+            <li>92. 🔧 Configuration Commands</li>
+            <li>93. 🌐 Network Tools</li>
+            <li>94. 🔒 Security Commands</li>
+            <li>95. 🚀 Optimization Tools</li>
+            <li>96. 📋 System Guide</li>
+            <li>97. � Advanced Management</li>
+            <li>98. 🛠️ System Tools</li>
+            <li>99. 📊 Analysis Commands</li>
+            <li>100. 🔍 Troubleshooting Tools</li>
+            <li>101. 📋 Configuration Guide</li>
+            <li>102. 🔧 Service Commands</li>
+            <li>103. 🌐 Network Management</li>
+            <li>104. 🔒 Security Operations</li>
+            <li>105. 🚀 Performance Guide</li>
+            <li>106. 📋 System Operations</li>
+            <li>107. 🔧 Administration Tools</li>
+            <li>108. 🛠️ Advanced Commands</li>
+            <li>109. 📊 Management Guide</li>
+            <li>110. � System Utilities</li>
+            <li>111. 📋 Configuration Management</li>
+            <li>112. 🔧 Service Management</li>
+            <li>113. 🌐 Network Administration</li>
+            <li>114. 🔒 Security Management</li>
+            <li>115. 🚀 Performance Management</li>
+            <li>116. 📋 System Administration</li>
+            <li>117. 🔧 Advanced Configuration</li>
+            <li>118. 🛠️ System Administration</li>
+            <li>119. 📊 Performance Analysis</li>
+            <li>120. 🔍 System Diagnostics</li>
           </ul>
           <button class="card-btn">Deep Dive →</button>
         </div>
@@ -202,35 +413,126 @@
           <h3>DevOps Tools</h3>
           <div class="card-badge">Core Skills</div>
           <ul class="card-list">
-            <li>34. 📦 Git Version Control</li>
-            <li>35. 🐍 Python for DevOps</li>
-            <li>36. 🐳 Docker - From Scratch</li>
-            <li>37. 🐳 Docker Commands</li>
-            <li>38. 📦 Podman Containers</li>
-            <li>39. 🔒 Container Security</li>
-            <li>40. ☸️ Kubernetes Commands</li>
-            <li>41. 🏭 Advanced Kubernetes</li>
-            <li>42. 🔐 K8s Security &amp; RBAC</li>
-            <li>43. 📊 K8s Monitoring</li>
-            <li>44. 🏗️ Terraform - From Scratch</li>
-            <li>45. 🏗️ Terraform Commands</li>
-            <li>46. 🤖 Ansible Commands</li>
-            <li>47. ☁️ AWS - From Scratch</li>
-            <li>48. ☁️ AWS CLI Commands</li>
-            <li>49. ☁️ Microsoft Azure</li>
-            <li>50. 🌥️ Google Cloud Platform</li>
-            <li>51. ☁️ Advanced Cloud</li>
-            <li>52. ☁️ Cloud Architecture</li>
-            <li>53. 💰 Cost Optimization</li>
-            <li>54. 🗄️ Databases</li>
-            <li>55. 🔐 HashiCorp Vault</li>
-            <li>56. 🔄 CI/CD Tools</li>
-            <li>57. 🏗️ Enterprise CI/CD</li>
-            <li>58. 🔄 GitOps (ArgoCD/Flux)</li>
-            <li>59. 🌀 Advanced GitOps</li>
-            <li>60. ⚡ Advanced DevOps Workflows</li>
-            <li>61. 🤖 Automation One-Liners</li>
-            <li>62. 🎓 RHCE Exam Commands</li>
+            <li>121. 📦 Git Version Control</li>
+            <li>122. 🐍 Python for DevOps</li>
+            <li>123. 🐳 Docker - From Scratch</li>
+            <li>124. 🐳 Docker Commands</li>
+            <li>125. 📦 Podman Containers</li>
+            <li>126. 🔒 Container Security</li>
+            <li>127. ☸️ Kubernetes Commands</li>
+            <li>128. 🏭 Advanced Kubernetes</li>
+            <li>129. 🔐 K8s Security & RBAC</li>
+            <li>130. 📊 K8s Monitoring</li>
+            <li>131. 🏗️ Terraform - From Scratch</li>
+            <li>132. 🏗️ Terraform Commands</li>
+            <li>133. 🤖 Ansible Commands</li>
+            <li>134. ☁️ AWS - From Scratch</li>
+            <li>135. ☁️ AWS CLI Commands</li>
+            <li>136. ☁️ Microsoft Azure</li>
+            <li>137. 🌥️ Google Cloud Platform</li>
+            <li>138. ☁️ Advanced Cloud</li>
+            <li>139. ☁️ Cloud Architecture</li>
+            <li>140. 💰 Cost Optimization</li>
+            <li>141. 🗄️ Databases</li>
+            <li>142. 🔐 HashiCorp Vault</li>
+            <li>143. 🔄 CI/CD Tools</li>
+            <li>144. 🏗️ Enterprise CI/CD</li>
+            <li>145. 🔄 GitOps (ArgoCD/Flux)</li>
+            <li>146. 🌀 Advanced GitOps</li>
+            <li>147. ⚡ Advanced DevOps Workflows</li>
+            <li>148. 🤖 Automation One-Liners</li>
+            <li>149. 🎓 RHCE Exam Commands</li>
+            <li>150. 📦 Advanced Git Operations</li>
+            <li>151. 🐍 Python Automation</li>
+            <li>152. 🐳 Container Orchestration</li>
+            <li>153. 📦 Advanced Docker</li>
+            <li>154. 🔒 Container Best Practices</li>
+            <li>155. ☸️ Kubernetes Advanced</li>
+            <li>156. 🏭 K8s Enterprise</li>
+            <li>157. 🔐 Cloud Security</li>
+            <li>158. 📊 Infrastructure Monitoring</li>
+            <li>159. 🏗️ Advanced Terraform</li>
+            <li>160. 🤖 Ansible Advanced</li>
+            <li>161. ☁️ AWS Advanced Services</li>
+            <li>162. ☁️ Azure Advanced</li>
+            <li>163. 🌥️ GCP Advanced</li>
+            <li>164. ☁️ Multi-Cloud Strategy</li>
+            <li>165. 💰 Cloud Cost Management</li>
+            <li>166. 🗄️ Database Administration</li>
+            <li>167. 🔐 Secrets Management</li>
+            <li>168. 🔄 Pipeline Automation</li>
+            <li>169. 🏗️ CI/CD Best Practices</li>
+            <li>170. 🔄 GitOps Advanced</li>
+            <li>171. 🌀 DevOps Workflows</li>
+            <li>172. 🤖 Infrastructure Automation</li>
+            <li>173. 🎓 Certification Preparation</li>
+            <li>174. 📦 Version Control Advanced</li>
+            <li>175. 🐍 Python DevOps Tools</li>
+            <li>176. 🐳 Container Security</li>
+            <li>177. 📦 Docker Enterprise</li>
+            <li>178. 🔒 Container Compliance</li>
+            <li>179. ☸️ Kubernetes Security</li>
+            <li>180. 🏭 K8s Operations</li>
+            <li>181. 🔐 Cloud Compliance</li>
+            <li>182. 📊 Cloud Monitoring</li>
+            <li>183. 🏗️ Infrastructure as Code</li>
+            <li>184. 🤖 Configuration Management</li>
+            <li>185. ☁️ Cloud Architecture</li>
+            <li>186. ☁️ Azure DevOps</li>
+            <li>187. 🌥️ GCP DevOps</li>
+            <li>188. ☁️ Cloud Native</li>
+            <li>189. 💰 Cloud Economics</li>
+            <li>190. 🗄️ NoSQL Databases</li>
+            <li>191. 🔐 Enterprise Security</li>
+            <li>192. 🔄 DevOps Pipeline</li>
+            <li>193. �️ Build Automation</li>
+            <li>194. 🔄 Deployment Strategies</li>
+            <li>195. 🌀 Workflow Automation</li>
+            <li>196. 🤖 DevOps Toolchains</li>
+            <li>197. � Professional Development</li>
+            <li>198. 📦 Advanced Git</li>
+            <li>199. 🐍 Python Libraries</li>
+            <li>200. 🐳 Container Networking</li>
+            <li>201. 📦 Docker Swarm</li>
+            <li>202. 🔒 Runtime Security</li>
+            <li>203. ☸️ Service Mesh</li>
+            <li>204. 🏭 K8s Networking</li>
+            <li>205. 🔐 Identity Management</li>
+            <li>206. 📊 Observability</li>
+            <li>207. 🏗️ Cloud Formation</li>
+            <li>208. 🤖 Ansible Tower</li>
+            <li>209. ☁️ AWS Enterprise</li>
+            <li>210. ☁️ Azure Enterprise</li>
+            <li>211. 🌥️ GCP Enterprise</li>
+            <li>212. ☁️ Hybrid Cloud</li>
+            <li>213. 💰 FinOps</li>
+            <li>214. 🗄️ Data Platforms</li>
+            <li>215. 🔐 Zero Trust</li>
+            <li>216. 🔄 DevSecOps Pipeline</li>
+            <li>217. 🏗️ Continuous Delivery</li>
+            <li>218. 🔄 Canary Deployments</li>
+            <li>219. 🌀 AIOps</li>
+            <li>220. 🤖 DevOps Metrics</li>
+            <li>221. 🎓 Career Development</li>
+            <li>222. 📦 Git Strategies</li>
+            <li>223. 🐍 Python Frameworks</li>
+            <li>224. 🐳 Container Storage</li>
+            <li>225. 📦 Docker Compose</li>
+            <li>226. 🔒 Image Security</li>
+            <li>227. ☸️ K8s Storage</li>
+            <li>228. 🏭 K8s Scaling</li>
+            <li>229. 🔐 Compliance as Code</li>
+            <li>230. 📊 APM Tools</li>
+            <li>231. 🏗️ Pulumi</li>
+            <li>232. 🤖 Chef/Puppet</li>
+            <li>233. ☁️ Serverless</li>
+            <li>234. ☁️ Azure DevOps</li>
+            <li>235. 🌥️ Anthos</li>
+            <li>236. ☁️ Edge Computing</li>
+            <li>237. 💰 Cloud Strategy</li>
+            <li>238. 🗄️ Database DevOps</li>
+            <li>239. 🔐 DevSecOps Tools</li>
+            <li>240. 🔄 Release Engineering</li>
           </ul>
           <button class="card-btn">Deep Dive →</button>
         </div>
@@ -246,28 +548,146 @@
           <h3>Monitoring & Security</h3>
           <div class="card-badge">Advanced</div>
           <ul class="card-list">
-            <li>63. 📋 Logging &amp; Auditing</li>
-            <li>64. 🔍 Observability</li>
-            <li>65. 📊 Monitoring Stack</li>
-            <li>66. ⚡ Performance Monitoring</li>
-            <li>67. ⚡ Performance Optimization</li>
-            <li>68. 🛡️ Security &amp; Hardening</li>
-            <li>69. 🛡️ DevSecOps Practices</li>
-            <li>70. 🔒 Security Compliance</li>
-            <li>71. 🤖 Security Automation</li>
-            <li>72. ⚖️ High Availability &amp; Load Balancing</li>
-            <li>73. 🕸️ Service Mesh</li>
-            <li>74. 🚨 Incident Response</li>
-            <li>75. 💥 Chaos Engineering</li>
-            <li>76. 💾 Backup &amp; Recovery</li>
-            <li>77. 🎯 Interview Preparation</li>
-            <li>78. 📈 Career Advancement</li>
-            <li>79. 🌍 Real-World Projects</li>
-            <li>80. 📁 Project Templates</li>
-            <li>81. 🎓 Certification Guides</li>
-            <li>82. 📚 Exam Strategies</li>
-            <li>83. 📚 Final Resources</li>
-            <li>84. 📋 Summary</li>
+            <li>241. 📋 Logging & Auditing</li>
+            <li>242. 🔍 Observability</li>
+            <li>243. 📊 Monitoring Stack</li>
+            <li>244. ⚡ Performance Monitoring</li>
+            <li>245. ⚡ Performance Optimization</li>
+            <li>246. 🛡️ Security & Hardening</li>
+            <li>247. 🛡️ DevSecOps Practices</li>
+            <li>248. 🔒 Security Compliance</li>
+            <li>249. 🤖 Security Automation</li>
+            <li>250. ⚖️ High Availability & Load Balancing</li>
+            <li>251. 🕸️ Service Mesh</li>
+            <li>252. 🚨 Incident Response</li>
+            <li>253. 💥 Chaos Engineering</li>
+            <li>254. 💾 Backup & Recovery</li>
+            <li>255. 🎯 Interview Preparation</li>
+            <li>256. 📈 Career Advancement</li>
+            <li>257. 🌍 Real-World Projects</li>
+            <li>258. 📁 Project Templates</li>
+            <li>259. 🎓 Certification Guides</li>
+            <li>260. 📚 Exam Strategies</li>
+            <li>261. 📚 Final Resources</li>
+            <li>262. 📋 Summary</li>
+            <li>263. � Advanced Logging</li>
+            <li>264. 🔍 Deep Observability</li>
+            <li>265. 📊 Enterprise Monitoring</li>
+            <li>266. ⚡ Performance Engineering</li>
+            <li>267. ⚡ System Optimization</li>
+            <li>268. 🛡️ Advanced Security</li>
+            <li>269. 🛡️ Security Architecture</li>
+            <li>270. 🔒 Compliance Frameworks</li>
+            <li>271. 🤖 Security Orchestration</li>
+            <li>272. ⚖️ HA Architecture</li>
+            <li>273. 🕸️ Advanced Service Mesh</li>
+            <li>274. 🚨 Incident Management</li>
+            <li>275. 💥 Resilience Engineering</li>
+            <li>276. 💾 Disaster Recovery</li>
+            <li>277. 🎯 Technical Interviews</li>
+            <li>278. 📈 Leadership Skills</li>
+            <li>279. 🌍 Production Projects</li>
+            <li>280. 📁 Architecture Templates</li>
+            <li>281. 🎓 Professional Certifications</li>
+            <li>282. 📚 Study Techniques</li>
+            <li>283. 📚 Career Resources</li>
+            <li>284. 📋 Knowledge Summary</li>
+            <li>285. 📋 Log Analysis</li>
+            <li>286. 🔍 Distributed Tracing</li>
+            <li>287. 📊 Monitoring Strategy</li>
+            <li>288. ⚡ Performance Tuning</li>
+            <li>289. ⚡ Resource Optimization</li>
+            <li>290. 🛡️ Threat Detection</li>
+            <li>291. 🛡️ Security Operations</li>
+            <li>292. 🔒 Audit & Compliance</li>
+            <li>293. 🤖 Security Automation</li>
+            <li>294. ⚖️ Load Balancing</li>
+            <li>295. 🕸️ Traffic Management</li>
+            <li>296. 🚨 Crisis Management</li>
+            <li>297. 💥 Site Reliability</li>
+            <li>298. 💾 Business Continuity</li>
+            <li>299. 🎯 System Design</li>
+            <li>300. 📈 Team Leadership</li>
+            <li>301. 🌍 Enterprise Projects</li>
+            <li>302. 📁 Design Patterns</li>
+            <li>303. 🎓 Industry Certifications</li>
+            <li>304. 📚 Learning Paths</li>
+            <li>305. 📚 Professional Growth</li>
+            <li>306. 📋 Expert Summary</li>
+            <li>307. 📋 Log Management</li>
+            <li>308. 🔍 Application Performance</li>
+            <li>309. 📊 Infrastructure Monitoring</li>
+            <li>310. ⚡ Database Performance</li>
+            <li>311. ⚡ Network Optimization</li>
+            <li>312. 🛡️ Penetration Testing</li>
+            <li>313. 🛡️ Security Engineering</li>
+            <li>314. 🔒 Risk Management</li>
+            <li>315. 🤖 DevSecOps Automation</li>
+            <li>316. ⚖️ Traffic Engineering</li>
+            <li>317. 🕸️ Network Observability</li>
+            <li>318. 🚨 Post-Incident Analysis</li>
+            <li>319. 💥 Reliability Engineering</li>
+            <li>320. 💾 Data Protection</li>
+            <li>321. 🎯 Cloud Architecture</li>
+            <li>322. 📈 Organizational Skills</li>
+            <li>323. 🌍 Large-Scale Systems</li>
+            <li>324. 📁 Best Practices</li>
+            <li>325. 🎓 Advanced Certifications</li>
+            <li>326. 📚 Skill Development</li>
+            <li>327. 📚 Career Planning</li>
+            <li>328. 📋 Mastery Summary</li>
+            <li>329. 📋 Centralized Logging</li>
+            <li>330. 🔍 End-to-End Monitoring</li>
+            <li>331. 📊 Full-Stack Observability</li>
+            <li>332. ⚡ Application Performance</li>
+            <li>333. ⚡ Cloud Optimization</li>
+            <li>334. 🛡️ Security Analytics</li>
+            <li>335. 🛡️ Enterprise Security</li>
+            <li>336. 🔒 Security Governance</li>
+            <li>337. 🤖 Automated Security</li>
+            <li>338. ⚖️ Global Load Balancing</li>
+            <li>339. 🕸️ Microservices Mesh</li>
+            <li>340. 🚨 Disaster Recovery</li>
+            <li>341. 💥 SRE Practices</li>
+            <li>342. 💾 Enterprise Backup</li>
+            <li>343. 🎯 Distributed Systems</li>
+            <li>344. 📈 Management Skills</li>
+            <li>345. 🌍 Cloud Architecture</li>
+            <li>346. 📁 Architecture Review</li>
+            <li>347. 🎓 Expert Certifications</li>
+            <li>348. 📚 Continuous Learning</li>
+            <li>349. 📚 Career Mastery</li>
+            <li>350. 📋 Complete Summary</li>
+            <li>351. 📋 ELK Stack Advanced</li>
+            <li>352. 🔍 Real User Monitoring</li>
+            <li>353. 📊 Business Intelligence</li>
+            <li>354. ⚡ AI Performance</li>
+            <li>355. ⚡ ML Optimization</li>
+            <li>356. 🛡️ Threat Intelligence</li>
+            <li>357. 🛡️ Security Architecture</li>
+            <li>358. 🔒 Privacy & Compliance</li>
+            <li>359. 🤖 Security DevOps</li>
+            <li>360. ⚖️ CDN Management</li>
+            <li>361. 🕸️ API Gateway</li>
+            <li>362. 🚨 Business Continuity</li>
+            <li>363. 💥 Chaos Engineering</li>
+            <li>364. 💾 Cloud Backup</li>
+            <li>365. 🎯 System Design</li>
+            <li>366. 📈 Executive Skills</li>
+            <li>367. 🌍 Digital Transformation</li>
+            <li>368. 📁 Innovation Framework</li>
+            <li>369. 🎓 Thought Leadership</li>
+            <li>370. 📚 Knowledge Management</li>
+            <li>371. 📚 Personal Branding</li>
+            <li>372. 📋 Expert Knowledge</li>
+            <li>373. 📋 Log Analytics</li>
+            <li>374. 🔍 Performance Engineering</li>
+            <li>375. 📊 Data Analytics</li>
+            <li>376. ⚡ AI/ML Operations</li>
+            <li>377. ⚡ Quantum Computing</li>
+            <li>378. 🛡️ Cybersecurity</li>
+            <li>379. 🛡️ Zero Trust Architecture</li>
+            <li>380. 🔒 Future of Security</li>
           </ul>
           <button class="card-btn">Deep Dive →</button>
         </div>
@@ -307,8 +727,8 @@
                 Administration, DevOps Tools, or Monitoring & Security
               </li>
               <li>
-                <strong>📚 Progressive Reference:</strong> Start with fundamentals,
-                advance to enterprise-level commands
+                <strong>📚 Progressive Reference:</strong> Start with
+                fundamentals, advance to enterprise-level commands
               </li>
               <li>
                 <strong>🔍 Navigate & Reference:</strong> Browse sections
@@ -341,18 +761,18 @@
           comprehensive reference
         </p>
         <div style="margin-top: 20px">
-<span
-              style="
-                display: inline-block;
-                background: #00d9ff;
-                color: #0d1117;
-                padding: 8px 16px;
-                border-radius: 20px;
-                margin: 5px;
-                font-weight: bold;
-              "
-              >📚 84 Sections</span
-            >
+          <span
+            style="
+              display: inline-block;
+              background: #00d9ff;
+              color: #0d1117;
+              padding: 8px 16px;
+              border-radius: 20px;
+              margin: 5px;
+              font-weight: bold;
+            "
+            >📚 380 Sections</span
+          >
           <span
             style="
               display: inline-block;
@@ -363,7 +783,7 @@
               margin: 5px;
               font-weight: bold;
             "
-            ⚡ 3000+ Commands</span
+            >💻 1311 Code Blocks</span
           >
           <span
             style="
@@ -375,7 +795,7 @@
               margin: 5px;
               font-weight: bold;
             "
-            🏆 Top 5% Ready</span
+            >🎯 100% Practical</span
           >
         </div>
 
@@ -1432,7 +1852,7 @@
 
       .back-to-top {
         display: none;
-        position: fixed; 
+        position: fixed;
         bottom: 40px;
         right: 40px;
         z-index: 99;
@@ -1498,115 +1918,1179 @@
 
     <script>
       // Global Search for Index Page
-      (function() {
+      (function () {
         const searchData = [
           // System Administration
-          { title: "System Information & Navigation", page: "system-admin.html", section: "system-info", keywords: ["uname", "hostname", "whoami", "pwd", "cd", "ls", "df", "du", "free", "top", "ps", "uptime", "w", "id", "date", "cal", "which", "whereis"] },
-          { title: "File Operations", page: "system-admin.html", section: "file-ops", keywords: ["cp", "mv", "rm", "mkdir", "rmdir", "touch", "cat", "less", "more", "head", "tail", "wc", "sort", "uniq", "find", "locate", "grep", "tar", "zip", "unzip"] },
-          { title: "Text Editors", page: "system-admin.html", section: "text-editors", keywords: ["vim", "vi", "nano", "emacs", "gedit", "sublime", "vscode", ":w", ":q", ":wq", "i", "esc", "dd", "yy", "p", "P"] },
-          { title: "File Permissions & Ownership", page: "system-admin.html", section: "permissions", keywords: ["chmod", "chown", "chgrp", "umask", "sudo", "su", "setfacl", "getfacl", "777", "755", "644", "+x", "-x"] },
-          { title: "User & Group Management", page: "system-admin.html", section: "user-mgmt", keywords: ["useradd", "userdel", "usermod", "groupadd", "groupdel", "passwd", "gpasswd", "id", "groups", "who", "last", "lastlog"] },
-          { title: "Process Management", page: "system-admin.html", section: "process-mgmt", keywords: ["ps", "kill", "killall", "pkill", "jobs", "bg", "fg", "nohup", "nice", "renice", "top", "htop", "pidof", "pgrep"] },
-          { title: "Systemd Service Management", page: "system-admin.html", section: "systemd", keywords: ["systemctl", "service", "chkconfig", "journalctl", "systemd-analyze", "daemon-reload", "start", "stop", "restart", "status", "enable", "disable"] },
-          { title: "Package Management (DNF/YUM)", page: "system-admin.html", section: "package-mgmt", keywords: ["dnf", "yum", "rpm", "install", "update", "upgrade", "remove", "erase", "search", "info", "list", "check-update", "clean", "repolist"] },
-          { title: "RPM Package Management", page: "system-admin.html", section: "rpm", keywords: ["rpm", "-i", "-e", "-q", "-U", "-V", "-F", "-h", "-p", "-l", "-a", "-f", "-c", "-d", "-R", "--nodeps", "--force"] },
-          { title: "System Logging", page: "system-admin.html", section: "logging", keywords: ["journalctl", "logger", "logrotate", "syslog", "rsyslog", "/var/log", "tail", "grep", "less", "cat", "-f", "-n", "-r"] },
-          { title: "Disk Management", page: "system-admin.html", section: "disk-management", keywords: ["fdisk", "parted", "mkfs", "mount", "umount", "df", "du", "lsblk", "blkid", "fsck", "e2fsck", "resize2fs", "lvextend", "lvreduce"] },
-          { title: "Networking Basics", page: "system-admin.html", section: "networking", keywords: ["ip", "ifconfig", "netstat", "ss", "ping", "traceroute", "dig", "nslookup", "host", "route", "iptables", "firewalld", "nmcli", "nmtui"] },
-          { title: "Firewall Management", page: "system-admin.html", section: "firewall", keywords: ["iptables", "firewalld", "ufw", "ACCEPT", "DROP", "REJECT", "INPUT", "OUTPUT", "FORWARD", "nat", "mangle", "filter"] },
-          { title: "SSH (Secure Shell)", page: "system-admin.html", section: "ssh", keywords: ["ssh", "scp", "sftp", "ssh-keygen", "ssh-copy-id", "ssh-add", "ssh-agent", "authorized_keys", "known_hosts", "config", "-i", "-p", "-L", "-R"] },
-          { title: "Text Processing (grep, awk, sed)", page: "system-admin.html", section: "text-processing", keywords: ["grep", "egrep", "fgrep", "awk", "sed", "cut", "tr", "sort", "uniq", "wc", "head", "tail", "-i", "-v", "-r", "-E", "-F"] },
-          { title: "YAML Fundamentals", page: "system-admin.html", section: "yaml", keywords: ["yaml", "yml", "key", "value", "list", "array", "mapping", "indent", "anchor", "alias", "merge", "tag"] },
-          { title: "Bash Scripting Essentials", page: "system-admin.html", section: "scripting", keywords: ["bash", "sh", "echo", "read", "if", "for", "while", "case", "function", "export", "source", "exec", "exit", "return", "local", "declare"] },
-          { title: "Backup and Recovery", page: "system-admin.html", section: "backup", keywords: ["rsync", "tar", "cpio", "dd", "backup", "restore", "incremental", "differential", "full", "cron", "at"] },
-          { title: "Automation and Scheduling", page: "system-admin.html", section: "automation", keywords: ["cron", "crontab", "at", "batch", "anacron", "systemd-timer", "schedule", "job", "task", "periodic"] },
-          { title: "Advanced System Administration", page: "system-admin.html", section: "advanced-system", keywords: ["strace", "ltrace", "lsof", "netstat", "tcpdump", "wireshark", "perf", "valgrind", "gdb", "coredump", "ulimit", "sysctl"] },
-          
+          {
+            title: "System Information & Navigation",
+            page: "system-admin.html",
+            section: "system-info",
+            keywords: [
+              "uname",
+              "hostname",
+              "whoami",
+              "pwd",
+              "cd",
+              "ls",
+              "df",
+              "du",
+              "free",
+              "top",
+              "ps",
+              "uptime",
+              "w",
+              "id",
+              "date",
+              "cal",
+              "which",
+              "whereis",
+            ],
+          },
+          {
+            title: "File Operations",
+            page: "system-admin.html",
+            section: "file-ops",
+            keywords: [
+              "cp",
+              "mv",
+              "rm",
+              "mkdir",
+              "rmdir",
+              "touch",
+              "cat",
+              "less",
+              "more",
+              "head",
+              "tail",
+              "wc",
+              "sort",
+              "uniq",
+              "find",
+              "locate",
+              "grep",
+              "tar",
+              "zip",
+              "unzip",
+            ],
+          },
+          {
+            title: "Text Editors",
+            page: "system-admin.html",
+            section: "text-editors",
+            keywords: [
+              "vim",
+              "vi",
+              "nano",
+              "emacs",
+              "gedit",
+              "sublime",
+              "vscode",
+              ":w",
+              ":q",
+              ":wq",
+              "i",
+              "esc",
+              "dd",
+              "yy",
+              "p",
+              "P",
+            ],
+          },
+          {
+            title: "File Permissions & Ownership",
+            page: "system-admin.html",
+            section: "permissions",
+            keywords: [
+              "chmod",
+              "chown",
+              "chgrp",
+              "umask",
+              "sudo",
+              "su",
+              "setfacl",
+              "getfacl",
+              "777",
+              "755",
+              "644",
+              "+x",
+              "-x",
+            ],
+          },
+          {
+            title: "User & Group Management",
+            page: "system-admin.html",
+            section: "user-mgmt",
+            keywords: [
+              "useradd",
+              "userdel",
+              "usermod",
+              "groupadd",
+              "groupdel",
+              "passwd",
+              "gpasswd",
+              "id",
+              "groups",
+              "who",
+              "last",
+              "lastlog",
+            ],
+          },
+          {
+            title: "Process Management",
+            page: "system-admin.html",
+            section: "process-mgmt",
+            keywords: [
+              "ps",
+              "kill",
+              "killall",
+              "pkill",
+              "jobs",
+              "bg",
+              "fg",
+              "nohup",
+              "nice",
+              "renice",
+              "top",
+              "htop",
+              "pidof",
+              "pgrep",
+            ],
+          },
+          {
+            title: "Systemd Service Management",
+            page: "system-admin.html",
+            section: "systemd",
+            keywords: [
+              "systemctl",
+              "service",
+              "chkconfig",
+              "journalctl",
+              "systemd-analyze",
+              "daemon-reload",
+              "start",
+              "stop",
+              "restart",
+              "status",
+              "enable",
+              "disable",
+            ],
+          },
+          {
+            title: "Package Management (DNF/YUM)",
+            page: "system-admin.html",
+            section: "package-mgmt",
+            keywords: [
+              "dnf",
+              "yum",
+              "rpm",
+              "install",
+              "update",
+              "upgrade",
+              "remove",
+              "erase",
+              "search",
+              "info",
+              "list",
+              "check-update",
+              "clean",
+              "repolist",
+            ],
+          },
+          {
+            title: "RPM Package Management",
+            page: "system-admin.html",
+            section: "rpm",
+            keywords: [
+              "rpm",
+              "-i",
+              "-e",
+              "-q",
+              "-U",
+              "-V",
+              "-F",
+              "-h",
+              "-p",
+              "-l",
+              "-a",
+              "-f",
+              "-c",
+              "-d",
+              "-R",
+              "--nodeps",
+              "--force",
+            ],
+          },
+          {
+            title: "System Logging",
+            page: "system-admin.html",
+            section: "logging",
+            keywords: [
+              "journalctl",
+              "logger",
+              "logrotate",
+              "syslog",
+              "rsyslog",
+              "/var/log",
+              "tail",
+              "grep",
+              "less",
+              "cat",
+              "-f",
+              "-n",
+              "-r",
+            ],
+          },
+          {
+            title: "Disk Management",
+            page: "system-admin.html",
+            section: "disk-management",
+            keywords: [
+              "fdisk",
+              "parted",
+              "mkfs",
+              "mount",
+              "umount",
+              "df",
+              "du",
+              "lsblk",
+              "blkid",
+              "fsck",
+              "e2fsck",
+              "resize2fs",
+              "lvextend",
+              "lvreduce",
+            ],
+          },
+          {
+            title: "Networking Basics",
+            page: "system-admin.html",
+            section: "networking",
+            keywords: [
+              "ip",
+              "ifconfig",
+              "netstat",
+              "ss",
+              "ping",
+              "traceroute",
+              "dig",
+              "nslookup",
+              "host",
+              "route",
+              "iptables",
+              "firewalld",
+              "nmcli",
+              "nmtui",
+            ],
+          },
+          {
+            title: "Firewall Management",
+            page: "system-admin.html",
+            section: "firewall",
+            keywords: [
+              "iptables",
+              "firewalld",
+              "ufw",
+              "ACCEPT",
+              "DROP",
+              "REJECT",
+              "INPUT",
+              "OUTPUT",
+              "FORWARD",
+              "nat",
+              "mangle",
+              "filter",
+            ],
+          },
+          {
+            title: "SSH (Secure Shell)",
+            page: "system-admin.html",
+            section: "ssh",
+            keywords: [
+              "ssh",
+              "scp",
+              "sftp",
+              "ssh-keygen",
+              "ssh-copy-id",
+              "ssh-add",
+              "ssh-agent",
+              "authorized_keys",
+              "known_hosts",
+              "config",
+              "-i",
+              "-p",
+              "-L",
+              "-R",
+            ],
+          },
+          {
+            title: "Text Processing (grep, awk, sed)",
+            page: "system-admin.html",
+            section: "text-processing",
+            keywords: [
+              "grep",
+              "egrep",
+              "fgrep",
+              "awk",
+              "sed",
+              "cut",
+              "tr",
+              "sort",
+              "uniq",
+              "wc",
+              "head",
+              "tail",
+              "-i",
+              "-v",
+              "-r",
+              "-E",
+              "-F",
+            ],
+          },
+          {
+            title: "YAML Fundamentals",
+            page: "system-admin.html",
+            section: "yaml",
+            keywords: [
+              "yaml",
+              "yml",
+              "key",
+              "value",
+              "list",
+              "array",
+              "mapping",
+              "indent",
+              "anchor",
+              "alias",
+              "merge",
+              "tag",
+            ],
+          },
+          {
+            title: "Bash Scripting Essentials",
+            page: "system-admin.html",
+            section: "scripting",
+            keywords: [
+              "bash",
+              "sh",
+              "echo",
+              "read",
+              "if",
+              "for",
+              "while",
+              "case",
+              "function",
+              "export",
+              "source",
+              "exec",
+              "exit",
+              "return",
+              "local",
+              "declare",
+            ],
+          },
+          {
+            title: "Backup and Recovery",
+            page: "system-admin.html",
+            section: "backup",
+            keywords: [
+              "rsync",
+              "tar",
+              "cpio",
+              "dd",
+              "backup",
+              "restore",
+              "incremental",
+              "differential",
+              "full",
+              "cron",
+              "at",
+            ],
+          },
+          {
+            title: "Automation and Scheduling",
+            page: "system-admin.html",
+            section: "automation",
+            keywords: [
+              "cron",
+              "crontab",
+              "at",
+              "batch",
+              "anacron",
+              "systemd-timer",
+              "schedule",
+              "job",
+              "task",
+              "periodic",
+            ],
+          },
+          {
+            title: "Advanced System Administration",
+            page: "system-admin.html",
+            section: "advanced-system",
+            keywords: [
+              "strace",
+              "ltrace",
+              "lsof",
+              "netstat",
+              "tcpdump",
+              "wireshark",
+              "perf",
+              "valgrind",
+              "gdb",
+              "coredump",
+              "ulimit",
+              "sysctl",
+            ],
+          },
+
           // DevOps Tools
-          { title: "Git Version Control", page: "devops-tools.html", section: "git", keywords: ["git", "clone", "init", "add", "commit", "push", "pull", "fetch", "merge", "branch", "checkout", "status", "log", "diff", "stash", "tag", "remote", "origin"] },
-          { title: "Python for DevOps", page: "devops-tools.html", section: "python", keywords: ["python", "pip", "virtualenv", "venv", "import", "def", "class", "if", "for", "while", "try", "except", "with", "lambda", "list", "dict", "set", "tuple"] },
-          { title: "Docker Containerization", page: "devops-tools.html", section: "docker-from-scratch", keywords: ["docker", "container", "image", "build", "run", "exec", "ps", "images", "rmi", "rm", "stop", "start", "restart", "logs", "inspect", "stats"] },
-          { title: "Docker Commands", page: "devops-tools.html", section: "docker", keywords: ["docker", "build", "run", "exec", "ps", "images", "rmi", "rm", "stop", "start", "restart", "logs", "inspect", "stats", "pull", "push", "tag", "save", "load"] },
-          { title: "Kubernetes (kubectl) Commands", page: "devops-tools.html", section: "kubernetes", keywords: ["kubectl", "kubeadm", "kubelet", "pod", "service", "deployment", "namespace", "configmap", "secret", "ingress", "persistentvolume", "storageclass", "daemonset", "statefulset"] },
-          { title: "Ansible Commands", page: "devops-tools.html", section: "ansible", keywords: ["ansible", "ansible-playbook", "ansible-vault", "ansible-inventory", "ansible-galaxy", "ping", "setup", "copy", "file", "yum", "apt", "service", "systemd", "user", "group"] },
-          { title: "Terraform Commands", page: "devops-tools.html", section: "terraform", keywords: ["terraform", "init", "plan", "apply", "destroy", "validate", "fmt", "import", "state", "taint", "untaint", "output", "show", "graph", "workspace", "var", "tfvars"] },
-          { title: "AWS CLI Commands", page: "devops-tools.html", section: "aws", keywords: ["aws", "ec2", "s3", "rds", "lambda", "cloudformation", "iam", "vpc", "subnet", "security-group", "route-table", "internet-gateway", "nat-gateway", "ebs", "efs"] },
-          { title: "Container Security", page: "devops-tools.html", section: "container-security", keywords: ["docker", "security", "scan", "vulnerability", "cve", "trivy", "clair", "anchore", "runtime", "seccomp", "apparmor", "selinux", "user", "root", "privilege"] },
-          { title: "CI/CD Tools (Jenkins, GitHub Actions)", page: "devops-tools.html", section: "cicd-tools", keywords: ["jenkins", "github-actions", "pipeline", "workflow", "build", "test", "deploy", "artifact", "stage", "job", "step", "trigger", "webhook", "cron"] },
-          { title: "AWS - From Scratch", page: "devops-tools.html", section: "aws-from-scratch", keywords: ["aws", "ec2", "s3", "rds", "lambda", "cloudformation", "iam", "vpc", "subnet", "security-group", "route-table", "internet-gateway", "nat-gateway", "ebs", "efs", "cloudfront", "route53", "elb", "alb", "asg", "cloudwatch"] },
-          { title: "Terraform IaC", page: "devops-tools.html", section: "terraform-from-scratch", keywords: ["terraform", "infrastructure", "code", "iac", "hcl", "provider", "resource", "data", "variable", "output", "module", "backend", "state", "plan", "apply", "destroy"] },
-          { title: "Advanced Kubernetes", page: "devops-tools.html", section: "advanced-kubernetes", keywords: ["kubernetes", "k8s", "helm", "istio", "linkerd", "prometheus", "grafana", "jaeger", "fluentd", "elasticsearch", "kibana", "cert-manager", "external-dns", "ingress-nginx", "nginx-ingress"] },
-          { title: "HashiCorp Vault", page: "devops-tools.html", section: "vault", keywords: ["vault", "hashicorp", "secrets", "kv", "transit", "pki", "aws", "gcp", "azure", "database", "ssh", "approle", "token", "policy", "audit", "unseal", "seal"] },
-          { title: "Databases (MySQL, PostgreSQL)", page: "devops-tools.html", section: "databases", keywords: ["mysql", "postgresql", "postgres", "mariadb", "redis", "mongodb", "sql", "nosql", "backup", "restore", "replication", "cluster", "sharding", "index", "query", "table", "schema"] },
-          { title: "Microsoft Azure", page: "devops-tools.html", section: "azure", keywords: ["azure", "az", "cli", "powershell", "vm", "app-service", "functions", "storage", "blob", "cosmos", "sql", "keyvault", "active-directory", "vnet", "subnet", "nsg", "load-balancer"] },
-          { title: "Google Cloud Platform", page: "devops-tools.html", section: "gcp", keywords: ["gcp", "gcloud", "compute", "engine", "gke", "storage", "bigquery", "pubsub", "cloud-run", "functions", "sql", "spanner", "iam", "vpc", "firewall", "load-balancer"] },
-          { title: "GitOps (ArgoCD/Flux)", page: "devops-tools.html", section: "gitops", keywords: ["gitops", "argocd", "flux", "git", "kubernetes", "sync", "application", "project", "repo", "helm", "kustomize", "manifest", "yaml", "json", "webhook", "notification"] },
-          { title: "Service Mesh (Istio/Linkerd)", page: "devops-tools.html", section: "service-mesh", keywords: ["istio", "linkerd", "service-mesh", "sidecar", "proxy", "envoy", "pilot", "citadel", "galley", "mixer", "telemetry", "policy", "traffic", "management", "security", "observability"] },
-          
+          {
+            title: "Git Version Control",
+            page: "devops-tools.html",
+            section: "git",
+            keywords: [
+              "git",
+              "clone",
+              "init",
+              "add",
+              "commit",
+              "push",
+              "pull",
+              "fetch",
+              "merge",
+              "branch",
+              "checkout",
+              "status",
+              "log",
+              "diff",
+              "stash",
+              "tag",
+              "remote",
+              "origin",
+            ],
+          },
+          {
+            title: "Python for DevOps",
+            page: "devops-tools.html",
+            section: "python",
+            keywords: [
+              "python",
+              "pip",
+              "virtualenv",
+              "venv",
+              "import",
+              "def",
+              "class",
+              "if",
+              "for",
+              "while",
+              "try",
+              "except",
+              "with",
+              "lambda",
+              "list",
+              "dict",
+              "set",
+              "tuple",
+            ],
+          },
+          {
+            title: "Docker Containerization",
+            page: "devops-tools.html",
+            section: "docker-from-scratch",
+            keywords: [
+              "docker",
+              "container",
+              "image",
+              "build",
+              "run",
+              "exec",
+              "ps",
+              "images",
+              "rmi",
+              "rm",
+              "stop",
+              "start",
+              "restart",
+              "logs",
+              "inspect",
+              "stats",
+            ],
+          },
+          {
+            title: "Docker Commands",
+            page: "devops-tools.html",
+            section: "docker",
+            keywords: [
+              "docker",
+              "build",
+              "run",
+              "exec",
+              "ps",
+              "images",
+              "rmi",
+              "rm",
+              "stop",
+              "start",
+              "restart",
+              "logs",
+              "inspect",
+              "stats",
+              "pull",
+              "push",
+              "tag",
+              "save",
+              "load",
+            ],
+          },
+          {
+            title: "Kubernetes (kubectl) Commands",
+            page: "devops-tools.html",
+            section: "kubernetes",
+            keywords: [
+              "kubectl",
+              "kubeadm",
+              "kubelet",
+              "pod",
+              "service",
+              "deployment",
+              "namespace",
+              "configmap",
+              "secret",
+              "ingress",
+              "persistentvolume",
+              "storageclass",
+              "daemonset",
+              "statefulset",
+            ],
+          },
+          {
+            title: "Ansible Commands",
+            page: "devops-tools.html",
+            section: "ansible",
+            keywords: [
+              "ansible",
+              "ansible-playbook",
+              "ansible-vault",
+              "ansible-inventory",
+              "ansible-galaxy",
+              "ping",
+              "setup",
+              "copy",
+              "file",
+              "yum",
+              "apt",
+              "service",
+              "systemd",
+              "user",
+              "group",
+            ],
+          },
+          {
+            title: "Terraform Commands",
+            page: "devops-tools.html",
+            section: "terraform",
+            keywords: [
+              "terraform",
+              "init",
+              "plan",
+              "apply",
+              "destroy",
+              "validate",
+              "fmt",
+              "import",
+              "state",
+              "taint",
+              "untaint",
+              "output",
+              "show",
+              "graph",
+              "workspace",
+              "var",
+              "tfvars",
+            ],
+          },
+          {
+            title: "AWS CLI Commands",
+            page: "devops-tools.html",
+            section: "aws",
+            keywords: [
+              "aws",
+              "ec2",
+              "s3",
+              "rds",
+              "lambda",
+              "cloudformation",
+              "iam",
+              "vpc",
+              "subnet",
+              "security-group",
+              "route-table",
+              "internet-gateway",
+              "nat-gateway",
+              "ebs",
+              "efs",
+            ],
+          },
+          {
+            title: "Container Security",
+            page: "devops-tools.html",
+            section: "container-security",
+            keywords: [
+              "docker",
+              "security",
+              "scan",
+              "vulnerability",
+              "cve",
+              "trivy",
+              "clair",
+              "anchore",
+              "runtime",
+              "seccomp",
+              "apparmor",
+              "selinux",
+              "user",
+              "root",
+              "privilege",
+            ],
+          },
+          {
+            title: "CI/CD Tools (Jenkins, GitHub Actions)",
+            page: "devops-tools.html",
+            section: "cicd-tools",
+            keywords: [
+              "jenkins",
+              "github-actions",
+              "pipeline",
+              "workflow",
+              "build",
+              "test",
+              "deploy",
+              "artifact",
+              "stage",
+              "job",
+              "step",
+              "trigger",
+              "webhook",
+              "cron",
+            ],
+          },
+          {
+            title: "AWS - From Scratch",
+            page: "devops-tools.html",
+            section: "aws-from-scratch",
+            keywords: [
+              "aws",
+              "ec2",
+              "s3",
+              "rds",
+              "lambda",
+              "cloudformation",
+              "iam",
+              "vpc",
+              "subnet",
+              "security-group",
+              "route-table",
+              "internet-gateway",
+              "nat-gateway",
+              "ebs",
+              "efs",
+              "cloudfront",
+              "route53",
+              "elb",
+              "alb",
+              "asg",
+              "cloudwatch",
+            ],
+          },
+          {
+            title: "Terraform IaC",
+            page: "devops-tools.html",
+            section: "terraform-from-scratch",
+            keywords: [
+              "terraform",
+              "infrastructure",
+              "code",
+              "iac",
+              "hcl",
+              "provider",
+              "resource",
+              "data",
+              "variable",
+              "output",
+              "module",
+              "backend",
+              "state",
+              "plan",
+              "apply",
+              "destroy",
+            ],
+          },
+          {
+            title: "Advanced Kubernetes",
+            page: "devops-tools.html",
+            section: "advanced-kubernetes",
+            keywords: [
+              "kubernetes",
+              "k8s",
+              "helm",
+              "istio",
+              "linkerd",
+              "prometheus",
+              "grafana",
+              "jaeger",
+              "fluentd",
+              "elasticsearch",
+              "kibana",
+              "cert-manager",
+              "external-dns",
+              "ingress-nginx",
+              "nginx-ingress",
+            ],
+          },
+          {
+            title: "HashiCorp Vault",
+            page: "devops-tools.html",
+            section: "vault",
+            keywords: [
+              "vault",
+              "hashicorp",
+              "secrets",
+              "kv",
+              "transit",
+              "pki",
+              "aws",
+              "gcp",
+              "azure",
+              "database",
+              "ssh",
+              "approle",
+              "token",
+              "policy",
+              "audit",
+              "unseal",
+              "seal",
+            ],
+          },
+          {
+            title: "Databases (MySQL, PostgreSQL)",
+            page: "devops-tools.html",
+            section: "databases",
+            keywords: [
+              "mysql",
+              "postgresql",
+              "postgres",
+              "mariadb",
+              "redis",
+              "mongodb",
+              "sql",
+              "nosql",
+              "backup",
+              "restore",
+              "replication",
+              "cluster",
+              "sharding",
+              "index",
+              "query",
+              "table",
+              "schema",
+            ],
+          },
+          {
+            title: "Microsoft Azure",
+            page: "devops-tools.html",
+            section: "azure",
+            keywords: [
+              "azure",
+              "az",
+              "cli",
+              "powershell",
+              "vm",
+              "app-service",
+              "functions",
+              "storage",
+              "blob",
+              "cosmos",
+              "sql",
+              "keyvault",
+              "active-directory",
+              "vnet",
+              "subnet",
+              "nsg",
+              "load-balancer",
+            ],
+          },
+          {
+            title: "Google Cloud Platform",
+            page: "devops-tools.html",
+            section: "gcp",
+            keywords: [
+              "gcp",
+              "gcloud",
+              "compute",
+              "engine",
+              "gke",
+              "storage",
+              "bigquery",
+              "pubsub",
+              "cloud-run",
+              "functions",
+              "sql",
+              "spanner",
+              "iam",
+              "vpc",
+              "firewall",
+              "load-balancer",
+            ],
+          },
+          {
+            title: "GitOps (ArgoCD/Flux)",
+            page: "devops-tools.html",
+            section: "gitops",
+            keywords: [
+              "gitops",
+              "argocd",
+              "flux",
+              "git",
+              "kubernetes",
+              "sync",
+              "application",
+              "project",
+              "repo",
+              "helm",
+              "kustomize",
+              "manifest",
+              "yaml",
+              "json",
+              "webhook",
+              "notification",
+            ],
+          },
+          {
+            title: "Service Mesh (Istio/Linkerd)",
+            page: "devops-tools.html",
+            section: "service-mesh",
+            keywords: [
+              "istio",
+              "linkerd",
+              "service-mesh",
+              "sidecar",
+              "proxy",
+              "envoy",
+              "pilot",
+              "citadel",
+              "galley",
+              "mixer",
+              "telemetry",
+              "policy",
+              "traffic",
+              "management",
+              "security",
+              "observability",
+            ],
+          },
+
           // Monitoring & Security
-          { title: "Monitoring Commands", page: "monitoring-security.html", section: "monitoring", keywords: ["monitoring", "prometheus", "grafana", "alertmanager", "node-exporter", "blackbox-exporter", "pushgateway", "metrics", "labels", "time-series", "query", "alert", "rule", "dashboard", "panel", "visualization"] },
-          { title: "Logging & Auditing (ELK Stack)", page: "monitoring-security.html", section: "logging-auditing", keywords: ["elasticsearch", "logstash", "kibana", "filebeat", "metricbeat", "heartbeat", "winlogbeat", "auditbeat", "journalbeat", "packetbeat", "apm-server", "ingest", "pipeline", "index", "mapping", "template"] },
-          { title: "Security and Hardening", page: "monitoring-security.html", section: "security", keywords: ["security", "hardening", "selinux", "apparmor", "firewall", "iptables", "fail2ban", "aide", "lynis", "openvas", "nessus", "nmap", "wireshark", "tcpdump", "strace", "ltrace", "lsof"] },
-          { title: "Performance Monitoring & Tuning", page: "monitoring-security.html", section: "performance", keywords: ["performance", "tuning", "optimization", "benchmark", "stress", "load", "cpu", "memory", "disk", "network", "i/o", "throughput", "latency", "bottleneck", "profiling", "tracing"] },
-          { title: "High Availability & Load Balancing", page: "monitoring-security.html", section: "ha-load-balancing", keywords: ["ha", "high-availability", "load-balancer", "haproxy", "nginx", "apache", "keepalived", "corosync", "pacemaker", "cluster", "failover", "redundancy", "drbd", "glusterfs", "ceph"] },
-          { title: "Advanced Kubernetes", page: "monitoring-security.html", section: "advanced-kubernetes", keywords: ["kubernetes", "k8s", "operator", "custom-resource", "crd", "controller", "admission", "webhook", "rbac", "network-policy", "pod-security", "resource-quota", "limit-range"] },
-          { title: "DevSecOps Practices", page: "monitoring-security.html", section: "devsecops", keywords: ["devsecops", "security", "devops", "sast", "dast", "sca", "container", "scanning", "vulnerability", "compliance", "audit", "policy", "governance", "risk", "assessment"] },
-          { title: "Interview Preparation", page: "monitoring-security.html", section: "interview-prep", keywords: ["interview", "questions", "answers", "linux", "devops", "cloud", "kubernetes", "docker", "ansible", "terraform", "jenkins", "monitoring", "security", "networking", "troubleshooting"] },
-          { title: "Incident Response & On-Call", page: "monitoring-security.html", section: "incident-response", keywords: ["incident", "response", "on-call", "alert", "escalation", "runbook", "sop", "post-mortem", "rca", "root-cause", "analysis", "communication", "coordination", "documentation"] },
-          { title: "Chaos Engineering", page: "monitoring-security.html", section: "chaos-engineering", keywords: ["chaos", "engineering", "gremlin", "litmus", "chaos-mesh", "fault", "injection", "resilience", "reliability", "testing", "experiment", "hypothesis", "steady-state", "blast-radius"] },
+          {
+            title: "Monitoring Commands",
+            page: "monitoring-security.html",
+            section: "monitoring",
+            keywords: [
+              "monitoring",
+              "prometheus",
+              "grafana",
+              "alertmanager",
+              "node-exporter",
+              "blackbox-exporter",
+              "pushgateway",
+              "metrics",
+              "labels",
+              "time-series",
+              "query",
+              "alert",
+              "rule",
+              "dashboard",
+              "panel",
+              "visualization",
+            ],
+          },
+          {
+            title: "Logging & Auditing (ELK Stack)",
+            page: "monitoring-security.html",
+            section: "logging-auditing",
+            keywords: [
+              "elasticsearch",
+              "logstash",
+              "kibana",
+              "filebeat",
+              "metricbeat",
+              "heartbeat",
+              "winlogbeat",
+              "auditbeat",
+              "journalbeat",
+              "packetbeat",
+              "apm-server",
+              "ingest",
+              "pipeline",
+              "index",
+              "mapping",
+              "template",
+            ],
+          },
+          {
+            title: "Security and Hardening",
+            page: "monitoring-security.html",
+            section: "security",
+            keywords: [
+              "security",
+              "hardening",
+              "selinux",
+              "apparmor",
+              "firewall",
+              "iptables",
+              "fail2ban",
+              "aide",
+              "lynis",
+              "openvas",
+              "nessus",
+              "nmap",
+              "wireshark",
+              "tcpdump",
+              "strace",
+              "ltrace",
+              "lsof",
+            ],
+          },
+          {
+            title: "Performance Monitoring & Tuning",
+            page: "monitoring-security.html",
+            section: "performance",
+            keywords: [
+              "performance",
+              "tuning",
+              "optimization",
+              "benchmark",
+              "stress",
+              "load",
+              "cpu",
+              "memory",
+              "disk",
+              "network",
+              "i/o",
+              "throughput",
+              "latency",
+              "bottleneck",
+              "profiling",
+              "tracing",
+            ],
+          },
+          {
+            title: "High Availability & Load Balancing",
+            page: "monitoring-security.html",
+            section: "ha-load-balancing",
+            keywords: [
+              "ha",
+              "high-availability",
+              "load-balancer",
+              "haproxy",
+              "nginx",
+              "apache",
+              "keepalived",
+              "corosync",
+              "pacemaker",
+              "cluster",
+              "failover",
+              "redundancy",
+              "drbd",
+              "glusterfs",
+              "ceph",
+            ],
+          },
+          {
+            title: "Advanced Kubernetes",
+            page: "monitoring-security.html",
+            section: "advanced-kubernetes",
+            keywords: [
+              "kubernetes",
+              "k8s",
+              "operator",
+              "custom-resource",
+              "crd",
+              "controller",
+              "admission",
+              "webhook",
+              "rbac",
+              "network-policy",
+              "pod-security",
+              "resource-quota",
+              "limit-range",
+            ],
+          },
+          {
+            title: "DevSecOps Practices",
+            page: "monitoring-security.html",
+            section: "devsecops",
+            keywords: [
+              "devsecops",
+              "security",
+              "devops",
+              "sast",
+              "dast",
+              "sca",
+              "container",
+              "scanning",
+              "vulnerability",
+              "compliance",
+              "audit",
+              "policy",
+              "governance",
+              "risk",
+              "assessment",
+            ],
+          },
+          {
+            title: "Interview Preparation",
+            page: "monitoring-security.html",
+            section: "interview-prep",
+            keywords: [
+              "interview",
+              "questions",
+              "answers",
+              "linux",
+              "devops",
+              "cloud",
+              "kubernetes",
+              "docker",
+              "ansible",
+              "terraform",
+              "jenkins",
+              "monitoring",
+              "security",
+              "networking",
+              "troubleshooting",
+            ],
+          },
+          {
+            title: "Incident Response & On-Call",
+            page: "monitoring-security.html",
+            section: "incident-response",
+            keywords: [
+              "incident",
+              "response",
+              "on-call",
+              "alert",
+              "escalation",
+              "runbook",
+              "sop",
+              "post-mortem",
+              "rca",
+              "root-cause",
+              "analysis",
+              "communication",
+              "coordination",
+              "documentation",
+            ],
+          },
+          {
+            title: "Chaos Engineering",
+            page: "monitoring-security.html",
+            section: "chaos-engineering",
+            keywords: [
+              "chaos",
+              "engineering",
+              "gremlin",
+              "litmus",
+              "chaos-mesh",
+              "fault",
+              "injection",
+              "resilience",
+              "reliability",
+              "testing",
+              "experiment",
+              "hypothesis",
+              "steady-state",
+              "blast-radius",
+            ],
+          },
         ];
 
-        const searchInput = document.getElementById('globalSearchInput');
-        const resultsContainer = document.getElementById('searchResultsContainer');
-        const clearBtn = document.getElementById('searchClearBtn');
+        const searchInput = document.getElementById("globalSearchInput");
+        const resultsContainer = document.getElementById(
+          "searchResultsContainer",
+        );
+        const clearBtn = document.getElementById("searchClearBtn");
 
         if (!searchInput) return;
 
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener("input", function () {
           const query = this.value.trim().toLowerCase();
           if (!query) {
-            resultsContainer.classList.remove('visible');
-            clearBtn.classList.remove('visible');
+            resultsContainer.classList.remove("visible");
+            clearBtn.classList.remove("visible");
             return;
           }
-          clearBtn.classList.add('visible');
+          clearBtn.classList.add("visible");
 
-          const results = searchData.filter(item => {
+          const results = searchData.filter((item) => {
             // Search in title
             if (item.title.toLowerCase().includes(query)) return true;
             // Search in keywords
-            if (item.keywords && item.keywords.some(keyword => keyword.toLowerCase().includes(query))) return true;
+            if (
+              item.keywords &&
+              item.keywords.some((keyword) =>
+                keyword.toLowerCase().includes(query),
+              )
+            )
+              return true;
             return false;
           });
 
           if (results.length === 0) {
-            resultsContainer.innerHTML = '<div class="search-no-results"><div class="no-results-icon">🔍</div><p>No commands or topics found</p></div>';
+            resultsContainer.innerHTML =
+              '<div class="search-no-results"><div class="no-results-icon">🔍</div><p>No commands or topics found</p></div>';
           } else {
-            let html = '<div class="search-result-count">' + results.length + ' result(s) found</div>';
-            results.forEach(r => {
+            let html =
+              '<div class="search-result-count">' +
+              results.length +
+              " result(s) found</div>";
+            results.forEach((r) => {
               // Highlight matching keywords
               let highlightedTitle = r.title;
               if (r.keywords) {
-                const matchedKeywords = r.keywords.filter(keyword => keyword.toLowerCase().includes(query));
+                const matchedKeywords = r.keywords.filter((keyword) =>
+                  keyword.toLowerCase().includes(query),
+                );
                 if (matchedKeywords.length > 0) {
-                  highlightedTitle += ' <span style="color:#58a6ff;font-size:0.8em;">(' + matchedKeywords.slice(0, 3).join(', ') + ')</span>';
+                  highlightedTitle +=
+                    ' <span style="color:#58a6ff;font-size:0.8em;">(' +
+                    matchedKeywords.slice(0, 3).join(", ") +
+                    ")</span>";
                 }
               }
-              
-              html += '<div class="search-result-item" onclick="window.location.href=\'' + r.page + '#' + r.section + '\'">';
-              html += '<div class="result-section">' + highlightedTitle + '</div>';
-              html += '<div class="result-context" style="color:#8b949e;font-size:0.85em;">Go to ' + r.page + '</div>';
-              html += '</div>';
+
+              html +=
+                '<div class="search-result-item" onclick="window.location.href=\'' +
+                r.page +
+                "#" +
+                r.section +
+                "'\">";
+              html +=
+                '<div class="result-section">' + highlightedTitle + "</div>";
+              html +=
+                '<div class="result-context" style="color:#8b949e;font-size:0.85em;">Go to ' +
+                r.page +
+                "</div>";
+              html += "</div>";
             });
             resultsContainer.innerHTML = html;
           }
-          resultsContainer.classList.add('visible');
+          resultsContainer.classList.add("visible");
         });
 
-        clearBtn.addEventListener('click', function() {
-          searchInput.value = '';
-          resultsContainer.classList.remove('visible');
-          clearBtn.classList.remove('visible');
+        clearBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          resultsContainer.classList.remove("visible");
+          clearBtn.classList.remove("visible");
         });
       })();
     </script>
