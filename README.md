@@ -6,21 +6,21 @@
 ![Version](https://img.shields.io/badge/version-3.2-green.svg)
 ![Status](https://img.shields.io/badge/status-production--ready-brightgreen.svg)
 ![Coverage](https://img.shields.io/badge/coverage-84%20sections-orange.svg)
-![Commands](https://img.shields.io/badge/commands-1311-red.svg)
+![HTML Lines](https://img.shields.io/badge/lines-44,984-red.svg)
 
 </div>
 
 ## 🎯 Overview
 
-This is the **most comprehensive Linux/DevOps command reference** available, designed for **top 5% industry candidates**. With **84 sections and 3000+ commands**, this resource covers everything from basic system administration to advanced enterprise DevOps practices.
+This is the **most comprehensive Linux/DevOps command reference** available, designed for **top 5% industry candidates**. With **84 sections across 44,984 lines of HTML content**, this resource covers everything from basic system administration to advanced enterprise DevOps practices.
 
 ## 🚀 Key Highlights
 
 - ✅ **84 Comprehensive Sections** - From basics to advanced enterprise topics
-- ✅ **1311 Code Blocks** - Practical, copy-paste ready commands
+- ✅ **44,984 Lines of HTML Content** - Extensive command reference material
+- ✅ **4 Interactive Web Pages** - Modern HTML-based navigation system
 - ✅ **Industry-Standard Content** - Used by top-tier professionals
 - ✅ **Safety-Classified Commands** - Clear usage guidelines and warnings
-- ✅ **Interactive Web Interface** - Modern HTML-based navigation
 - ✅ **Production-Ready Examples** - Real-world scenarios and solutions
 
 ## 🏷️ Command Classification System
@@ -206,12 +206,12 @@ python3 -m http.server 8000
 
 ## 📈 Performance Metrics
 
-| Metric | Value | Status |
-|--------|-------|--------|
-| **Total Sections** | 84 | ✅ Complete |
-| **Code Blocks** | 1,311 | ✅ Comprehensive |
-| **Web Pages** | 4 | ✅ Interactive |
-| **Lines of Code** | 43,796 | ✅ Extensive |
+| Metric                | Value             | Status         |
+| --------------------- | ----------------- | -------------- |
+| **Total Sections**    | 84                | ✅ Complete    |
+| **Web Pages**         | 4                 | ✅ Interactive |
+| **Total HTML Lines**  | 44,984            | ✅ Extensive   |
+| **Assets**            | 3 files           | ✅ Complete    |
 | **Difficulty Levels** | Beginner → Expert | ✅ Progressive |
 
 ## 🤝 Contributing
@@ -257,7 +257,7 @@ python3 -m http.server 8000
 
 ## 🎉 Conclusion
 
-**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **84 sections, 1311 code blocks, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
+**You now possess the most comprehensive Linux/DevOps command reference available**, specifically designed for **top 5% industry candidates**. With **84 sections, 44,984 lines of HTML content across 4 interactive web pages, and enterprise-grade content**, you're equipped for **senior-level positions** and **career advancement**.
 
 **🚀 Ready to excel in the top tier of the industry!**
 
@@ -273,4 +273,4 @@ python3 -m http.server 8000
 _**Last Updated:** April 2026  
 _**Version:** 3.2 - Top 5% Industry Standard  
 _**Maintained by:** samiulAsumel  
-_**License:** MIT License_
+_**License:** MIT License\_
