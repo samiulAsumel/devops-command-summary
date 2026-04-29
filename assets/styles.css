@@ -30,14 +30,14 @@ body {
 }
 
 .container {
-  max-width: 90% !important;
-  margin: 0 auto !important;
-  padding: 20px !important;
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 20px;
   background-color: #0f0f0f;
   color: #c9d1d9;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
   flex: 1;
-  width: 90% !important;
+  width: 90%;
 }
 
 /* Header Styles */
@@ -88,7 +88,6 @@ h4 {
 }
 
 .navigation a {
-  color: white;
   text-decoration: none;
   padding: 8px 12px;
   background-color: var(--secondary-color);
@@ -261,31 +260,6 @@ h4 {
   background: #2980b9;
 }
 
-/* Copy Buttons */
-.copy-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #00d9ff;
-  color: #0d1117;
-  border: none;
-  border-radius: 3px;
-  padding: 5px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s;
-  z-index: 10;
-}
-
-.copy-btn:hover {
-  background: #ff6b9d;
-  color: white;
-  transform: scale(1.05);
-}
-
-.copy-btn:active {
-  transform: scale(0.95);
-}
 
 /* Cards Grid */
 .cards-grid {
@@ -556,84 +530,6 @@ h4 {
   line-height: 1.4;
 }
 
-/* Command Blocks */
-.command-block {
-  background: var(--bg-color);
-  border-left: 4px solid var(--accent-color);
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 5px;
-  position: relative;
-}
-
-.command-block h4 {
-  color: var(--accent-color);
-  margin-top: 0;
-  font-size: 1.3em;
-  border-bottom: 1px solid rgba(255, 107, 0, 0.3);
-  padding-bottom: 8px;
-}
-
-.command-block pre {
-  background: var(--code-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 15px;
-  overflow-x: auto;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--text-color);
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.command-block code {
-  color: var(--text-color);
-  font-family: "Courier New", Courier, monospace;
-  font-size: 17px;
-}
-
-/* Section Index */
-.section-index {
-  background: var(--bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  padding: 20px;
-  margin: 20px 0;
-}
-
-.section-index h3 {
-  color: var(--secondary-color);
-  margin-top: 0;
-  font-size: 1.2em;
-}
-
-.section-index ul {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0;
-}
-
-.section-index li {
-  color: var(--text-color);
-  padding: 8px 0;
-  margin: 5px 0;
-  line-height: 1.4;
-}
-
-.section-index a {
-  color: var(--secondary-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.section-index a:hover {
-  color: var(--accent-color);
-  text-decoration: underline;
-}
-
 /* Content Sections */
 .content {
   flex: 1;
@@ -651,33 +547,6 @@ h4 {
   overflow-y: auto;
 }
 
-.search-result-item {
-  background: rgba(0, 217, 255, 0.05);
-  border-left: 3px solid var(--secondary-color);
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-
-.search-result-item:hover {
-  background: rgba(0, 217, 255, 0.1);
-  border-left-color: var(--accent-color);
-  transform: translateX(5px);
-}
-
-.search-result-item h4 {
-  color: var(--secondary-color);
-  margin-top: 0;
-  font-size: 1.1em;
-}
-
-.search-result-item p {
-  color: var(--text-color);
-  margin: 5px 0 0 0;
-  font-size: 0.9em;
-  line-height: 1.4;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -855,6 +724,12 @@ h4 {
   overflow-x: auto;
   margin: 10px 0;
   border: 1px solid #1a1d23;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text-color);
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .command-block code {
@@ -867,17 +742,7 @@ h4 {
   border-radius: 3px;
 }
 
-/* Enhanced Search Bar */
-.search-container {
-  margin-bottom: 20px;
-  position: sticky;
-  top: 0;
-  background: var(--bg-color);
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  z-index: 100;
-}
+/* Search Box (legacy .search-box used on some pages) */
 
 .search-box {
   display: flex;
@@ -919,29 +784,6 @@ h4 {
   transform: translateY(-2px);
 }
 
-/* Search Clear Button */
-.search-clear-btn {
-  padding: 8px 12px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: bold;
-  transition: all 0.3s;
-  margin-left: 5px;
-  display: none;
-}
-
-.search-clear-btn:hover {
-  background: #c82333;
-  transform: scale(1.1);
-}
-
-.search-clear-btn:active {
-  transform: scale(0.95);
-}
 
 /* Alert Boxes */
 .warning {
@@ -1048,13 +890,12 @@ body.light-mode h4 {
 }
 
 /* Responsive Design */
-/* Responsive Design */
 @media (max-width: 1024px) {
   .container {
-    max-width: 90% !important;
+    max-width: 90%;
     padding: 14px;
-    margin: 0 auto !important;
-    width: 90% !important;
+    margin: 0 auto;
+    width: 90%;
   }
 
   h1 {
@@ -1113,10 +954,10 @@ body.light-mode h4 {
 
 @media (max-width: 480px) {
   .container {
-    max-width: 90% !important;
-    padding: 10px !important;
-    margin: 0 auto !important;
-    width: 90% !important;
+    max-width: 90%;
+    padding: 10px;
+    margin: 0 auto;
+    width: 90%;
   }
 
   h1 {
@@ -1551,15 +1392,7 @@ body:not(.index-page) .command-block:hover {
   .category-description {
     font-size: 1.27em;
   }
-}
 
-.nav-down:hover {
-  background: linear-gradient(135deg, #ff7ba8, #ff5773);
-  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
-}
-
-/* Responsive adjustments for navigation buttons */
-@media (max-width: 768px) {
   .navigation-buttons {
     right: 15px;
   }
@@ -1570,6 +1403,8 @@ body:not(.index-page) .command-block:hover {
     font-size: 18px;
   }
 }
+
+
 
 @media (max-width: 480px) {
   .navigation-buttons {
@@ -1594,7 +1429,11 @@ body:not(.index-page) .command-block:hover {
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 25px;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
 }
 
 .search-container h3 {
@@ -1639,6 +1478,7 @@ body:not(.index-page) .command-block:hover {
   border-radius: 8px;
   color: #dc3545;
   font-size: 1em;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   display: none;
@@ -1646,6 +1486,11 @@ body:not(.index-page) .command-block:hover {
 
 .search-clear-btn:hover {
   background: rgba(220, 53, 69, 0.4);
+  transform: scale(1.05);
+}
+
+.search-clear-btn:active {
+  transform: scale(0.95);
 }
 
 .search-clear-btn.visible {
@@ -1939,4 +1784,64 @@ body:not(.index-page) .command-block:hover {
 @keyframes sectionFlash {
   0% { background: rgba(0, 217, 255, 0.3); }
   100% { background: transparent; }
+}
+
+/* Dangerous command pulse — shared across all pages */
+@keyframes pulse-danger {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.15);
+  }
+}
+
+/* Copy button — used inside .command-block */
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 217, 255, 0.15);
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 10;
+  letter-spacing: 0.5px;
+}
+
+.copy-btn:hover {
+  background: var(--secondary-color);
+  color: #0d1117;
+  transform: scale(1.05);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
+}
+
+.copy-btn.copied {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: #0d1117;
+}
+
+/* ====================================
+   ACCESSIBILITY — reduced motion
+   ==================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -57,7 +57,7 @@ const Utils = {
     let timeoutId;
     return (...args) => {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
+      timeoutId = setTimeout(() => func(...args), delay);
     };
   },
 
@@ -83,8 +83,8 @@ const ThemeManager = {
    */
   init() {
     try {
-      const theme = Utils.safeStorageGet(CONFIG.THEME_STORAGE_KEY, "light");
-      if (theme === "dark") {
+      const theme = Utils.safeStorageGet(CONFIG.THEME_STORAGE_KEY, "dark");
+      if (theme !== "light") {
         document.body.classList.add("dark-mode");
       }
 
@@ -307,8 +307,8 @@ const Accessibility = {
    */
   enhanceKeyboardNavigation() {
     document.querySelectorAll("a[href]").forEach((link) => {
-      if (!link.getAttribute("role")) {
-        link.setAttribute("role", "navigation");
+      if (!link.getAttribute("tabindex")) {
+        link.setAttribute("tabindex", "0");
       }
     });
   },
@@ -934,6 +934,67 @@ const TOCToggle = {
   },
 };
 
+// Copy to Clipboard Module
+const CopyManager = {
+  init() {
+    try {
+      this.injectButtons();
+      this.bindEvents();
+    } catch (error) {
+      console.error("CopyManager initialization failed:", error);
+    }
+  },
+
+  injectButtons() {
+    document.querySelectorAll(".command-block").forEach((block) => {
+      if (block.querySelector(".copy-btn")) return;
+      const pre = block.querySelector("pre");
+      if (!pre) return;
+
+      const btn = document.createElement("button");
+      btn.className = "copy-btn";
+      btn.textContent = "Copy";
+      btn.setAttribute("aria-label", "Copy code to clipboard");
+      block.style.position = "relative";
+      block.appendChild(btn);
+    });
+  },
+
+  bindEvents() {
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".copy-btn");
+      if (!btn) return;
+      const block = btn.closest(".command-block");
+      const pre = block && block.querySelector("pre");
+      if (!pre) return;
+
+      const text = pre.innerText || pre.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "Copy";
+          btn.classList.remove("copied");
+        }, 2000);
+      }).catch(() => {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.cssText = "position:fixed;opacity:0;";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "Copy";
+          btn.classList.remove("copied");
+        }, 2000);
+      });
+    });
+  },
+};
+
 // Main Application Controller
 const App = {
   /**
@@ -947,6 +1008,7 @@ const App = {
       ThemeManager.init();
       ScrollManager.initBackToTop();
       NavigationManager.init();
+      CopyManager.init();
       CodeFormatter.formatComments();
       CodeFormatter.cleanCodeBlocks();
       TOCGenerator.generate();
@@ -996,6 +1058,7 @@ if (typeof module !== "undefined" && module.exports) {
     BreadcrumbManager,
     SectionNavManager,
     TOCToggle,
+    CopyManager,
     Utils,
   };
 }
